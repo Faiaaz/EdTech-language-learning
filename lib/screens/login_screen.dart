@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import 'package:ez_trainz/controllers/auth_controller.dart';
-import 'package:ez_trainz/screens/course_list_screen.dart';
+import 'package:ez_trainz/screens/home_screen.dart';
 import 'package:ez_trainz/screens/sign_up_screen.dart';
 import 'package:ez_trainz/services/auth_service.dart';
 import 'package:ez_trainz/widgets/animated_character.dart';
@@ -54,7 +54,7 @@ class _LoginScreenState extends State<LoginScreen> {
       AuthController.to.setSession(token: token, name: name);
 
       if (mounted) setState(() => _isLoading = false);
-      Get.offAll(() => const CourseListScreen());
+      Get.offAll(() => const HomeScreen());
     } on AuthException catch (e) {
       setState(() { _error = e.message; _isLoading = false; });
     } catch (e) {
