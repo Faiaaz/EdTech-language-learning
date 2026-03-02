@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import 'package:ez_trainz/controllers/auth_controller.dart';
+import 'package:ez_trainz/controllers/course_controller.dart';
+import 'package:ez_trainz/screens/course_detail_screen.dart';
+import 'package:ez_trainz/screens/course_list_screen.dart';
 import 'package:ez_trainz/screens/login_screen.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -16,6 +19,15 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   late AnimationController _entranceCtrl;
   late Animation<double>   _fadeIn;
   late Animation<Offset>   _slideIn;
+
+  // ── Staggered card animations ──────────────────────────────────
+  late AnimationController _cardsCtrl;
+  late Animation<double>   _card1Fade;
+  late Animation<Offset>   _card1Slide;
+  late Animation<double>   _card2Fade;
+  late Animation<Offset>   _card2Slide;
+  late Animation<double>   _card3Fade;
+  late Animation<Offset>   _card3Slide;
 
   // ── Waving arm animation ───────────────────────────────────────
   late AnimationController _waveCtrl;
@@ -36,6 +48,37 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
       end: Offset.zero,
     ).animate(CurvedAnimation(parent: _entranceCtrl, curve: Curves.easeOut));
     _entranceCtrl.forward();
+
+    // Staggered card animations
+    _cardsCtrl = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 900),
+    );
+
+    _card1Fade = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(parent: _cardsCtrl, curve: const Interval(0.0, 0.5, curve: Curves.easeOut)),
+    );
+    _card1Slide = Tween<Offset>(begin: const Offset(0.3, 0), end: Offset.zero).animate(
+      CurvedAnimation(parent: _cardsCtrl, curve: const Interval(0.0, 0.5, curve: Curves.easeOutCubic)),
+    );
+
+    _card2Fade = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(parent: _cardsCtrl, curve: const Interval(0.2, 0.7, curve: Curves.easeOut)),
+    );
+    _card2Slide = Tween<Offset>(begin: const Offset(0.3, 0), end: Offset.zero).animate(
+      CurvedAnimation(parent: _cardsCtrl, curve: const Interval(0.2, 0.7, curve: Curves.easeOutCubic)),
+    );
+
+    _card3Fade = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(parent: _cardsCtrl, curve: const Interval(0.4, 0.9, curve: Curves.easeOut)),
+    );
+    _card3Slide = Tween<Offset>(begin: const Offset(0.3, 0), end: Offset.zero).animate(
+      CurvedAnimation(parent: _cardsCtrl, curve: const Interval(0.4, 0.9, curve: Curves.easeOutCubic)),
+    );
+
+    Future.delayed(const Duration(milliseconds: 400), () {
+      if (mounted) _cardsCtrl.forward();
+    });
 
     // Wave — rocks back and forth 5 times then stops
     _waveCtrl = AnimationController(
@@ -64,6 +107,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   @override
   void dispose() {
     _entranceCtrl.dispose();
+    _cardsCtrl.dispose();
     _waveCtrl.dispose();
     super.dispose();
   }
@@ -71,6 +115,37 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   void _onLogout() {
     AuthController.to.logout();
     Get.offAll(() => const LoginScreen());
+  }
+
+  void _navigateToCourses() {
+    Get.to(
+      () => const CourseListScreen(),
+      transition: Transition.rightToLeftWithFade,
+      duration: const Duration(milliseconds: 300),
+    );
+  }
+
+  void _navigateToLessons() {
+    final ctrl = CourseController.to;
+    if (ctrl.courses.isNotEmpty) {
+      ctrl.selectCourse(ctrl.courses.first);
+      Get.to(
+        () => const CourseDetailScreen(),
+        transition: Transition.rightToLeftWithFade,
+        duration: const Duration(milliseconds: 300),
+      );
+    } else {
+      _navigateToCourses();
+    }
+  }
+
+  void _navigateToQuizzes() {
+    // Navigate to courses — user picks a course → lesson → quiz
+    Get.to(
+      () => const CourseListScreen(),
+      transition: Transition.rightToLeftWithFade,
+      duration: const Duration(milliseconds: 300),
+    );
   }
 
   @override
@@ -84,142 +159,353 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
           opacity: _fadeIn,
           child: SlideTransition(
             position: _slideIn,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const SizedBox(height: 16),
+            child: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 24),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SizedBox(height: 16),
 
-                  // ── TOP BAR ────────────────────────────────────
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const Row(
-                        crossAxisAlignment: CrossAxisAlignment.baseline,
-                        textBaseline: TextBaseline.alphabetic,
-                        children: [
-                          Text('EZ',
-                              style: TextStyle(
-                                color: Color(0xFFFFE000),
-                                fontSize: 22,
-                                fontWeight: FontWeight.w900,
-                                height: 1,
-                              )),
-                          SizedBox(width: 3),
-                          Text('TRAINZ',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 20,
-                                fontWeight: FontWeight.w800,
-                                letterSpacing: 1.5,
-                                height: 1,
-                              )),
-                        ],
-                      ),
-                      GestureDetector(
-                        onTap: _onLogout,
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 14, vertical: 8),
-                          decoration: BoxDecoration(
-                            color: Colors.white.withValues(alpha: 0.2),
-                            borderRadius: BorderRadius.circular(20),
-                            border: Border.all(
-                                color: Colors.white38, width: 1),
-                          ),
-                          child: const Row(
-                            children: [
-                              Icon(Icons.logout_rounded,
-                                  color: Colors.white, size: 15),
-                              SizedBox(width: 5),
-                              Text('Logout',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 13,
-                                    fontWeight: FontWeight.w600,
-                                  )),
-                            ],
+                    // ── TOP BAR ────────────────────────────────────
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Row(
+                          crossAxisAlignment: CrossAxisAlignment.baseline,
+                          textBaseline: TextBaseline.alphabetic,
+                          children: [
+                            Text('EZ',
+                                style: TextStyle(
+                                  color: Color(0xFFFFE000),
+                                  fontSize: 22,
+                                  fontWeight: FontWeight.w900,
+                                  height: 1,
+                                )),
+                            SizedBox(width: 3),
+                            Text('TRAINZ',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w800,
+                                  letterSpacing: 1.5,
+                                  height: 1,
+                                )),
+                          ],
+                        ),
+                        GestureDetector(
+                          onTap: _onLogout,
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 14, vertical: 8),
+                            decoration: BoxDecoration(
+                              color: Colors.white.withValues(alpha: 0.2),
+                              borderRadius: BorderRadius.circular(20),
+                              border: Border.all(
+                                  color: Colors.white38, width: 1),
+                            ),
+                            child: const Row(
+                              children: [
+                                Icon(Icons.logout_rounded,
+                                    color: Colors.white, size: 15),
+                                SizedBox(width: 5),
+                                Text('Logout',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 13,
+                                      fontWeight: FontWeight.w600,
+                                    )),
+                              ],
+                            ),
                           ),
                         ),
+                      ],
+                    ),
+
+                    const SizedBox(height: 36),
+
+                    // ── GREETING ───────────────────────────────────
+                    Text(
+                      'Hello,',
+                      style: TextStyle(
+                        color: Colors.white.withValues(alpha: 0.8),
+                        fontSize: 26,
+                        fontWeight: FontWeight.w400,
+                        height: 1.2,
                       ),
-                    ],
-                  ),
-
-                  const SizedBox(height: 48),
-
-                  // ── GREETING ───────────────────────────────────
-                  Text(
-                    'Hello,',
-                    style: TextStyle(
-                      color: Colors.white.withValues(alpha: 0.8),
-                      fontSize: 26,
-                      fontWeight: FontWeight.w400,
-                      height: 1.2,
                     ),
-                  ),
-                  Text(
-                    '$firstName! 👋',
-                    style: const TextStyle(
-                      color: Color(0xFFFFE000),
-                      fontSize: 38,
-                      fontWeight: FontWeight.w900,
-                      height: 1.1,
+                    Text(
+                      '$firstName! 👋',
+                      style: const TextStyle(
+                        color: Color(0xFFFFE000),
+                        fontSize: 38,
+                        fontWeight: FontWeight.w900,
+                        height: 1.1,
+                      ),
                     ),
-                  ),
 
-                  const SizedBox(height: 8),
+                    const SizedBox(height: 8),
 
-                  Text(
-                    'Ready to learn something new today?',
-                    style: TextStyle(
-                      color: Colors.white.withValues(alpha: 0.75),
-                      fontSize: 15,
-                      fontWeight: FontWeight.w400,
+                    Text(
+                      'Ready to learn something new today?',
+                      style: TextStyle(
+                        color: Colors.white.withValues(alpha: 0.75),
+                        fontSize: 15,
+                        fontWeight: FontWeight.w400,
+                      ),
                     ),
-                  ),
 
-                  const Spacer(),
+                    const SizedBox(height: 32),
 
-                  // ── WAVING PENGUIN ─────────────────────────────
-                  Center(
-                    child: AnimatedBuilder(
-                      animation: _waveCtrl,
-                      builder: (context, child) {
-                        return Transform.rotate(
-                          angle: _waveAngle.value,
-                          alignment: Alignment.bottomCenter,
-                          child: child,
+                    // ── NAVIGATION CARDS ──────────────────────────
+                    AnimatedBuilder(
+                      animation: _cardsCtrl,
+                      builder: (context, _) {
+                        return Column(
+                          children: [
+                            // ── Courses Card ──────────────────────
+                            SlideTransition(
+                              position: _card1Slide,
+                              child: FadeTransition(
+                                opacity: _card1Fade,
+                                child: _NavCard(
+                                  title: 'Courses',
+                                  subtitle: 'Browse N5 & N4 courses',
+                                  icon: Icons.school_rounded,
+                                  gradientColors: const [
+                                    Color(0xFF667EEA),
+                                    Color(0xFF764BA2),
+                                  ],
+                                  onTap: _navigateToCourses,
+                                ),
+                              ),
+                            ),
+
+                            const SizedBox(height: 14),
+
+                            // ── Lessons Card ──────────────────────
+                            SlideTransition(
+                              position: _card2Slide,
+                              child: FadeTransition(
+                                opacity: _card2Fade,
+                                child: _NavCard(
+                                  title: 'Lessons',
+                                  subtitle: 'Watch videos & study materials',
+                                  icon: Icons.play_circle_rounded,
+                                  gradientColors: const [
+                                    Color(0xFF11998E),
+                                    Color(0xFF38EF7D),
+                                  ],
+                                  onTap: _navigateToLessons,
+                                ),
+                              ),
+                            ),
+
+                            const SizedBox(height: 14),
+
+                            // ── Quizzes Card ──────────────────────
+                            SlideTransition(
+                              position: _card3Slide,
+                              child: FadeTransition(
+                                opacity: _card3Fade,
+                                child: _NavCard(
+                                  title: 'Quizzes',
+                                  subtitle: 'Test your knowledge',
+                                  icon: Icons.quiz_rounded,
+                                  gradientColors: const [
+                                    Color(0xFFF093FB),
+                                    Color(0xFFF5576C),
+                                  ],
+                                  onTap: _navigateToQuizzes,
+                                ),
+                              ),
+                            ),
+                          ],
                         );
                       },
-                      child: const Image(
-                        image: AssetImage(
-                            'assets/images/ninja_penguin_transparent.png'),
-                        height: 260,
-                        fit: BoxFit.contain,
+                    ),
+
+                    const SizedBox(height: 28),
+
+                    // ── WAVING PENGUIN ─────────────────────────────
+                    Center(
+                      child: AnimatedBuilder(
+                        animation: _waveCtrl,
+                        builder: (context, child) {
+                          return Transform.rotate(
+                            angle: _waveAngle.value,
+                            alignment: Alignment.bottomCenter,
+                            child: child,
+                          );
+                        },
+                        child: const Image(
+                          image: AssetImage(
+                              'assets/images/ninja_penguin_transparent.png'),
+                          height: 180,
+                          fit: BoxFit.contain,
+                        ),
                       ),
                     ),
-                  ),
 
-                  const SizedBox(height: 12),
+                    const SizedBox(height: 12),
 
-                  // ── TAGLINE ────────────────────────────────────
-                  Center(
-                    child: Text(
-                      'ভাষা শিখুন, ভবিষ্যৎ গড়ুন',
-                      style: TextStyle(
-                        color: Colors.white.withValues(alpha: 0.6),
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500,
-                        letterSpacing: 0.3,
+                    // ── TAGLINE ────────────────────────────────────
+                    Center(
+                      child: Text(
+                        'ভাষা শিখুন, ভবিষ্যৎ গড়ুন',
+                        style: TextStyle(
+                          color: Colors.white.withValues(alpha: 0.6),
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,
+                          letterSpacing: 0.3,
+                        ),
                       ),
                     ),
-                  ),
 
-                  const SizedBox(height: 40),
-                ],
+                    const SizedBox(height: 32),
+                  ],
+                ),
               ),
             ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+// ── NAVIGATION CARD WIDGET ──────────────────────────────────────────
+class _NavCard extends StatefulWidget {
+  final String title;
+  final String subtitle;
+  final IconData icon;
+  final List<Color> gradientColors;
+  final VoidCallback onTap;
+
+  const _NavCard({
+    required this.title,
+    required this.subtitle,
+    required this.icon,
+    required this.gradientColors,
+    required this.onTap,
+  });
+
+  @override
+  State<_NavCard> createState() => _NavCardState();
+}
+
+class _NavCardState extends State<_NavCard> with SingleTickerProviderStateMixin {
+  late AnimationController _scaleCtrl;
+  late Animation<double> _scale;
+
+  @override
+  void initState() {
+    super.initState();
+    _scaleCtrl = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 120),
+      lowerBound: 0.0,
+      upperBound: 1.0,
+    );
+    _scale = Tween<double>(begin: 1.0, end: 0.96).animate(
+      CurvedAnimation(parent: _scaleCtrl, curve: Curves.easeInOut),
+    );
+  }
+
+  @override
+  void dispose() {
+    _scaleCtrl.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTapDown: (_) => _scaleCtrl.forward(),
+      onTapUp: (_) {
+        _scaleCtrl.reverse();
+        widget.onTap();
+      },
+      onTapCancel: () => _scaleCtrl.reverse(),
+      child: AnimatedBuilder(
+        animation: _scale,
+        builder: (context, child) {
+          return Transform.scale(scale: _scale.value, child: child);
+        },
+        child: Container(
+          width: double.infinity,
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: widget.gradientColors,
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+            borderRadius: BorderRadius.circular(18),
+            boxShadow: [
+              BoxShadow(
+                color: widget.gradientColors.first.withValues(alpha: 0.35),
+                blurRadius: 16,
+                offset: const Offset(0, 6),
+              ),
+            ],
+          ),
+          child: Row(
+            children: [
+              // ── Icon circle ─────────────────────────────────
+              Container(
+                width: 48,
+                height: 48,
+                decoration: BoxDecoration(
+                  color: Colors.white.withValues(alpha: 0.22),
+                  borderRadius: BorderRadius.circular(14),
+                ),
+                child: Icon(widget.icon, color: Colors.white, size: 26),
+              ),
+              const SizedBox(width: 16),
+
+              // ── Title + subtitle ────────────────────────────
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      widget.title,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 18,
+                        fontWeight: FontWeight.w800,
+                        height: 1.2,
+                      ),
+                    ),
+                    const SizedBox(height: 3),
+                    Text(
+                      widget.subtitle,
+                      style: TextStyle(
+                        color: Colors.white.withValues(alpha: 0.8),
+                        fontSize: 13,
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+
+              // ── Arrow ──────────────────────────────────────
+              Container(
+                width: 32,
+                height: 32,
+                decoration: BoxDecoration(
+                  color: Colors.white.withValues(alpha: 0.2),
+                  shape: BoxShape.circle,
+                ),
+                child: const Icon(
+                  Icons.arrow_forward_rounded,
+                  color: Colors.white,
+                  size: 18,
+                ),
+              ),
+            ],
           ),
         ),
       ),
