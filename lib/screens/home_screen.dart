@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import 'package:ez_trainz/controllers/auth_controller.dart';
+import 'package:ez_trainz/screens/course_list_screen.dart';
 import 'package:ez_trainz/screens/login_screen.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -176,6 +177,44 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                       color: Colors.white.withValues(alpha: 0.75),
                       fontSize: 15,
                       fontWeight: FontWeight.w400,
+                    ),
+                  ),
+
+                  const SizedBox(height: 32),
+
+                  // ── START LEARNING BUTTON ────────────────────────
+                  Center(
+                    child: GestureDetector(
+                      onTap: () => Get.to(() => const CourseListScreen()),
+                      child: Container(
+                        width: double.infinity,
+                        padding: const EdgeInsets.symmetric(vertical: 16),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFFFE000),
+                          borderRadius: BorderRadius.circular(16),
+                          boxShadow: [
+                            BoxShadow(
+                              color: const Color(0xFFFFE000).withValues(alpha: 0.35),
+                              blurRadius: 16,
+                              offset: const Offset(0, 6),
+                            ),
+                          ],
+                        ),
+                        child: const Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(Icons.school_rounded,
+                                color: Color(0xFF1A1A2E), size: 22),
+                            SizedBox(width: 10),
+                            Text('Browse Courses',
+                                style: TextStyle(
+                                  color: Color(0xFF1A1A2E),
+                                  fontSize: 17,
+                                  fontWeight: FontWeight.w800,
+                                )),
+                          ],
+                        ),
+                      ),
                     ),
                   ),
 
