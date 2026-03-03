@@ -32,4 +32,18 @@ enum Program {
   final String shortName;
   final String subtitle;
   final List<Color> gradientColors;
+
+  /// National flag emoji for visual cue: Japan, South Korea, UK, Germany.
+  String get flagEmoji {
+    switch (this) {
+      case Program.jlc:
+        return '\u{1F1EF}\u{1F1F5}'; // 🇯🇵 Japan
+      case Program.klc:
+        return '\u{1F1F0}\u{1F1F7}'; // 🇰🇷 South Korea
+      case Program.elc:
+        return '\u{1F1EC}\u{1F1E7}'; // 🇬🇧 United Kingdom
+      case Program.glc:
+        return '\u{1F1E9}\u{1F1EA}'; // 🇩🇪 Germany
+    }
+  }
 }

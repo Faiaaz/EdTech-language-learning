@@ -11,9 +11,13 @@ class AuthController extends GetxController {
   // ── Logged-in user info ────────────────────────────────────────
   final _accessToken = ''.obs;
   final _userName    = ''.obs;
+  final _userEmail   = Rxn<String>();
+  final _userBio     = Rxn<String>();
 
   String get accessToken => _accessToken.value;
   String get userName    => _userName.value;
+  String? get userEmail  => _userEmail.value;
+  String? get userBio    => _userBio.value;
   String get firstName   => _userName.value.split(' ').first;
   bool   get isLoggedIn  => _accessToken.value.isNotEmpty;
 
@@ -27,14 +31,23 @@ class AuthController extends GetxController {
     signUpPhone = phone;
   }
 
-  void setSession({ required String token, required String name }) {
+  void setSession({
+    required String token,
+    required String name,
+    String? email,
+    String? bio,
+  }) {
     _accessToken.value = token;
     _userName.value    = name;
+    _userEmail.value   = email;
+    _userBio.value     = bio;
   }
 
   void logout() {
     _accessToken.value = '';
     _userName.value    = '';
+    _userEmail.value   = null;
+    _userBio.value     = null;
     signUpName  = '';
     signUpEmail = '';
     signUpPhone = '';

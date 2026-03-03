@@ -6,7 +6,7 @@ import 'package:ez_trainz/controllers/course_controller.dart';
 import 'package:ez_trainz/controllers/program_controller.dart';
 import 'package:ez_trainz/models/program.dart';
 import 'package:ez_trainz/screens/course_detail_screen.dart';
-import 'package:ez_trainz/screens/course_list_screen.dart';
+import 'package:ez_trainz/screens/main_shell_screen.dart';
 import 'package:ez_trainz/screens/login_screen.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -132,7 +132,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     ProgramController.to.setProgram(program);
     CourseController.to.loadCourses();
     Get.to(
-      () => const CourseListScreen(),
+      () => const MainShellScreen(),
       transition: Transition.rightToLeftWithFade,
       duration: const Duration(milliseconds: 300),
     );
@@ -260,7 +260,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                 child: _NavCard(
                                   title: Program.jlc.name,
                                   subtitle: Program.jlc.subtitle,
-                                  icon: Icons.translate_rounded,
+                                  iconWidget: _flagIcon(Program.jlc.flagEmoji),
                                   gradientColors: Program.jlc.gradientColors,
                                   onTap: () => _navigateToProgram(Program.jlc),
                                 ),
@@ -274,7 +274,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                 child: _NavCard(
                                   title: Program.klc.name,
                                   subtitle: Program.klc.subtitle,
-                                  icon: Icons.translate_rounded,
+                                  iconWidget: _flagIcon(Program.klc.flagEmoji),
                                   gradientColors: Program.klc.gradientColors,
                                   onTap: () => _navigateToProgram(Program.klc),
                                 ),
@@ -288,7 +288,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                 child: _NavCard(
                                   title: Program.elc.name,
                                   subtitle: Program.elc.subtitle,
-                                  icon: Icons.translate_rounded,
+                                  iconWidget: _flagIcon(Program.elc.flagEmoji),
                                   gradientColors: Program.elc.gradientColors,
                                   onTap: () => _navigateToProgram(Program.elc),
                                 ),
@@ -302,7 +302,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                 child: _NavCard(
                                   title: Program.glc.name,
                                   subtitle: Program.glc.subtitle,
-                                  icon: Icons.translate_rounded,
+                                  iconWidget: _flagIcon(Program.glc.flagEmoji),
                                   gradientColors: Program.glc.gradientColors,
                                   onTap: () => _navigateToProgram(Program.glc),
                                 ),
@@ -362,18 +362,26 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   }
 }
 
+// ── Flag emoji, no box, slightly larger for natural look ─────────────
+Widget _flagIcon(String flagEmoji) {
+  return Text(
+    flagEmoji,
+    style: const TextStyle(fontSize: 38, height: 1.15),
+  );
+}
+
 // ── NAVIGATION CARD WIDGET ──────────────────────────────────────────
 class _NavCard extends StatefulWidget {
   final String title;
   final String subtitle;
-  final IconData icon;
+  final Widget iconWidget;
   final List<Color> gradientColors;
   final VoidCallback onTap;
 
   const _NavCard({
     required this.title,
     required this.subtitle,
-    required this.icon,
+    required this.iconWidget,
     required this.gradientColors,
     required this.onTap,
   });
@@ -440,15 +448,10 @@ class _NavCardState extends State<_NavCard> with SingleTickerProviderStateMixin 
           ),
           child: Row(
             children: [
-              // ── Icon circle ─────────────────────────────────
-              Container(
-                width: 48,
-                height: 48,
-                decoration: BoxDecoration(
-                  color: Colors.white.withValues(alpha: 0.22),
-                  borderRadius: BorderRadius.circular(14),
-                ),
-                child: Icon(widget.icon, color: Colors.white, size: 26),
+              // ── Flag only, no box; reserve width so layout stays even ──
+              SizedBox(
+                width: 52,
+                child: Center(child: widget.iconWidget),
               ),
               const SizedBox(width: 16),
 

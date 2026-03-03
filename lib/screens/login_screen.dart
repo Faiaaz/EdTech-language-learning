@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import 'package:ez_trainz/controllers/auth_controller.dart';
-import 'package:ez_trainz/screens/home_screen.dart';
+import 'package:ez_trainz/screens/main_shell_screen.dart';
 import 'package:ez_trainz/screens/sign_up_screen.dart';
 import 'package:ez_trainz/services/auth_service.dart';
 import 'package:ez_trainz/widgets/animated_character.dart';
@@ -50,11 +50,16 @@ class _LoginScreenState extends State<LoginScreen> {
       final token = response['accessToken'] as String? ?? '';
       final user  = response['user'] as Map<String, dynamic>? ?? {};
       final name  = user['name'] as String? ?? email.split('@').first;
+      final userEmail = user['email'] as String? ?? email;
 
-      AuthController.to.setSession(token: token, name: name);
+      AuthController.to.setSession(
+        token: token,
+        name: name,
+        email: userEmail,
+      );
 
       if (mounted) setState(() => _isLoading = false);
-      Get.offAll(() => const HomeScreen());
+      Get.offAll(() => const MainShellScreen());
     } on AuthException catch (e) {
       setState(() { _error = e.message; _isLoading = false; });
     } catch (e) {

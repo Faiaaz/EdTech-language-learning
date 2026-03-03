@@ -41,7 +41,9 @@ class CourseListScreen extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       GestureDetector(
-                        onTap: () => Get.back(),
+                        onTap: () {
+                          ProgramController.to.clearProgram();
+                        },
                         child: Container(
                           padding: const EdgeInsets.symmetric(
                               horizontal: 12, vertical: 8),
