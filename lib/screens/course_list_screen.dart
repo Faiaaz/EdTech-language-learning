@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import 'package:ez_trainz/controllers/course_controller.dart';
 import 'package:ez_trainz/controllers/auth_controller.dart';
+import 'package:ez_trainz/controllers/course_controller.dart';
+import 'package:ez_trainz/controllers/program_controller.dart';
 import 'package:ez_trainz/models/course.dart';
 import 'package:ez_trainz/screens/course_detail_screen.dart';
 import 'package:ez_trainz/screens/login_screen.dart';
@@ -39,6 +40,33 @@ class CourseListScreen extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
+                      GestureDetector(
+                        onTap: () => Get.back(),
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 12, vertical: 8),
+                          decoration: BoxDecoration(
+                            color: Colors.white.withValues(alpha: 0.2),
+                            borderRadius: BorderRadius.circular(20),
+                            border:
+                                Border.all(color: Colors.white38, width: 1),
+                          ),
+                          child: const Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon(Icons.apps_rounded,
+                                  color: Colors.white, size: 16),
+                              SizedBox(width: 6),
+                              Text('Programs',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 13,
+                                    fontWeight: FontWeight.w600,
+                                  )),
+                            ],
+                          ),
+                        ),
+                      ),
                       const Row(
                         crossAxisAlignment: CrossAxisAlignment.baseline,
                         textBaseline: TextBaseline.alphabetic,
@@ -106,7 +134,9 @@ class CourseListScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: 6),
                   Text(
-                    'Choose a course to start learning',
+                    ProgramController.to.hasProgram
+                        ? '${ProgramController.to.current!.name} (${ProgramController.to.current!.shortName}) · Choose a course'
+                        : 'Choose a course to start learning',
                     style: TextStyle(
                       color: Colors.white.withValues(alpha: 0.75),
                       fontSize: 15,

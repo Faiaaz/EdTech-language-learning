@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 
+import 'package:ez_trainz/controllers/program_controller.dart';
 import 'package:ez_trainz/models/course.dart';
 import 'package:ez_trainz/models/lesson.dart';
 import 'package:ez_trainz/services/course_service.dart';
@@ -26,17 +27,18 @@ class CourseController extends GetxController {
     loadCourses();
   }
 
-  // ── Load all courses ─────────────────────────────────────────────
+  // ── Load all courses for the current program ─────────────────────
   /// TODO: replace static call with [CourseService.fetchCourses] once API is ready
   void loadCourses() {
     isLoading.value = true;
     error.value = '';
+    final programId = ProgramController.to.current?.id;
     try {
-      // ── STATIC: swap this block with the async API call ──
-      courses.value = CourseService.getStaticCourses();
+      // ── STATIC: per-program data; API will be GET /programs/{programId}/courses ──
+      courses.value = CourseService.getStaticCourses(programId);
       // ── FUTURE API USAGE: ────────────────────────────────
       // final token = AuthController.to.accessToken;
-      // courses.value = await CourseService.fetchCourses(accessToken: token);
+      // courses.value = await CourseService.fetchCourses(programId: programId, accessToken: token);
     } catch (e) {
       error.value = e.toString();
     } finally {

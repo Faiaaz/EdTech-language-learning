@@ -3,6 +3,8 @@ import 'package:get/get.dart';
 
 import 'package:ez_trainz/controllers/auth_controller.dart';
 import 'package:ez_trainz/controllers/course_controller.dart';
+import 'package:ez_trainz/controllers/program_controller.dart';
+import 'package:ez_trainz/models/program.dart';
 import 'package:ez_trainz/screens/course_detail_screen.dart';
 import 'package:ez_trainz/screens/course_list_screen.dart';
 import 'package:ez_trainz/screens/login_screen.dart';
@@ -28,6 +30,8 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   late Animation<Offset>   _card2Slide;
   late Animation<double>   _card3Fade;
   late Animation<Offset>   _card3Slide;
+  late Animation<double>   _card4Fade;
+  late Animation<Offset>   _card4Slide;
 
   // ── Waving arm animation ───────────────────────────────────────
   late AnimationController _waveCtrl;
@@ -76,6 +80,13 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
       CurvedAnimation(parent: _cardsCtrl, curve: const Interval(0.4, 0.9, curve: Curves.easeOutCubic)),
     );
 
+    _card4Fade = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(parent: _cardsCtrl, curve: const Interval(0.5, 1.0, curve: Curves.easeOut)),
+    );
+    _card4Slide = Tween<Offset>(begin: const Offset(0.3, 0), end: Offset.zero).animate(
+      CurvedAnimation(parent: _cardsCtrl, curve: const Interval(0.5, 1.0, curve: Curves.easeOutCubic)),
+    );
+
     Future.delayed(const Duration(milliseconds: 400), () {
       if (mounted) _cardsCtrl.forward();
     });
@@ -117,30 +128,9 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     Get.offAll(() => const LoginScreen());
   }
 
-  void _navigateToCourses() {
-    Get.to(
-      () => const CourseListScreen(),
-      transition: Transition.rightToLeftWithFade,
-      duration: const Duration(milliseconds: 300),
-    );
-  }
-
-  void _navigateToLessons() {
-    final ctrl = CourseController.to;
-    if (ctrl.courses.isNotEmpty) {
-      ctrl.selectCourse(ctrl.courses.first);
-      Get.to(
-        () => const CourseDetailScreen(),
-        transition: Transition.rightToLeftWithFade,
-        duration: const Duration(milliseconds: 300),
-      );
-    } else {
-      _navigateToCourses();
-    }
-  }
-
-  void _navigateToQuizzes() {
-    // Navigate to courses — user picks a course → lesson → quiz
+  void _navigateToProgram(Program program) {
+    ProgramController.to.setProgram(program);
+    CourseController.to.loadCourses();
     Get.to(
       () => const CourseListScreen(),
       transition: Transition.rightToLeftWithFade,
@@ -247,7 +237,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                     const SizedBox(height: 8),
 
                     Text(
-                      'Ready to learn something new today?',
+                      'Choose a language program to start',
                       style: TextStyle(
                         color: Colors.white.withValues(alpha: 0.75),
                         fontSize: 15,
@@ -257,66 +247,64 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
 
                     const SizedBox(height: 32),
 
-                    // ── NAVIGATION CARDS ──────────────────────────
+                    // ── PROGRAM CARDS (JLC, KLC, ELC, GLC) ─────────
                     AnimatedBuilder(
                       animation: _cardsCtrl,
                       builder: (context, _) {
                         return Column(
                           children: [
-                            // ── Courses Card ──────────────────────
                             SlideTransition(
                               position: _card1Slide,
                               child: FadeTransition(
                                 opacity: _card1Fade,
                                 child: _NavCard(
-                                  title: 'Courses',
-                                  subtitle: 'Browse N5 & N4 courses',
-                                  icon: Icons.school_rounded,
-                                  gradientColors: const [
-                                    Color(0xFF667EEA),
-                                    Color(0xFF764BA2),
-                                  ],
-                                  onTap: _navigateToCourses,
+                                  title: Program.jlc.name,
+                                  subtitle: Program.jlc.subtitle,
+                                  icon: Icons.translate_rounded,
+                                  gradientColors: Program.jlc.gradientColors,
+                                  onTap: () => _navigateToProgram(Program.jlc),
                                 ),
                               ),
                             ),
-
                             const SizedBox(height: 14),
-
-                            // ── Lessons Card ──────────────────────
                             SlideTransition(
                               position: _card2Slide,
                               child: FadeTransition(
                                 opacity: _card2Fade,
                                 child: _NavCard(
-                                  title: 'Lessons',
-                                  subtitle: 'Watch videos & study materials',
-                                  icon: Icons.play_circle_rounded,
-                                  gradientColors: const [
-                                    Color(0xFF11998E),
-                                    Color(0xFF38EF7D),
-                                  ],
-                                  onTap: _navigateToLessons,
+                                  title: Program.klc.name,
+                                  subtitle: Program.klc.subtitle,
+                                  icon: Icons.translate_rounded,
+                                  gradientColors: Program.klc.gradientColors,
+                                  onTap: () => _navigateToProgram(Program.klc),
                                 ),
                               ),
                             ),
-
                             const SizedBox(height: 14),
-
-                            // ── Quizzes Card ──────────────────────
                             SlideTransition(
                               position: _card3Slide,
                               child: FadeTransition(
                                 opacity: _card3Fade,
                                 child: _NavCard(
-                                  title: 'Quizzes',
-                                  subtitle: 'Test your knowledge',
-                                  icon: Icons.quiz_rounded,
-                                  gradientColors: const [
-                                    Color(0xFFF093FB),
-                                    Color(0xFFF5576C),
-                                  ],
-                                  onTap: _navigateToQuizzes,
+                                  title: Program.elc.name,
+                                  subtitle: Program.elc.subtitle,
+                                  icon: Icons.translate_rounded,
+                                  gradientColors: Program.elc.gradientColors,
+                                  onTap: () => _navigateToProgram(Program.elc),
+                                ),
+                              ),
+                            ),
+                            const SizedBox(height: 14),
+                            SlideTransition(
+                              position: _card4Slide,
+                              child: FadeTransition(
+                                opacity: _card4Fade,
+                                child: _NavCard(
+                                  title: Program.glc.name,
+                                  subtitle: Program.glc.subtitle,
+                                  icon: Icons.translate_rounded,
+                                  gradientColors: Program.glc.gradientColors,
+                                  onTap: () => _navigateToProgram(Program.glc),
                                 ),
                               ),
                             ),

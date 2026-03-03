@@ -122,8 +122,9 @@ class CourseService {
   /// Returns the video URL for a lesson, or null if not available.
   static String? getVideoUrl(int lessonId) => _staticVideoUrls[lessonId];
 
-  /// Static courses data. Follows the same JSON shape the API will return.
-  static List<Course> getStaticCourses() {
+  /// Static courses data per program. API will be GET /programs/{programId}/courses.
+  /// [programId] e.g. 'jlc', 'klc', 'elc', 'glc'. For now returns same list for all.
+  static List<Course> getStaticCourses([String? programId]) {
     const raw = [
       {
         "id": 1,
