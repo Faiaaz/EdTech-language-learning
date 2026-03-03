@@ -232,13 +232,17 @@ class _ProgramCard extends StatelessWidget {
         ),
         child: Row(
           children: [
-            SizedBox(
-              width: 52,
-              child: Center(
-                child: Text(
-                  program.flagEmoji,
-                  style: const TextStyle(fontSize: 38, height: 1.15),
-                ),
+            Container(
+              width: 48,
+              height: 48,
+              decoration: BoxDecoration(
+                color: Colors.white.withValues(alpha: 0.22),
+                borderRadius: BorderRadius.circular(14),
+              ),
+              alignment: Alignment.center,
+              child: Text(
+                program.flagEmoji,
+                style: const TextStyle(fontSize: 26, height: 1.2),
               ),
             ),
             const SizedBox(width: 16),

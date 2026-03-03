@@ -362,11 +362,11 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   }
 }
 
-// ── Flag emoji, no box, slightly larger for natural look ─────────────
+// ── Helper: flag icon in same size as original icon ───────────────────
 Widget _flagIcon(String flagEmoji) {
   return Text(
     flagEmoji,
-    style: const TextStyle(fontSize: 38, height: 1.15),
+    style: const TextStyle(fontSize: 26, height: 1.2),
   );
 }
 
@@ -448,10 +448,16 @@ class _NavCardState extends State<_NavCard> with SingleTickerProviderStateMixin 
           ),
           child: Row(
             children: [
-              // ── Flag only, no box; reserve width so layout stays even ──
-              SizedBox(
-                width: 52,
-                child: Center(child: widget.iconWidget),
+              // ── Flag icon in white semi-transparent box ─────────────
+              Container(
+                width: 48,
+                height: 48,
+                decoration: BoxDecoration(
+                  color: Colors.white.withValues(alpha: 0.22),
+                  borderRadius: BorderRadius.circular(14),
+                ),
+                alignment: Alignment.center,
+                child: widget.iconWidget,
               ),
               const SizedBox(width: 16),
 
