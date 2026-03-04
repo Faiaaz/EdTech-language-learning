@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_tts/flutter_tts.dart';
 import 'package:get/get.dart';
 
 import 'package:ez_trainz/models/kana.dart';
@@ -52,15 +53,27 @@ class _KanaDragDropScreenState extends State<KanaDragDropScreen>
   // ── Shake animation for incorrect ─────────────────────────────
   final Map<int, AnimationController> _shakeControllers = {};
 
+  // ── TTS for correct matches ─────────────────────────────────
+  final FlutterTts _tts = FlutterTts();
+
   @override
   void initState() {
     super.initState();
+    _initTts();
     _startNewRound();
     _startTimer();
   }
 
+  Future<void> _initTts() async {
+    await _tts.setLanguage('ja-JP');
+    await _tts.setSpeechRate(0.5);
+    await _tts.setPitch(1.0);
+    await _tts.setVolume(1.0);
+  }
+
   @override
   void dispose() {
+    _tts.stop();
     _timer?.cancel();
     for (final c in _shakeControllers.values) {
       c.dispose();
@@ -94,13 +107,16 @@ class _KanaDragDropScreenState extends State<KanaDragDropScreen>
   }
 
   void _onCorrectMatch(int gridIndex) {
+    final kana = _gridKana[gridIndex];
+    // Speak the character on correct match (Duolingo-style feedback)
+    _tts.speak(kana.character);
+
     setState(() {
       _matched[gridIndex] = true;
       _feedback[gridIndex] = _FeedbackState.correct;
       _score++;
       _attempts++;
       // Remove matched romaji tile
-      final kana = _gridKana[gridIndex];
       _romajiTiles.removeWhere((k) => k.romaji == kana.romaji);
     });
 

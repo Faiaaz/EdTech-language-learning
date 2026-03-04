@@ -267,13 +267,36 @@ class _KanaDetailSheetState extends State<_KanaDetailSheet>
     _initTts();
   }
 
+  bool _isSpeaking = false;
+
   Future<void> _initTts() async {
     await _tts.setLanguage('ja-JP');
-    await _tts.setSpeechRate(0.3);
+    await _tts.setSpeechRate(0.5);
     await _tts.setPitch(1.0);
+    await _tts.setVolume(1.0);
+
+    _tts.setStartHandler(() {
+      if (mounted) setState(() => _isSpeaking = true);
+    });
+    _tts.setCompletionHandler(() {
+      if (mounted) setState(() => _isSpeaking = false);
+    });
+
+    // Auto-speak when sheet opens (Duolingo-style)
+    Future.delayed(const Duration(milliseconds: 200), () {
+      if (mounted) _speak(widget.kana.character);
+    });
   }
 
+  /// Normal speed — clear, natural pace like Duolingo.
   Future<void> _speak(String text) async {
+    await _tts.setSpeechRate(0.5);
+    await _tts.speak(text);
+  }
+
+  /// Slow speed — turtle button, extra slow for tricky sounds.
+  Future<void> _speakSlow(String text) async {
+    await _tts.setSpeechRate(0.2);
     await _tts.speak(text);
   }
 
@@ -444,26 +467,86 @@ class _KanaDetailSheetState extends State<_KanaDetailSheet>
 
           const SizedBox(height: 16),
 
-          // ── Audio button (TTS) ──────────────────────────────
-          SizedBox(
-            width: double.infinity,
-            child: ElevatedButton.icon(
-              onPressed: () => _speak(kana.character),
-              icon: const Icon(Icons.volume_up_rounded),
-              label: Text('Listen to "${kana.romaji}"'),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: _sakura,
-                foregroundColor: Colors.white,
-                padding: const EdgeInsets.symmetric(vertical: 14),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(14),
-                ),
-                textStyle: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w700,
+          // ── Audio buttons (Duolingo-style) ─────────────────
+          Row(
+            children: [
+              // Main speak button — large, prominent
+              Expanded(
+                child: GestureDetector(
+                  onTap: _isSpeaking ? null : () => _speak(kana.character),
+                  child: AnimatedContainer(
+                    duration: const Duration(milliseconds: 200),
+                    padding: const EdgeInsets.symmetric(vertical: 16),
+                    decoration: BoxDecoration(
+                      color: _isSpeaking
+                          ? _sakuraDark
+                          : _sakura,
+                      borderRadius: BorderRadius.circular(16),
+                      boxShadow: [
+                        BoxShadow(
+                          color: _sakura.withValues(alpha: 0.4),
+                          blurRadius: _isSpeaking ? 16 : 8,
+                          offset: const Offset(0, 3),
+                        ),
+                      ],
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          _isSpeaking
+                              ? Icons.graphic_eq_rounded
+                              : Icons.volume_up_rounded,
+                          color: Colors.white,
+                          size: 26,
+                        ),
+                        const SizedBox(width: 10),
+                        Text(
+                          _isSpeaking ? 'Playing...' : 'Listen',
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 17,
+                            fontWeight: FontWeight.w800,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
               ),
-            ),
+              const SizedBox(width: 12),
+              // Slow speak button — turtle icon
+              GestureDetector(
+                onTap: _isSpeaking ? null : () => _speakSlow(kana.character),
+                child: Container(
+                  width: 56,
+                  height: 56,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(16),
+                    border: Border.all(color: _sakura, width: 2),
+                  ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.slow_motion_video_rounded,
+                        color: _sakura,
+                        size: 22,
+                      ),
+                      const Text(
+                        'Slow',
+                        style: TextStyle(
+                          color: Color(0xFFE91E63),
+                          fontSize: 9,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
           ),
         ],
       ),
