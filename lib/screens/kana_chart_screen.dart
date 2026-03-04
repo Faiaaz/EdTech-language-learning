@@ -269,13 +269,11 @@ class _KanaDetailSheetState extends State<_KanaDetailSheet>
 
   Future<void> _initTts() async {
     await _tts.setLanguage('ja-JP');
-    await _tts.setSpeechRate(0.3);
+    await _tts.setSpeechRate(0.5);
     await _tts.setPitch(1.0);
   }
 
   Future<void> _speak(String text) async {
-    await _tts.speak(text);
-    await Future.delayed(const Duration(milliseconds: 700));
     await _tts.speak(text);
   }
 
