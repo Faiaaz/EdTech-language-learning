@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_tts/flutter_tts.dart';
 import 'package:get/get.dart';
 
 import 'package:ez_trainz/models/kana.dart';
@@ -244,6 +245,7 @@ class _KanaDetailSheetState extends State<_KanaDetailSheet>
     with SingleTickerProviderStateMixin {
   late AnimationController _strokeCtrl;
   late Animation<double> _strokeProgress;
+  final FlutterTts _tts = FlutterTts();
 
   static const _sakura = Color(KanaData.sakuraPink);
   static const _sakuraDark = Color(KanaData.sakuraPinkDark);
@@ -262,10 +264,22 @@ class _KanaDetailSheetState extends State<_KanaDetailSheet>
     Future.delayed(const Duration(milliseconds: 300), () {
       if (mounted) _strokeCtrl.forward();
     });
+    _initTts();
+  }
+
+  Future<void> _initTts() async {
+    await _tts.setLanguage('ja-JP');
+    await _tts.setSpeechRate(0.4);
+    await _tts.setPitch(1.0);
+  }
+
+  Future<void> _speak(String text) async {
+    await _tts.speak(text);
   }
 
   @override
   void dispose() {
+    _tts.stop();
     _strokeCtrl.dispose();
     super.dispose();
   }
@@ -430,19 +444,11 @@ class _KanaDetailSheetState extends State<_KanaDetailSheet>
 
           const SizedBox(height: 16),
 
-          // ── Audio placeholder button ───────────────────────
+          // ── Audio button (TTS) ──────────────────────────────
           SizedBox(
             width: double.infinity,
             child: ElevatedButton.icon(
-              onPressed: () {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text('Audio for "${kana.romaji}" coming soon!'),
-                    backgroundColor: _sakura,
-                    duration: const Duration(seconds: 1),
-                  ),
-                );
-              },
+              onPressed: () => _speak(kana.character),
               icon: const Icon(Icons.volume_up_rounded),
               label: Text('Listen to "${kana.romaji}"'),
               style: ElevatedButton.styleFrom(
