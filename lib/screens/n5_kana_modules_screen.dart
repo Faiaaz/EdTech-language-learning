@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import 'package:ez_trainz/controllers/srs_controller.dart';
 import 'package:ez_trainz/models/kana.dart';
 import 'package:ez_trainz/screens/kana_chart_screen.dart';
 import 'package:ez_trainz/screens/kana_drag_drop_screen.dart';
+import 'package:ez_trainz/screens/kana_srs_review_screen.dart';
 
 /// N5 Kana sub-modules: Hiragana and Katakana sections.
 /// Each section offers a Chart view and a Drag-and-Drop game.
@@ -164,6 +166,11 @@ class N5KanaModulesScreen extends StatelessWidget {
                     ),
 
                     const SizedBox(height: 24),
+
+                    // ── SRS REVIEW CARD ─────────────────────────
+                    _SrsReviewCard(),
+
+                    const SizedBox(height: 20),
 
                     // ── TIPS CARD ───────────────────────────────
                     Container(
@@ -399,6 +406,191 @@ class _ActionButton extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+// ── SRS Review card ─────────────────────────────────────────────────────────
+class _SrsReviewCard extends StatelessWidget {
+  static const _sakura = Color(KanaData.sakuraPink);
+  static const _sakuraDark = Color(KanaData.sakuraPinkDark);
+  static const _sakuraLight = Color(KanaData.sakuraPinkLight);
+
+  @override
+  Widget build(BuildContext context) {
+    final ctrl = Get.find<SrsController>();
+
+    return Obx(() {
+      final due = ctrl.dueCount.value;
+      final total = ctrl.totalCount.value;
+
+      return Container(
+        padding: const EdgeInsets.all(20),
+        decoration: BoxDecoration(
+          gradient: const LinearGradient(
+            colors: [Color(0xFF7B1FA2), Color(0xFFAD1457)],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+          borderRadius: BorderRadius.circular(20),
+          boxShadow: [
+            BoxShadow(
+              color: const Color(0xFF7B1FA2).withValues(alpha: 0.25),
+              blurRadius: 16,
+              offset: const Offset(0, 4),
+            ),
+          ],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Title row
+            Row(
+              children: [
+                Container(
+                  width: 44,
+                  height: 44,
+                  decoration: BoxDecoration(
+                    color: Colors.white.withValues(alpha: 0.2),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: const Icon(
+                    Icons.style_rounded,
+                    color: Colors.white,
+                    size: 24,
+                  ),
+                ),
+                const SizedBox(width: 14),
+                const Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Flashcard Review',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 18,
+                          fontWeight: FontWeight.w900,
+                        ),
+                      ),
+                      SizedBox(height: 2),
+                      Text(
+                        'Spaced repetition for long-term memory',
+                        style: TextStyle(
+                          color: Colors.white70,
+                          fontSize: 11,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 16),
+
+            // Stats row
+            Row(
+              children: [
+                _SrsStat(
+                  value: '$due',
+                  label: 'Due today',
+                  highlight: due > 0,
+                ),
+                const SizedBox(width: 16),
+                _SrsStat(value: '$total', label: 'Total cards'),
+              ],
+            ),
+            const SizedBox(height: 16),
+
+            // Start button
+            GestureDetector(
+              onTap: due == 0
+                  ? null
+                  : () {
+                      ctrl.startSession();
+                      Get.to(
+                        () => const KanaSrsReviewScreen(),
+                        transition: Transition.rightToLeftWithFade,
+                        duration: const Duration(milliseconds: 300),
+                      );
+                    },
+              child: Container(
+                width: double.infinity,
+                padding: const EdgeInsets.symmetric(vertical: 12),
+                decoration: BoxDecoration(
+                  color: due > 0
+                      ? Colors.white
+                      : Colors.white.withValues(alpha: 0.3),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      due > 0
+                          ? Icons.play_arrow_rounded
+                          : Icons.check_circle_rounded,
+                      color: due > 0
+                          ? const Color(0xFF7B1FA2)
+                          : Colors.white,
+                      size: 20,
+                    ),
+                    const SizedBox(width: 6),
+                    Text(
+                      due > 0
+                          ? 'Start Review  ($due cards)'
+                          : 'All caught up!',
+                      style: TextStyle(
+                        color: due > 0
+                            ? const Color(0xFF7B1FA2)
+                            : Colors.white,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w800,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      );
+    });
+  }
+}
+
+class _SrsStat extends StatelessWidget {
+  final String value;
+  final String label;
+  final bool highlight;
+
+  const _SrsStat({
+    required this.value,
+    required this.label,
+    this.highlight = false,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Text(
+          value,
+          style: TextStyle(
+            color: highlight ? const Color(0xFFFFCC02) : Colors.white,
+            fontSize: 22,
+            fontWeight: FontWeight.w900,
+          ),
+        ),
+        const SizedBox(width: 6),
+        Text(
+          label,
+          style: const TextStyle(
+            color: Colors.white70,
+            fontSize: 12,
+          ),
+        ),
+      ],
     );
   }
 }
