@@ -4,16 +4,43 @@ import 'package:get/get.dart';
 import 'package:ez_trainz/models/kana.dart';
 import 'package:ez_trainz/screens/kana_chart_screen.dart';
 import 'package:ez_trainz/screens/kana_drag_drop_screen.dart';
+import 'package:ez_trainz/screens/kana_review_screen.dart';
+import 'package:ez_trainz/screens/kana_progress_screen.dart';
+import 'package:ez_trainz/services/srs_service.dart';
 
 /// N5 Kana sub-modules: Hiragana and Katakana sections.
 /// Each section offers a Chart view and a Drag-and-Drop game.
 /// Uses Sakura Pink accent for JLC-specific styling.
-class N5KanaModulesScreen extends StatelessWidget {
+class N5KanaModulesScreen extends StatefulWidget {
   const N5KanaModulesScreen({super.key});
 
+  @override
+  State<N5KanaModulesScreen> createState() => _N5KanaModulesScreenState();
+}
+
+class _N5KanaModulesScreenState extends State<N5KanaModulesScreen> {
   static const _sakura = Color(KanaData.sakuraPink);
   static const _sakuraLight = Color(KanaData.sakuraPinkLight);
   static const _sakuraDark = Color(KanaData.sakuraPinkDark);
+
+  int _hiraganaDue = 0;
+  int _katakanaDue = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadDueCounts();
+  }
+
+  Future<void> _loadDueCounts() async {
+    final srs = await SrsService.getInstance();
+    if (mounted) {
+      setState(() {
+        _hiraganaDue = srs.dueCount('hiragana');
+        _katakanaDue = srs.dueCount('katakana');
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -117,6 +144,7 @@ class N5KanaModulesScreen extends StatelessWidget {
                           'The foundational Japanese script. 46 basic characters used for native Japanese words.',
                       icon: Icons.brush_rounded,
                       characterCount: 46,
+                      dueCount: _hiraganaDue,
                       onChartTap: () => Get.to(
                         () => KanaChartScreen(
                           title: 'Hiragana',
@@ -129,6 +157,24 @@ class N5KanaModulesScreen extends StatelessWidget {
                         () => KanaDragDropScreen(
                           title: 'Hiragana',
                           kanaList: KanaData.hiragana,
+                        ),
+                        transition: Transition.rightToLeftWithFade,
+                        duration: const Duration(milliseconds: 300),
+                      ),
+                      onReviewTap: () => Get.to(
+                        () => KanaReviewScreen(
+                          title: 'Hiragana',
+                          kanaList: KanaData.hiragana,
+                          kanaType: 'hiragana',
+                        ),
+                        transition: Transition.rightToLeftWithFade,
+                        duration: const Duration(milliseconds: 300),
+                      )?.then((_) => _loadDueCounts()),
+                      onProgressTap: () => Get.to(
+                        () => KanaProgressScreen(
+                          title: 'Hiragana',
+                          kanaList: KanaData.hiragana,
+                          kanaType: 'hiragana',
                         ),
                         transition: Transition.rightToLeftWithFade,
                         duration: const Duration(milliseconds: 300),
@@ -145,6 +191,7 @@ class N5KanaModulesScreen extends StatelessWidget {
                           'Used for foreign words, onomatopoeia, and emphasis. 46 basic characters.',
                       icon: Icons.translate_rounded,
                       characterCount: 46,
+                      dueCount: _katakanaDue,
                       onChartTap: () => Get.to(
                         () => KanaChartScreen(
                           title: 'Katakana',
@@ -157,6 +204,24 @@ class N5KanaModulesScreen extends StatelessWidget {
                         () => KanaDragDropScreen(
                           title: 'Katakana',
                           kanaList: KanaData.katakana,
+                        ),
+                        transition: Transition.rightToLeftWithFade,
+                        duration: const Duration(milliseconds: 300),
+                      ),
+                      onReviewTap: () => Get.to(
+                        () => KanaReviewScreen(
+                          title: 'Katakana',
+                          kanaList: KanaData.katakana,
+                          kanaType: 'katakana',
+                        ),
+                        transition: Transition.rightToLeftWithFade,
+                        duration: const Duration(milliseconds: 300),
+                      )?.then((_) => _loadDueCounts()),
+                      onProgressTap: () => Get.to(
+                        () => KanaProgressScreen(
+                          title: 'Katakana',
+                          kanaList: KanaData.katakana,
+                          kanaType: 'katakana',
                         ),
                         transition: Transition.rightToLeftWithFade,
                         duration: const Duration(milliseconds: 300),
@@ -199,6 +264,8 @@ class N5KanaModulesScreen extends StatelessWidget {
                           _TipItem(text: 'Practice stroke order for muscle memory'),
                           SizedBox(height: 6),
                           _TipItem(text: 'Play the drag & drop game daily'),
+                          SizedBox(height: 6),
+                          _TipItem(text: 'Use SRS Review to retain long-term'),
                         ],
                       ),
                     ),
@@ -220,8 +287,11 @@ class _ModuleSection extends StatelessWidget {
   final String description;
   final IconData icon;
   final int characterCount;
+  final int dueCount;
   final VoidCallback onChartTap;
   final VoidCallback onGameTap;
+  final VoidCallback onReviewTap;
+  final VoidCallback onProgressTap;
 
   const _ModuleSection({
     required this.title,
@@ -229,8 +299,11 @@ class _ModuleSection extends StatelessWidget {
     required this.description,
     required this.icon,
     required this.characterCount,
+    this.dueCount = 0,
     required this.onChartTap,
     required this.onGameTap,
+    required this.onReviewTap,
+    required this.onProgressTap,
   });
 
   static const _sakura = Color(KanaData.sakuraPink);
@@ -339,6 +412,29 @@ class _ModuleSection extends StatelessWidget {
               ),
             ],
           ),
+          const SizedBox(height: 10),
+          Row(
+            children: [
+              Expanded(
+                child: _ActionButton(
+                  icon: Icons.style_rounded,
+                  label: 'Review',
+                  onTap: onReviewTap,
+                  filled: true,
+                  badge: dueCount > 0 ? '$dueCount' : null,
+                ),
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: _ActionButton(
+                  icon: Icons.insights_rounded,
+                  label: 'Progress',
+                  onTap: onProgressTap,
+                  filled: false,
+                ),
+              ),
+            ],
+          ),
         ],
       ),
     );
@@ -350,12 +446,14 @@ class _ActionButton extends StatelessWidget {
   final String label;
   final VoidCallback onTap;
   final bool filled;
+  final String? badge;
 
   const _ActionButton({
     required this.icon,
     required this.label,
     required this.onTap,
     required this.filled,
+    this.badge,
   });
 
   static const _sakura = Color(KanaData.sakuraPink);
@@ -396,6 +494,26 @@ class _ActionButton extends StatelessWidget {
                 fontWeight: FontWeight.w700,
               ),
             ),
+            if (badge != null) ...[
+              const SizedBox(width: 6),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 2),
+                decoration: BoxDecoration(
+                  color: filled
+                      ? Colors.white
+                      : _sakuraDark,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Text(
+                  badge!,
+                  style: TextStyle(
+                    color: filled ? _sakuraDark : Colors.white,
+                    fontSize: 11,
+                    fontWeight: FontWeight.w800,
+                  ),
+                ),
+              ),
+            ],
           ],
         ),
       ),
