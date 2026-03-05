@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -7,8 +9,8 @@ import 'package:ez_trainz/services/srs_service.dart';
 
 /// Flashcard review screen for Kana SRS.
 ///
-/// Shows one card at a time. User recalls the reading, taps "Show Answer",
-/// then rates their recall as Forgot / Hard / Easy.
+/// Tap the card to flip it (3-D Y-axis rotation).
+/// After flipping, rate recall as Forgot / Hard / Easy.
 class KanaSrsReviewScreen extends StatelessWidget {
   const KanaSrsReviewScreen({super.key});
 
@@ -39,7 +41,6 @@ class _ReviewBody extends StatelessWidget {
   const _ReviewBody({required this.ctrl});
 
   static const _sakura = Color(KanaData.sakuraPink);
-  static const _sakuraLight = Color(KanaData.sakuraPinkLight);
   static const _sakuraDark = Color(KanaData.sakuraPinkDark);
 
   @override
@@ -85,8 +86,7 @@ class _ReviewBody extends StatelessWidget {
                         decoration: BoxDecoration(
                           color: Colors.white.withValues(alpha: 0.2),
                           borderRadius: BorderRadius.circular(20),
-                          border:
-                              Border.all(color: Colors.white38, width: 1),
+                          border: Border.all(color: Colors.white38, width: 1),
                         ),
                         child: const Row(
                           mainAxisSize: MainAxisSize.min,
@@ -125,7 +125,6 @@ class _ReviewBody extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 8),
-                // Progress bar
                 ClipRRect(
                   borderRadius: BorderRadius.circular(4),
                   child: LinearProgressIndicator(
@@ -140,7 +139,7 @@ class _ReviewBody extends StatelessWidget {
             ),
           ),
 
-          // ── Card ────────────────────────────────────────────────
+          // ── Body ────────────────────────────────────────────────
           Expanded(
             child: SingleChildScrollView(
               padding: const EdgeInsets.all(20),
@@ -168,112 +167,25 @@ class _ReviewBody extends StatelessWidget {
                   ),
                   const SizedBox(height: 20),
 
-                  // Main kana card
-                  Container(
-                    width: double.infinity,
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 40, horizontal: 24),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(24),
-                      boxShadow: [
-                        BoxShadow(
-                          color: _sakura.withValues(alpha: 0.15),
-                          blurRadius: 24,
-                          offset: const Offset(0, 8),
-                        ),
-                      ],
-                    ),
-                    child: Column(
-                      children: [
-                        // ── Front: character ──
-                        Text(
-                          card.label,
-                          style: TextStyle(
-                            fontSize: 96,
-                            color: scriptColor,
-                            fontWeight: FontWeight.w400,
-                            height: 1.0,
-                          ),
-                        ),
-
-                        if (answered) ...[
-                          const SizedBox(height: 24),
-                          Divider(
-                              color: _sakuraLight, thickness: 1.5),
-                          const SizedBox(height: 20),
-
-                          // ── Back: romaji ──
-                          if (kana != null) ...[
-                            Text(
-                              kana.romaji.toUpperCase(),
-                              style: TextStyle(
-                                fontSize: 36,
-                                fontWeight: FontWeight.w900,
-                                color: scriptColor,
-                              ),
-                            ),
-                            const SizedBox(height: 12),
-
-                            // ── Mnemonic ──
-                            Container(
-                              padding: const EdgeInsets.all(14),
-                              decoration: BoxDecoration(
-                                color: _sakuraLight,
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                              child: Row(
-                                children: [
-                                  Icon(Icons.lightbulb_rounded,
-                                      color: _sakura, size: 18),
-                                  const SizedBox(width: 10),
-                                  Expanded(
-                                    child: Text(
-                                      kana.mnemonic,
-                                      style: const TextStyle(
-                                        color: Color(0xFF5D4037),
-                                        fontSize: 13,
-                                        height: 1.4,
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ] else ...[
-                            Text(
-                              card.label,
-                              style: const TextStyle(
-                                fontSize: 28,
-                                fontWeight: FontWeight.w700,
-                                color: Color(0xFF1A1A2E),
-                              ),
-                            ),
-                          ],
-                        ] else ...[
-                          const SizedBox(height: 16),
-                          Text(
-                            'What is the reading?',
-                            style: TextStyle(
-                              fontSize: 14,
-                              color: Colors.grey[500],
-                            ),
-                          ),
-                        ],
-                      ],
-                    ),
+                  // Flip card — keyed by card.id so state resets each card
+                  _FlipCard(
+                    key: ValueKey(card.id),
+                    card: card,
+                    kana: kana,
+                    isFlipped: answered,
+                    scriptColor: scriptColor,
+                    onFlip: ctrl.showAnswer,
                   ),
 
                   const SizedBox(height: 28),
 
-                  // ── Action area ──────────────────────────────────
-                  if (!answered)
-                    _ShowAnswerButton(
-                      onTap: ctrl.showAnswer,
-                      color: scriptColor,
-                    )
-                  else
-                    _RatingButtons(ctrl: ctrl),
+                  // Rating buttons — only appear after flip
+                  AnimatedSwitcher(
+                    duration: const Duration(milliseconds: 250),
+                    child: answered
+                        ? _RatingButtons(ctrl: ctrl)
+                        : _HintText(color: scriptColor),
+                  ),
                 ],
               ),
             ),
@@ -284,47 +196,273 @@ class _ReviewBody extends StatelessWidget {
   }
 }
 
-class _ShowAnswerButton extends StatelessWidget {
-  final VoidCallback onTap;
-  final Color color;
-  const _ShowAnswerButton({required this.onTap, required this.color});
+// ── Flip card ────────────────────────────────────────────────────────────────
+
+class _FlipCard extends StatefulWidget {
+  final SrsCard card;
+  final Kana? kana;
+  final bool isFlipped;
+  final Color scriptColor;
+  final VoidCallback onFlip;
+
+  const _FlipCard({
+    super.key,
+    required this.card,
+    required this.kana,
+    required this.isFlipped,
+    required this.scriptColor,
+    required this.onFlip,
+  });
+
+  @override
+  State<_FlipCard> createState() => _FlipCardState();
+}
+
+class _FlipCardState extends State<_FlipCard>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _ctrl;
+  late final Animation<double> _anim;
+
+  @override
+  void initState() {
+    super.initState();
+    _ctrl = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 450),
+    );
+    _anim = CurvedAnimation(parent: _ctrl, curve: Curves.easeInOut);
+  }
+
+  @override
+  void didUpdateWidget(_FlipCard old) {
+    super.didUpdateWidget(old);
+    if (widget.isFlipped && !old.isFlipped) {
+      _ctrl.forward();
+    } else if (!widget.isFlipped) {
+      // New card via ValueKey rebuild — ensure we start from front.
+      _ctrl.reset();
+    }
+  }
+
+  @override
+  void dispose() {
+    _ctrl.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        width: double.infinity,
-        padding: const EdgeInsets.symmetric(vertical: 16),
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [color, Color.lerp(color, Colors.black, 0.15)!],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
+      onTap: !widget.isFlipped ? widget.onFlip : null,
+      child: AnimatedBuilder(
+        animation: _anim,
+        builder: (_, __) {
+          final angle = _anim.value * math.pi; // 0 → π
+          final isFront = angle <= math.pi / 2;
+
+          return Stack(
+            children: [
+              // Front face
+              if (isFront)
+                _buildTransformed(
+                  angle: angle,
+                  child: _CardFront(
+                    character: widget.card.label,
+                    scriptColor: widget.scriptColor,
+                  ),
+                ),
+
+              // Back face (pre-rotated by π so it starts facing away)
+              if (!isFront)
+                _buildTransformed(
+                  angle: angle - math.pi,
+                  child: _CardBack(
+                    kana: widget.kana,
+                    scriptColor: widget.scriptColor,
+                  ),
+                ),
+            ],
+          );
+        },
+      ),
+    );
+  }
+
+  Widget _buildTransformed({required double angle, required Widget child}) {
+    return Transform(
+      alignment: Alignment.center,
+      transform: Matrix4.identity()
+        ..setEntry(3, 2, 0.001) // perspective
+        ..rotateY(angle),
+      child: child,
+    );
+  }
+}
+
+// ── Card faces ───────────────────────────────────────────────────────────────
+
+class _CardFront extends StatelessWidget {
+  final String character;
+  final Color scriptColor;
+
+  const _CardFront({required this.character, required this.scriptColor});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(vertical: 56, horizontal: 24),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(24),
+        boxShadow: [
+          BoxShadow(
+            color: scriptColor.withValues(alpha: 0.15),
+            blurRadius: 24,
+            offset: const Offset(0, 8),
           ),
-          borderRadius: BorderRadius.circular(16),
-          boxShadow: [
-            BoxShadow(
-              color: color.withValues(alpha: 0.4),
-              blurRadius: 12,
-              offset: const Offset(0, 4),
+        ],
+      ),
+      child: Column(
+        children: [
+          Text(
+            character,
+            style: TextStyle(
+              fontSize: 100,
+              color: scriptColor,
+              fontWeight: FontWeight.w400,
+              height: 1.0,
             ),
-          ],
-        ),
-        child: const Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(Icons.flip_rounded, color: Colors.white, size: 20),
-            SizedBox(width: 8),
+          ),
+          const SizedBox(height: 20),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(Icons.touch_app_rounded,
+                  color: scriptColor.withValues(alpha: 0.5), size: 16),
+              const SizedBox(width: 6),
+              Text(
+                'Tap to reveal',
+                style: TextStyle(
+                  color: scriptColor.withValues(alpha: 0.5),
+                  fontSize: 13,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _CardBack extends StatelessWidget {
+  final Kana? kana;
+  final Color scriptColor;
+
+  static const _sakuraLight = Color(KanaData.sakuraPinkLight);
+
+  const _CardBack({required this.kana, required this.scriptColor});
+
+  @override
+  Widget build(BuildContext context) {
+    final k = kana;
+
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 24),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(24),
+        border: Border.all(
+            color: scriptColor.withValues(alpha: 0.3), width: 2),
+        boxShadow: [
+          BoxShadow(
+            color: scriptColor.withValues(alpha: 0.2),
+            blurRadius: 24,
+            offset: const Offset(0, 8),
+          ),
+        ],
+      ),
+      child: Column(
+        children: [
+          if (k != null) ...[
+            // Romaji
             Text(
-              'Show Answer',
+              k.romaji.toUpperCase(),
               style: TextStyle(
-                color: Colors.white,
-                fontSize: 16,
-                fontWeight: FontWeight.w800,
+                fontSize: 52,
+                fontWeight: FontWeight.w900,
+                color: scriptColor,
+                height: 1.0,
               ),
             ),
+            const SizedBox(height: 8),
+            // Small character reminder
+            Text(
+              k.character,
+              style: TextStyle(
+                fontSize: 28,
+                color: scriptColor.withValues(alpha: 0.4),
+                fontWeight: FontWeight.w400,
+              ),
+            ),
+            const SizedBox(height: 24),
+            // Mnemonic
+            Container(
+              padding: const EdgeInsets.all(14),
+              decoration: BoxDecoration(
+                color: _sakuraLight,
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Icon(Icons.lightbulb_rounded,
+                      color: scriptColor, size: 18),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: Text(
+                      k.mnemonic,
+                      style: const TextStyle(
+                        color: Color(0xFF5D4037),
+                        fontSize: 13,
+                        height: 1.4,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ] else ...[
+            Text(
+              'No data',
+              style: TextStyle(color: scriptColor, fontSize: 24),
+            ),
           ],
+        ],
+      ),
+    );
+  }
+}
+
+// ── Supporting widgets ───────────────────────────────────────────────────────
+
+class _HintText extends StatelessWidget {
+  final Color color;
+  const _HintText({required this.color});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 4),
+      child: Text(
+        'Tap the card to reveal the answer',
+        style: TextStyle(
+          color: color.withValues(alpha: 0.6),
+          fontSize: 13,
+          fontWeight: FontWeight.w500,
         ),
       ),
     );
@@ -365,8 +503,7 @@ class _RatingButtons extends StatelessWidget {
                 label: 'Hard',
                 icon: Icons.sentiment_neutral_rounded,
                 color: const Color(0xFFF57C00),
-                onTap: () =>
-                    ctrl.submitRating(RecallQuality.hardCorrect),
+                onTap: () => ctrl.submitRating(RecallQuality.hardCorrect),
               ),
             ),
             const SizedBox(width: 10),
@@ -407,7 +544,8 @@ class _RatingButton extends StatelessWidget {
         decoration: BoxDecoration(
           color: color.withValues(alpha: 0.1),
           borderRadius: BorderRadius.circular(14),
-          border: Border.all(color: color.withValues(alpha: 0.4), width: 1.5),
+          border:
+              Border.all(color: color.withValues(alpha: 0.4), width: 1.5),
         ),
         child: Column(
           children: [
@@ -453,17 +591,12 @@ class _SessionSummary extends StatelessWidget {
             Container(
               width: 80,
               height: 80,
-              decoration: BoxDecoration(
-                gradient: const LinearGradient(
-                  colors: [_sakura, _sakuraDark],
-                ),
+              decoration: const BoxDecoration(
+                gradient: LinearGradient(colors: [_sakura, _sakuraDark]),
                 shape: BoxShape.circle,
               ),
-              child: const Icon(
-                Icons.check_rounded,
-                color: Colors.white,
-                size: 44,
-              ),
+              child: const Icon(Icons.check_rounded,
+                  color: Colors.white, size: 44),
             ),
             const SizedBox(height: 24),
             const Text(
@@ -477,47 +610,37 @@ class _SessionSummary extends StatelessWidget {
             const SizedBox(height: 8),
             Text(
               'You reviewed $reviewed cards',
-              style: const TextStyle(
-                fontSize: 15,
-                color: Color(0xFF6B7280),
-              ),
+              style: const TextStyle(fontSize: 15, color: Color(0xFF6B7280)),
             ),
             const SizedBox(height: 28),
-
-            // Stats row
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 _StatChip(
-                  value: '$correct',
-                  label: 'Correct',
-                  color: const Color(0xFF43A047),
-                ),
+                    value: '$correct',
+                    label: 'Correct',
+                    color: const Color(0xFF43A047)),
                 const SizedBox(width: 16),
                 _StatChip(
-                  value: '${reviewed - correct}',
-                  label: 'Missed',
-                  color: const Color(0xFFE53935),
-                ),
+                    value: '${reviewed - correct}',
+                    label: 'Missed',
+                    color: const Color(0xFFE53935)),
                 const SizedBox(width: 16),
                 _StatChip(
-                  value: '$accuracy%',
-                  label: 'Accuracy',
-                  color: _sakura,
-                ),
+                    value: '$accuracy%',
+                    label: 'Accuracy',
+                    color: _sakura),
               ],
             ),
             const SizedBox(height: 36),
-
-            // Back button
             GestureDetector(
               onTap: () {
                 ctrl.endSession();
                 Get.back();
               },
               child: Container(
-                padding: const EdgeInsets.symmetric(
-                    vertical: 14, horizontal: 40),
+                padding:
+                    const EdgeInsets.symmetric(vertical: 14, horizontal: 40),
                 decoration: BoxDecoration(
                   gradient: const LinearGradient(
                     colors: [_sakura, _sakuraDark],
@@ -555,32 +678,21 @@ class _StatChip extends StatelessWidget {
   final String label;
   final Color color;
 
-  const _StatChip({
-    required this.value,
-    required this.label,
-    required this.color,
-  });
+  const _StatChip(
+      {required this.value, required this.label, required this.color});
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Text(
-          value,
-          style: TextStyle(
-            fontSize: 28,
-            fontWeight: FontWeight.w900,
-            color: color,
-          ),
-        ),
-        Text(
-          label,
-          style: const TextStyle(
-            fontSize: 12,
-            color: Color(0xFF6B7280),
-            fontWeight: FontWeight.w500,
-          ),
-        ),
+        Text(value,
+            style: TextStyle(
+                fontSize: 28, fontWeight: FontWeight.w900, color: color)),
+        Text(label,
+            style: const TextStyle(
+                fontSize: 12,
+                color: Color(0xFF6B7280),
+                fontWeight: FontWeight.w500)),
       ],
     );
   }
