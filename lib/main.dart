@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:ez_trainz/controllers/auth_controller.dart';
 import 'package:ez_trainz/controllers/course_controller.dart';
 import 'package:ez_trainz/controllers/program_controller.dart';
+import 'package:ez_trainz/controllers/srs_controller.dart';
 import 'package:ez_trainz/screens/course_list_screen.dart';
 import 'package:ez_trainz/screens/login_screen.dart';
 import 'package:ez_trainz/screens/splash_screen.dart';
@@ -23,6 +24,7 @@ class MyApp extends StatelessWidget {
         Get.put(AuthController(), permanent: true);
         Get.put(ProgramController(), permanent: true);
         Get.put(CourseController(), permanent: true);
+        Get.put(SrsController(), permanent: true);
       }),
       getPages: [
         GetPage(name: '/login', page: () => const LoginScreen()),
