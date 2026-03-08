@@ -7,6 +7,7 @@ import 'package:ez_trainz/models/program.dart';
 import 'package:ez_trainz/screens/coming_soon_screen.dart';
 import 'package:ez_trainz/screens/course_list_screen.dart';
 import 'package:ez_trainz/screens/profile_screen.dart';
+import 'package:ez_trainz/widgets/language_switcher.dart';
 
 /// Main container after login. Fixed bottom nav with five tabs.
 /// Learn tab shows program picker (JLC/KLC/ELC/GLC) or course list when a program is selected.
@@ -25,11 +26,11 @@ class _MainShellScreenState extends State<MainShellScreen> {
   static const _unselectedColor = Colors.white70;
 
   static const _tabs = [
-    _NavItem(icon: Icons.school_rounded, label: 'Learn'),
-    _NavItem(icon: Icons.fitness_center_rounded, label: 'Practice'),
-    _NavItem(icon: Icons.person_rounded, label: 'Profile'),
-    _NavItem(icon: Icons.people_rounded, label: 'Community'),
-    _NavItem(icon: Icons.emoji_events_rounded, label: 'Leaderboard'),
+    _NavItem(icon: Icons.school_rounded, labelKey: 'nav_learn'),
+    _NavItem(icon: Icons.fitness_center_rounded, labelKey: 'nav_practice'),
+    _NavItem(icon: Icons.person_rounded, labelKey: 'nav_profile'),
+    _NavItem(icon: Icons.people_rounded, labelKey: 'nav_community'),
+    _NavItem(icon: Icons.emoji_events_rounded, labelKey: 'nav_leaderboard'),
   ];
 
   @override
@@ -43,10 +44,10 @@ class _MainShellScreenState extends State<MainShellScreen> {
                 ? const CourseListScreen()
                 : const _ProgramPickerView();
           }),
-          const ComingSoonScreen(title: 'Practice', icon: Icons.fitness_center_rounded),
+          const ComingSoonScreen(titleKey: 'nav_practice', icon: Icons.fitness_center_rounded),
           const ProfileScreen(),
-          const ComingSoonScreen(title: 'Community', icon: Icons.people_rounded),
-          const ComingSoonScreen(title: 'Leaderboard', icon: Icons.emoji_events_rounded),
+          const ComingSoonScreen(titleKey: 'nav_community', icon: Icons.people_rounded),
+          const ComingSoonScreen(titleKey: 'nav_leaderboard', icon: Icons.emoji_events_rounded),
         ],
       ),
       bottomNavigationBar: Container(
@@ -91,7 +92,7 @@ class _MainShellScreenState extends State<MainShellScreen> {
                         ),
                         const SizedBox(height: 4),
                         Text(
-                          tab.label,
+                          tab.labelKey.tr,
                           style: TextStyle(
                             fontSize: 11,
                             fontWeight:
@@ -113,9 +114,9 @@ class _MainShellScreenState extends State<MainShellScreen> {
 }
 
 class _NavItem {
-  const _NavItem({required this.icon, required this.label});
+  const _NavItem({required this.icon, required this.labelKey});
   final IconData icon;
-  final String label;
+  final String labelKey;
 }
 
 /// Shown in Learn tab when no program is selected. Tapping a card sets program and loads courses.
@@ -133,31 +134,37 @@ class _ProgramPickerView extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(height: 24),
-              const Row(
-                crossAxisAlignment: CrossAxisAlignment.baseline,
-                textBaseline: TextBaseline.alphabetic,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text('EZ',
-                      style: TextStyle(
-                        color: Color(0xFFFFE000),
-                        fontSize: 22,
-                        fontWeight: FontWeight.w900,
-                        height: 1,
-                      )),
-                  SizedBox(width: 3),
-                  Text('TRAINZ',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 20,
-                        fontWeight: FontWeight.w800,
-                        letterSpacing: 1.5,
-                        height: 1,
-                      )),
+                  const Row(
+                    crossAxisAlignment: CrossAxisAlignment.baseline,
+                    textBaseline: TextBaseline.alphabetic,
+                    children: [
+                      Text('EZ',
+                          style: TextStyle(
+                            color: Color(0xFFFFE000),
+                            fontSize: 22,
+                            fontWeight: FontWeight.w900,
+                            height: 1,
+                          )),
+                      SizedBox(width: 3),
+                      Text('TRAINZ',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 20,
+                            fontWeight: FontWeight.w800,
+                            letterSpacing: 1.5,
+                            height: 1,
+                          )),
+                    ],
+                  ),
+                  const LanguageSwitcher(),
                 ],
               ),
               const SizedBox(height: 28),
               Text(
-                'Choose a language program',
+                'choose_language_program'.tr,
                 style: TextStyle(
                   color: Colors.white.withValues(alpha: 0.9),
                   fontSize: 20,
@@ -167,7 +174,7 @@ class _ProgramPickerView extends StatelessWidget {
               ),
               const SizedBox(height: 6),
               Text(
-                'Select one to see courses and lessons',
+                'select_one_subtitle'.tr,
                 style: TextStyle(
                   color: Colors.white.withValues(alpha: 0.75),
                   fontSize: 14,

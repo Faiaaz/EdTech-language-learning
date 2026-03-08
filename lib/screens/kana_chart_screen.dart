@@ -79,14 +79,14 @@ class _KanaChartScreenState extends State<KanaChartScreen> {
                             border:
                                 Border.all(color: Colors.white38, width: 1),
                           ),
-                          child: const Row(
+                          child: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              Icon(Icons.arrow_back_ios_rounded,
+                              const Icon(Icons.arrow_back_ios_rounded,
                                   color: Colors.white, size: 14),
-                              SizedBox(width: 4),
-                              Text('Back',
-                                  style: TextStyle(
+                              const SizedBox(width: 4),
+                              Text('back'.tr,
+                                  style: const TextStyle(
                                     color: Colors.white,
                                     fontSize: 13,
                                     fontWeight: FontWeight.w600,
@@ -403,9 +403,9 @@ class _KanaDetailSheetState extends State<_KanaDetailSheet>
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text(
-                        'Memory Hint',
-                        style: TextStyle(
+                      Text(
+                        'memory_hint'.tr,
+                        style: const TextStyle(
                           color: Color(0xFFF57F17),
                           fontSize: 11,
                           fontWeight: FontWeight.w700,
@@ -437,14 +437,14 @@ class _KanaDetailSheetState extends State<_KanaDetailSheet>
               onPressed: () {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
-                    content: Text('Audio for "${kana.romaji}" coming soon!'),
+                    content: Text('audio_coming_soon'.trParams({'romaji': kana.romaji})),
                     backgroundColor: _sakura,
                     duration: const Duration(seconds: 1),
                   ),
                 );
               },
               icon: const Icon(Icons.volume_up_rounded),
-              label: Text('Listen to "${kana.romaji}"'),
+              label: Text('listen_to'.trParams({'romaji': kana.romaji})),
               style: ElevatedButton.styleFrom(
                 backgroundColor: _sakura,
                 foregroundColor: Colors.white,
