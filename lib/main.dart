@@ -13,6 +13,11 @@ import 'package:ez_trainz/screens/splash_screen.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
+  Get.put(LocaleController(), permanent: true);
+  Get.put(AuthController(), permanent: true);
+  Get.put(ProgramController(), permanent: true);
+  Get.put(CourseController(), permanent: true);
+  Get.put(SrsController(), permanent: true);
   runApp(const MyApp());
 }
 
@@ -26,13 +31,6 @@ class MyApp extends StatelessWidget {
       translations: AppTranslations(),
       locale: LocaleController.to.locale,
       fallbackLocale: const Locale('en', 'US'),
-      initialBinding: BindingsBuilder(() {
-        Get.put(LocaleController(), permanent: true);
-        Get.put(AuthController(), permanent: true);
-        Get.put(ProgramController(), permanent: true);
-        Get.put(CourseController(), permanent: true);
-        Get.put(SrsController(), permanent: true);
-      }),
       getPages: [
         GetPage(name: '/login', page: () => const LoginScreen()),
         GetPage(name: '/courses', page: () => const CourseListScreen()),
