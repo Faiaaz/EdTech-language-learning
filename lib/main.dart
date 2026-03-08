@@ -24,7 +24,7 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       translations: AppTranslations(),
-      locale: const Locale('bn', 'BD'),
+      locale: LocaleController.to.locale,
       fallbackLocale: const Locale('en', 'US'),
       initialBinding: BindingsBuilder(() {
         Get.put(LocaleController(), permanent: true);

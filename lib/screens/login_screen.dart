@@ -6,6 +6,7 @@ import 'package:ez_trainz/screens/main_shell_screen.dart';
 import 'package:ez_trainz/screens/sign_up_screen.dart';
 import 'package:ez_trainz/services/auth_service.dart';
 import 'package:ez_trainz/widgets/animated_character.dart';
+import 'package:ez_trainz/widgets/language_switcher.dart';
 import 'package:ez_trainz/widgets/social_btn.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -78,6 +79,13 @@ class _LoginScreenState extends State<LoginScreen> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 const SizedBox(height: 14),
+
+                // ── Language switcher (EN / Banglish) ───────────────
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: const LanguageSwitcher(),
+                ),
+                const SizedBox(height: 8),
 
                 // ── HEADER ─────────────────────────────────────────
                 const Row(

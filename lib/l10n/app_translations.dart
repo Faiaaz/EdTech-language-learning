@@ -86,11 +86,29 @@ const _en = <String, String>{
   'email_label': 'Email',
   'bio_label': 'Bio',
   'no_bio': 'No bio yet.',
+  'profile_logout_confirm': 'Do you want to logout?',
+  'profile_logout_yes': 'Yes, Logout',
+  'profile_cancel': 'Cancel',
 
   // ── Language Picker ─────────────────────────────────────────────
   'app_language': 'App Language',
   'language_english': 'English',
   'language_bangla': 'বাংলিশ (Banglish)',
+
+  // ── Nav (bottom bar) ───────────────────────────────────────────
+  'nav_learn': 'Learn',
+  'nav_practice': 'Practice',
+  'nav_profile': 'Profile',
+  'nav_community': 'Community',
+  'nav_leaderboard': 'Leaderboard',
+
+  // ── Home / Learn tab ──────────────────────────────────────────
+  'home_subtitle': 'Which language will you learn today?',
+  'choose_language_program': 'Choose a language program',
+  'select_one_subtitle': 'Select one to see courses and lessons',
+
+  // ── Coming Soon ────────────────────────────────────────────────
+  'coming_soon': 'Coming Soon',
 
   // ── Splash ──────────────────────────────────────────────────────
   'splash_tagline': 'Learn languages the easy way',
@@ -173,11 +191,29 @@ const _bn = <String, String>{
   'email_label': 'Email',
   'bio_label': 'Bio',
   'no_bio': 'এখনো কোনো bio নেই।',
+  'profile_logout_confirm': 'আপনি কি Logout করতে চান?',
+  'profile_logout_yes': 'হ্যাঁ, Logout করুন',
+  'profile_cancel': 'বাদ দিন',
 
   // ── Language Picker ─────────────────────────────────────────────
   'app_language': 'অ্যাপের ভাষা',
   'language_english': 'English',
   'language_bangla': 'বাংলিশ (Banglish)',
+
+  // ── Nav (bottom bar) ───────────────────────────────────────────
+  'nav_learn': 'শিখুন',
+  'nav_practice': 'প্র্যাকটিস',
+  'nav_profile': 'প্রোফাইল',
+  'nav_community': 'কমিউনিটি',
+  'nav_leaderboard': 'লিডারবোর্ড',
+
+  // ── Home / Learn tab ──────────────────────────────────────────
+  'home_subtitle': 'আজ কোন ভাষা শিখবেন?',
+  'choose_language_program': 'কোন ভাষা শিখবেন বেছে নিন',
+  'select_one_subtitle': 'একটি বেছে নিন এবং কোর্স ও লেসন দেখুন',
+
+  // ── Coming Soon ────────────────────────────────────────────────
+  'coming_soon': 'শীঘ্রই আসছে',
 
   // ── Splash ──────────────────────────────────────────────────────
   'splash_tagline': 'ভাষা শেখা এখন সহজ',
