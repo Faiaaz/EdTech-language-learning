@@ -86,12 +86,12 @@ class _LessonScreenState extends State<LessonScreen> {
                     borderRadius: BorderRadius.circular(20),
                     border: Border.all(color: Colors.white38, width: 1),
                   ),
-                  child: const Row(
+                  child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Icon(Icons.arrow_back_ios_rounded,
+                      const Icon(Icons.arrow_back_ios_rounded,
                           color: Colors.white, size: 14),
-                      SizedBox(width: 4),
+                      const SizedBox(width: 4),
                       Text('back'.tr,
                           style: const TextStyle(
                             color: Colors.white,
@@ -265,13 +265,13 @@ class _LessonScreenState extends State<LessonScreen> {
     if (_videoError) {
       return Container(
         color: const Color(0xFF1A1A2E),
-        child: const Center(
+        child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(Icons.error_outline_rounded,
+              const Icon(Icons.error_outline_rounded,
                   color: Colors.white54, size: 36),
-              SizedBox(height: 8),
+              const SizedBox(height: 8),
               Text('failed_load_video'.tr,
                   style: const TextStyle(color: Colors.white54, fontSize: 13)),
             ],
