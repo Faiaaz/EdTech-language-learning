@@ -116,7 +116,7 @@ class CourseService {
   /// Video URLs mapped by lesson ID.
   /// TODO: replace with [fetchVideoUrl] once backend delivers signed URLs.
   static final Map<int, String> _staticVideoUrls = {
-    1: '$_videoBaseUrl/N5-Basics/1.mp4?Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly9kM2M2bzVsaGYwODliYi5jbG91ZGZyb250Lm5ldC9ONS1CYXNpY3MvMS5tcDQiLCJDb25kaXRpb24iOnsiRGF0ZUxlc3NUaGFuIjp7IkFXUzpFcG9jaFRpbWUiOjE3NzI0OTYwMDB9fX1dfQ__&Key-Pair-Id=K3SL4B0PI402BI&Signature=h-W7jbUTBEIBq~5a2VZIfChQx9XB6q31AWVASF2TP215lrfKXHKL6f1WakyN9SyAuyYgOT9qD1ISH-aD3iJR5YS6CglRRYyppBgc~wzb8WD1XXL5aXQIl9N5g3e7~GBm4FZO3ZDwqO~1iJbMukMvD9RK2DtcXhegzfnJkO98jkLHcJnE6MDtA3eG9UFLpuI~-2parVc~QozxMC0wokA4nvQoT~JcQ1LG5cbC9Y1lUnJdH~ZXfuSUjMv~kkRUAnlVe7arJHQI8lD9m97e-mMWAPwTAAQXF18RHsxYgjqw7Ix2hV~Jx9u55Ym-hV6Nb0KaIParRBFO9-UT2L6UlmZ~pg__',
+    1: '$_videoBaseUrl/output_grp/Hiragana%20Part-1%20_EZTrainZ_JLC.m3u8?Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly9kM2M2bzVsaGYwODliYi5jbG91ZGZyb250Lm5ldC9vdXRwdXRfZ3JwL0hpcmFnYW5hJTIwUGFydC0xJTIwX0VaVHJhaW5aX0pMQy5tM3U4IiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzczMTg3MjAwfX19XX0_&Key-Pair-Id=K3SL4B0PI402BI&Signature=A2ulpY2mb~Np-b4YUn3tVb7Etq-Y1JtZdYt0Bx7YoFhKlUu4Mzzph-rQgQa1uWyesmeSy76D~ojYZ6Nrjn8h-NkNyc8UZSN5MpaTVxqe9O5dr182a5tCjRbgI25CNs0YNx7owrfzt97tENy1ZMcbbpnxVoI3-CXki2HUzaElkpeLe~yNBGAwIfFsonPphoJz7EZcmQXAyCBHvWOwDoneUD7XwPLGBnejhQyRuorWBmCAsPmDCaXa3oX-VM~-4comhy571h-FtBEbEN3fYhYSeH1iklF1KV1jcMap9U6Z5Io3xD8EziMtp9MDjJ~~GgOw9tkpdmEz-IEnFTSAa3k4wQ__',
   };
 
   /// Returns the video URL for a lesson, or null if not available.
@@ -138,11 +138,11 @@ class CourseService {
           {
             "id": 1,
             "courseId": 1,
-            "title": "Lesson 1: Greetings",
-            "description": "Basic Japanese greetings and introductions.",
+            "title": "Lesson 1: Hiragana Part 1",
+            "description": "Introduction to Hiragana — the foundational Japanese syllabary.",
             "content": {
               "body":
-                  "Learn to say hello, goodbye, and introduce yourself in Japanese.",
+                  "Learn the first set of Hiragana characters used in the Japanese writing system. Hiragana is one of three scripts in Japanese and is essential for reading and writing. This lesson covers the vowels (あ い う え お) and the K-row (か き く け こ).",
               "type": "text"
             },
             "createdAt": "2026-01-27T08:42:17.818Z",
@@ -234,11 +234,11 @@ class CourseService {
       {
         "id": 1,
         "courseId": 1,
-        "title": "Lesson 1: Greetings",
-        "description": "Basic Japanese greetings and introductions.",
+        "title": "Lesson 1: Hiragana Part 1",
+        "description": "Introduction to Hiragana — the foundational Japanese syllabary.",
         "content": {
           "body":
-              "Learn to say hello, goodbye, and introduce yourself in Japanese.",
+              "Learn the first set of Hiragana characters used in the Japanese writing system. Hiragana is one of three scripts in Japanese and is essential for reading and writing. This lesson covers the vowels (あ い う え お) and the K-row (か き く け こ).",
           "type": "text"
         },
         "createdAt": "2026-01-27T08:42:17.818Z",
@@ -247,7 +247,7 @@ class CourseService {
           {
             "id": 1,
             "lessonId": 1,
-            "title": "Greetings Quiz 1",
+            "title": "Hiragana Quiz 1",
             "passingScore": 70,
             "createdAt": "2026-01-27T08:42:17.818Z",
             "updatedAt": "2026-01-27T08:42:17.818Z"
@@ -255,7 +255,7 @@ class CourseService {
           {
             "id": 2,
             "lessonId": 1,
-            "title": "Greetings Quiz 2",
+            "title": "Hiragana Quiz 2",
             "passingScore": 70,
             "createdAt": "2026-01-27T08:42:17.818Z",
             "updatedAt": "2026-01-27T08:42:17.818Z"
@@ -263,7 +263,7 @@ class CourseService {
           {
             "id": 3,
             "lessonId": 1,
-            "title": "Greetings Quiz 3",
+            "title": "Hiragana Quiz 3",
             "passingScore": 70,
             "createdAt": "2026-01-27T08:42:17.818Z",
             "updatedAt": "2026-01-27T08:42:17.818Z"
