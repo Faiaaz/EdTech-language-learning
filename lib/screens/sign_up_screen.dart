@@ -67,26 +67,26 @@ class _SignUpScreenState extends State<SignUpScreen>
 
   String? _validateName(String v) {
     v = v.trim();
-    if (v.isEmpty) return 'Full name is required';
-    if (v.length < 3) return 'Name must be at least 3 characters';
+    if (v.isEmpty) return 'val_name_required'.tr;
+    if (v.length < 3) return 'val_name_length'.tr;
     if (!RegExp(r"^[a-zA-Z\s\-'.]+$").hasMatch(v)) {
-      return 'Name can only contain letters, spaces, or hyphens';
+      return 'val_name_format'.tr;
     }
     return null;
   }
 
   String? _validateEmail(String v) {
     v = v.trim();
-    if (v.isEmpty) return 'Email address is required';
+    if (v.isEmpty) return 'val_email_required'.tr;
     if (!RegExp(r'^[\w\.\+\-]+@[\w\-]+\.[a-z]{2,}$').hasMatch(v)) {
-      return 'Enter a valid email address';
+      return 'val_email_format'.tr;
     }
     return null;
   }
 
   String? _validatePhone(String v) {
     v = v.trim();
-    if (v.isEmpty) return 'Phone number is required';
+    if (v.isEmpty) return 'val_phone_required'.tr;
     final cleaned = v.replaceAll(RegExp(r'[\s\-()]'), '');
     final normalized = cleaned.startsWith('+88')
         ? cleaned.substring(3)
@@ -94,25 +94,25 @@ class _SignUpScreenState extends State<SignUpScreen>
             ? cleaned.substring(2)
             : cleaned;
     if (!RegExp(r'^01[3-9]\d{8}$').hasMatch(normalized)) {
-      return 'Enter a valid BD number (e.g. 017XXXXXXXX)';
+      return 'val_phone_format'.tr;
     }
     return null;
   }
 
   String? _validatePassword(String v) {
-    if (v.isEmpty) return 'Password is required';
-    if (v.length < 8) return 'Must be at least 8 characters';
-    if (!RegExp(r'[A-Z]').hasMatch(v)) return 'Must include an uppercase letter';
-    if (!RegExp(r'[0-9]').hasMatch(v)) return 'Must include a number';
+    if (v.isEmpty) return 'val_pass_required'.tr;
+    if (v.length < 8) return 'val_pass_length'.tr;
+    if (!RegExp(r'[A-Z]').hasMatch(v)) return 'val_pass_uppercase'.tr;
+    if (!RegExp(r'[0-9]').hasMatch(v)) return 'val_pass_number'.tr;
     if (!RegExp(r'[!@#$%^&*(),.?":{}|<>_\-\+\=\[\]\/\~`]').hasMatch(v)) {
-      return 'Must include a special character (e.g. @, #, !)';
+      return 'val_pass_special'.tr;
     }
     return null;
   }
 
   String? _validateConfirm(String v) {
-    if (v.isEmpty) return 'Please confirm your password';
-    if (v != _passCtrl.text) return 'Passwords do not match';
+    if (v.isEmpty) return 'val_confirm_required'.tr;
+    if (v != _passCtrl.text) return 'val_confirm_match'.tr;
     return null;
   }
 
@@ -164,7 +164,7 @@ class _SignUpScreenState extends State<SignUpScreen>
     } on AuthException catch (e) {
       if (mounted) setState(() { _apiError = e.message; _isLoading = false; });
     } catch (e) {
-      if (mounted) setState(() { _apiError = "Something went wrong: $e"; _isLoading = false; });
+      if (mounted) setState(() { _apiError = 'login_generic_error'.tr; _isLoading = false; });
     }
   }
 
@@ -296,8 +296,8 @@ class _SignUpScreenState extends State<SignUpScreen>
                           const SizedBox(height: 16),
 
                           LabeledField(
-                            label: 'Full Name',
-                            hint: 'Enter your full name',
+                            label: 'signup_name_label'.tr,
+                            hint: 'signup_name_hint'.tr,
                             icon: Icons.person_outline_rounded,
                             controller: _nameCtrl,
                             errorText: _nameError,
@@ -307,8 +307,8 @@ class _SignUpScreenState extends State<SignUpScreen>
                           const SizedBox(height: 12),
 
                           LabeledField(
-                            label: 'Email Address',
-                            hint: 'Enter your email',
+                            label: 'signup_email_label'.tr,
+                            hint: 'signup_email_hint'.tr,
                             icon: Icons.email_outlined,
                             keyboardType: TextInputType.emailAddress,
                             controller: _emailCtrl,
@@ -319,8 +319,8 @@ class _SignUpScreenState extends State<SignUpScreen>
                           const SizedBox(height: 12),
 
                           LabeledField(
-                            label: 'Phone Number',
-                            hint: '017XXXXXXXX',
+                            label: 'signup_phone_label'.tr,
+                            hint: 'signup_phone_hint'.tr,
                             icon: Icons.phone_outlined,
                             keyboardType: TextInputType.phone,
                             controller: _phoneCtrl,
@@ -331,8 +331,8 @@ class _SignUpScreenState extends State<SignUpScreen>
                           const SizedBox(height: 12),
 
                           LabeledField(
-                            label: 'Password',
-                            hint: 'Min 8 chars, uppercase, number, symbol',
+                            label: 'signup_pass_label'.tr,
+                            hint: 'signup_pass_hint'.tr,
                             icon: Icons.lock_outline_rounded,
                             isPassword: true,
                             controller: _passCtrl,
@@ -343,8 +343,8 @@ class _SignUpScreenState extends State<SignUpScreen>
                           const SizedBox(height: 12),
 
                           LabeledField(
-                            label: 'Confirm Password',
-                            hint: 'Re-enter your password',
+                            label: 'signup_confirm_label'.tr,
+                            hint: 'signup_confirm_hint'.tr,
                             icon: Icons.lock_outline_rounded,
                             isPassword: true,
                             controller: _confirmCtrl,
@@ -439,9 +439,9 @@ class _SignUpScreenState extends State<SignUpScreen>
                                 strokeWidth: 2.5,
                               ),
                             )
-                          : const Text(
-                              'Continue',
-                              style: TextStyle(
+                          : Text(
+                              'signup_button'.tr,
+                              style: const TextStyle(
                                 fontSize: 17,
                                 fontWeight: FontWeight.w600,
                                 letterSpacing: 0.3,
@@ -453,17 +453,17 @@ class _SignUpScreenState extends State<SignUpScreen>
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Text(
-                        'Already have an account? ',
-                        style: TextStyle(color: Colors.white, fontSize: 13),
+                      Text(
+                        'signup_have_account'.tr,
+                        style: const TextStyle(color: Colors.white, fontSize: 13),
                       ),
                       GestureDetector(
                         onTap: _isLoading
                             ? null
                             : () => Navigator.of(context).pop(),
-                        child: const Text(
-                          'Sign In',
-                          style: TextStyle(
+                        child: Text(
+                          'signup_sign_in'.tr,
+                          style: const TextStyle(
                             color: Color(0xFFFFE000),
                             fontSize: 13,
                             fontWeight: FontWeight.w700,

@@ -34,7 +34,7 @@ class _LoginScreenState extends State<LoginScreen> {
     final password = _passCtrl.text;
 
     if (email.isEmpty || password.isEmpty) {
-      setState(() => _error = 'Please enter your email and password.');
+      setState(() => _error = 'login_empty_fields'.tr);
       return;
     }
 
@@ -46,7 +46,6 @@ class _LoginScreenState extends State<LoginScreen> {
         password: password,
       );
 
-      // Pull name + accessToken from response
       final token = response['accessToken'] as String? ?? '';
       final user  = response['user'] as Map<String, dynamic>? ?? {};
       final name  = user['name'] as String? ?? email.split('@').first;
@@ -63,7 +62,7 @@ class _LoginScreenState extends State<LoginScreen> {
     } on AuthException catch (e) {
       setState(() { _error = e.message; _isLoading = false; });
     } catch (e) {
-      setState(() { _error = 'Something went wrong: $e'; _isLoading = false; });
+      setState(() { _error = 'login_generic_error'.tr; _isLoading = false; });
     }
   }
 
@@ -145,7 +144,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 // ── EMAIL FIELD ────────────────────────────────────
                 _LoginField(
                   controller: _emailCtrl,
-                  hint: 'Enter your Email',
+                  hint: 'enter_email'.tr,
                   keyboardType: TextInputType.emailAddress,
                   onChanged: (_) => setState(() => _error = null),
                 ),
@@ -154,7 +153,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 // ── PASSWORD FIELD ─────────────────────────────────
                 _LoginField(
                   controller: _passCtrl,
-                  hint: 'Enter your password',
+                  hint: 'enter_password'.tr,
                   isPassword: true,
                   obscure: _obscure,
                   onToggleObscure: () => setState(() => _obscure = !_obscure),
@@ -212,8 +211,8 @@ class _LoginScreenState extends State<LoginScreen> {
                               strokeWidth: 2.5,
                             ),
                           )
-                        : const Text('Sign in',
-                            style: TextStyle(
+                        : Text('sign_in'.tr,
+                            style: const TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.w600,
                             )),
@@ -222,8 +221,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
                 const SizedBox(height: 14),
 
-                const Text('Forgot Password',
-                    style: TextStyle(
+                Text('forgot_password'.tr,
+                    style: const TextStyle(
                       color: Color(0xFFFFE000),
                       fontSize: 14,
                       fontWeight: FontWeight.w600,
@@ -231,19 +230,19 @@ class _LoginScreenState extends State<LoginScreen> {
 
                 const SizedBox(height: 10),
 
-                const Row(
+                Row(
                   children: [
-                    Expanded(
+                    const Expanded(
                         child: Divider(color: Colors.white60, thickness: 1)),
                     Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 10),
-                      child: Text('Or Sign In With',
-                          style: TextStyle(
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      child: Text('or_sign_in_with'.tr,
+                          style: const TextStyle(
                             color: Colors.white,
                             fontSize: 13,
                           )),
                     ),
-                    Expanded(
+                    const Expanded(
                         child: Divider(color: Colors.white60, thickness: 1)),
                   ],
                 ),
@@ -269,8 +268,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
                 const SizedBox(height: 14),
 
-                const Text('New Here ?',
-                    style: TextStyle(color: Colors.white, fontSize: 13)),
+                Text('new_here'.tr,
+                    style: const TextStyle(color: Colors.white, fontSize: 13)),
 
                 const SizedBox(height: 10),
 
@@ -286,8 +285,8 @@ class _LoginScreenState extends State<LoginScreen> {
                         borderRadius: BorderRadius.circular(30),
                       ),
                     ),
-                    child: const Text("Let's Sign Up",
-                        style: TextStyle(
+                    child: Text('lets_sign_up'.tr,
+                        style: const TextStyle(
                           fontSize: 15,
                           fontWeight: FontWeight.w600,
                         )),

@@ -57,8 +57,8 @@ class _LessonScreenState extends State<LessonScreen> {
   Widget build(BuildContext context) {
     final lesson = CourseController.to.selectedLesson;
     if (lesson == null) {
-      return const Scaffold(
-        body: Center(child: Text('Lesson not found.')),
+      return Scaffold(
+        body: Center(child: Text('lesson_not_found'.tr)),
       );
     }
 
@@ -92,8 +92,8 @@ class _LessonScreenState extends State<LessonScreen> {
                       Icon(Icons.arrow_back_ios_rounded,
                           color: Colors.white, size: 14),
                       SizedBox(width: 4),
-                      Text('Back',
-                          style: TextStyle(
+                      Text('back'.tr,
+                          style: const TextStyle(
                             color: Colors.white,
                             fontSize: 13,
                             fontWeight: FontWeight.w600,
@@ -178,9 +178,9 @@ class _LessonScreenState extends State<LessonScreen> {
                       // ── Quizzes section ──────────────────────
                       if (lesson.quizzes.isNotEmpty) ...[
                         const SizedBox(height: 28),
-                        const Text(
-                          'Quizzes',
-                          style: TextStyle(
+                        Text(
+                          'quizzes'.tr,
+                          style: const TextStyle(
                             color: Color(0xFF1A1A2E),
                             fontSize: 18,
                             fontWeight: FontWeight.w800,
@@ -219,7 +219,7 @@ class _LessonScreenState extends State<LessonScreen> {
                                         ),
                                         const SizedBox(height: 2),
                                         Text(
-                                          'Passing score: ${quiz.passingScore}%',
+                                          'passing_score'.trParams({'score': quiz.passingScore.toString()}),
                                           style: const TextStyle(
                                             color: Color(0xFF6B7280),
                                             fontSize: 12,
@@ -236,9 +236,9 @@ class _LessonScreenState extends State<LessonScreen> {
                                       borderRadius:
                                           BorderRadius.circular(16),
                                     ),
-                                    child: const Text(
-                                      'Start',
-                                      style: TextStyle(
+                                    child: Text(
+                                      'start'.tr,
+                                      style: const TextStyle(
                                         color: Colors.white,
                                         fontSize: 12,
                                         fontWeight: FontWeight.w700,
@@ -272,8 +272,8 @@ class _LessonScreenState extends State<LessonScreen> {
               Icon(Icons.error_outline_rounded,
                   color: Colors.white54, size: 36),
               SizedBox(height: 8),
-              Text('Failed to load video',
-                  style: TextStyle(color: Colors.white54, fontSize: 13)),
+              Text('failed_load_video'.tr,
+                  style: const TextStyle(color: Colors.white54, fontSize: 13)),
             ],
           ),
         ),
