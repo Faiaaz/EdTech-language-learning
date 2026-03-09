@@ -145,16 +145,21 @@ class _LessonScreenState extends State<LessonScreen> {
       return Scaffold(
         backgroundColor: Colors.black,
         body: SafeArea(
-          child: Stack(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Center(child: _buildVideoContent()),
-              if (_showControls)
-                Positioned(
-                  top: 8,
-                  left: 8,
-                  child: _fsBackButton(),
+              // 16:9 video centred on black background
+              AspectRatio(
+                aspectRatio: 16 / 9,
+                child: Stack(
+                  children: [
+                    Positioned.fill(child: _buildVideoContent()),
+                    _buildControlsOverlay(),
+                  ],
                 ),
-              _buildControlsOverlay(fullscreen: true),
+              ),
+              // Fullscreen exit button below the video
+              _buildFullscreenToggleBar(),
             ],
           ),
         ),
@@ -215,15 +220,18 @@ class _LessonScreenState extends State<LessonScreen> {
                     aspectRatio: 16 / 9,
                     child: Stack(
                       children: [
-                        _buildVideoContent(),
-                        _buildControlsOverlay(fullscreen: false),
+                        Positioned.fill(child: _buildVideoContent()),
+                        _buildControlsOverlay(),
                       ],
                     ),
                   ),
                 ),
               ),
 
-            if (hasVideo) const SizedBox(height: 20),
+            // ── Fullscreen toggle button below video ──────
+            if (hasVideo) _buildFullscreenToggleBar(),
+
+            if (hasVideo) const SizedBox(height: 8),
 
             // ── Lesson content ────────────────────────────
             Expanded(
@@ -393,9 +401,9 @@ class _LessonScreenState extends State<LessonScreen> {
     return VideoPlayer(_videoCtrl!);
   }
 
-  // ── Controls overlay ─────────────────────────────────────────────
+  // ── Controls overlay (inside video) ─────────────────────────────
 
-  Widget _buildControlsOverlay({required bool fullscreen}) {
+  Widget _buildControlsOverlay() {
     return Positioned.fill(
       child: GestureDetector(
         behavior: HitTestBehavior.opaque,
@@ -411,32 +419,15 @@ class _LessonScreenState extends State<LessonScreen> {
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
                   colors: [
-                    Colors.black.withValues(alpha: 0.3),
                     Colors.transparent,
                     Colors.transparent,
                     Colors.black.withValues(alpha: 0.65),
                   ],
-                  stops: const [0.0, 0.25, 0.65, 1.0],
+                  stops: const [0.0, 0.55, 1.0],
                 ),
               ),
               child: Column(
                 children: [
-                  // ── Top row: fullscreen toggle ─────────
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        _iconBtn(
-                          icon: _isFullscreen
-                              ? Icons.fullscreen_exit_rounded
-                              : Icons.fullscreen_rounded,
-                          onTap: _toggleFullscreen,
-                        ),
-                      ],
-                    ),
-                  ),
-
                   // ── Centre row: rewind | play/pause | forward ──
                   Expanded(
                     child: Row(
@@ -516,6 +507,52 @@ class _LessonScreenState extends State<LessonScreen> {
     );
   }
 
+  // ── Fullscreen toggle bar (below the video) ──────────────────────
+
+  Widget _buildFullscreenToggleBar() {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(24, 6, 24, 0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          GestureDetector(
+            onTap: _toggleFullscreen,
+            child: Container(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+              decoration: BoxDecoration(
+                color: Colors.white.withValues(alpha: 0.2),
+                borderRadius: BorderRadius.circular(14),
+                border: Border.all(color: Colors.white38, width: 1),
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(
+                    _isFullscreen
+                        ? Icons.fullscreen_exit_rounded
+                        : Icons.fullscreen_rounded,
+                    color: Colors.white,
+                    size: 18,
+                  ),
+                  const SizedBox(width: 4),
+                  Text(
+                    _isFullscreen ? 'Exit' : 'Fullscreen',
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 12,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   // ── Reusable icon button ─────────────────────────────────────────
 
   Widget _iconBtn({
@@ -529,31 +566,4 @@ class _LessonScreenState extends State<LessonScreen> {
     );
   }
 
-  // ── Back button used in fullscreen mode ──────────────────────────
-
-  Widget _fsBackButton() {
-    return GestureDetector(
-      onTap: _toggleFullscreen,
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-        decoration: BoxDecoration(
-          color: Colors.black45,
-          borderRadius: BorderRadius.circular(16),
-        ),
-        child: const Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(Icons.fullscreen_exit_rounded,
-                color: Colors.white, size: 18),
-            SizedBox(width: 4),
-            Text('Exit',
-                style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 12,
-                    fontWeight: FontWeight.w600)),
-          ],
-        ),
-      ),
-    );
-  }
 }
