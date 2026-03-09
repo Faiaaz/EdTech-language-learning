@@ -9,15 +9,24 @@ import 'package:ez_trainz/controllers/srs_controller.dart';
 import 'package:ez_trainz/l10n/app_translations.dart';
 import 'package:ez_trainz/screens/course_list_screen.dart';
 import 'package:ez_trainz/screens/login_screen.dart';
+import 'package:ez_trainz/screens/main_shell_screen.dart';
 import 'package:ez_trainz/screens/splash_screen.dart';
+
+// TODO: Remove auth bypass before production
+const bool _kBypassAuth = true;
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   Get.put(LocaleController(), permanent: true);
-  Get.put(AuthController(), permanent: true);
+  final auth = Get.put(AuthController(), permanent: true);
   Get.put(ProgramController(), permanent: true);
   Get.put(CourseController(), permanent: true);
   Get.put(SrsController(), permanent: true);
+
+  if (_kBypassAuth) {
+    auth.setSession(token: 'dev-bypass-token', name: 'Dev User', email: 'dev@example.com');
+  }
+
   runApp(const MyApp());
 }
 
@@ -35,7 +44,7 @@ class MyApp extends StatelessWidget {
         GetPage(name: '/login', page: () => const LoginScreen()),
         GetPage(name: '/courses', page: () => const CourseListScreen()),
       ],
-      home: const SplashScreen(),
+      home: _kBypassAuth ? const MainShellScreen() : const SplashScreen(),
     );
   }
 }
