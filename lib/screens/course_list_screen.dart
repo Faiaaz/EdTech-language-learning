@@ -231,9 +231,10 @@ class _CourseCard extends StatelessWidget {
               child: Center(
                 child: Text(
                   course.level,
+                  textAlign: TextAlign.center,
                   style: TextStyle(
                     color: badgeColor,
-                    fontSize: 18,
+                    fontSize: 11,
                     fontWeight: FontWeight.w900,
                   ),
                 ),
