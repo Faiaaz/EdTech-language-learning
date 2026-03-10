@@ -217,7 +217,12 @@ class _LessonScreenState extends State<LessonScreen> {
           body: Stack(
             fit: StackFit.expand,
             children: [
-              _buildVideoContent(),
+              Center(
+                child: AspectRatio(
+                  aspectRatio: 16 / 9,
+                  child: _buildVideoContent(),
+                ),
+              ),
               _buildControlsOverlay(fullscreen: true),
             ],
           ),
