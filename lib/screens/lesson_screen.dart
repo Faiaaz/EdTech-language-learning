@@ -20,9 +20,12 @@ class _LessonScreenState extends State<LessonScreen> {
   bool _videoError = false;
   bool _showControls = true;
   bool _isFullscreen = false;
+  bool _isDraggingSlider = false;
+  double _sliderValue = 0.0;
   Timer? _hideTimer;
 
   static const _seekStep = Duration(seconds: 10);
+  static const _autoHideDuration = Duration(seconds: 3);
 
   @override
   void initState() {
@@ -38,15 +41,41 @@ class _LessonScreenState extends State<LessonScreen> {
 
     _videoCtrl = VideoPlayerController.networkUrl(Uri.parse(url))
       ..initialize().then((_) {
-        if (mounted) setState(() => _videoInitialised = true);
+        if (mounted) {
+          setState(() => _videoInitialised = true);
+          _resetHideTimer();
+        }
       }).catchError((_) {
         if (mounted) setState(() => _videoError = true);
       });
+
     _videoCtrl!.addListener(_onVideoUpdate);
   }
 
   void _onVideoUpdate() {
-    if (mounted) setState(() {});
+    if (!mounted) return;
+    final ctrl = _videoCtrl;
+    if (ctrl == null || !ctrl.value.isInitialized) return;
+
+    // Keep controls visible when video ends
+    if (ctrl.value.isCompleted) {
+      _hideTimer?.cancel();
+      if (!_showControls) setState(() => _showControls = true);
+      return;
+    }
+
+    // Sync slider position only while not dragging
+    if (!_isDraggingSlider) {
+      final durationMs = ctrl.value.duration.inMilliseconds;
+      if (durationMs > 0) {
+        final newVal = ctrl.value.position.inMilliseconds / durationMs;
+        if ((newVal - _sliderValue).abs() > 0.001) {
+          setState(() => _sliderValue = newVal.clamp(0.0, 1.0));
+        }
+      }
+    } else {
+      setState(() {});
+    }
   }
 
   @override
@@ -61,45 +90,69 @@ class _LessonScreenState extends State<LessonScreen> {
   // ── Playback controls ────────────────────────────────────────────
 
   void _togglePlay() {
-    if (_videoCtrl == null || !_videoInitialised) return;
-    _videoCtrl!.value.isPlaying ? _videoCtrl!.pause() : _videoCtrl!.play();
-    _resetHideTimer();
+    final ctrl = _videoCtrl;
+    if (ctrl == null || !_videoInitialised) return;
+    if (ctrl.value.isPlaying) {
+      ctrl.pause();
+      // Keep controls visible when paused
+      _hideTimer?.cancel();
+      setState(() => _showControls = true);
+    } else {
+      ctrl.play();
+      _resetHideTimer();
+    }
   }
 
   void _seekForward() {
-    if (_videoCtrl == null || !_videoInitialised) return;
-    final target = _videoCtrl!.value.position + _seekStep;
-    final dur = _videoCtrl!.value.duration;
-    _videoCtrl!.seekTo(target > dur ? dur : target);
+    final ctrl = _videoCtrl;
+    if (ctrl == null || !_videoInitialised) return;
+    final target = ctrl.value.position + _seekStep;
+    final dur = ctrl.value.duration;
+    ctrl.seekTo(target > dur ? dur : target);
     _resetHideTimer();
   }
 
   void _seekBackward() {
-    if (_videoCtrl == null || !_videoInitialised) return;
-    final target = _videoCtrl!.value.position - _seekStep;
-    _videoCtrl!.seekTo(target < Duration.zero ? Duration.zero : target);
+    final ctrl = _videoCtrl;
+    if (ctrl == null || !_videoInitialised) return;
+    final target = ctrl.value.position - _seekStep;
+    ctrl.seekTo(target < Duration.zero ? Duration.zero : target);
     _resetHideTimer();
   }
 
   // ── Controls visibility ──────────────────────────────────────────
 
   void _onVideoTap() {
-    setState(() => _showControls = !_showControls);
-    if (_showControls) _resetHideTimer();
+    if (_showControls) {
+      // Tap while visible: hide if playing, keep if paused
+      if (_videoCtrl?.value.isPlaying ?? false) {
+        _hideTimer?.cancel();
+        setState(() => _showControls = false);
+      }
+    } else {
+      // Tap while hidden: always show
+      setState(() => _showControls = true);
+      _resetHideTimer();
+    }
   }
 
   void _resetHideTimer() {
     _hideTimer?.cancel();
     if (!mounted) return;
-    setState(() => _showControls = true);
-    _hideTimer = Timer(const Duration(seconds: 3), () {
-      if (mounted && (_videoCtrl?.value.isPlaying ?? false)) {
-        setState(() => _showControls = false);
-      }
-    });
+    if (!_showControls) setState(() => _showControls = true);
+    // Only auto-hide when playing and not scrubbing
+    if ((_videoCtrl?.value.isPlaying ?? false) && !_isDraggingSlider) {
+      _hideTimer = Timer(_autoHideDuration, () {
+        if (mounted &&
+            (_videoCtrl?.value.isPlaying ?? false) &&
+            !_isDraggingSlider) {
+          setState(() => _showControls = false);
+        }
+      });
+    }
   }
 
-  // ── Fullscreen ───────────────────────────────────────────────────
+  // ── Fullscreen (YouTube-style) ───────────────────────────────────
 
   Future<void> _toggleFullscreen() async {
     if (_isFullscreen) {
@@ -110,20 +163,32 @@ class _LessonScreenState extends State<LessonScreen> {
         DeviceOrientation.landscapeLeft,
         DeviceOrientation.landscapeRight,
       ]);
-      await SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
+      await SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
       if (mounted) setState(() => _isFullscreen = true);
     }
     _resetHideTimer();
   }
 
   Future<void> _restoreSystemUI() async {
-    await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
-    await SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+    await SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
+    await SystemChrome.setEnabledSystemUIMode(
+      SystemUiMode.manual,
+      overlays: SystemUiOverlay.values,
+    );
   }
 
   // ── Helpers ──────────────────────────────────────────────────────
 
   String _fmt(Duration d) {
+    if (d.inHours > 0) {
+      final h = d.inHours.toString().padLeft(2, '0');
+      final m = d.inMinutes.remainder(60).toString().padLeft(2, '0');
+      final s = d.inSeconds.remainder(60).toString().padLeft(2, '0');
+      return '$h:$m:$s';
+    }
     final m = d.inMinutes.remainder(60).toString().padLeft(2, '0');
     final s = d.inSeconds.remainder(60).toString().padLeft(2, '0');
     return '$m:$s';
@@ -142,24 +207,18 @@ class _LessonScreenState extends State<LessonScreen> {
 
     // ── FULLSCREEN layout ──────────────────────────────────────────
     if (_isFullscreen) {
-      return Scaffold(
-        backgroundColor: Colors.black,
-        body: SafeArea(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+      return PopScope(
+        canPop: false,
+        onPopInvoked: (didPop) {
+          if (!didPop) _toggleFullscreen();
+        },
+        child: Scaffold(
+          backgroundColor: Colors.black,
+          body: Stack(
+            fit: StackFit.expand,
             children: [
-              // 16:9 video centred on black background
-              AspectRatio(
-                aspectRatio: 16 / 9,
-                child: Stack(
-                  children: [
-                    Positioned.fill(child: _buildVideoContent()),
-                    _buildControlsOverlay(),
-                  ],
-                ),
-              ),
-              // Fullscreen exit button below the video
-              _buildFullscreenToggleBar(),
+              _buildVideoContent(),
+              _buildControlsOverlay(fullscreen: true),
             ],
           ),
         ),
@@ -182,13 +241,12 @@ class _LessonScreenState extends State<LessonScreen> {
                   Get.back();
                 },
                 child: Container(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 12, vertical: 8),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                   decoration: BoxDecoration(
                     color: Colors.white.withValues(alpha: 0.2),
                     borderRadius: BorderRadius.circular(20),
-                    border:
-                        Border.all(color: Colors.white38, width: 1),
+                    border: Border.all(color: Colors.white38, width: 1),
                   ),
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
@@ -196,12 +254,14 @@ class _LessonScreenState extends State<LessonScreen> {
                       const Icon(Icons.arrow_back_ios_rounded,
                           color: Colors.white, size: 14),
                       const SizedBox(width: 4),
-                      Text('back'.tr,
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 13,
-                            fontWeight: FontWeight.w600,
-                          )),
+                      Text(
+                        'back'.tr,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 13,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
                     ],
                   ),
                 ),
@@ -219,17 +279,15 @@ class _LessonScreenState extends State<LessonScreen> {
                   child: AspectRatio(
                     aspectRatio: 16 / 9,
                     child: Stack(
+                      fit: StackFit.expand,
                       children: [
-                        Positioned.fill(child: _buildVideoContent()),
-                        _buildControlsOverlay(),
+                        _buildVideoContent(),
+                        _buildControlsOverlay(fullscreen: false),
                       ],
                     ),
                   ),
                 ),
               ),
-
-            // ── Fullscreen toggle button below video ──────
-            if (hasVideo) _buildFullscreenToggleBar(),
 
             if (hasVideo) const SizedBox(height: 8),
 
@@ -367,7 +425,7 @@ class _LessonScreenState extends State<LessonScreen> {
     );
   }
 
-  // ── Raw video surface (error / loading / player) ─────────────────
+  // ── Raw video surface ────────────────────────────────────────────
 
   Widget _buildVideoContent() {
     if (_videoError) {
@@ -380,9 +438,10 @@ class _LessonScreenState extends State<LessonScreen> {
               const Icon(Icons.error_outline_rounded,
                   color: Colors.white54, size: 36),
               const SizedBox(height: 8),
-              Text('failed_load_video'.tr,
-                  style:
-                      const TextStyle(color: Colors.white54, fontSize: 13)),
+              Text(
+                'failed_load_video'.tr,
+                style: const TextStyle(color: Colors.white54, fontSize: 13),
+              ),
             ],
           ),
         ),
@@ -401,151 +460,253 @@ class _LessonScreenState extends State<LessonScreen> {
     return VideoPlayer(_videoCtrl!);
   }
 
-  // ── Controls overlay (inside video) ─────────────────────────────
+  // ── Controls overlay (YouTube-style: all controls inside video) ──
 
-  Widget _buildControlsOverlay() {
-    return Positioned.fill(
-      child: GestureDetector(
-        behavior: HitTestBehavior.opaque,
-        onTap: _onVideoTap,
-        child: AnimatedOpacity(
-          opacity: _showControls ? 1.0 : 0.0,
-          duration: const Duration(milliseconds: 250),
-          child: IgnorePointer(
-            ignoring: !_showControls,
-            child: Container(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: [
-                    Colors.transparent,
-                    Colors.transparent,
-                    Colors.black.withValues(alpha: 0.65),
-                  ],
-                  stops: const [0.0, 0.55, 1.0],
+  Widget _buildControlsOverlay({required bool fullscreen}) {
+    final ctrl = _videoCtrl;
+    final isPlaying = ctrl?.value.isPlaying ?? false;
+    final isBuffering = ctrl?.value.isBuffering ?? false;
+
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: _onVideoTap,
+      child: AnimatedOpacity(
+        opacity: _showControls ? 1.0 : 0.0,
+        duration: const Duration(milliseconds: 250),
+        child: IgnorePointer(
+          ignoring: !_showControls,
+          child: Stack(
+            fit: StackFit.expand,
+            children: [
+              // Dark gradient for control visibility
+              Container(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [
+                      Colors.black.withValues(alpha: 0.45),
+                      Colors.transparent,
+                      Colors.transparent,
+                      Colors.black.withValues(alpha: 0.75),
+                    ],
+                    stops: const [0.0, 0.25, 0.6, 1.0],
+                  ),
                 ),
               ),
-              child: Column(
-                children: [
-                  // ── Centre row: rewind | play/pause | forward ──
-                  Expanded(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        _iconBtn(
-                          icon: Icons.replay_10_rounded,
-                          onTap: _seekBackward,
-                          size: 36,
-                        ),
-                        const SizedBox(width: 28),
-                        _iconBtn(
-                          icon: (_videoCtrl?.value.isPlaying ?? false)
-                              ? Icons.pause_circle_filled_rounded
-                              : Icons.play_circle_filled_rounded,
-                          onTap: _togglePlay,
-                          size: 56,
-                        ),
-                        const SizedBox(width: 28),
-                        _iconBtn(
-                          icon: Icons.forward_10_rounded,
-                          onTap: _seekForward,
-                          size: 36,
-                        ),
-                      ],
-                    ),
-                  ),
 
-                  // ── Bottom row: time + progress bar ────
-                  if (_videoInitialised)
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(12, 0, 12, 8),
-                      child: Column(
+              // Centre: buffering spinner or play controls
+              Center(
+                child: isBuffering && _videoInitialised
+                    ? const SizedBox(
+                        width: 48,
+                        height: 48,
+                        child: CircularProgressIndicator(
+                          color: Colors.white,
+                          strokeWidth: 2.5,
+                        ),
+                      )
+                    : Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          VideoProgressIndicator(
-                            _videoCtrl!,
-                            allowScrubbing: true,
-                            colors: const VideoProgressColors(
-                              playedColor: Color(0xFFFFE000),
-                              bufferedColor: Colors.white30,
-                              backgroundColor: Colors.white24,
-                            ),
-                            padding: const EdgeInsets.symmetric(vertical: 4),
+                          _iconBtn(
+                            icon: Icons.replay_10_rounded,
+                            onTap: _seekBackward,
+                            size: 36,
                           ),
-                          const SizedBox(height: 2),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                _fmt(_videoCtrl!.value.position),
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 11,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                              Text(
-                                _fmt(_videoCtrl!.value.duration),
-                                style: const TextStyle(
-                                  color: Colors.white70,
-                                  fontSize: 11,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                            ],
+                          const SizedBox(width: 28),
+                          _iconBtn(
+                            icon: isPlaying
+                                ? Icons.pause_circle_filled_rounded
+                                : Icons.play_circle_filled_rounded,
+                            onTap: _togglePlay,
+                            size: 58,
+                          ),
+                          const SizedBox(width: 28),
+                          _iconBtn(
+                            icon: Icons.forward_10_rounded,
+                            onTap: _seekForward,
+                            size: 36,
                           ),
                         ],
                       ),
-                    ),
-                ],
               ),
-            ),
+
+              // Bottom bar: progress + time + fullscreen button
+              if (_videoInitialised)
+                Positioned(
+                  left: 0,
+                  right: 0,
+                  bottom: 0,
+                  child: _buildBottomBar(fullscreen: fullscreen),
+                ),
+            ],
           ),
         ),
       ),
     );
   }
 
-  // ── Fullscreen toggle bar (below the video) ──────────────────────
+  // ── Bottom control bar ───────────────────────────────────────────
 
-  Widget _buildFullscreenToggleBar() {
+  Widget _buildBottomBar({required bool fullscreen}) {
+    final ctrl = _videoCtrl!;
+    final position = ctrl.value.position;
+    final duration = ctrl.value.duration;
+    final durationMs = duration.inMilliseconds;
+
+    // Compute buffered %
+    double bufferedFraction = 0.0;
+    if (durationMs > 0 && ctrl.value.buffered.isNotEmpty) {
+      final bufEndMs = ctrl.value.buffered.last.end.inMilliseconds;
+      bufferedFraction = (bufEndMs / durationMs).clamp(0.0, 1.0);
+    }
+
+    final hPad = fullscreen ? 20.0 : 12.0;
+    final bPad = fullscreen ? 20.0 : 10.0;
+
     return Padding(
-      padding: const EdgeInsets.fromLTRB(24, 6, 24, 0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.end,
+      padding: EdgeInsets.fromLTRB(hPad, 0, hPad, bPad),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
-          GestureDetector(
-            onTap: _toggleFullscreen,
-            child: Container(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-              decoration: BoxDecoration(
-                color: Colors.white.withValues(alpha: 0.2),
-                borderRadius: BorderRadius.circular(14),
-                border: Border.all(color: Colors.white38, width: 1),
+          // Custom seekable progress bar
+          _buildProgressBar(
+            bufferedFraction: bufferedFraction,
+            durationMs: durationMs,
+          ),
+
+          const SizedBox(height: 2),
+
+          // Time labels + fullscreen toggle
+          Row(
+            children: [
+              Text(
+                _fmt(position),
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 11,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Icon(
-                    _isFullscreen
+              const Text(
+                ' / ',
+                style: TextStyle(color: Colors.white54, fontSize: 11),
+              ),
+              Text(
+                _fmt(duration),
+                style: const TextStyle(
+                  color: Colors.white54,
+                  fontSize: 11,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+              const Spacer(),
+              // Fullscreen button lives here (YouTube-style)
+              GestureDetector(
+                onTap: _toggleFullscreen,
+                child: Padding(
+                  padding: const EdgeInsets.all(4),
+                  child: Icon(
+                    fullscreen
                         ? Icons.fullscreen_exit_rounded
                         : Icons.fullscreen_rounded,
                     color: Colors.white,
-                    size: 18,
+                    size: 26,
                   ),
-                  const SizedBox(width: 4),
-                  Text(
-                    _isFullscreen ? 'Exit' : 'Fullscreen',
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 12,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ],
+                ),
               ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  // ── Custom progress bar with buffer track and draggable thumb ────
+
+  Widget _buildProgressBar({
+    required double bufferedFraction,
+    required int durationMs,
+  }) {
+    const trackH = 3.0;
+    const thumbR = 6.0;
+
+    return SizedBox(
+      height: 24,
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          // Background track
+          Container(
+            height: trackH,
+            decoration: BoxDecoration(
+              color: Colors.white24,
+              borderRadius: BorderRadius.circular(trackH / 2),
+            ),
+          ),
+
+          // Buffered track
+          Align(
+            alignment: Alignment.centerLeft,
+            child: FractionallySizedBox(
+              widthFactor: bufferedFraction,
+              child: Container(
+                height: trackH,
+                decoration: BoxDecoration(
+                  color: Colors.white38,
+                  borderRadius: BorderRadius.circular(trackH / 2),
+                ),
+              ),
+            ),
+          ),
+
+          // Played track
+          Align(
+            alignment: Alignment.centerLeft,
+            child: FractionallySizedBox(
+              widthFactor: _sliderValue.clamp(0.0, 1.0),
+              child: Container(
+                height: trackH,
+                decoration: BoxDecoration(
+                  color: const Color(0xFFFFE000),
+                  borderRadius: BorderRadius.circular(trackH / 2),
+                ),
+              ),
+            ),
+          ),
+
+          // Invisible-track Slider for drag interaction
+          SliderTheme(
+            data: SliderThemeData(
+              trackHeight: trackH,
+              thumbShape:
+                  const RoundSliderThumbShape(enabledThumbRadius: thumbR),
+              overlayShape:
+                  const RoundSliderOverlayShape(overlayRadius: 14),
+              activeTrackColor: Colors.transparent,
+              inactiveTrackColor: Colors.transparent,
+              thumbColor: const Color(0xFFFFE000),
+              overlayColor:
+                  const Color(0xFFFFE000).withValues(alpha: 0.25),
+            ),
+            child: Slider(
+              value: _sliderValue.clamp(0.0, 1.0),
+              onChangeStart: (_) {
+                _isDraggingSlider = true;
+                _hideTimer?.cancel();
+              },
+              onChanged: (v) => setState(() => _sliderValue = v),
+              onChangeEnd: (v) {
+                if (durationMs > 0) {
+                  _videoCtrl?.seekTo(
+                    Duration(milliseconds: (v * durationMs).round()),
+                  );
+                }
+                _isDraggingSlider = false;
+                _resetHideTimer();
+              },
             ),
           ),
         ],
@@ -561,9 +722,9 @@ class _LessonScreenState extends State<LessonScreen> {
     double size = 28,
   }) {
     return GestureDetector(
+      behavior: HitTestBehavior.opaque,
       onTap: onTap,
       child: Icon(icon, color: Colors.white, size: size),
     );
   }
-
 }
