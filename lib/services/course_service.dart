@@ -118,6 +118,9 @@ class CourseService {
   static final Map<int, String> _staticVideoUrls = {
     // JLC lessons
     1: '$_videoBaseUrl/output_grp/Hiragana%20Part-1%20_EZTrainZ_JLC.m3u8?Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly9kM2M2bzVsaGYwODliYi5jbG91ZGZyb250Lm5ldC9vdXRwdXRfZ3JwL0hpcmFnYW5hJTIwUGFydC0xJTIwX0VaVHJhaW5aX0pMQy5tM3U4IiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzczMTg3MjAwfX19XX0_&Key-Pair-Id=K3SL4B0PI402BI&Signature=A2ulpY2mb~Np-b4YUn3tVb7Etq-Y1JtZdYt0Bx7YoFhKlUu4Mzzph-rQgQa1uWyesmeSy76D~ojYZ6Nrjn8h-NkNyc8UZSN5MpaTVxqe9O5dr182a5tCjRbgI25CNs0YNx7owrfzt97tENy1ZMcbbpnxVoI3-CXki2HUzaElkpeLe~yNBGAwIfFsonPphoJz7EZcmQXAyCBHvWOwDoneUD7XwPLGBnejhQyRuorWBmCAsPmDCaXa3oX-VM~-4comhy571h-FtBEbEN3fYhYSeH1iklF1KV1jcMap9U6Z5Io3xD8EziMtp9MDjJ~~GgOw9tkpdmEz-IEnFTSAa3k4wQ__',
+    // JLC Hiragana Part 2 & 3
+    13: 'https://d3c6o5lhf089bb.cloudfront.net/JLC_output_grp/Hiragana%20Part-2_EZTrainZ_JLC.m3u8?Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly9kM2M2bzVsaGYwODliYi5jbG91ZGZyb250Lm5ldC9KTENfb3V0cHV0X2dycC9IaXJhZ2FuYSUyMFBhcnQtMl9FWlRyYWluWl9KTEMubTN1OCIsIkNvbmRpdGlvbiI6eyJEYXRlTGVzc1RoYW4iOnsiQVdTOkVwb2NoVGltZSI6MTc3MzE4NzIwMH19fV19&Key-Pair-Id=K3SL4B0PI402BI&Signature=NmBQuiV-gu8FTnW0QoS8xG3j6JGGTnLl1WQBh3LzJuBMrKV8G4YbJ3IbPfz~Xdonz0X5743AK5gZuAY-XS0C1TYhy8jmmoH64hsIk2dGgAGbUppRFbgcGV7fO0VBdl6WxJvdlZxmFVcl4l5QkZILi9dqbttY9pMd0aLgmkgCeRYPA59pBS2UdwYOxydjgvfvRvSDT1INFrK4qY68POvT6T9NRQW7InmD5H-l~g7nqfwpHleD2Yfz25feOUCkKU~LYz2NRLLbIoMTminVocQGjVdHLwn7qYsXrXKrh3Cd~92xwExJysphz-MVTCDyzxJS~145o0cwqDCl8TAI4jFDOA__',
+    14: 'https://d3c6o5lhf089bb.cloudfront.net/JLC_output_grp/Hiragana-Part-3_EZTrainZ_JLC.m3u8?Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly9kM2M2bzVsaGYwODliYi5jbG91ZGZyb250Lm5ldC9KTENfb3V0cHV0X2dycC9IaXJhZ2FuYS1QYXJ0LTNfRVpUcmFpblpfSkxDLm0zdTgiLCJDb25kaXRpb24iOnsiRGF0ZUxlc3NUaGFuIjp7IkFXUzpFcG9jaFRpbWUiOjE3NzMxODcyMDB9fX1dfQ__&Key-Pair-Id=K3SL4B0PI402BI&Signature=KIbX2sgDrl5wR-RcA45VXZbajX0uwS~eksEpyYmkWC~XmHKXOigCZ-hS~b84TdYGSyERTYGioB7ulPUYcAfP27SoKVQUXlmELw-Q5xGw1JlHD9lgH~L6EJKEEJ8vGxzq2ejFL8LM0Zz-tH9SEi1a0-5ZDiwjEhJ69qNqcdeNC2Hddm3OGkEOX-G6eADXLBxWQcw4CJwdgaqYgbPxmdPlZzKCIhnC5jptlQcTQ9JIryhWSp1R0xHPnIJG1V7Ss0GCZEhU6fWuGDX9FT-Gp24SZXuJgyucoPt-TO2zbvPgVcXkcOfYFMKSO2Bos11mcbOAF2k8QG25XntkmeQqhkKbHg__',
     // KLC lessons
     7: '$_videoBaseUrl/KLC_output_grp/CLASS-1-VIDEO-1__EZTrainZ_KLC.m3u8?Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly9kM2M2bzVsaGYwODliYi5jbG91ZGZyb250Lm5ldC9LTENfb3V0cHV0X2dycC9DTEFTUy0xLVZJREVPLTFfX0VaVHJhaW5aX0tMQy5tM3U4IiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzczMTg3MjAwfX19XX0_&Key-Pair-Id=K3SL4B0PI402BI&Signature=gpcyUnBsXrctyXwzgx~gAGnGj7LZPt3Ev~9~kMBHxpD65O4-YshSw~S7spLuI-U0Yegj7pJ~rOaN6EDoCQJFNksTajQc893dwNbs9HCwGsze1PuCGjVWFODOYcDin2ughew1yX4KO09OpEKc0ARmsaj3XIOfzp6q8-78diZa1S5X9IwkAeYRF6detDrGToool6mIuLYt6dsT~ICGhLgfDx4p6coBZsslH-ETnicAN4S4~5XJrQw-cWuJ9mAizu5DJy2tRWxqm3wc~TMEAZFzD55d2yBBhz15Dh6unwslhekdypl0UAKT9WX1RlSruM~tnxDblBvhAXhghl7EPsmVQQ__',
     8: '$_videoBaseUrl/KLC_output_grp/CLASS-2-VIDEO-2_EZTrainZ_KLC.m3u8?Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly9kM2M2bzVsaGYwODliYi5jbG91ZGZyb250Lm5ldC9LTENfb3V0cHV0X2dycC9DTEFTUy0yLVZJREVPLTJfRVpUcmFpblpfS0xDLm0zdTgiLCJDb25kaXRpb24iOnsiRGF0ZUxlc3NUaGFuIjp7IkFXUzpFcG9jaFRpbWUiOjE3NzMxODcyMDB9fX1dfQ__&Key-Pair-Id=K3SL4B0PI402BI&Signature=XK1i8bTVLxOcSqAQgapHoEWdjmC89VD-ULC67LJDX4B8ta2POqtaZkj6XDWSd6uGoH10VZVUHlV4MZ5qXxUAhnN0LbZS~nAeBGiEkMUuvpOxRTybw1QOUgga7UkVX0Rsq4avMjOeS5F7uq~teUGT1CQ95kU67gQdnIUMcmM0~1BQ-M0wAEm-XrX9~kGw5fhZAbw5aWqZtO4qOpZJ0uldC66-2NG1dl~Gh1K5eICzc5TzGGtvyjhkIFMT7du4tk2~x6PfB3UxJA3wtZoDD5XsxpgaQjDBY32SguBs9E0iA7k3wKWWQwLoq-dqCgHFDX-FNS8FcIuAhXVbVl4e6GCOWA__',
@@ -180,6 +183,32 @@ class CourseService {
           "description": "Learn basic Japanese sentence structure.",
           "content": {
             "body": "Understand subject-object-verb order.",
+            "type": "text"
+          },
+          "createdAt": "2026-01-27T08:42:17.818Z",
+          "updatedAt": "2026-01-27T08:42:17.818Z"
+        },
+        {
+          "id": 13,
+          "courseId": 1,
+          "title": "Lesson 4: Hiragana Part 2",
+          "description": "Continue learning Hiragana — S, T, N, and H rows.",
+          "content": {
+            "body":
+                "In this lesson, we continue building your Hiragana foundation. You will learn the S-row (さ し す せ そ), T-row (た ち つ て と), N-row (な に ぬ ね の), and H-row (は ひ ふ へ ほ). Practice each character carefully to improve your reading and writing skills.",
+            "type": "text"
+          },
+          "createdAt": "2026-01-27T08:42:17.818Z",
+          "updatedAt": "2026-01-27T08:42:17.818Z"
+        },
+        {
+          "id": 14,
+          "courseId": 1,
+          "title": "Lesson 5: Hiragana Part 3",
+          "description": "Complete your Hiragana — M, Y, R, W rows and the N character.",
+          "content": {
+            "body":
+                "This final Hiragana lesson covers the M-row (ま み む め も), Y-row (や ゆ よ), R-row (ら り る れ ろ), W-row (わ を), and the standalone N (ん). By the end of this lesson you will have mastered all 46 basic Hiragana characters.",
             "type": "text"
           },
           "createdAt": "2026-01-27T08:42:17.818Z",
@@ -398,6 +427,34 @@ class CourseService {
         "title": "Lesson 3: Basic Grammar",
         "description": "Learn basic Japanese sentence structure.",
         "content": {"body": "Understand subject-object-verb order.", "type": "text"},
+        "createdAt": "2026-01-27T08:42:17.818Z",
+        "updatedAt": "2026-01-27T08:42:17.818Z",
+        "quizzes": []
+      },
+      {
+        "id": 13,
+        "courseId": 1,
+        "title": "Lesson 4: Hiragana Part 2",
+        "description": "Continue learning Hiragana — S, T, N, and H rows.",
+        "content": {
+          "body":
+              "In this lesson, we continue building your Hiragana foundation. You will learn the S-row (さ し す せ そ), T-row (た ち つ て と), N-row (な に ぬ ね の), and H-row (は ひ ふ へ ほ). Practice each character carefully to improve your reading and writing skills.",
+          "type": "text"
+        },
+        "createdAt": "2026-01-27T08:42:17.818Z",
+        "updatedAt": "2026-01-27T08:42:17.818Z",
+        "quizzes": []
+      },
+      {
+        "id": 14,
+        "courseId": 1,
+        "title": "Lesson 5: Hiragana Part 3",
+        "description": "Complete your Hiragana — M, Y, R, W rows and the N character.",
+        "content": {
+          "body":
+              "This final Hiragana lesson covers the M-row (ま み む め も), Y-row (や ゆ よ), R-row (ら り る れ ろ), W-row (わ を), and the standalone N (ん). By the end of this lesson you will have mastered all 46 basic Hiragana characters.",
+          "type": "text"
+        },
         "createdAt": "2026-01-27T08:42:17.818Z",
         "updatedAt": "2026-01-27T08:42:17.818Z",
         "quizzes": []
