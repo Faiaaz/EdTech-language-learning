@@ -139,7 +139,7 @@ class _GameCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colors = _gradients[game.name.length % _gradients.length];
+    final colors = _gradients[game.title.length % _gradients.length];
 
     return GestureDetector(
       onTap: () {
@@ -182,7 +182,7 @@ class _GameCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    game.name,
+                    game.title,
                     style: const TextStyle(
                       color: Colors.white,
                       fontSize: 17,

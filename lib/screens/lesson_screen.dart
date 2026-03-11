@@ -6,6 +6,9 @@ import 'package:get/get.dart';
 import 'package:video_player/video_player.dart';
 
 import 'package:ez_trainz/controllers/course_controller.dart';
+import 'package:ez_trainz/controllers/game_controller.dart';
+import 'package:ez_trainz/models/game.dart';
+import 'package:ez_trainz/screens/game_detail_screen.dart';
 
 class LessonScreen extends StatefulWidget {
   const LessonScreen({super.key});
@@ -31,6 +34,13 @@ class _LessonScreenState extends State<LessonScreen> {
   void initState() {
     super.initState();
     _initVideo();
+    _loadLessonGames();
+  }
+
+  void _loadLessonGames() {
+    final lesson = CourseController.to.selectedLesson;
+    if (lesson == null) return;
+    GameController.to.loadGamesByLesson(lesson.id.toString());
   }
 
   void _initVideo() {
@@ -419,6 +429,42 @@ class _LessonScreenState extends State<LessonScreen> {
                           ),
                         ),
                       ],
+
+                      // ── Games for this lesson ──────────
+                      Obx(() {
+                        final gameCtrl = GameController.to;
+                        if (gameCtrl.isLoading.value) {
+                          return const Padding(
+                            padding: EdgeInsets.only(top: 28),
+                            child: Center(
+                              child: CircularProgressIndicator(
+                                color: Color(0xFF4DA6E8),
+                              ),
+                            ),
+                          );
+                        }
+                        if (gameCtrl.games.isEmpty) {
+                          return const SizedBox.shrink();
+                        }
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const SizedBox(height: 28),
+                            Text(
+                              'games_title'.tr,
+                              style: const TextStyle(
+                                color: Color(0xFF1A1A2E),
+                                fontSize: 18,
+                                fontWeight: FontWeight.w800,
+                              ),
+                            ),
+                            const SizedBox(height: 12),
+                            ...gameCtrl.games.map(
+                              (game) => _LessonGameCard(game: game),
+                            ),
+                          ],
+                        );
+                      }),
                     ],
                   ),
                 ),
@@ -730,6 +776,83 @@ class _LessonScreenState extends State<LessonScreen> {
       behavior: HitTestBehavior.opaque,
       onTap: onTap,
       child: Icon(icon, color: Colors.white, size: size),
+    );
+  }
+}
+
+class _LessonGameCard extends StatelessWidget {
+  const _LessonGameCard({required this.game});
+  final Game game;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        GameController.to.selectGame(game);
+        Get.to(() => GameDetailScreen(game: game));
+      },
+      child: Container(
+        margin: const EdgeInsets.only(bottom: 10),
+        padding: const EdgeInsets.all(14),
+        decoration: BoxDecoration(
+          color: const Color(0xFF4DA6E8).withValues(alpha: 0.08),
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(
+            color: const Color(0xFF4DA6E8).withValues(alpha: 0.25),
+          ),
+        ),
+        child: Row(
+          children: [
+            const Icon(Icons.sports_esports_rounded,
+                color: Color(0xFF4DA6E8), size: 22),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    game.title,
+                    style: const TextStyle(
+                      color: Color(0xFF1A1A2E),
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  if (game.description.isNotEmpty) ...[
+                    const SizedBox(height: 2),
+                    Text(
+                      game.description,
+                      style: const TextStyle(
+                        color: Color(0xFF6B7280),
+                        fontSize: 12,
+                      ),
+                    ),
+                  ],
+                ],
+              ),
+            ),
+            Container(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+              decoration: BoxDecoration(
+                color: const Color(0xFF4DA6E8).withValues(alpha: 0.12),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Text(
+                game.type,
+                style: const TextStyle(
+                  color: Color(0xFF4DA6E8),
+                  fontSize: 11,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ),
+            const SizedBox(width: 8),
+            const Icon(Icons.arrow_forward_ios_rounded,
+                color: Color(0xFF9CA3AF), size: 14),
+          ],
+        ),
+      ),
     );
   }
 }
