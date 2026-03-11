@@ -3,6 +3,9 @@ import 'package:get/get.dart';
 
 import 'package:ez_trainz/controllers/auth_controller.dart';
 import 'package:ez_trainz/controllers/course_controller.dart';
+import 'package:ez_trainz/controllers/game_controller.dart';
+import 'package:ez_trainz/controllers/game_session_controller.dart';
+import 'package:ez_trainz/controllers/leaderboard_controller.dart';
 import 'package:ez_trainz/controllers/locale_controller.dart';
 import 'package:ez_trainz/controllers/program_controller.dart';
 import 'package:ez_trainz/controllers/srs_controller.dart';
@@ -22,6 +25,9 @@ void main() {
   Get.put(ProgramController(), permanent: true);
   Get.put(CourseController(), permanent: true);
   Get.put(SrsController(), permanent: true);
+  Get.put(GameController(), permanent: true);
+  Get.put(GameSessionController(), permanent: true);
+  Get.put(LeaderboardController(), permanent: true);
 
   if (_kBypassAuth) {
     auth.setSession(token: 'dev-bypass-token', name: 'Dev User', email: 'dev@example.com');

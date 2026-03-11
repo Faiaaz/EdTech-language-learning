@@ -6,6 +6,8 @@ import 'package:ez_trainz/controllers/program_controller.dart';
 import 'package:ez_trainz/models/program.dart';
 import 'package:ez_trainz/screens/coming_soon_screen.dart';
 import 'package:ez_trainz/screens/course_list_screen.dart';
+import 'package:ez_trainz/screens/games_screen.dart';
+import 'package:ez_trainz/screens/leaderboard_screen.dart';
 import 'package:ez_trainz/screens/profile_screen.dart';
 import 'package:ez_trainz/widgets/language_switcher.dart';
 
@@ -44,10 +46,10 @@ class _MainShellScreenState extends State<MainShellScreen> {
                 ? const CourseListScreen()
                 : const _ProgramPickerView();
           }),
-          const ComingSoonScreen(titleKey: 'nav_practice', icon: Icons.fitness_center_rounded),
+          const GamesScreen(),
           const ProfileScreen(),
           const ComingSoonScreen(titleKey: 'nav_community', icon: Icons.people_rounded),
-          const ComingSoonScreen(titleKey: 'nav_leaderboard', icon: Icons.emoji_events_rounded),
+          const LeaderboardScreen(),
         ],
       ),
       bottomNavigationBar: Container(

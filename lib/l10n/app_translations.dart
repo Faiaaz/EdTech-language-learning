@@ -113,6 +113,28 @@ const _en = <String, String>{
   // ── Splash ──────────────────────────────────────────────────────
   'splash_tagline': 'Learn languages the easy way',
   'splash_loading': 'Loading...',
+
+  // ── Games ─────────────────────────────────────────────────────
+  'games_title': 'Games',
+  'games_subtitle': 'Practice your skills with fun games',
+  'games_empty': 'No games available yet.',
+  'game_type': 'Type',
+  'game_difficulty': 'Difficulty',
+  'game_max_score': 'Max Score',
+  'game_view_history': 'View History',
+  'game_delete': 'Delete',
+  'game_delete_confirm_title': 'Delete Game',
+  'game_delete_confirm_body': 'Are you sure you want to delete this game?',
+  'game_history': 'Session History',
+  'game_history_empty': 'No sessions yet.',
+  'game_score': 'Score',
+  'game_correct': 'correct',
+  'retry': 'Retry',
+
+  // ── Leaderboard ──────────────────────────────────────────────
+  'leaderboard_global': 'Global',
+  'leaderboard_empty': 'No leaderboard data yet.',
+  'leaderboard_games_played': 'games played',
 };
 
 const _bn = <String, String>{
@@ -218,4 +240,26 @@ const _bn = <String, String>{
   // ── Splash ──────────────────────────────────────────────────────
   'splash_tagline': 'ভাষা শেখা এখন সহজ',
   'splash_loading': 'প্রস্তুত হচ্ছে...',
+
+  // ── Games ─────────────────────────────────────────────────────
+  'games_title': 'Games',
+  'games_subtitle': 'মজার game খেলে skill প্র্যাকটিস করুন',
+  'games_empty': 'এখনো কোনো game নেই।',
+  'game_type': 'ধরন',
+  'game_difficulty': 'কঠিনতা',
+  'game_max_score': 'সর্বোচ্চ Score',
+  'game_view_history': 'History দেখুন',
+  'game_delete': 'মুছুন',
+  'game_delete_confirm_title': 'Game মুছুন',
+  'game_delete_confirm_body': 'আপনি কি এই game মুছতে চান?',
+  'game_history': 'Session History',
+  'game_history_empty': 'এখনো কোনো session নেই।',
+  'game_score': 'Score',
+  'game_correct': 'সঠিক',
+  'retry': 'আবার চেষ্টা করুন',
+
+  // ── Leaderboard ──────────────────────────────────────────────
+  'leaderboard_global': 'Global',
+  'leaderboard_empty': 'এখনো leaderboard data নেই।',
+  'leaderboard_games_played': 'টি game খেলেছেন',
 };
