@@ -114,6 +114,17 @@ class GameService {
     return Game.fromJson(data as Map<String, dynamic>);
   }
 
+  // ── GET /games/lesson/:lessonId ─────────────────────────────────
+  static Future<List<Game>> fetchGamesByLesson(String lessonId) async {
+    final data = await _get('/games/lesson/$lessonId');
+    if (data is List) {
+      return data
+          .map((g) => Game.fromJson(g as Map<String, dynamic>))
+          .toList();
+    }
+    return [];
+  }
+
   // ── DELETE /games/:id ───────────────────────────────────────────
   static Future<void> deleteGame(String id) async {
     await _delete('/games/$id');

@@ -29,6 +29,21 @@ class GameController extends GetxController {
     }
   }
 
+  // ── Load games for a specific lesson ────────────────────────────
+  Future<void> loadGamesByLesson(String lessonId) async {
+    isLoading.value = true;
+    error.value = '';
+    try {
+      games.value = await GameService.fetchGamesByLesson(lessonId);
+    } on GameException catch (e) {
+      error.value = e.message;
+    } catch (e) {
+      error.value = e.toString();
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
   // ── Select a game ────────────────────────────────────────────────
   void selectGame(Game game) {
     _selectedGame.value = game;

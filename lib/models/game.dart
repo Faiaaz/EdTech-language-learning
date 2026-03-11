@@ -1,20 +1,20 @@
 class Game {
   final String id;
-  final String name;
+  final String title;
   final String description;
   final String type;
-  final String difficulty;
-  final int maxScore;
+  final String lessonId;
+  final bool isActive;
   final DateTime createdAt;
   final DateTime updatedAt;
 
   const Game({
     required this.id,
-    required this.name,
+    required this.title,
     required this.description,
     required this.type,
-    required this.difficulty,
-    required this.maxScore,
+    required this.lessonId,
+    required this.isActive,
     required this.createdAt,
     required this.updatedAt,
   });
@@ -22,11 +22,11 @@ class Game {
   factory Game.fromJson(Map<String, dynamic> json) {
     return Game(
       id: json['id'] as String,
-      name: json['name'] as String,
+      title: json['title'] as String,
       description: json['description'] as String? ?? '',
       type: json['type'] as String? ?? '',
-      difficulty: json['difficulty'] as String? ?? 'easy',
-      maxScore: json['maxScore'] as int? ?? 0,
+      lessonId: json['lessonId'] as String? ?? '',
+      isActive: json['isActive'] as bool? ?? true,
       createdAt: DateTime.parse(json['createdAt'] as String),
       updatedAt: DateTime.parse(json['updatedAt'] as String),
     );
@@ -34,11 +34,11 @@ class Game {
 
   Map<String, dynamic> toJson() => {
         'id': id,
-        'name': name,
+        'title': title,
         'description': description,
         'type': type,
-        'difficulty': difficulty,
-        'maxScore': maxScore,
+        'lessonId': lessonId,
+        'isActive': isActive,
         'createdAt': createdAt.toIso8601String(),
         'updatedAt': updatedAt.toIso8601String(),
       };

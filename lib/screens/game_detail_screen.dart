@@ -60,7 +60,7 @@ class GameDetailScreen extends StatelessWidget {
               // ── Name ─────────────────────────────────────────
               Center(
                 child: Text(
-                  game.name,
+                  game.title,
                   style: const TextStyle(
                     color: Colors.white,
                     fontSize: 24,
@@ -92,11 +92,11 @@ class GameDetailScreen extends StatelessWidget {
                   _InfoChip(
                       label: 'game_type'.tr, value: game.type.isNotEmpty ? game.type : '-'),
                   const SizedBox(width: 12),
-                  _InfoChip(label: 'game_difficulty'.tr, value: game.difficulty),
+                  _InfoChip(label: 'game_lesson'.tr, value: game.lessonId),
                   const SizedBox(width: 12),
                   _InfoChip(
-                      label: 'game_max_score'.tr,
-                      value: game.maxScore.toString()),
+                      label: 'game_status'.tr,
+                      value: game.isActive ? 'game_active'.tr : 'game_inactive'.tr),
                 ],
               ),
               const SizedBox(height: 32),
@@ -106,7 +106,7 @@ class GameDetailScreen extends StatelessWidget {
                 width: double.infinity,
                 child: ElevatedButton.icon(
                   onPressed: () {
-                    Get.to(() => GameHistoryScreen(gameId: game.id, gameName: game.name));
+                    Get.to(() => GameHistoryScreen(gameId: game.id, gameName: game.title));
                   },
                   icon: const Icon(Icons.history_rounded, size: 20),
                   label: Text('game_view_history'.tr),
