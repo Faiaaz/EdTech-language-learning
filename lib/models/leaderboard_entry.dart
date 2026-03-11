@@ -16,7 +16,7 @@ class LeaderboardEntry {
   factory LeaderboardEntry.fromJson(Map<String, dynamic> json) {
     return LeaderboardEntry(
       cognitoId: json['cognitoId'] as String? ?? '',
-      userName: json['userName'] as String? ?? 'Unknown',
+      userName: (json['username'] ?? json['userName']) as String? ?? 'Unknown',
       totalScore: json['totalScore'] as int? ?? 0,
       gamesPlayed: json['gamesPlayed'] as int? ?? 0,
       rank: json['rank'] as int? ?? 0,
