@@ -1,0 +1,121 @@
+import 'dart:convert';
+import 'dart:io';
+import 'package:http/http.dart' as http;
+
+import 'package:ez_trainz/models/game.dart';
+
+class GameException implements Exception {
+  final String message;
+  const GameException(this.message);
+}
+
+class GameService {
+  static const _baseUrl =
+      'https://bdmy1zi0va.execute-api.us-east-1.amazonaws.com';
+
+  // ── Shared GET helper ────────────────────────────────────────────
+  static Future<dynamic> _get(String path) async {
+    final uri = Uri.parse('$_baseUrl$path');
+
+    // ignore: avoid_print
+    print('[GameService] GET $uri');
+
+    final headers = <String, String>{'Content-Type': 'application/json'};
+
+    late http.Response response;
+    try {
+      response = await http
+          .get(uri, headers: headers)
+          .timeout(const Duration(seconds: 20));
+    } on SocketException catch (e) {
+      throw GameException('No internet connection. ($e)');
+    } on HandshakeException catch (e) {
+      throw GameException('SSL error. ($e)');
+    } catch (e) {
+      throw GameException('Network error: $e');
+    }
+
+    // ignore: avoid_print
+    print('[GameService] Status: ${response.statusCode}');
+
+    dynamic data;
+    try {
+      data = jsonDecode(response.body);
+    } catch (_) {}
+
+    if (response.statusCode >= 200 && response.statusCode < 300) {
+      return data;
+    }
+
+    final apiMsg = (data is Map)
+        ? (data['message'] as String? ??
+            data['error'] as String? ??
+            'Request failed (${response.statusCode}).')
+        : 'Request failed (${response.statusCode}).';
+    throw GameException(apiMsg);
+  }
+
+  // ── Shared DELETE helper ─────────────────────────────────────────
+  static Future<dynamic> _delete(String path) async {
+    final uri = Uri.parse('$_baseUrl$path');
+
+    // ignore: avoid_print
+    print('[GameService] DELETE $uri');
+
+    final headers = <String, String>{'Content-Type': 'application/json'};
+
+    late http.Response response;
+    try {
+      response = await http
+          .delete(uri, headers: headers)
+          .timeout(const Duration(seconds: 20));
+    } on SocketException catch (e) {
+      throw GameException('No internet connection. ($e)');
+    } on HandshakeException catch (e) {
+      throw GameException('SSL error. ($e)');
+    } catch (e) {
+      throw GameException('Network error: $e');
+    }
+
+    // ignore: avoid_print
+    print('[GameService] Status: ${response.statusCode}');
+
+    dynamic data;
+    try {
+      data = jsonDecode(response.body);
+    } catch (_) {}
+
+    if (response.statusCode >= 200 && response.statusCode < 300) {
+      return data;
+    }
+
+    final apiMsg = (data is Map)
+        ? (data['message'] as String? ??
+            data['error'] as String? ??
+            'Request failed (${response.statusCode}).')
+        : 'Request failed (${response.statusCode}).';
+    throw GameException(apiMsg);
+  }
+
+  // ── GET /games ───────────────────────────────────────────────────
+  static Future<List<Game>> fetchGames() async {
+    final data = await _get('/games');
+    if (data is List) {
+      return data
+          .map((g) => Game.fromJson(g as Map<String, dynamic>))
+          .toList();
+    }
+    return [];
+  }
+
+  // ── GET /games/:id ──────────────────────────────────────────────
+  static Future<Game> fetchGame(String id) async {
+    final data = await _get('/games/$id');
+    return Game.fromJson(data as Map<String, dynamic>);
+  }
+
+  // ── DELETE /games/:id ───────────────────────────────────────────
+  static Future<void> deleteGame(String id) async {
+    await _delete('/games/$id');
+  }
+}
