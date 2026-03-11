@@ -7,6 +7,7 @@ import 'package:ez_trainz/models/program.dart';
 import 'package:ez_trainz/screens/coming_soon_screen.dart';
 import 'package:ez_trainz/screens/course_list_screen.dart';
 import 'package:ez_trainz/screens/games_screen.dart';
+import 'package:ez_trainz/screens/ielts_dashboard_screen.dart';
 import 'package:ez_trainz/screens/leaderboard_screen.dart';
 import 'package:ez_trainz/screens/profile_screen.dart';
 import 'package:ez_trainz/widgets/language_switcher.dart';
@@ -42,9 +43,14 @@ class _MainShellScreenState extends State<MainShellScreen> {
         index: _currentIndex,
         children: [
           Obx(() {
-            return ProgramController.to.hasProgram
-                ? const CourseListScreen()
-                : const _ProgramPickerView();
+            if (!ProgramController.to.hasProgram) {
+              return const _ProgramPickerView();
+            }
+            // Route ELC (English) to the IELTS dashboard
+            if (ProgramController.to.current == Program.elc) {
+              return const IeltsDashboardScreen();
+            }
+            return const CourseListScreen();
           }),
           const GamesScreen(),
           const ProfileScreen(),
