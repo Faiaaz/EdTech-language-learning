@@ -138,6 +138,27 @@ const _en = <String, String>{
   'leaderboard_empty': 'No leaderboard data yet.',
   'leaderboard_games_played': 'games played',
 
+  // ── User History ──────────────────────────────────────────────
+  'history_title': 'My History',
+  'history_subtitle': 'All your game attempts',
+  'history_empty': 'No game sessions yet. Start playing!',
+  'history_total_sessions': 'Sessions',
+  'history_best_score': 'Best Score',
+  'history_avg_accuracy': 'Avg Accuracy',
+  'history_recent': 'Recent Attempts',
+  'history_btn': 'My Game History',
+  'history_btn_label': 'Activity',
+
+  // ── Submit Score ───────────────────────────────────────────────
+  'submit_score': 'Submit Score',
+  'submit_score_title': 'Submit Your Score',
+  'submit_score_hint': 'Enter your score',
+  'submit_score_required': 'Please enter a score',
+  'submit_score_invalid': 'Enter a valid score',
+  'submit_score_submit': 'Submit',
+  'submit_score_success_title': 'Score Submitted!',
+  'submit_score_success': 'Your score has been recorded.',
+
   // ── IELTS Module ──────────────────────────────────────────────
   'ielts_title': 'IELTS Preparation',
   'ielts_subtitle': 'Research-based strategies for top scores',
@@ -289,6 +310,27 @@ const _bn = <String, String>{
   'leaderboard_global': 'Global',
   'leaderboard_empty': 'এখনো leaderboard data নেই।',
   'leaderboard_games_played': 'টি game খেলেছেন',
+
+  // ── User History ──────────────────────────────────────────────
+  'history_title': 'আমার History',
+  'history_subtitle': 'আপনার সব game attempt',
+  'history_empty': 'এখনো কোনো session নেই। খেলা শুরু করুন!',
+  'history_total_sessions': 'Session',
+  'history_best_score': 'সেরা Score',
+  'history_avg_accuracy': 'গড় নির্ভুলতা',
+  'history_recent': 'সাম্প্রতিক Attempt',
+  'history_btn': 'আমার Game History',
+  'history_btn_label': 'কার্যকলাপ',
+
+  // ── Submit Score ───────────────────────────────────────────────
+  'submit_score': 'Score জমা দিন',
+  'submit_score_title': 'Score জমা দিন',
+  'submit_score_hint': 'Score লিখুন',
+  'submit_score_required': 'Score দিন',
+  'submit_score_invalid': 'সঠিক Score দিন',
+  'submit_score_submit': 'জমা দিন',
+  'submit_score_success_title': 'Score জমা হয়েছে!',
+  'submit_score_success': 'আপনার score সংরক্ষিত হয়েছে।',
 
   // ── IELTS Module ──────────────────────────────────────────────
   'ielts_title': 'IELTS প্রস্তুতি',

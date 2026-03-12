@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:ez_trainz/controllers/auth_controller.dart';
 import 'package:ez_trainz/controllers/locale_controller.dart';
 import 'package:ez_trainz/screens/login_screen.dart';
+import 'package:ez_trainz/screens/user_history_screen.dart';
 
 /// Basic user information: Name, Email, Bio. Matches JLC/KLC/ELC/GLC theme.
 class ProfileScreen extends StatelessWidget {
@@ -141,6 +142,69 @@ class ProfileScreen extends StatelessWidget {
                       label: 'bio_label'.tr,
                       value: bio,
                       maxLines: 4,
+                    ),
+                    const SizedBox(height: 14),
+
+                    // ── My History button ────────────────────────
+                    GestureDetector(
+                      onTap: () => Get.to(() => const UserHistoryScreen()),
+                      child: Container(
+                        width: double.infinity,
+                        padding: const EdgeInsets.all(20),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(16),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withValues(alpha: 0.06),
+                              blurRadius: 12,
+                              offset: const Offset(0, 4),
+                            ),
+                          ],
+                        ),
+                        child: Row(
+                          children: [
+                            Container(
+                              width: 44,
+                              height: 44,
+                              decoration: BoxDecoration(
+                                color: const Color(0xFF4DA6E8)
+                                    .withValues(alpha: 0.12),
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              child: const Icon(Icons.history_rounded,
+                                  color: Color(0xFF4DA6E8), size: 22),
+                            ),
+                            const SizedBox(width: 16),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'history_btn_label'.tr,
+                                    style: const TextStyle(
+                                      color: Color(0xFF6B7280),
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 4),
+                                  Text(
+                                    'history_btn'.tr,
+                                    style: const TextStyle(
+                                      color: Color(0xFF1A1A2E),
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            const Icon(Icons.arrow_forward_ios_rounded,
+                                color: Color(0xFF6B7280), size: 16),
+                          ],
+                        ),
+                      ),
                     ),
                     const SizedBox(height: 14),
 
