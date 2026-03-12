@@ -16,8 +16,7 @@ import 'package:ez_trainz/screens/login_screen.dart';
 import 'package:ez_trainz/screens/main_shell_screen.dart';
 import 'package:ez_trainz/screens/splash_screen.dart';
 
-// TODO: Remove auth bypass before production
-const bool _kBypassAuth = true;
+const bool _kBypassAuth = false;
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
