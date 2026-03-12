@@ -13,11 +13,13 @@ class AuthController extends GetxController {
   final _userName    = ''.obs;
   final _userEmail   = Rxn<String>();
   final _userBio     = Rxn<String>();
+  final _cognitoId   = Rxn<String>();
 
   String get accessToken => _accessToken.value;
   String get userName    => _userName.value;
   String? get userEmail  => _userEmail.value;
   String? get userBio    => _userBio.value;
+  String? get cognitoId  => _cognitoId.value;
   String get firstName   => _userName.value.split(' ').first;
   bool   get isLoggedIn  => _accessToken.value.isNotEmpty;
 
@@ -36,11 +38,13 @@ class AuthController extends GetxController {
     required String name,
     String? email,
     String? bio,
+    String? cognitoId,
   }) {
     _accessToken.value = token;
     _userName.value    = name;
     _userEmail.value   = email;
     _userBio.value     = bio;
+    _cognitoId.value   = cognitoId;
   }
 
   void logout() {
@@ -48,6 +52,7 @@ class AuthController extends GetxController {
     _userName.value    = '';
     _userEmail.value   = null;
     _userBio.value     = null;
+    _cognitoId.value   = null;
     signUpName  = '';
     signUpEmail = '';
     signUpPhone = '';

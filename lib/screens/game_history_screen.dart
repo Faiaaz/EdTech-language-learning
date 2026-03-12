@@ -26,7 +26,7 @@ class _GameHistoryScreenState extends State<GameHistoryScreen> {
   }
 
   void _load() {
-    final cognitoId = AuthController.to.userEmail ?? 'dev-user';
+    final cognitoId = AuthController.to.cognitoId ?? 'dev-user';
     if (widget.gameId != null) {
       GameSessionController.to.loadGameHistory(cognitoId, widget.gameId!);
     } else {

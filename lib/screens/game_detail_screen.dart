@@ -223,7 +223,7 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
                       if (!formKey.currentState!.validate()) return;
                       final score = int.parse(scoreCtrl.text);
                       final cognitoId =
-                          AuthController.to.userEmail ?? 'dev-user';
+                          AuthController.to.cognitoId ?? 'dev-user';
                       final ok = await GameSessionController.to.submitSession(
                         cognitoId: cognitoId,
                         gameId: widget.game.id,
