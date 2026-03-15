@@ -77,10 +77,19 @@ class LeaderboardService {
   }
 
   // ── GET /leaderboard/me/:cognitoId ──────────────────────────────
+  // Response shape: { cognitoId, username, global: { rank, totalScore }, games }
   static Future<LeaderboardEntry?> fetchMyRank(String cognitoId) async {
     final data = await _get('/leaderboard/me/$cognitoId');
     if (data is Map<String, dynamic>) {
-      return LeaderboardEntry.fromJson(data);
+      final global = data['global'];
+      final flat = <String, dynamic>{
+        'cognitoId': data['cognitoId'],
+        'username': data['username'] ?? data['userName'],
+        'rank': global is Map ? global['rank'] : data['rank'],
+        'totalScore': global is Map ? global['totalScore'] : data['totalScore'],
+        'gamesPlayed': data['gamesPlayed'] ?? 0,
+      };
+      return LeaderboardEntry.fromJson(flat);
     }
     return null;
   }
