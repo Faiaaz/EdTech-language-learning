@@ -51,7 +51,10 @@ class _LoginScreenState extends State<LoginScreen> {
       final user  = response['user'] as Map<String, dynamic>? ?? {};
       final name  = user['name'] as String? ?? email.split('@').first;
       final userEmail = user['email'] as String? ?? email;
-      final cognitoId = user['cognitoId'] as String? ?? user['sub'] as String?;
+      final cognitoId = (response['cognitoId'] as String?) ??
+          (user['cognitoId'] as String?) ??
+          (user['sub'] as String?) ??
+          (user['id'] as String?);
 
       AuthController.to.setSession(
         token: token,

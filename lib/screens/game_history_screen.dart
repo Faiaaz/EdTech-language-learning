@@ -26,7 +26,13 @@ class _GameHistoryScreenState extends State<GameHistoryScreen> {
   }
 
   void _load() {
-    final cognitoId = AuthController.to.cognitoId ?? 'dev-user';
+    final cognitoId = AuthController.to.cognitoId ?? '';
+    if (cognitoId.isEmpty) {
+      GameSessionController.to.error.value =
+          'Missing cognitoId. Please sign in again.';
+      GameSessionController.to.sessions.clear();
+      return;
+    }
     if (widget.gameId != null) {
       GameSessionController.to.loadGameHistory(cognitoId, widget.gameId!);
     } else {
@@ -157,6 +163,46 @@ class _SessionCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          if (session.gameTitle.isNotEmpty) ...[
+            Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    session.gameTitle,
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 15,
+                      fontWeight: FontWeight.w700,
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+                if (session.isBestScore)
+                  Container(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFFFE000).withValues(alpha: 0.22),
+                      borderRadius: BorderRadius.circular(999),
+                      border: Border.all(
+                        color: const Color(0xFFFFE000).withValues(alpha: 0.5),
+                      ),
+                    ),
+                    child: const Text(
+                      'BEST',
+                      style: TextStyle(
+                        color: Color(0xFFFFE000),
+                        fontSize: 11,
+                        fontWeight: FontWeight.w800,
+                        letterSpacing: 0.5,
+                      ),
+                    ),
+                  ),
+              ],
+            ),
+            const SizedBox(height: 10),
+          ],
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -168,19 +214,34 @@ class _SessionCard extends StatelessWidget {
                   fontWeight: FontWeight.w700,
                 ),
               ),
-              Text(
-                '${session.accuracy.toStringAsFixed(0)}%',
-                style: const TextStyle(
-                  color: Color(0xFFFFE000),
-                  fontSize: 16,
-                  fontWeight: FontWeight.w800,
+              if (session.totalQuestions > 0)
+                Text(
+                  '${session.accuracy.toStringAsFixed(0)}%',
+                  style: const TextStyle(
+                    color: Color(0xFFFFE000),
+                    fontSize: 16,
+                    fontWeight: FontWeight.w800,
+                  ),
+                )
+              else if (session.gameType.isNotEmpty)
+                Text(
+                  session.gameType,
+                  style: TextStyle(
+                    color: Colors.white.withValues(alpha: 0.75),
+                    fontSize: 12,
+                    fontWeight: FontWeight.w700,
+                    letterSpacing: 0.6,
+                  ),
                 ),
-              ),
             ],
           ),
           const SizedBox(height: 6),
           Text(
-            '${session.correctAnswers}/${session.totalQuestions} ${'game_correct'.tr}  •  ${session.durationSeconds}s',
+            session.totalQuestions > 0
+                ? '${session.correctAnswers}/${session.totalQuestions} ${'game_correct'.tr}  •  ${session.durationSeconds}s'
+                : session.username.isNotEmpty
+                    ? session.username
+                    : session.gameId,
             style: TextStyle(
                 color: Colors.white.withValues(alpha: 0.7), fontSize: 13),
           ),

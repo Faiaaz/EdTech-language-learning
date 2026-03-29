@@ -110,6 +110,30 @@ const _en = <String, String>{
   // ── Coming Soon ────────────────────────────────────────────────
   'coming_soon': 'Coming Soon',
 
+  // ── Forum (Community) ─────────────────────────────────────────
+  'forum_title': 'Community Forum',
+  'forum_all_posts': 'All posts',
+  'forum_threads': 'Threads',
+  'forum_empty': 'No posts yet. Start the conversation!',
+  'forum_new_post': 'New post',
+  'forum_create': 'Create post',
+  'forum_title_field': 'Title',
+  'forum_body_field': 'What would you like to share?',
+  'forum_publish': 'Publish',
+  'forum_create_required': 'Please enter a title and message.',
+  'forum_post': 'Post',
+  'forum_untitled': 'Untitled',
+  'forum_comments': 'Comments',
+  'forum_no_comments': 'No comments yet. Be the first!',
+  'forum_comment_hint': 'Write a comment…',
+  'forum_delete_post': 'Delete post?',
+  'forum_delete_post_body': 'This cannot be undone.',
+  'forum_delete_comment': 'Delete comment?',
+  'forum_delete_comment_body': 'Remove this comment?',
+  'forum_delete': 'Delete',
+  'forum_cancel': 'Cancel',
+  'forum_error': 'Forum',
+
   // ── Splash ──────────────────────────────────────────────────────
   'splash_tagline': 'Learn languages the easy way',
   'splash_loading': 'Loading...',
@@ -282,6 +306,30 @@ const _bn = <String, String>{
 
   // ── Coming Soon ────────────────────────────────────────────────
   'coming_soon': 'শীঘ্রই আসছে',
+
+  // ── Forum (Community) ─────────────────────────────────────────
+  'forum_title': 'কমিউনিটি ফোরাম',
+  'forum_all_posts': 'সব পোস্ট',
+  'forum_threads': 'থ্রেড',
+  'forum_empty': 'এখনো কোনো পোস্ট নেই। আলোচনা শুরু করুন!',
+  'forum_new_post': 'নতুন পোস্ট',
+  'forum_create': 'পোস্ট তৈরি',
+  'forum_title_field': 'শিরোনাম',
+  'forum_body_field': 'আপনি কী শেয়ার করতে চান?',
+  'forum_publish': 'প্রকাশ করুন',
+  'forum_create_required': 'শিরোনাম ও বার্তা দিন।',
+  'forum_post': 'পোস্ট',
+  'forum_untitled': 'শিরোনামহীন',
+  'forum_comments': 'মন্তব্য',
+  'forum_no_comments': 'এখনো মন্তব্য নেই। প্রথম হন!',
+  'forum_comment_hint': 'মন্তব্য লিখুন…',
+  'forum_delete_post': 'পোস্ট মুছবেন?',
+  'forum_delete_post_body': 'এটি ফেরানো যাবে না।',
+  'forum_delete_comment': 'মন্তব্য মুছবেন?',
+  'forum_delete_comment_body': 'এই মন্তব্য সরাবেন?',
+  'forum_delete': 'মুছুন',
+  'forum_cancel': 'বাদ দিন',
+  'forum_error': 'ফোরাম',
 
   // ── Splash ──────────────────────────────────────────────────────
   'splash_tagline': 'ভাষা শেখা এখন সহজ',

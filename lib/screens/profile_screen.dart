@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 
 import 'package:ez_trainz/controllers/auth_controller.dart';
 import 'package:ez_trainz/controllers/locale_controller.dart';
+import 'package:ez_trainz/screens/game_history_screen.dart';
 import 'package:ez_trainz/screens/login_screen.dart';
 import 'package:ez_trainz/screens/user_history_screen.dart';
 
@@ -145,7 +146,7 @@ class ProfileScreen extends StatelessWidget {
                     ),
                     const SizedBox(height: 14),
 
-                    // ── My History button ────────────────────────
+                    // ── My History (main) ─────────────────────────────
                     GestureDetector(
                       onTap: () => Get.to(() => const UserHistoryScreen()),
                       child: Container(
@@ -205,6 +206,14 @@ class ProfileScreen extends StatelessWidget {
                           ],
                         ),
                       ),
+                    ),
+                    const SizedBox(height: 14),
+
+                    // ── Game history (session history API) ──────────────
+                    _ActionCard(
+                      icon: Icons.sports_esports_rounded,
+                      label: 'game_history'.tr,
+                      onTap: () => Get.to(() => const GameHistoryScreen()),
                     ),
                     const SizedBox(height: 14),
 
@@ -404,6 +413,66 @@ class _ProfileRow extends StatelessWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class _ActionCard extends StatelessWidget {
+  const _ActionCard({
+    required this.icon,
+    required this.label,
+    required this.onTap,
+  });
+
+  final IconData icon;
+  final String label;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        width: double.infinity,
+        padding: const EdgeInsets.all(20),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(16),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.06),
+              blurRadius: 12,
+              offset: const Offset(0, 4),
+            ),
+          ],
+        ),
+        child: Row(
+          children: [
+            Container(
+              width: 44,
+              height: 44,
+              decoration: BoxDecoration(
+                color: const Color(0xFF4DA6E8).withValues(alpha: 0.12),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Icon(icon, color: const Color(0xFF4DA6E8), size: 22),
+            ),
+            const SizedBox(width: 16),
+            Expanded(
+              child: Text(
+                label,
+                style: const TextStyle(
+                  color: Color(0xFF1A1A2E),
+                  fontSize: 16,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+            ),
+            const Icon(Icons.chevron_right_rounded,
+                color: Color(0xFF9CA3AF), size: 22),
+          ],
+        ),
       ),
     );
   }

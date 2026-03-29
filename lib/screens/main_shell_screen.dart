@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import 'package:ez_trainz/controllers/course_controller.dart';
 import 'package:ez_trainz/controllers/program_controller.dart';
 import 'package:ez_trainz/models/program.dart';
-import 'package:ez_trainz/screens/coming_soon_screen.dart';
+import 'package:ez_trainz/screens/forum_screen.dart';
 import 'package:ez_trainz/screens/course_list_screen.dart';
 import 'package:ez_trainz/screens/games_screen.dart';
 import 'package:ez_trainz/screens/ielts_dashboard_screen.dart';
@@ -54,7 +54,7 @@ class _MainShellScreenState extends State<MainShellScreen> {
           }),
           const GamesScreen(),
           const ProfileScreen(),
-          const ComingSoonScreen(titleKey: 'nav_community', icon: Icons.people_rounded),
+          const ForumScreen(),
           const LeaderboardScreen(),
         ],
       ),

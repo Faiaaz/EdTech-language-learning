@@ -72,7 +72,7 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
                     ...gameCtrl.games.map((g) => Padding(
                           padding: const EdgeInsets.only(left: 8),
                           child: _FilterChip(
-                            label: g.name,
+                            label: g.title,
                             selected: lbCtrl.selectedGameId.value == g.id,
                             onTap: () => lbCtrl.loadByGame(g.id),
                           ),
