@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 /// Empty state / placeholder for features not yet built (e.g. Community, Leaderboard).
 class ComingSoonScreen extends StatelessWidget {
   const ComingSoonScreen({
     super.key,
-    required this.title,
+    required this.titleKey,
     this.icon,
   });
 
-  final String title;
+  /// Translation key for the tab/section name (e.g. nav_practice, nav_community).
+  final String titleKey;
   final IconData? icon;
 
   static const _bgColor = Color(0xFF4DA6E8);
@@ -41,7 +43,7 @@ class ComingSoonScreen extends StatelessWidget {
                 ),
                 const SizedBox(height: 24),
                 Text(
-                  title,
+                  titleKey.tr,
                   style: const TextStyle(
                     color: Colors.white,
                     fontSize: 22,
@@ -51,7 +53,7 @@ class ComingSoonScreen extends StatelessWidget {
                 ),
                 const SizedBox(height: 12),
                 Text(
-                  'Coming Soon',
+                  'coming_soon'.tr,
                   style: TextStyle(
                     color: Colors.white.withValues(alpha: 0.85),
                     fontSize: 16,

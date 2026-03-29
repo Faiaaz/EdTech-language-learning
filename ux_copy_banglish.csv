@@ -1,0 +1,137 @@
+Screen,Element Name,Key,Proposed Text,Translation / Note
+Login,Screen Title,login_title,Login করুন,"Log in korun"
+Login,Email Field Label,login_email,Email address,Universal tech term
+Login,Password Field Label,login_password,Password,Universal tech term
+Login,Primary Button,login_button,Login,English action verb
+Login,Helper Text,login_helper,আপনার একাউন্টে প্রবেশ করুন,Enter your account
+Login,Forgot Password Link,login_forgot,Password ভুলে গেছেন?,Forgot your password?
+Login,Sign Up Prompt,login_signup_prompt,একাউন্ট নেই? Sign Up করুন,No account? Sign Up korun
+Login,Error - Wrong Credentials,login_error,Email বা password ভুল হয়েছে। আবার চেষ্টা করুন।,Email or password is wrong. Try again.
+Sign Up,Screen Title,signup_title,নতুন Account তৈরি করুন,Create a new account
+Sign Up,Name Field,signup_name,আপনার নাম,Your name
+Sign Up,Email Field,signup_email,Email address,English tech term
+Sign Up,Phone Field,signup_phone,মোবাইল নম্বর,Mobile number
+Sign Up,Password Field,signup_password,Password দিন,Enter password
+Sign Up,Password Hint,signup_password_hint,কমপক্ষে ৮ অক্ষর দিন,Give at least 8 characters
+Sign Up,Primary Button,signup_button,Sign Up,English action
+Sign Up,Terms Text,signup_terms,Sign Up করলে আপনি আমাদের Terms ও Privacy Policy মেনে নিচ্ছেন,By signing up you agree to our Terms & Privacy Policy
+OTP Verification,Screen Title,otp_title,OTP Verification,English — universal tech concept
+OTP Verification,Instruction,otp_instruction,আপনার email-এ পাঠানো ৬ সংখ্যার কোডটি দিন,Enter the 6-digit code sent to your email
+OTP Verification,Input Placeholder,otp_placeholder,৬ সংখ্যার কোড,6-digit code
+OTP Verification,Primary Button,otp_button,Verify,English action
+OTP Verification,Resend Prompt,otp_resend,কোড পাননি? Resend করুন,Didn't get the code? Resend korun
+OTP Verification,Success Toast,otp_success,সফলভাবে verify হয়েছে!,Successfully verified!
+Home,Greeting,home_greeting,স্বাগতম {name}!,"Welcome, {name}!"
+Home,Subtitle,home_subtitle,আজ কোন ভাষা শিখবেন?,Which language will you learn today?
+Home,Japanese Card,home_japanese,🇯🇵 Japanese শিখুন,Learn Japanese
+Home,Korean Card,home_korean,🇰🇷 Korean শিখুন,Learn Korean
+Home,English Card,home_english,🇬🇧 English শিখুন,Learn English
+Home,German Card,home_german,🇩🇪 German শিখুন,Learn German
+Home,Continue Button,home_continue,শেখা চালিয়ে যান,Continue learning
+Home,Nav - Home,nav_home,Home,English nav label
+Home,Nav - Courses,nav_courses,Courses,English nav label
+Home,Nav - Profile,nav_profile,Profile,English nav label
+Course List,Screen Title,course_list_title,Courses,English
+Course List,Search Placeholder,course_list_search,Course খুঁজুন...,Search for a course...
+Course List,Filter Label,course_list_filter,Level বাছাই করুন,Select a level
+Course List,Beginner Tag,course_list_beginner,শুরুর ধাপ,Beginning step
+Course List,Intermediate Tag,course_list_intermediate,মাঝামাঝি ধাপ,Middle step
+Course List,Lesson Count,course_list_lesson_count,{n}টি Lesson,{n} Lessons
+Course List,Empty State,course_list_empty,এখনো কোনো course যোগ হয়নি,No courses added yet
+SRS Flashcard Review,Screen Title,srs_title,Flashcard Review,English tech term
+SRS Flashcard Review,Instruction,srs_instruction,"কার্ডটি দেখুন, তারপর উল্টান","Look at the card, then flip it"
+SRS Flashcard Review,Flip Button,srs_flip,উল্টান,Flip
+SRS Flashcard Review,Rating Prompt,srs_rating_prompt,কতটুকু মনে ছিল?,How much did you remember?
+SRS Flashcard Review,Forgot Button,srs_forgot,ভুলে গেছি 😅,I forgot
+SRS Flashcard Review,Hard Button,srs_hard,কঠিন ছিল,It was hard
+SRS Flashcard Review,Easy Button,srs_easy,সহজ ছিল ✨,It was easy
+SRS Flashcard Review,Cards Remaining,srs_remaining,আর {n}টি বাকি,{n} more remaining
+SRS Flashcard Review,Session Complete Title,srs_complete_title,🎉 আজকের Review শেষ!,Today's review is done!
+SRS Flashcard Review,Session Complete Subtitle,srs_complete_subtitle,দারুণ করেছেন! কাল আবার দেখা হবে।,You did great! See you tomorrow.
+SRS Flashcard Review,Stats - Reviewed,srs_stats_reviewed,Review করেছেন: {n}টি,Reviewed: {n}
+SRS Flashcard Review,Stats - Accuracy,srs_stats_accuracy,সঠিক উত্তর: {n}%,Correct answers: {n}%
+Kana Chart,Screen Title,kana_title,Kana Chart,English tech term
+Kana Chart,Subtitle,kana_subtitle,হিরাগানা ও কাতাকানা সব অক্ষর,All Hiragana and Katakana characters
+Kana Chart,Tab - Hiragana,kana_tab_hiragana,হিরাগানা,Bengali transliteration
+Kana Chart,Tab - Katakana,kana_tab_katakana,কাতাকানা,Bengali transliteration
+Kana Chart,Mnemonic Label,kana_mnemonic,মনে রাখার কৌশল,Memory trick
+Kana Chart,Tap Hint,kana_tap_hint,অক্ষরে ট্যাপ করে উচ্চারণ শুনুন,Tap a character to hear pronunciation
+Kana Chart,Start Review Button,kana_start_review,Review শুরু করুন,Start Review
+Kana Chart,Mastered Count,kana_mastered,আয়ত্তে আছে: {n}টি,Mastered: {n}
+Kana Chart,Remaining Count,kana_remaining,বাকি আছে: {n}টি,Remaining: {n}
+Kana Chart,Detail - Romaji,kana_romaji,Romaji: {value},English label
+Kana Chart,Detail - Stroke Order,kana_stroke_order,লেখার ক্রম,Writing order
+Kana Chart,Detail - Example Word,kana_example,উদাহরণ শব্দ,Example word
+Lesson + Video,Screen Title,lesson_title,Lesson {n},English
+Lesson + Video,Lesson Subtitle,lesson_subtitle,পাঠ বিবরণী,Lesson description
+Lesson + Video,Video Section Title,lesson_video_title,ভিডিও দেখুন,Watch the video
+Lesson + Video,Play Button,lesson_play,Play,English action
+Lesson + Video,Buffering Text,lesson_buffering,লোড হচ্ছে...,Loading...
+Lesson + Video,Video Error,lesson_video_error,ভিডিও চালানো যাচ্ছে না। Internet সংযোগ দেখুন।,Can't play video. Check internet connection.
+Lesson + Video,Duration Label,lesson_duration,সময়কাল: {duration},Duration
+Lesson + Video,Notes Section,lesson_notes,পাঠের নোট,Lesson notes
+Lesson + Video,Next Lesson Button,lesson_next,পরবর্তী Lesson →,Next Lesson
+Lesson + Video,Previous Lesson,lesson_prev,← আগের Lesson,Previous Lesson
+Lesson + Video,Mark Complete,lesson_mark_complete,সম্পন্ন হিসেবে চিহ্নিত করুন,Mark as complete
+Lesson + Video,Completed Badge,lesson_completed,✅ সম্পন্ন হয়েছে,Completed
+Lesson + Video,Download Option,lesson_download,Download করে রাখুন,Download and keep
+Course Detail,Screen Title,course_detail_title,Course বিবরণ,Course details
+Course Detail,About Section,course_detail_about,এই Course সম্পর্কে,About this Course
+Course Detail,Instructor Label,course_detail_instructor,শিক্ষক,Instructor
+Course Detail,Level Label,course_detail_level,ধাপ,Level
+Course Detail,Beginner,course_detail_beginner,শুরুর ধাপ,Beginning level
+Course Detail,Intermediate,course_detail_intermediate,মাঝামাঝি ধাপ,Intermediate level
+Course Detail,Advanced,course_detail_advanced,উন্নত ধাপ,Advanced level
+Course Detail,Total Lessons,course_detail_total_lessons,মোট Lesson: {n}টি,Total Lessons: {n}
+Course Detail,Progress Label,course_detail_progress,আপনার অগ্রগতি,Your progress
+Course Detail,Progress Bar Text,course_detail_progress_pct,{n}% সম্পন্ন,{n}% complete
+Course Detail,Start Course Button,course_detail_start,Course শুরু করুন,Start Course
+Course Detail,Continue Button,course_detail_continue,শেখা চালিয়ে যান,Continue learning
+Course Detail,Lesson List Title,course_detail_lessons,সব Lesson,All Lessons
+Course Detail,Locked Lesson,course_detail_locked,🔒 আগের Lesson শেষ করুন,Complete the previous Lesson
+Quiz,Screen Title,quiz_title,Quiz,English
+Quiz,Instruction,quiz_instruction,সঠিক উত্তরটি বাছাই করুন,Choose the correct answer
+Quiz,Question Counter,quiz_counter,প্রশ্ন {current} / {total},Question {current} / {total}
+Quiz,Submit Button,quiz_submit,Submit,English action
+Quiz,Next Button,quiz_next,পরের প্রশ্ন →,Next question
+Quiz,Correct Feedback,quiz_correct,✅ একদম সঠিক!,Exactly correct!
+Quiz,Wrong Feedback,quiz_wrong,❌ ভুল হয়ে গেছে। সঠিক উত্তর: {answer},Got it wrong. Correct answer: {answer}
+Quiz,Hint Button,quiz_hint,💡 একটু Hint দিন,Give a Hint
+Quiz,Skip Button,quiz_skip,এড়িয়ে যান,Skip
+Quiz,Timer Label,quiz_timer,সময় বাকি: {time},Time remaining
+Quiz,Result Title,quiz_result_title,🎉 Quiz শেষ!,Quiz done!
+Quiz,Score,quiz_score,আপনার Score: {n} / {total},Your Score
+Quiz,Pass Message,quiz_pass,দারুণ! আপনি পাশ করেছেন! 🔥,Great! You passed!
+Quiz,Fail Message,quiz_fail,"আরেকটু চেষ্টা করলেই হবে। আবার দিন!","A little more effort. Try again!"
+Quiz,Retry Button,quiz_retry,আবার Quiz দিন,Take Quiz again
+Quiz,Back to Lesson,quiz_back_to_lesson,Lesson-এ ফিরে যান,Go back to Lesson
+Splash,App Name,splash_app_name,EZ TRAINZ,Brand name — always English
+Splash,Tagline,splash_tagline,ভাষা শেখা এখন সহজ,Learning languages is now easy
+Splash,Loading Text,splash_loading,প্রস্তুত হচ্ছে...,Getting ready...
+Settings,Screen Title,settings_title,Settings,English
+Settings,Notification Toggle,settings_notification,Notification চালু করুন,Turn on Notifications
+Settings,Notification Desc,settings_notification_desc,প্রতিদিন মনে করিয়ে দেবে পড়ার কথা,Will remind you to study every day
+Settings,Language Pref,settings_language,অ্যাপের ভাষা,App language
+Settings,Dark Mode Toggle,settings_dark_mode,Dark Mode,English tech term
+Settings,About,settings_about,আমাদের সম্পর্কে,About us
+Settings,Version,settings_version,Version {version},English
+Settings,Clear Data,settings_clear_data,সব Data মুছে ফেলুন,Delete all Data
+Settings,Clear Confirm,settings_clear_confirm,এটি করলে আপনার সব অগ্রগতি মুছে যাবে। আপনি কি নিশ্চিত?,This will delete all your progress. Are you sure?
+Settings,Confirm Yes,settings_confirm_yes,"হ্যাঁ, মুছে ফেলুন","Yes, delete"
+Settings,Cancel,settings_cancel,বাদ দিন,Cancel
+Error States,No Internet,error_no_internet,Internet সংযোগ নেই। আবার চেষ্টা করুন।,No internet connection. Try again.
+Error States,Retry Button,error_retry,আবার চেষ্টা করুন,Try again
+Error States,Server Error,error_server,কিছু একটা সমস্যা হয়েছে। একটু পরে আবার আসুন।,Something went wrong. Come back in a bit.
+Error States,Empty Course List,error_empty_courses,এখনো কোনো Course পাওয়া যায়নি,No Courses found yet
+Error States,No Reviews Due,error_no_reviews,🎉 আজ কোনো Review নেই! বিশ্রাম নিন।,No Reviews today! Take a rest.
+Error States,404 Screen,error_404,হায়! এই pageটি খুঁজে পাওয়া যাচ্ছে না 😕,Oops! This page can't be found
+Profile,Screen Title,profile_title,Profile,English
+Profile,Name Label,profile_name,নাম,Name
+Profile,Email Label,profile_email,Email,English
+Profile,Phone Label,profile_phone,মোবাইল নম্বর,Mobile number
+Profile,Edit Button,profile_edit,Edit Profile,English action
+Profile,Language Pref,profile_language_pref,পছন্দের ভাষা,Preferred language
+Profile,Logout Button,profile_logout,Logout,English action
+Profile,Logout Confirm,profile_logout_confirm,আপনি কি Logout করতে চান?,Do you want to logout?
+Profile,Confirm Yes,profile_logout_yes,"হ্যাঁ, Logout করুন","Yes, Logout"
+Profile,Cancel,profile_cancel,বাদ দিন,Cancel
