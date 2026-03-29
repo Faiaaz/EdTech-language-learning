@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
+import 'package:get/get.dart';
 
 import 'package:ez_trainz/screens/login_screen.dart';
 import 'package:ez_trainz/widgets/ez_logo_boxed.dart';
@@ -256,8 +257,8 @@ class _SplashScreenState extends State<SplashScreen>
                         offset: Offset(taglineOffset, 0),
                         child: Opacity(
                           opacity: taglineOpacity.clamp(0.0, 1.0),
-                          child: const Text(
-                            'Learn. Grow. Thrive.',
+                          child: Text(
+                            'splash_tagline'.tr,
                             textAlign: TextAlign.center,
                             style: TextStyle(
                               color: Color(0xFF888888),

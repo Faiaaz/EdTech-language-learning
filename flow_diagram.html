@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>EZ TRAINZ — App Architecture</title>
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #0f1117;
+      color: #e2e8f0;
+      padding: 40px 24px 80px;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 56px;
+    }
+
+    header h1 {
+      font-size: 2.4rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, #a78bfa, #38bdf8, #34d399);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      letter-spacing: -0.5px;
+    }
+
+    header p {
+      margin-top: 10px;
+      color: #94a3b8;
+      font-size: 1rem;
+    }
+
+    .section {
+      max-width: 1100px;
+      margin: 0 auto 60px;
+    }
+
+    .section-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: #64748b;
+      margin-bottom: 20px;
+      padding-left: 2px;
+    }
+
+    .card {
+      background: #1e2130;
+      border: 1px solid #2d3452;
+      border-radius: 16px;
+      padding: 32px 28px;
+      overflow-x: auto;
+    }
+
+    .card .mermaid {
+      display: flex;
+      justify-content: center;
+    }
+
+    /* Status badge grid */
+    .status-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 14px;
+    }
+
+    .status-item {
+      background: #1e2130;
+      border: 1px solid #2d3452;
+      border-radius: 12px;
+      padding: 16px 18px;
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+    }
+
+    .status-icon {
+      font-size: 1.3rem;
+      line-height: 1;
+      margin-top: 2px;
+    }
+
+    .status-text strong {
+      display: block;
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: #e2e8f0;
+      margin-bottom: 3px;
+    }
+
+    .status-text span {
+      font-size: 0.78rem;
+      color: #64748b;
+    }
+
+    footer {
+      text-align: center;
+      color: #334155;
+      font-size: 0.8rem;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>EZ TRAINZ</h1>
+  <p>EdTech Language Learning Platform — Architecture Overview</p>
+</header>
+
+<!-- ① USER JOURNEY -->
+<div class="section">
+  <div class="section-title">① User Journey</div>
+  <div class="card">
+    <div class="mermaid">
+flowchart LR
+    A([Launch App]) --> B{Logged in?}
+    B -- No --> C[Login / Sign Up]
+    C --> D[OTP Verification]
+    D --> E[Home Screen]
+    B -- Yes --> E
+
+    E --> F{Pick a Language}
+    F --> JLC[🇯🇵 Japanese]
+    F --> KLC[🇰🇷 Korean]
+    F --> ELC[🇬🇧 English]
+    F --> GLC[🇩🇪 German]
+
+    JLC & KLC & ELC & GLC --> G[Course List]
+    G --> H[Course Detail]
+    H --> I[Lesson + Video]
+    I --> J[Quiz]
+
+    G --> K[Kana Chart]
+    K --> L[SRS Flashcard Review]
+    L --> M{Rate Recall}
+    M -- Forgot --> N[Reset: 1 day]
+    M -- Hard --> O[Short interval]
+    M -- Easy --> P[Longer interval]
+    N & O & P --> L
+
+    style A fill:#7c3aed,color:#fff,stroke:none
+    style E fill:#0369a1,color:#fff,stroke:none
+    style L fill:#065f46,color:#fff,stroke:none
+    style J fill:#92400e,color:#fff,stroke:none
+    </div>
+  </div>
+</div>
+
+<!-- ② SYSTEM ARCHITECTURE -->
+<div class="section">
+  <div class="section-title">② System Architecture (Layers)</div>
+  <div class="card">
+    <div class="mermaid">
+flowchart TB
+    subgraph UI ["📱  UI Layer — Screens"]
+        direction LR
+        S1[Splash] --> S2[Login / OTP / Sign Up]
+        S2 --> S3[Home]
+        S3 --> S4[Course List]
+        S4 --> S5[Lesson + Video]
+        S3 --> S6[Kana Chart]
+        S6 --> S7[SRS Review]
+        S3 --> S8[Profile]
+    end
+
+    subgraph STATE ["⚙️  State Layer — GetX Controllers"]
+        direction LR
+        C1[AuthController\nSession & token]
+        C2[ProgramController\nActive language]
+        C3[CourseController\nCourses & lessons]
+        C4[SrsController\nFlashcard session]
+    end
+
+    subgraph SVC ["🔧  Service Layer — Business Logic"]
+        direction LR
+        SV1[AuthService\nSign up / Login / OTP]
+        SV2[CourseService\nCourse & lesson data]
+        SV3[SrsService\nSM-2 algorithm]
+    end
+
+    subgraph DATA ["💾  Data Layer"]
+        direction LR
+        D1[(AWS Lambda API\nauth endpoints)]
+        D2[(Static Data\ncourses / lessons)]
+        D3[(In-Memory\nSRS cards)]
+        D4[(CloudFront CDN\nvideo files)]
+    end
+
+    UI --> STATE
+    STATE --> SVC
+    SVC --> DATA
+
+    C1 --> SV1
+    C2 --> SV2
+    C3 --> SV2
+    C4 --> SV3
+    SV1 --> D1
+    SV2 --> D2
+    SV2 --> D4
+    SV3 --> D3
+
+    style UI fill:#1e3a5f,stroke:#3b82f6,color:#bfdbfe
+    style STATE fill:#3b1a5f,stroke:#8b5cf6,color:#ddd6fe
+    style SVC fill:#1a3a2f,stroke:#10b981,color:#a7f3d0
+    style DATA fill:#3b2a1a,stroke:#f59e0b,color:#fde68a
+    </div>
+  </div>
+</div>
+
+<!-- ③ SRS ALGORITHM -->
+<div class="section">
+  <div class="section-title">③ Spaced Repetition System (SM-2 Algorithm)</div>
+  <div class="card">
+    <div class="mermaid">
+flowchart TD
+    START([92 Kana Cards loaded\nhiragana + katakana]) --> DUE{Card due today?}
+    DUE -- Yes --> SHOW[Show character to learner]
+    DUE -- No --> WAIT[Wait until scheduled date]
+
+    SHOW --> FLIP[Learner flips card\nsees answer]
+    FLIP --> RATE{Learner rates recall}
+
+    RATE -- "Forgot\nquality 0–2" --> FAIL[Reset interval → 1 day\nrepetitions = 0]
+    RATE -- "Hard correct\nquality 3" --> HARD[Short interval boost\nease factor drops slightly]
+    RATE -- "Easy / Perfect\nquality 4–5" --> EASY[Interval multiplied by\nease factor ×2.5 avg]
+
+    FAIL --> SCHED[Schedule next review]
+    HARD --> SCHED
+    EASY --> SCHED
+
+    SCHED --> NEXT{More cards\nin session?}
+    NEXT -- Yes --> SHOW
+    NEXT -- No --> DONE([Session complete\nStats updated])
+
+    DONE --> PERSIST["⚠️ TODO: Save to\nshared_preferences / backend"]
+
+    style START fill:#065f46,color:#d1fae5,stroke:none
+    style DONE fill:#065f46,color:#d1fae5,stroke:none
+    style FAIL fill:#7f1d1d,color:#fecaca,stroke:none
+    style EASY fill:#14532d,color:#bbf7d0,stroke:none
+    style PERSIST fill:#78350f,color:#fde68a,stroke:#f59e0b,stroke-dasharray:5
+    </div>
+  </div>
+</div>
+
+<!-- ④ AUTH FLOW -->
+<div class="section">
+  <div class="section-title">④ Authentication Flow</div>
+  <div class="card">
+    <div class="mermaid">
+sequenceDiagram
+    actor User
+    participant App as Flutter App
+    participant Auth as AuthService
+    participant API as AWS Lambda API
+
+    User->>App: Enter name / email / phone / password
+    App->>Auth: signUp(...)
+    Auth->>API: POST /auth/signup
+    API-->>Auth: 200 OK
+    Auth-->>App: Success
+    App->>User: Show OTP screen
+
+    User->>App: Enter 6-digit OTP
+    App->>Auth: verifyOtp(email, otp)
+    Auth->>API: POST /auth/confirm
+    API-->>Auth: Access token
+    Auth-->>App: Token received
+    App->>App: AuthController.setSession(token)
+    App->>User: Navigate to Home Screen
+    </div>
+  </div>
+</div>
+
+<!-- ⑤ BUILD STATUS -->
+<div class="section">
+  <div class="section-title">⑤ Feature Status</div>
+  <div class="status-grid">
+    <div class="status-item">
+      <div class="status-icon">✅</div>
+      <div class="status-text">
+        <strong>Authentication</strong>
+        <span>Sign up, OTP, Login — fully connected to AWS</span>
+      </div>
+    </div>
+    <div class="status-item">
+      <div class="status-icon">✅</div>
+      <div class="status-text">
+        <strong>Language Program Selection</strong>
+        <span>Japanese, Korean, English, German</span>
+      </div>
+    </div>
+    <div class="status-item">
+      <div class="status-icon">✅</div>
+      <div class="status-text">
+        <strong>Kana Database</strong>
+        <span>All 92 hiragana + katakana with mnemonics</span>
+      </div>
+    </div>
+    <div class="status-item">
+      <div class="status-icon">✅</div>
+      <div class="status-text">
+        <strong>SRS Algorithm (SM-2)</strong>
+        <span>Flashcard scheduling logic complete</span>
+      </div>
+    </div>
+    <div class="status-item">
+      <div class="status-icon">✅</div>
+      <div class="status-text">
+        <strong>Course & Lesson Models</strong>
+        <span>Data structures defined, static data loaded</span>
+      </div>
+    </div>
+    <div class="status-item">
+      <div class="status-icon">⚠️</div>
+      <div class="status-text">
+        <strong>SRS Persistence</strong>
+        <span>In-memory only — resets on app restart</span>
+      </div>
+    </div>
+    <div class="status-item">
+      <div class="status-icon">⚠️</div>
+      <div class="status-text">
+        <strong>Course API Integration</strong>
+        <span>Endpoints ready but using static data</span>
+      </div>
+    </div>
+    <div class="status-item">
+      <div class="status-icon">⚠️</div>
+      <div class="status-text">
+        <strong>Quiz Engine</strong>
+        <span>Models exist, UI not yet built</span>
+      </div>
+    </div>
+    <div class="status-item">
+      <div class="status-icon">⚠️</div>
+      <div class="status-text">
+        <strong>Video Streaming</strong>
+        <span>CloudFront CDN ready, player integration pending</span>
+      </div>
+    </div>
+    <div class="status-item">
+      <div class="status-icon">🔲</div>
+      <div class="status-text">
+        <strong>Progress Tracking</strong>
+        <span>Not yet started</span>
+      </div>
+    </div>
+    <div class="status-item">
+      <div class="status-icon">🔲</div>
+      <div class="status-text">
+        <strong>Korean / English / German Content</strong>
+        <span>Framework ready, content not yet added</span>
+      </div>
+    </div>
+    <div class="status-item">
+      <div class="status-icon">🔲</div>
+      <div class="status-text">
+        <strong>Offline / Caching</strong>
+        <span>Not yet started</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>EZ TRAINZ — EdTech Language Learning Platform</footer>
+
+<script>
+  mermaid.initialize({
+    startOnLoad: true,
+    theme: 'dark',
+    themeVariables: {
+      primaryColor: '#1e3a5f',
+      primaryTextColor: '#e2e8f0',
+      primaryBorderColor: '#3b82f6',
+      lineColor: '#475569',
+      secondaryColor: '#1e2130',
+      tertiaryColor: '#0f1117',
+      background: '#0f1117',
+      mainBkg: '#1e2130',
+      nodeBorder: '#475569',
+      clusterBkg: '#161b27',
+      titleColor: '#e2e8f0',
+      edgeLabelBackground: '#1e2130',
+      fontSize: '14px'
+    },
+    flowchart: {
+      htmlLabels: true,
+      curve: 'basis',
+      padding: 20
+    },
+    sequence: {
+      diagramMarginX: 40,
+      diagramMarginY: 20,
+      actorMargin: 80,
+      messageMargin: 40,
+      mirrorActors: false,
+      useMaxWidth: true
+    }
+  });
+</script>
+</body>
+</html>
