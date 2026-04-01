@@ -48,6 +48,7 @@ class _LoginScreenState extends State<LoginScreen> {
       );
 
       final token = response['accessToken'] as String? ?? '';
+      final idToken = response['idToken'] as String? ?? response['token'] as String?;
       final user  = response['user'] as Map<String, dynamic>? ?? {};
       final name  = user['name'] as String? ?? email.split('@').first;
       final userEmail = user['email'] as String? ?? email;
@@ -55,6 +56,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
       AuthController.to.setSession(
         token: token,
+        idToken: idToken,
         name: name,
         email: userEmail,
         cognitoId: cognitoId,

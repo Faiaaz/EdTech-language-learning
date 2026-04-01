@@ -112,10 +112,16 @@ class _OtpScreenState extends State<OtpScreen>
       );
 
       final token = response['accessToken'] as String? ?? '';
+      final idToken = response['idToken'] as String? ?? response['token'] as String?;
+      final user = response['user'] as Map<String, dynamic>? ?? {};
+      final cognitoId = user['cognitoId'] as String? ?? user['sub'] as String?;
       if (token.isNotEmpty) {
         AuthController.to.setSession(
           token: token,
+          idToken: idToken,
           name: AuthController.to.signUpName,
+          email: AuthController.to.signUpEmail,
+          cognitoId: cognitoId,
         );
       }
 
