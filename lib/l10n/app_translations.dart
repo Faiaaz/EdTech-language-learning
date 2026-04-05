@@ -26,6 +26,9 @@ const _en = <String, String>{
   'lets_sign_up': "Let's Sign Up",
   'enter_email': 'Enter your Email',
   'enter_password': 'Enter your password',
+  'login_email_or_phone_hint': 'Email or Phone Number',
+  'login_password_hint': 'Password',
+  'continue_as_guest': 'Continue as a Guest',
 
   // ── Sign Up ─────────────────────────────────────────────────────
   'signup_title': 'Create your Account',
@@ -228,6 +231,9 @@ const _bn = <String, String>{
   'lets_sign_up': 'Sign Up করুন',
   'enter_email': 'Email address দিন',
   'enter_password': 'Password দিন',
+  'login_email_or_phone_hint': 'Email বা ফোন নম্বর',
+  'login_password_hint': 'Password',
+  'continue_as_guest': 'Guest হিসেবে চালিয়ে যান',
 
   // ── Sign Up ─────────────────────────────────────────────────────
   'signup_title': 'নতুন Account তৈরি করুন',
