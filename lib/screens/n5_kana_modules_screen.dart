@@ -76,14 +76,14 @@ class _N5KanaModulesScreenState extends State<N5KanaModulesScreen> {
                         borderRadius: BorderRadius.circular(20),
                         border: Border.all(color: Colors.white38, width: 1),
                       ),
-                      child: const Row(
+                      child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          Icon(Icons.arrow_back_ios_rounded,
+                          const Icon(Icons.arrow_back_ios_rounded,
                               color: Colors.white, size: 14),
-                          SizedBox(width: 4),
-                          Text('Back',
-                              style: TextStyle(
+                          const SizedBox(width: 4),
+                          Text('back'.tr,
+                              style: const TextStyle(
                                 color: Colors.white,
                                 fontSize: 13,
                                 fontWeight: FontWeight.w600,
@@ -100,9 +100,9 @@ class _N5KanaModulesScreenState extends State<N5KanaModulesScreen> {
                       color: Colors.white.withValues(alpha: 0.2),
                       borderRadius: BorderRadius.circular(8),
                     ),
-                    child: const Text(
-                      'N5 Beginner',
-                      style: TextStyle(
+                    child: Text(
+                      'n5_beginner'.tr,
+                      style: const TextStyle(
                         color: Colors.white,
                         fontSize: 12,
                         fontWeight: FontWeight.w700,
@@ -110,9 +110,9 @@ class _N5KanaModulesScreenState extends State<N5KanaModulesScreen> {
                     ),
                   ),
                   const SizedBox(height: 8),
-                  const Text(
-                    'Japanese Writing Systems',
-                    style: TextStyle(
+                  Text(
+                    'jp_writing_systems'.tr,
+                    style: const TextStyle(
                       color: Colors.white,
                       fontSize: 24,
                       fontWeight: FontWeight.w900,
@@ -121,7 +121,7 @@ class _N5KanaModulesScreenState extends State<N5KanaModulesScreen> {
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    'Master Hiragana & Katakana characters',
+                    'master_kana_desc'.tr,
                     style: TextStyle(
                       color: Colors.white.withValues(alpha: 0.8),
                       fontSize: 14,
@@ -140,10 +140,9 @@ class _N5KanaModulesScreenState extends State<N5KanaModulesScreen> {
                   children: [
                     // ── HIRAGANA MODULE ─────────────────────────
                     _ModuleSection(
-                      title: 'Hiragana',
+                      title: 'hiragana'.tr,
                       subtitle: 'ひらがな',
-                      description:
-                          'The foundational Japanese script. 46 basic characters used for native Japanese words.',
+                      description: 'hiragana_desc'.tr,
                       icon: Icons.brush_rounded,
                       characterCount: 46,
                       dueCount: _hiraganaDue,
@@ -187,10 +186,9 @@ class _N5KanaModulesScreenState extends State<N5KanaModulesScreen> {
 
                     // ── KATAKANA MODULE ─────────────────────────
                     _ModuleSection(
-                      title: 'Katakana',
+                      title: 'katakana'.tr,
                       subtitle: 'カタカナ',
-                      description:
-                          'Used for foreign words, onomatopoeia, and emphasis. 46 basic characters.',
+                      description: 'katakana_desc'.tr,
                       icon: Icons.translate_rounded,
                       characterCount: 46,
                       dueCount: _katakanaDue,
@@ -245,17 +243,17 @@ class _N5KanaModulesScreenState extends State<N5KanaModulesScreen> {
                         borderRadius: BorderRadius.circular(16),
                         border: Border.all(color: const Color(0xFFFFE082)),
                       ),
-                      child: const Column(
+                      child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Row(
                             children: [
-                              Icon(Icons.tips_and_updates_rounded,
+                              const Icon(Icons.tips_and_updates_rounded,
                                   color: Color(0xFFFFA000), size: 20),
-                              SizedBox(width: 8),
+                              const SizedBox(width: 8),
                               Text(
-                                'Learning Tips',
-                                style: TextStyle(
+                                'learning_tips'.tr,
+                                style: const TextStyle(
                                   color: Color(0xFFF57F17),
                                   fontSize: 14,
                                   fontWeight: FontWeight.w800,
@@ -263,16 +261,16 @@ class _N5KanaModulesScreenState extends State<N5KanaModulesScreen> {
                               ),
                             ],
                           ),
-                          SizedBox(height: 10),
-                          _TipItem(text: 'Start with Hiragana before Katakana'),
-                          SizedBox(height: 6),
-                          _TipItem(text: 'Use mnemonics to remember shapes'),
-                          SizedBox(height: 6),
-                          _TipItem(text: 'Practice stroke order for muscle memory'),
-                          SizedBox(height: 6),
-                          _TipItem(text: 'Play the drag & drop game daily'),
-                          SizedBox(height: 6),
-                          _TipItem(text: 'Use SRS Review to retain long-term'),
+                          const SizedBox(height: 10),
+                          _TipItem(text: 'tip_start_hiragana'.tr),
+                          const SizedBox(height: 6),
+                          _TipItem(text: 'tip_mnemonics'.tr),
+                          const SizedBox(height: 6),
+                          _TipItem(text: 'tip_stroke_order'.tr),
+                          const SizedBox(height: 6),
+                          _TipItem(text: 'tip_drag_drop'.tr),
+                          const SizedBox(height: 6),
+                          _TipItem(text: 'tip_srs'.tr),
                         ],
                       ),
                     ),
@@ -374,7 +372,7 @@ class _ModuleSection extends StatelessWidget {
                     ),
                     const SizedBox(height: 2),
                     Text(
-                      '$characterCount characters',
+                      'characters_count'.trParams({'count': '$characterCount'}),
                       style: const TextStyle(
                         color: Color(0xFF6B7280),
                         fontSize: 12,
@@ -403,7 +401,7 @@ class _ModuleSection extends StatelessWidget {
               Expanded(
                 child: _ActionButton(
                   icon: Icons.grid_view_rounded,
-                  label: 'Chart',
+                  label: 'chart'.tr,
                   onTap: onChartTap,
                   filled: true,
                 ),
@@ -412,7 +410,7 @@ class _ModuleSection extends StatelessWidget {
               Expanded(
                 child: _ActionButton(
                   icon: Icons.games_rounded,
-                  label: 'Drag & Drop',
+                  label: 'drag_drop'.tr,
                   onTap: onGameTap,
                   filled: false,
                 ),
@@ -425,7 +423,7 @@ class _ModuleSection extends StatelessWidget {
               Expanded(
                 child: _ActionButton(
                   icon: Icons.style_rounded,
-                  label: 'Review',
+                  label: 'review'.tr,
                   onTap: onReviewTap,
                   filled: true,
                   badge: dueCount > 0 ? '$dueCount' : null,
@@ -435,7 +433,7 @@ class _ModuleSection extends StatelessWidget {
               Expanded(
                 child: _ActionButton(
                   icon: Icons.insights_rounded,
-                  label: 'Progress',
+                  label: 'progress'.tr,
                   onTap: onProgressTap,
                   filled: false,
                 ),
@@ -579,22 +577,22 @@ class _SrsReviewCard extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(width: 14),
-                const Expanded(
+                Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Flashcard Review',
-                        style: TextStyle(
+                        'flashcard_review'.tr,
+                        style: const TextStyle(
                           color: Colors.white,
                           fontSize: 18,
                           fontWeight: FontWeight.w900,
                         ),
                       ),
-                      SizedBox(height: 2),
+                      const SizedBox(height: 2),
                       Text(
-                        'Spaced repetition for long-term memory',
-                        style: TextStyle(
+                        'srs_desc'.tr,
+                        style: const TextStyle(
                           color: Colors.white70,
                           fontSize: 11,
                         ),
@@ -611,11 +609,11 @@ class _SrsReviewCard extends StatelessWidget {
               children: [
                 _SrsStat(
                   value: '$due',
-                  label: 'Due today',
+                  label: 'due_today'.tr,
                   highlight: due > 0,
                 ),
                 const SizedBox(width: 16),
-                _SrsStat(value: '$total', label: 'Total cards'),
+                _SrsStat(value: '$total', label: 'total_cards'.tr),
               ],
             ),
             const SizedBox(height: 16),
@@ -656,8 +654,8 @@ class _SrsReviewCard extends StatelessWidget {
                     const SizedBox(width: 6),
                     Text(
                       due > 0
-                          ? 'Start Review  ($due cards)'
-                          : 'All caught up!',
+                          ? 'start_review_count'.trParams({'count': '$due'})
+                          : 'all_caught_up'.tr,
                       style: TextStyle(
                         color: due > 0
                             ? const Color(0xFF7B1FA2)

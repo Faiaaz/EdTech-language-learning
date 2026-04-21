@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:typed_data';
 import 'package:http/http.dart' as http;
 
 import 'package:ez_trainz/models/game.dart';
@@ -12,6 +13,29 @@ class GameException implements Exception {
 class GameService {
   static const _baseUrl =
       'https://bdmy1zi0va.execute-api.us-east-1.amazonaws.com';
+
+  /// Extracts Cognito `sub` from a JWT (used by gamification endpoints).
+  ///
+  /// Returns null if token is missing/invalid or payload can't be decoded.
+  static String? extractSubFromToken(String? jwt) {
+    if (jwt == null || jwt.isEmpty) return null;
+    final parts = jwt.split('.');
+    if (parts.length < 2) return null;
+    try {
+      final payloadSeg = parts[1];
+      final normalized = base64Url.normalize(payloadSeg);
+      final bytes = base64Url.decode(normalized);
+      final jsonStr = utf8.decode(Uint8List.fromList(bytes));
+      final payload = jsonDecode(jsonStr);
+      if (payload is Map<String, dynamic>) {
+        final sub = payload['sub'];
+        return sub is String ? sub : null;
+      }
+      return null;
+    } catch (_) {
+      return null;
+    }
+  }
 
   // ── Shared GET helper ────────────────────────────────────────────
   static Future<dynamic> _get(String path) async {

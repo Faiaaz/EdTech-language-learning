@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Hiragana Hunt - A & K Series</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Segoe UI', sans-serif;
+    background: linear-gradient(135deg, #1e3c72, #2a5298);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    padding: 20px;
+  }
+  .game {
+    background: rgba(0,0,0,0.35);
+    border-radius: 20px;
+    padding: 30px;
+    width: 100%;
+    max-width: 700px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+  }
+  h1 { text-align: center; margin-bottom: 15px; font-size: 26px; }
+  .hud {
+    display: flex;
+    justify-content: space-around;
+    background: rgba(255,255,255,0.1);
+    padding: 12px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+    font-size: 16px;
+    font-weight: bold;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .hud span { color: #ffd86b; }
+  .target {
+    text-align: center;
+    background: rgba(255,255,255,0.15);
+    padding: 15px;
+    border-radius: 12px;
+    margin-bottom: 15px;
+  }
+  .target .label { font-size: 14px; opacity: 0.85; margin-bottom: 5px; }
+  .target .char {
+    font-size: 60px;
+    font-weight: bold;
+    color: #ffd86b;
+    line-height: 1;
+  }
+  .progress {
+    text-align: center;
+    margin-bottom: 15px;
+    font-size: 15px;
+    opacity: 0.9;
+  }
+  .board {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    min-height: 380px;
+  }
+  .tile {
+    aspect-ratio: 1;
+    background: rgba(255,255,255,0.9);
+    color: #222;
+    border: none;
+    border-radius: 12px;
+    font-size: 42px;
+    cursor: pointer;
+    transition: transform 0.15s, background 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .tile:hover:not(:disabled) { transform: scale(1.05); background: #fff; }
+  .tile.correct { background: #4caf50 !important; color: white; }
+  .tile.wrong { background: #f44336 !important; color: white; }
+  .tile:disabled { cursor: default; }
+  .controls { text-align: center; margin-top: 15px; display: flex; gap: 10px; justify-content: center; }
+  button.action {
+    background: #ffd86b;
+    color: #1e3c72;
+    border: none;
+    padding: 10px 24px;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+  button.action:hover { background: #ffca28; }
+  button.skip {
+    background: rgba(255,255,255,0.2);
+    color: white;
+  }
+  button.skip:hover { background: rgba(255,255,255,0.3); }
+  .message {
+    text-align: center;
+    margin-top: 12px;
+    font-size: 16px;
+    min-height: 22px;
+  }
+  .gameover {
+    text-align: center;
+    padding: 30px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 12px;
+  }
+  .gameover h2 { font-size: 32px; margin-bottom: 15px; color: #ffd86b; }
+  .hidden { display: none; }
+</style>
+</head>
+<body>
+<div class="game">
+  <h1>🎌 Hiragana Hunt — あ・か Series</h1>
+
+  <div id="introScreen">
+    <p style="text-align:center; margin-bottom:15px; opacity:0.9;">Study these hiragana, then find them by their romaji!</p>
+    <div style="display:grid; grid-template-columns:repeat(5,1fr); gap:10px; margin-bottom:20px;">
+      <div style="background:rgba(255,255,255,0.15); padding:15px; border-radius:10px; text-align:center;"><div style="font-size:42px; color:#ffd86b;">あ</div><div>a</div></div>
+      <div style="background:rgba(255,255,255,0.15); padding:15px; border-radius:10px; text-align:center;"><div style="font-size:42px; color:#ffd86b;">い</div><div>i</div></div>
+      <div style="background:rgba(255,255,255,0.15); padding:15px; border-radius:10px; text-align:center;"><div style="font-size:42px; color:#ffd86b;">う</div><div>u</div></div>
+      <div style="background:rgba(255,255,255,0.15); padding:15px; border-radius:10px; text-align:center;"><div style="font-size:42px; color:#ffd86b;">え</div><div>e</div></div>
+      <div style="background:rgba(255,255,255,0.15); padding:15px; border-radius:10px; text-align:center;"><div style="font-size:42px; color:#ffd86b;">お</div><div>o</div></div>
+      <div style="background:rgba(255,255,255,0.15); padding:15px; border-radius:10px; text-align:center;"><div style="font-size:42px; color:#ffd86b;">か</div><div>ka</div></div>
+      <div style="background:rgba(255,255,255,0.15); padding:15px; border-radius:10px; text-align:center;"><div style="font-size:42px; color:#ffd86b;">き</div><div>ki</div></div>
+      <div style="background:rgba(255,255,255,0.15); padding:15px; border-radius:10px; text-align:center;"><div style="font-size:42px; color:#ffd86b;">く</div><div>ku</div></div>
+      <div style="background:rgba(255,255,255,0.15); padding:15px; border-radius:10px; text-align:center;"><div style="font-size:42px; color:#ffd86b;">け</div><div>ke</div></div>
+      <div style="background:rgba(255,255,255,0.15); padding:15px; border-radius:10px; text-align:center;"><div style="font-size:42px; color:#ffd86b;">こ</div><div>ko</div></div>
+    </div>
+    <div style="text-align:center;"><button class="action" onclick="startGame()">Start Game</button></div>
+  </div>
+
+  <div id="playScreen" class="hidden">
+    <div class="hud">
+      <div>⏱️ <span id="time">120</span>s</div>
+      <div>⭐ <span id="score">0</span></div>
+      <div>🔥 Streak: <span id="streak">0</span></div>
+      <div>🎯 Rounds: <span id="rounds">0</span></div>
+    </div>
+
+    <div class="target">
+      <div class="label">Find ALL hiragana for:</div>
+      <div class="char" id="targetRomaji">a</div>
+      <button class="action skip" id="hintBtn" style="margin-top:12px;">💡 Show Hint (-3)</button>
+    </div>
+
+    <div class="progress">Found: <span id="found">0</span> / <span id="total">0</span></div>
+
+    <div class="board" id="board"></div>
+    <div class="message" id="message">Click every tile matching the target. Fonts and shapes vary!</div>
+    <div class="controls">
+      <button class="action skip" onclick="skipRound()">Skip →</button>
+    </div>
+  </div>
+
+  <div id="endScreen" class="gameover hidden">
+    <h2>Time's Up!</h2>
+    <p style="font-size:22px; margin:10px 0;">Final Score: <span id="finalScore">0</span></p>
+    <p style="margin-bottom:8px;">Rounds completed: <span id="finalRounds">0</span></p>
+    <p style="margin-bottom:20px;">Correct: <span id="finalCorrect">0</span> | Wrong: <span id="finalWrong">0</span></p>
+    <button class="action" onclick="startGame()">Play Again</button>
+  </div>
+</div>
+
+<script>
+  const HIRAGANA = [
+    { char: 'あ', romaji: 'a' },
+    { char: 'い', romaji: 'i' },
+    { char: 'う', romaji: 'u' },
+    { char: 'え', romaji: 'e' },
+    { char: 'お', romaji: 'o' },
+    { char: 'か', romaji: 'ka' },
+    { char: 'き', romaji: 'ki' },
+    { char: 'く', romaji: 'ku' },
+    { char: 'け', romaji: 'ke' },
+    { char: 'こ', romaji: 'ko' },
+  ];
+
+  const FONT_STYLES = [
+    "'Yu Mincho', 'MS Mincho', serif",
+    "'Yu Gothic', 'Meiryo', sans-serif",
+    "'Hiragino Mincho ProN', serif",
+    "'Hiragino Kaku Gothic ProN', sans-serif",
+    "'Sawarabi Mincho', serif",
+    "'HG Maru Gothic M-PRO', sans-serif",
+    "'MS PGothic', sans-serif",
+    "cursive",
+    "fantasy",
+    "'Kosugi Maru', sans-serif",
+  ];
+
+  const TRANSFORMS = [
+    'none',
+    'rotate(-8deg)',
+    'rotate(8deg)',
+    'skewX(-6deg)',
+    'skewY(4deg)',
+    'scale(1.1, 0.9)',
+    'scale(0.9, 1.1)',
+  ];
+
+  const GRID_SIZE = 12;
+  let timeLeft, score, correctCount, wrongCount, streak, roundCount;
+  let currentTarget;
+  let targetTotal, foundCount;
+  let timerId;
+
+  function pick(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
+
+  function startGame() {
+    timeLeft = 120;
+    score = 0;
+    correctCount = 0;
+    wrongCount = 0;
+    streak = 0;
+    roundCount = 0;
+    document.getElementById('introScreen').classList.add('hidden');
+    document.getElementById('endScreen').classList.add('hidden');
+    document.getElementById('playScreen').classList.remove('hidden');
+    updateHUD();
+    nextRound();
+    clearInterval(timerId);
+    timerId = setInterval(() => {
+      timeLeft--;
+      updateHUD();
+      if (timeLeft <= 0) endGame();
+    }, 1000);
+  }
+
+  function updateHUD() {
+    document.getElementById('time').textContent = timeLeft;
+    document.getElementById('score').textContent = score;
+    document.getElementById('streak').textContent = streak;
+    document.getElementById('rounds').textContent = roundCount;
+  }
+
+  function nextRound() {
+    if (window.resetHint) window.resetHint();
+    currentTarget = pick(HIRAGANA);
+    document.getElementById('targetRomaji').textContent = currentTarget.romaji;
+
+    // Decide how many target tiles to place (2 to 5)
+    const targetInstances = 2 + Math.floor(Math.random() * 4);
+    const tiles = [];
+    for (let i = 0; i < targetInstances; i++) tiles.push(currentTarget);
+
+    // Fill rest with non-target hiragana
+    const distractors = HIRAGANA.filter(h => h.char !== currentTarget.char);
+    while (tiles.length < GRID_SIZE) {
+      tiles.push(pick(distractors));
+    }
+    tiles.sort(() => Math.random() - 0.5);
+
+    targetTotal = targetInstances;
+    foundCount = 0;
+    document.getElementById('total').textContent = targetTotal;
+    document.getElementById('found').textContent = foundCount;
+
+    const board = document.getElementById('board');
+    board.innerHTML = '';
+    tiles.forEach(t => {
+      const btn = document.createElement('button');
+      btn.className = 'tile';
+      btn.textContent = t.char;
+      btn.style.fontFamily = pick(FONT_STYLES);
+      btn.style.transform = pick(TRANSFORMS);
+      btn.style.fontWeight = Math.random() > 0.5 ? 'bold' : 'normal';
+      btn.onclick = () => handleClick(btn, t);
+      board.appendChild(btn);
+    });
+  }
+
+  function handleClick(btn, tile) {
+    if (btn.disabled) return;
+
+    if (tile.char === currentTarget.char) {
+      btn.classList.add('correct');
+      btn.disabled = true;
+      foundCount++;
+      correctCount++;
+      score += 10 + streak * 2;
+      streak++;
+      document.getElementById('found').textContent = foundCount;
+      document.getElementById('message').textContent = '✅ +' + (10 + (streak-1)*2);
+
+      if (foundCount === targetTotal) {
+        score += 20; // round bonus
+        roundCount++;
+        document.getElementById('message').textContent = '🎉 Round clear! +20 bonus';
+        setTimeout(nextRound, 700);
+      }
+    } else {
+      btn.classList.add('wrong');
+      btn.disabled = true;
+      wrongCount++;
+      score = Math.max(0, score - 5);
+      streak = 0;
+      document.getElementById('message').textContent = '❌ That was ' + tile.char + ' (' + tile.romaji + ')';
+    }
+    updateHUD();
+  }
+
+  function skipRound() {
+    streak = 0;
+    nextRound();
+    document.getElementById('message').textContent = 'Skipped.';
+    updateHUD();
+  }
+
+  function endGame() {
+    clearInterval(timerId);
+    document.getElementById('playScreen').classList.add('hidden');
+    document.getElementById('endScreen').classList.remove('hidden');
+    document.getElementById('finalScore').textContent = score;
+    document.getElementById('finalRounds').textContent = roundCount;
+    document.getElementById('finalCorrect').textContent = correctCount;
+    document.getElementById('finalWrong').textContent = wrongCount;
+  }
+
+  // Game waits for user to click Start from intro screen
+
+  // Hint button: tap to toggle hiragana display. Costs 3 points per activation.
+  (function() {
+    const hintBtn = document.getElementById('hintBtn');
+    const romajiEl = document.getElementById('targetRomaji');
+    let hintActive = false;
+
+    hintBtn.addEventListener('click', function(e) {
+      e.preventDefault();
+      if (!currentTarget) return;
+      if (!hintActive) {
+        hintActive = true;
+        romajiEl.textContent = currentTarget.char;
+        hintBtn.textContent = '👁️ Hide Hint';
+        score = Math.max(0, score - 3);
+        document.getElementById('message').textContent = '💡 Hint used: -3 points';
+        updateHUD();
+      } else {
+        hintActive = false;
+        romajiEl.textContent = currentTarget.romaji;
+        hintBtn.textContent = '💡 Show Hint (-3)';
+      }
+    });
+
+    // Reset hint state when round changes
+    window.resetHint = function() {
+      hintActive = false;
+      hintBtn.textContent = '💡 Show Hint (-3)';
+    };
+  })();
+</script>
+</body>
+</html>

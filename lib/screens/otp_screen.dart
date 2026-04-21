@@ -99,7 +99,7 @@ class _OtpScreenState extends State<OtpScreen>
   Future<void> _onVerify() async {
     final otp = _otp;
     if (otp.length < 6) {
-      setState(() => _error = 'Please enter the full 6-digit code');
+      setState(() => _error = 'otp_enter_code'.tr);
       return;
     }
 
@@ -113,6 +113,7 @@ class _OtpScreenState extends State<OtpScreen>
 
       final token = response['accessToken'] as String? ?? '';
       final idToken = response['idToken'] as String? ?? response['token'] as String?;
+      final refreshToken = response['refreshToken'] as String?;
       final user = response['user'] as Map<String, dynamic>? ?? {};
       final cognitoId = user['cognitoId'] as String? ?? user['sub'] as String?;
       if (token.isNotEmpty) {
@@ -122,6 +123,7 @@ class _OtpScreenState extends State<OtpScreen>
           name: AuthController.to.signUpName,
           email: AuthController.to.signUpEmail,
           cognitoId: cognitoId,
+          refreshToken: refreshToken,
         );
       }
 
@@ -137,7 +139,7 @@ class _OtpScreenState extends State<OtpScreen>
       setState(() => _error = e.message);
       _clearOtp();
     } catch (e) {
-      setState(() => _error = 'Something went wrong: $e');
+      setState(() => _error = 'otp_error'.trParams({'error': '$e'}));
       _clearOtp();
     } finally {
       if (mounted) setState(() => _isLoading = false);
@@ -153,7 +155,7 @@ class _OtpScreenState extends State<OtpScreen>
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Code resent to $_email'),
+            content: Text('otp_resent'.trParams({'email': _email})),
             backgroundColor: const Color(0xFF2E8FD4),
             behavior: SnackBarBehavior.floating,
             shape: RoundedRectangleBorder(
@@ -165,7 +167,7 @@ class _OtpScreenState extends State<OtpScreen>
     } on AuthException catch (e) {
       setState(() => _error = e.message);
     } catch (e) {
-      setState(() => _error = 'Something went wrong: $e');
+      setState(() => _error = 'otp_error'.trParams({'error': '$e'}));
     } finally {
       if (mounted) setState(() => _isResending = false);
     }
@@ -286,7 +288,7 @@ class _OtpScreenState extends State<OtpScreen>
                         const SizedBox(height: 4),
 
                         Text(
-                          'Verify your email',
+                          'otp_verify_email'.tr,
                           style: TextStyle(
                             color: Colors.white.withValues(alpha: 0.7),
                             fontSize: 13,
@@ -299,8 +301,8 @@ class _OtpScreenState extends State<OtpScreen>
                         RichText(
                           text: TextSpan(
                             children: [
-                              const TextSpan(
-                                text: 'We sent a 6-digit code to\n',
+                              TextSpan(
+                                text: 'otp_code_sent'.tr,
                                 style: TextStyle(
                                   color: Colors.white70,
                                   fontSize: 14,
@@ -382,9 +384,9 @@ class _OtpScreenState extends State<OtpScreen>
                                       strokeWidth: 2.5,
                                     ),
                                   )
-                                : const Text(
-                                    'Verify Email',
-                                    style: TextStyle(
+                                : Text(
+                                    'otp_verify_btn'.tr,
+                                    style: const TextStyle(
                                       fontSize: 17,
                                       fontWeight: FontWeight.w600,
                                       letterSpacing: 0.3,
@@ -398,7 +400,7 @@ class _OtpScreenState extends State<OtpScreen>
                         Center(
                           child: _resendCountdown > 0
                               ? Text(
-                                  'Resend code in ${_resendCountdown}s',
+                                  'otp_resend_countdown'.trParams({'seconds': '$_resendCountdown'}),
                                   style: const TextStyle(
                                     color: Colors.white70,
                                     fontSize: 13,
@@ -415,9 +417,9 @@ class _OtpScreenState extends State<OtpScreen>
                                             strokeWidth: 2,
                                           ),
                                         )
-                                      : const Text(
-                                          'Resend Code',
-                                          style: TextStyle(
+                                      : Text(
+                                          'otp_resend_btn'.tr,
+                                          style: const TextStyle(
                                             color: Color(0xFFFFE000),
                                             fontSize: 13,
                                             fontWeight: FontWeight.w700,
@@ -584,19 +586,19 @@ class _SuccessDialogState extends State<_SuccessDialog>
                   ),
                 ),
                 const SizedBox(height: 20),
-                const Text(
-                  'Email Verified!',
-                  style: TextStyle(
+                Text(
+                  'otp_verified_title'.tr,
+                  style: const TextStyle(
                     color: Colors.white,
                     fontSize: 22,
                     fontWeight: FontWeight.w800,
                   ),
                 ),
                 const SizedBox(height: 10),
-                const Text(
-                  'Your account has been created\nsuccessfully. Please sign in.',
+                Text(
+                  'otp_verified_body'.tr,
                   textAlign: TextAlign.center,
-                  style: TextStyle(
+                  style: const TextStyle(
                     color: Colors.white70,
                     fontSize: 14,
                     height: 1.5,
@@ -616,9 +618,9 @@ class _SuccessDialogState extends State<_SuccessDialog>
                         borderRadius: BorderRadius.circular(30),
                       ),
                     ),
-                    child: const Text(
-                      'Go to Sign In',
-                      style: TextStyle(
+                    child: Text(
+                      'otp_go_signin'.tr,
+                      style: const TextStyle(
                         fontSize: 15,
                         fontWeight: FontWeight.w700,
                       ),

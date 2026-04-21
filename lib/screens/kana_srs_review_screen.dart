@@ -88,14 +88,14 @@ class _ReviewBody extends StatelessWidget {
                           borderRadius: BorderRadius.circular(20),
                           border: Border.all(color: Colors.white38, width: 1),
                         ),
-                        child: const Row(
+                        child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            Icon(Icons.arrow_back_ios_rounded,
+                            const Icon(Icons.arrow_back_ios_rounded,
                                 color: Colors.white, size: 14),
-                            SizedBox(width: 4),
-                            Text('Back',
-                                style: TextStyle(
+                            const SizedBox(width: 4),
+                            Text('back'.tr,
+                                style: const TextStyle(
                                   color: Colors.white,
                                   fontSize: 13,
                                   fontWeight: FontWeight.w600,
@@ -116,9 +116,9 @@ class _ReviewBody extends StatelessWidget {
                   ],
                 ),
                 const SizedBox(height: 12),
-                const Text(
-                  'Flashcard Review',
-                  style: TextStyle(
+                Text(
+                  'flashcard_review'.tr,
+                  style: const TextStyle(
                     color: Colors.white,
                     fontSize: 22,
                     fontWeight: FontWeight.w900,
@@ -478,9 +478,9 @@ class _RatingButtons extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
-          'How well did you remember?',
-          style: TextStyle(
+        Text(
+          'how_well_remember'.tr,
+          style: const TextStyle(
             color: Color(0xFF6B7280),
             fontSize: 13,
             fontWeight: FontWeight.w600,
@@ -491,7 +491,7 @@ class _RatingButtons extends StatelessWidget {
           children: [
             Expanded(
               child: _RatingButton(
-                label: 'Forgot',
+                label: 'forgot'.tr,
                 icon: Icons.sentiment_very_dissatisfied_rounded,
                 color: const Color(0xFFE53935),
                 onTap: () => ctrl.submitRating(RecallQuality.blackout),
@@ -500,7 +500,7 @@ class _RatingButtons extends StatelessWidget {
             const SizedBox(width: 10),
             Expanded(
               child: _RatingButton(
-                label: 'Hard',
+                label: 'hard'.tr,
                 icon: Icons.sentiment_neutral_rounded,
                 color: const Color(0xFFF57C00),
                 onTap: () => ctrl.submitRating(RecallQuality.hardCorrect),
@@ -509,7 +509,7 @@ class _RatingButtons extends StatelessWidget {
             const SizedBox(width: 10),
             Expanded(
               child: _RatingButton(
-                label: 'Easy',
+                label: 'easy'.tr,
                 icon: Icons.sentiment_satisfied_alt_rounded,
                 color: const Color(0xFF43A047),
                 onTap: () => ctrl.submitRating(RecallQuality.perfect),
@@ -599,9 +599,9 @@ class _SessionSummary extends StatelessWidget {
                   color: Colors.white, size: 44),
             ),
             const SizedBox(height: 24),
-            const Text(
-              'Session Complete!',
-              style: TextStyle(
+            Text(
+              'session_complete'.tr,
+              style: const TextStyle(
                 fontSize: 26,
                 fontWeight: FontWeight.w900,
                 color: Color(0xFF1A1A2E),
@@ -609,7 +609,7 @@ class _SessionSummary extends StatelessWidget {
             ),
             const SizedBox(height: 8),
             Text(
-              'You reviewed $reviewed cards',
+              'reviewed_cards'.trParams({'count': '$reviewed'}),
               style: const TextStyle(fontSize: 15, color: Color(0xFF6B7280)),
             ),
             const SizedBox(height: 28),
@@ -618,17 +618,17 @@ class _SessionSummary extends StatelessWidget {
               children: [
                 _StatChip(
                     value: '$correct',
-                    label: 'Correct',
+                    label: 'correct'.tr,
                     color: const Color(0xFF43A047)),
                 const SizedBox(width: 16),
                 _StatChip(
                     value: '${reviewed - correct}',
-                    label: 'Missed',
+                    label: 'missed'.tr,
                     color: const Color(0xFFE53935)),
                 const SizedBox(width: 16),
                 _StatChip(
                     value: '$accuracy%',
-                    label: 'Accuracy',
+                    label: 'accuracy'.tr,
                     color: _sakura),
               ],
             ),
@@ -656,9 +656,9 @@ class _SessionSummary extends StatelessWidget {
                     ),
                   ],
                 ),
-                child: const Text(
-                  'Done',
-                  style: TextStyle(
+                child: Text(
+                  'done'.tr,
+                  style: const TextStyle(
                     color: Colors.white,
                     fontSize: 16,
                     fontWeight: FontWeight.w800,

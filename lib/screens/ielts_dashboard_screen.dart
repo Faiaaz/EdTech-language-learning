@@ -142,9 +142,9 @@ class IeltsDashboardScreen extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Text('Practice Sessions', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700, color: Color(0xFF1A1A2E))),
+                          Text('practice_sessions'.tr, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700, color: Color(0xFF1A1A2E))),
                           const SizedBox(height: 4),
-                          Text('$total sessions completed', style: const TextStyle(fontSize: 12, color: Color(0xFF6B7280))),
+                          Text('sessions_completed'.trParams({'total': '$total'}), style: const TextStyle(fontSize: 12, color: Color(0xFF6B7280))),
                         ],
                       ),
                     ),
@@ -171,9 +171,9 @@ class IeltsDashboardScreen extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
-                      'IELTS Sections',
-                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800, color: Color(0xFF1A1A2E)),
+                    Text(
+                      'ielts_sections_label'.tr,
+                      style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w800, color: Color(0xFF1A1A2E)),
                     ),
                     const SizedBox(height: 14),
 
@@ -183,8 +183,8 @@ class IeltsDashboardScreen extends StatelessWidget {
                         Expanded(
                           child: _SectionCard(
                             icon: Icons.menu_book_rounded,
-                            title: 'Reading',
-                            subtitle: '${ctrl.passages.length} passages',
+                            title: 'ielts_reading'.tr,
+                            subtitle: 'reading_desc'.trParams({'count': '${ctrl.passages.length}'}),
                             color: const Color(0xFF4CAF50),
                             onTap: () => Get.to(
                               () => const IeltsReadingScreen(),
@@ -197,8 +197,8 @@ class IeltsDashboardScreen extends StatelessWidget {
                         Expanded(
                           child: _SectionCard(
                             icon: Icons.headphones_rounded,
-                            title: 'Listening',
-                            subtitle: '${ctrl.listeningSections.length} sections',
+                            title: 'ielts_listening'.tr,
+                            subtitle: 'listening_desc'.trParams({'count': '${ctrl.listeningSections.length}'}),
                             color: const Color(0xFF2196F3),
                             onTap: () => Get.to(
                               () => const IeltsListeningScreen(),
@@ -215,8 +215,8 @@ class IeltsDashboardScreen extends StatelessWidget {
                         Expanded(
                           child: _SectionCard(
                             icon: Icons.edit_note_rounded,
-                            title: 'Writing',
-                            subtitle: '${ctrl.writingTasks.length} tasks',
+                            title: 'ielts_writing'.tr,
+                            subtitle: 'writing_desc'.trParams({'count': '${ctrl.writingTasks.length}'}),
                             color: const Color(0xFFFF9800),
                             onTap: () => Get.to(
                               () => const IeltsWritingScreen(),
@@ -229,8 +229,8 @@ class IeltsDashboardScreen extends StatelessWidget {
                         Expanded(
                           child: _SectionCard(
                             icon: Icons.record_voice_over_rounded,
-                            title: 'Speaking',
-                            subtitle: '${ctrl.speakingTopics.length} topics',
+                            title: 'ielts_speaking'.tr,
+                            subtitle: 'speaking_desc'.trParams({'count': '${ctrl.speakingTopics.length}'}),
                             color: const Color(0xFF9C27B0),
                             onTap: () => Get.to(
                               () => const IeltsSpeakingScreen(),
@@ -244,20 +244,20 @@ class IeltsDashboardScreen extends StatelessWidget {
 
                     const SizedBox(height: 24),
 
-                    const Text(
-                      'Study Tools',
-                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800, color: Color(0xFF1A1A2E)),
+                    Text(
+                      'study_tools'.tr,
+                      style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w800, color: Color(0xFF1A1A2E)),
                     ),
                     const SizedBox(height: 14),
 
                     // Vocabulary Builder
                     _ToolCard(
                       icon: Icons.auto_stories_rounded,
-                      title: 'Academic Vocabulary',
-                      subtitle: 'SRS flashcards for high-frequency IELTS words',
+                      title: 'academic_vocab'.tr,
+                      subtitle: 'academic_vocab_desc'.tr,
                       gradient: const [Color(0xFF667EEA), Color(0xFF764BA2)],
                       trailing: Obx(() => Text(
-                        '${ctrl.vocabDueCount.value} due',
+                        '${ctrl.vocabDueCount.value} ${'ielts_due'.tr}',
                         style: TextStyle(
                           color: ctrl.vocabDueCount.value > 0 ? const Color(0xFFFFCC02) : Colors.white70,
                           fontSize: 14,
@@ -275,11 +275,11 @@ class IeltsDashboardScreen extends StatelessWidget {
                     // Mini Games
                     _ToolCard(
                       icon: Icons.sports_esports_rounded,
-                      title: 'IELTS Mini Games',
-                      subtitle: 'Fun interactive games to boost your score',
+                      title: 'ielts_mini_games'.tr,
+                      subtitle: 'ielts_mini_games_desc'.tr,
                       gradient: const [Color(0xFF11998E), Color(0xFF38EF7D)],
                       trailing: Text(
-                        '${ctrl.miniGames.length} games',
+                        'games_count'.trParams({'count': '${ctrl.miniGames.length}'}),
                         style: const TextStyle(color: Colors.white70, fontSize: 14, fontWeight: FontWeight.w600),
                       ),
                       onTap: () => Get.to(
@@ -293,8 +293,8 @@ class IeltsDashboardScreen extends StatelessWidget {
                     // Band Calculator
                     _ToolCard(
                       icon: Icons.calculate_rounded,
-                      title: 'Band Score Calculator',
-                      subtitle: 'Estimate your overall IELTS band score',
+                      title: 'band_calc'.tr,
+                      subtitle: 'band_calc_desc'.tr,
                       gradient: const [Color(0xFFFF9800), Color(0xFFF44336)],
                       trailing: const Icon(Icons.arrow_forward_rounded, color: Colors.white, size: 20),
                       onTap: () => Get.to(
@@ -314,26 +314,26 @@ class IeltsDashboardScreen extends StatelessWidget {
                         borderRadius: BorderRadius.circular(16),
                         border: Border.all(color: const Color(0xFFFFE082)),
                       ),
-                      child: const Column(
+                      child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Row(
                             children: [
-                              Icon(Icons.tips_and_updates_rounded, color: Color(0xFFFFA000), size: 20),
-                              SizedBox(width: 8),
-                              Text('Top Score Tips', style: TextStyle(color: Color(0xFFF57F17), fontSize: 14, fontWeight: FontWeight.w800)),
+                              const Icon(Icons.tips_and_updates_rounded, color: Color(0xFFFFA000), size: 20),
+                              const SizedBox(width: 8),
+                              Text('top_score_tips'.tr, style: const TextStyle(color: Color(0xFFF57F17), fontSize: 14, fontWeight: FontWeight.w800)),
                             ],
                           ),
-                          SizedBox(height: 10),
-                          _TipItem(text: 'Practice all 4 sections equally for balanced improvement'),
-                          SizedBox(height: 6),
-                          _TipItem(text: 'Learn academic vocabulary with spaced repetition daily'),
-                          SizedBox(height: 6),
-                          _TipItem(text: 'Time yourself during reading — 20 min per passage'),
-                          SizedBox(height: 6),
-                          _TipItem(text: 'Study model answers to understand band 8+ writing'),
-                          SizedBox(height: 6),
-                          _TipItem(text: 'Record yourself speaking to identify areas for improvement'),
+                          const SizedBox(height: 10),
+                          const _TipItem(text: 'Practice all 4 sections equally for balanced improvement'),
+                          const SizedBox(height: 6),
+                          const _TipItem(text: 'Learn academic vocabulary with spaced repetition daily'),
+                          const SizedBox(height: 6),
+                          const _TipItem(text: 'Time yourself during reading — 20 min per passage'),
+                          const SizedBox(height: 6),
+                          const _TipItem(text: 'Study model answers to understand band 8+ writing'),
+                          const SizedBox(height: 6),
+                          const _TipItem(text: 'Record yourself speaking to identify areas for improvement'),
                         ],
                       ),
                     ),

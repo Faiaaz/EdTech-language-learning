@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
@@ -170,313 +172,358 @@ class _SignUpScreenState extends State<SignUpScreen>
 
   // ── BUILD ─────────────────────────────────────────────────────
 
+  static const _sky = Color(0xFFB8E4F8);
+  static const _titleBlue = Color(0xFF1A4F8C);
+  static const _btnBlue = Color(0xFF00AEEF);
+  static const _ezBlue = Color(0xFF1E88E5);
+  static const _yellow = Color(0xFFFFE000);
+
   @override
   Widget build(BuildContext context) {
+    final mq = MediaQuery.of(context);
+    final topPad = mq.padding.top;
+    final bottomPad = mq.padding.bottom;
+    final screenH = mq.size.height;
+
     return Scaffold(
-      backgroundColor: const Color(0xFF4DA6E8),
-      body: SafeArea(
-        child: Column(
-          children: [
-            // ── HEADER ────────────────────────────────────────────
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-              child: Row(
-                children: [
-                  GestureDetector(
-                    onTap: _isLoading ? null : () => Navigator.of(context).pop(),
-                    child: Container(
-                      width: 36,
-                      height: 36,
-                      decoration: BoxDecoration(
-                        color: Colors.white.withValues(alpha: 0.25),
-                        shape: BoxShape.circle,
-                      ),
-                      child: const Icon(
-                        Icons.arrow_back_ios_new_rounded,
-                        color: Colors.white,
-                        size: 18,
-                      ),
-                    ),
-                  ),
-                  const Expanded(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.baseline,
-                      textBaseline: TextBaseline.alphabetic,
-                      children: [
-                        Text(
-                          'EZ',
-                          style: TextStyle(
-                            color: Color(0xFFFFE000),
-                            fontSize: 26,
-                            fontWeight: FontWeight.w900,
-                            letterSpacing: 1,
-                            height: 1,
-                          ),
-                        ),
-                        SizedBox(width: 4),
-                        Text(
-                          'TRAINZ',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 24,
-                            fontWeight: FontWeight.w800,
-                            letterSpacing: 2,
-                            height: 1,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(width: 36),
-                ],
-              ),
+      backgroundColor: _sky,
+      body: Stack(
+        children: [
+          Positioned(
+            top: 0,
+            left: 0,
+            right: 0,
+            height: screenH * 0.48,
+            child: Image.asset(
+              'assets/images/login_sky_bg.gif',
+              fit: BoxFit.cover,
+              alignment: Alignment.topCenter,
+              gaplessPlayback: true,
             ),
-
-            // ── SCROLLABLE FORM ───────────────────────────────────
-            Expanded(
-              child: SingleChildScrollView(
-                physics: const BouncingScrollPhysics(),
-                child: FadeTransition(
-                  opacity: _fadeIn,
-                  child: SlideTransition(
-                    position: _slideIn,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const SizedBox(height: 8),
-
-                          RichText(
-                            text: const TextSpan(
-                              children: [
-                                TextSpan(
-                                  text: 'আপনার ',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 22,
-                                    fontWeight: FontWeight.w700,
-                                    height: 1.4,
-                                  ),
-                                ),
-                                TextSpan(
-                                  text: 'অ্যাকাউন্ট',
-                                  style: TextStyle(
-                                    color: Color(0xFFFFE000),
-                                    fontSize: 22,
-                                    fontWeight: FontWeight.w700,
-                                    height: 1.4,
-                                  ),
-                                ),
-                                TextSpan(
-                                  text: ' তৈরি করুন',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 22,
-                                    fontWeight: FontWeight.w700,
-                                    height: 1.4,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-
-                          const SizedBox(height: 4),
-
-                          const Text(
-                            'Create your account',
-                            style: TextStyle(
-                              color: Colors.white70,
-                              fontSize: 13,
-                              fontWeight: FontWeight.w400,
-                            ),
-                          ),
-
-                          const SizedBox(height: 16),
-
-                          LabeledField(
-                            label: 'signup_name_label'.tr,
-                            hint: 'signup_name_hint'.tr,
-                            icon: Icons.person_outline_rounded,
-                            controller: _nameCtrl,
-                            errorText: _nameError,
-                            onChanged: (_) =>
-                                setState(() => _nameError = null),
-                          ),
-                          const SizedBox(height: 12),
-
-                          LabeledField(
-                            label: 'signup_email_label'.tr,
-                            hint: 'signup_email_hint'.tr,
-                            icon: Icons.email_outlined,
-                            keyboardType: TextInputType.emailAddress,
-                            controller: _emailCtrl,
-                            errorText: _emailError,
-                            onChanged: (_) =>
-                                setState(() => _emailError = null),
-                          ),
-                          const SizedBox(height: 12),
-
-                          LabeledField(
-                            label: 'signup_phone_label'.tr,
-                            hint: 'signup_phone_hint'.tr,
-                            icon: Icons.phone_outlined,
-                            keyboardType: TextInputType.phone,
-                            controller: _phoneCtrl,
-                            errorText: _phoneError,
-                            onChanged: (_) =>
-                                setState(() => _phoneError = null),
-                          ),
-                          const SizedBox(height: 12),
-
-                          LabeledField(
-                            label: 'signup_pass_label'.tr,
-                            hint: 'signup_pass_hint'.tr,
-                            icon: Icons.lock_outline_rounded,
-                            isPassword: true,
-                            controller: _passCtrl,
-                            errorText: _passError,
-                            onChanged: (_) =>
-                                setState(() => _passError = null),
-                          ),
-                          const SizedBox(height: 12),
-
-                          LabeledField(
-                            label: 'signup_confirm_label'.tr,
-                            hint: 'signup_confirm_hint'.tr,
-                            icon: Icons.lock_outline_rounded,
-                            isPassword: true,
-                            controller: _confirmCtrl,
-                            errorText: _confirmError,
-                            onChanged: (_) =>
-                                setState(() => _confirmError = null),
-                          ),
-
-                          // ── API ERROR BANNER ──────────────────────
-                          if (_apiError != null) ...[
-                            const SizedBox(height: 14),
-                            Container(
-                              width: double.infinity,
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 16, vertical: 12),
-                              decoration: BoxDecoration(
-                                color: const Color(0xFFFF2D2D).withValues(alpha: 0.15),
-                                borderRadius: BorderRadius.circular(12),
-                                border: Border.all(
-                                    color: const Color(0xFFFF2D2D), width: 1),
-                              ),
-                              child: Row(
-                                children: [
-                                  const Icon(Icons.error_outline,
-                                      color: Color(0xFFFF2D2D), size: 18),
-                                  const SizedBox(width: 10),
-                                  Expanded(
-                                    child: Text(
-                                      _apiError!,
-                                      style: const TextStyle(
-                                        color: Color(0xFFFF2D2D),
-                                        fontSize: 13,
-                                        fontWeight: FontWeight.w500,
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-
-                          const SizedBox(height: 12),
-
-                          // ── NINJA PENGUIN ─────────────────────────
-                          const Align(
-                            alignment: Alignment.center,
-                            child: Image(
-                              image: AssetImage(
-                                  'assets/images/ninja_penguin_transparent.png'),
-                              height: 120,
-                              fit: BoxFit.contain,
-                            ),
-                          ),
-
-                          const SizedBox(height: 8),
-                        ],
-                      ),
-                    ),
-                  ),
+          ),
+          Positioned(
+            top: screenH * 0.32,
+            left: 0,
+            right: 0,
+            height: screenH * 0.22,
+            child: const DecoratedBox(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    Color(0x00B8E4F8),
+                    Color(0xFFB8E4F8),
+                  ],
                 ),
               ),
             ),
-
-            // ── BOTTOM ACTIONS ────────────────────────────────────
-            Padding(
-              padding: const EdgeInsets.fromLTRB(20, 8, 20, 16),
+          ),
+          Positioned.fill(
+            child: Padding(
+              padding:
+                  EdgeInsets.fromLTRB(20, topPad + 8, 20, bottomPad + 12),
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  SizedBox(
-                    width: double.infinity,
-                    height: 52,
-                    child: ElevatedButton(
-                      onPressed: _isLoading ? null : _onContinue,
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF2E8FD4),
-                        disabledBackgroundColor:
-                            const Color(0xFF2E8FD4).withValues(alpha: 0.6),
-                        foregroundColor: Colors.white,
-                        elevation: 0,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(30),
-                          side: const BorderSide(
-                              color: Colors.white60, width: 1.2),
-                        ),
-                      ),
-                      child: _isLoading
-                          ? const SizedBox(
-                              width: 22,
-                              height: 22,
-                              child: CircularProgressIndicator(
-                                color: Colors.white,
-                                strokeWidth: 2.5,
-                              ),
-                            )
-                          : Text(
-                              'signup_button'.tr,
-                              style: const TextStyle(
-                                fontSize: 17,
-                                fontWeight: FontWeight.w600,
-                                letterSpacing: 0.3,
-                              ),
-                            ),
-                    ),
-                  ),
-                  const SizedBox(height: 12),
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text(
-                        'signup_have_account'.tr,
-                        style: const TextStyle(color: Colors.white, fontSize: 13),
-                      ),
                       GestureDetector(
                         onTap: _isLoading
                             ? null
                             : () => Navigator.of(context).pop(),
-                        child: Text(
-                          'signup_sign_in'.tr,
-                          style: const TextStyle(
-                            color: Color(0xFFFFE000),
-                            fontSize: 13,
-                            fontWeight: FontWeight.w700,
+                        child: Container(
+                          width: 40,
+                          height: 40,
+                          decoration: BoxDecoration(
+                            color: Colors.white.withValues(alpha: 0.38),
+                            shape: BoxShape.circle,
+                            border: Border.all(
+                              color: Colors.white.withValues(alpha: 0.6),
+                              width: 1.2,
+                            ),
+                          ),
+                          child: const Icon(
+                            Icons.arrow_back_ios_new_rounded,
+                            color: _titleBlue,
+                            size: 18,
                           ),
                         ),
                       ),
+                      Expanded(
+                        child: Center(
+                          child: Image.asset(
+                            'assets/images/ez_trainz_logo_text_clean.png',
+                            height: 48,
+                            fit: BoxFit.contain,
+                            filterQuality: FilterQuality.high,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 40),
                     ],
+                  ),
+                  const SizedBox(height: 12),
+                  Expanded(
+                    child: FadeTransition(
+                      opacity: _fadeIn,
+                      child: SlideTransition(
+                        position: _slideIn,
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(28),
+                          child: BackdropFilter(
+                            filter:
+                                ImageFilter.blur(sigmaX: 18, sigmaY: 18),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(28),
+                                color: Colors.white.withValues(alpha: 0.42),
+                                border: Border.all(
+                                  color:
+                                      Colors.white.withValues(alpha: 0.65),
+                                  width: 1.5,
+                                ),
+                              ),
+                              child: SingleChildScrollView(
+                                physics: const BouncingScrollPhysics(),
+                                padding: const EdgeInsets.fromLTRB(
+                                    18, 18, 18, 20),
+                                child: Column(
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.start,
+                                  children: [
+                                    RichText(
+                                      text: const TextSpan(
+                                        children: [
+                                          TextSpan(
+                                            text: 'আপনার ',
+                                            style: TextStyle(
+                                              color: _titleBlue,
+                                              fontSize: 22,
+                                              fontWeight: FontWeight.w700,
+                                              height: 1.35,
+                                            ),
+                                          ),
+                                          TextSpan(
+                                            text: 'অ্যাকাউন্ট',
+                                            style: TextStyle(
+                                              color: _yellow,
+                                              fontSize: 22,
+                                              fontWeight: FontWeight.w700,
+                                              height: 1.35,
+                                            ),
+                                          ),
+                                          TextSpan(
+                                            text: ' তৈরি করুন',
+                                            style: TextStyle(
+                                              color: _titleBlue,
+                                              fontSize: 22,
+                                              fontWeight: FontWeight.w700,
+                                              height: 1.35,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    const SizedBox(height: 6),
+                                    Text(
+                                      'Create your account',
+                                      style: TextStyle(
+                                        color: _titleBlue.withValues(
+                                            alpha: 0.62),
+                                        fontSize: 13,
+                                        fontWeight: FontWeight.w400,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 16),
+                                    LabeledField(
+                                      label: 'signup_name_label'.tr,
+                                      hint: 'signup_name_hint'.tr,
+                                      icon: Icons.person_outline_rounded,
+                                      controller: _nameCtrl,
+                                      errorText: _nameError,
+                                      glassStyle: true,
+                                      onChanged: (_) => setState(
+                                          () => _nameError = null),
+                                    ),
+                                    const SizedBox(height: 12),
+                                    LabeledField(
+                                      label: 'signup_email_label'.tr,
+                                      hint: 'signup_email_hint'.tr,
+                                      icon: Icons.email_outlined,
+                                      keyboardType:
+                                          TextInputType.emailAddress,
+                                      controller: _emailCtrl,
+                                      errorText: _emailError,
+                                      glassStyle: true,
+                                      onChanged: (_) => setState(
+                                          () => _emailError = null),
+                                    ),
+                                    const SizedBox(height: 12),
+                                    LabeledField(
+                                      label: 'signup_phone_label'.tr,
+                                      hint: 'signup_phone_hint'.tr,
+                                      icon: Icons.phone_outlined,
+                                      keyboardType: TextInputType.phone,
+                                      controller: _phoneCtrl,
+                                      errorText: _phoneError,
+                                      glassStyle: true,
+                                      onChanged: (_) => setState(
+                                          () => _phoneError = null),
+                                    ),
+                                    const SizedBox(height: 12),
+                                    LabeledField(
+                                      label: 'signup_pass_label'.tr,
+                                      hint: 'signup_pass_hint'.tr,
+                                      icon: Icons.lock_outline_rounded,
+                                      isPassword: true,
+                                      controller: _passCtrl,
+                                      errorText: _passError,
+                                      glassStyle: true,
+                                      onChanged: (_) => setState(
+                                          () => _passError = null),
+                                    ),
+                                    const SizedBox(height: 12),
+                                    LabeledField(
+                                      label: 'signup_confirm_label'.tr,
+                                      hint: 'signup_confirm_hint'.tr,
+                                      icon: Icons.lock_outline_rounded,
+                                      isPassword: true,
+                                      controller: _confirmCtrl,
+                                      errorText: _confirmError,
+                                      glassStyle: true,
+                                      onChanged: (_) => setState(
+                                          () => _confirmError = null),
+                                    ),
+                                    if (_apiError != null) ...[
+                                      const SizedBox(height: 14),
+                                      Container(
+                                        width: double.infinity,
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 16, vertical: 12),
+                                        decoration: BoxDecoration(
+                                          color: const Color(0xFFFF2D2D)
+                                              .withValues(alpha: 0.12),
+                                          borderRadius:
+                                              BorderRadius.circular(12),
+                                          border: Border.all(
+                                              color: const Color(0xFFFF2D2D),
+                                              width: 1),
+                                        ),
+                                        child: Row(
+                                          children: [
+                                            const Icon(Icons.error_outline,
+                                                color: Color(0xFFFF2D2D),
+                                                size: 18),
+                                            const SizedBox(width: 10),
+                                            Expanded(
+                                              child: Text(
+                                                _apiError!,
+                                                style: const TextStyle(
+                                                  color: Color(0xFFFF2D2D),
+                                                  fontSize: 13,
+                                                  fontWeight: FontWeight.w500,
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                    const SizedBox(height: 12),
+                                    const Align(
+                                      alignment: Alignment.center,
+                                      child: Image(
+                                        image: AssetImage(
+                                            'assets/images/ninja_penguin_transparent.png'),
+                                        height: 110,
+                                        fit: BoxFit.contain,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 18),
+                                    SizedBox(
+                                      width: double.infinity,
+                                      height: 52,
+                                      child: ElevatedButton(
+                                        onPressed: _isLoading
+                                            ? null
+                                            : _onContinue,
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor: _btnBlue,
+                                          disabledBackgroundColor: _btnBlue
+                                              .withValues(alpha: 0.55),
+                                          foregroundColor: Colors.white,
+                                          elevation: 0,
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(30),
+                                            side: const BorderSide(
+                                                color: Colors.white60,
+                                                width: 1.2),
+                                          ),
+                                        ),
+                                        child: _isLoading
+                                            ? const SizedBox(
+                                                width: 22,
+                                                height: 22,
+                                                child:
+                                                    CircularProgressIndicator(
+                                                  color: Colors.white,
+                                                  strokeWidth: 2.5,
+                                                ),
+                                              )
+                                            : Text(
+                                                'signup_button'.tr,
+                                                style: const TextStyle(
+                                                  fontSize: 17,
+                                                  fontWeight: FontWeight.w600,
+                                                  letterSpacing: 0.3,
+                                                ),
+                                              ),
+                                      ),
+                                    ),
+                                    const SizedBox(height: 14),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          'signup_have_account'.tr,
+                                          style: const TextStyle(
+                                            color: _titleBlue,
+                                            fontSize: 13,
+                                          ),
+                                        ),
+                                        GestureDetector(
+                                          onTap: _isLoading
+                                              ? null
+                                              : () => Navigator.of(context)
+                                                  .pop(),
+                                          child: Text(
+                                            'signup_sign_in'.tr,
+                                            style: const TextStyle(
+                                              color: _yellow,
+                                              fontSize: 13,
+                                              fontWeight: FontWeight.w700,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
                   ),
                 ],
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

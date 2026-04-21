@@ -12,6 +12,9 @@ class LabeledField extends StatefulWidget {
   final String? errorText;
   final ValueChanged<String>? onChanged;
 
+  /// Sky / glass sign-up theme (blue labels, frosted pill fields).
+  final bool glassStyle;
+
   const LabeledField({
     super.key,
     required this.label,
@@ -22,6 +25,7 @@ class LabeledField extends StatefulWidget {
     this.controller,
     this.errorText,
     this.onChanged,
+    this.glassStyle = false,
   });
 
   @override
@@ -31,17 +35,33 @@ class LabeledField extends StatefulWidget {
 class _LabeledFieldState extends State<LabeledField> {
   bool _obscure = true;
 
+  static const _fieldBlue = Color(0xFF1A4F8C);
+  static const _fieldBorderGlass = Color(0xFFB3DFFA);
+
   @override
   Widget build(BuildContext context) {
     final hasError = widget.errorText != null && widget.errorText!.isNotEmpty;
+    final g = widget.glassStyle;
+
+    final labelColor =
+        g ? const Color(0xFF0090D4) : Colors.white;
+    final borderColor = hasError
+        ? const Color(0xFFFF2D2D)
+        : (g ? _fieldBorderGlass : Colors.white);
+    final iconColor = hasError
+        ? const Color(0xFFFF2D2D)
+        : (g ? _fieldBlue.withValues(alpha: 0.45) : Colors.white70);
+    final textColor = g ? _fieldBlue : Colors.white;
+    final hintColor =
+        g ? _fieldBlue.withValues(alpha: 0.4) : Colors.white60;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           widget.label,
-          style: const TextStyle(
-            color: Colors.white,
+          style: TextStyle(
+            color: labelColor,
             fontSize: 13,
             fontWeight: FontWeight.w600,
             letterSpacing: 0.2,
@@ -53,8 +73,9 @@ class _LabeledFieldState extends State<LabeledField> {
           height: 52,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(26),
+            color: g ? Colors.white.withValues(alpha: 0.55) : null,
             border: Border.all(
-              color: hasError ? const Color(0xFFFF2D2D) : Colors.white,
+              color: borderColor,
               width: 1.5,
             ),
           ),
@@ -63,14 +84,18 @@ class _LabeledFieldState extends State<LabeledField> {
             obscureText: widget.isPassword && _obscure,
             keyboardType: widget.keyboardType,
             onChanged: widget.onChanged,
-            style: const TextStyle(color: Colors.white),
+            style: TextStyle(
+              color: textColor,
+              fontSize: 15,
+              fontWeight: g ? FontWeight.w500 : FontWeight.normal,
+            ),
             decoration: InputDecoration(
               hintText: widget.hint,
-              hintStyle: const TextStyle(color: Colors.white60, fontSize: 14),
+              hintStyle: TextStyle(color: hintColor, fontSize: 14),
               border: InputBorder.none,
               prefixIcon: Icon(
                 widget.icon,
-                color: hasError ? const Color(0xFFFF2D2D) : Colors.white70,
+                color: iconColor,
                 size: 20,
               ),
               suffixIcon: widget.isPassword
@@ -80,7 +105,7 @@ class _LabeledFieldState extends State<LabeledField> {
                         _obscure
                             ? Icons.visibility_off_outlined
                             : Icons.visibility_outlined,
-                        color: Colors.white70,
+                        color: iconColor,
                         size: 20,
                       ),
                     )

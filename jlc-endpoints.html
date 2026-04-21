@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>JLC Gamifier — API Endpoints</title>
+  <style>
+    :root {
+      --bg:      #0d1117;
+      --bg2:     #161b22;
+      --bg3:     #1f2937;
+      --border:  #30363d;
+      --text:    #e6edf3;
+      --text2:   #8b949e;
+      --text3:   #c9d1d9;
+      --accent:  #58a6ff;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      font-size: 14px;
+      line-height: 1.6;
+      padding: 40px;
+    }
+
+    /* ── Header ── */
+    header {
+      margin-bottom: 36px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--border);
+    }
+    header h1 { font-size: 22px; font-weight: 800; color: var(--text); }
+    header h1 span { color: var(--accent); }
+    header p  { color: var(--text2); font-size: 13px; margin-top: 4px; }
+
+    /* ── Search ── */
+    .search-bar {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 28px;
+      flex-wrap: wrap;
+    }
+    .search-bar input {
+      flex: 1;
+      min-width: 200px;
+      padding: 8px 14px;
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text);
+      font-size: 13px;
+      outline: none;
+    }
+    .search-bar input:focus { border-color: var(--accent); }
+    .filter-btn {
+      padding: 7px 14px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      border: 1px solid var(--border);
+      background: var(--bg2);
+      color: var(--text2);
+      transition: all 0.12s;
+    }
+    .filter-btn.active, .filter-btn:hover {
+      color: var(--accent);
+      border-color: #1c4060;
+      background: #0d2137;
+    }
+
+    /* ── Section ── */
+    .section { margin-bottom: 36px; }
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 12px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--border);
+    }
+    .section-header h2 { font-size: 15px; font-weight: 700; }
+    .base-url {
+      font-family: monospace;
+      font-size: 11px;
+      color: var(--text2);
+      background: var(--bg3);
+      padding: 2px 8px;
+      border-radius: 4px;
+      margin-left: auto;
+      word-break: break-all;
+    }
+
+    /* ── Table ── */
+    table { width: 100%; border-collapse: collapse; }
+    thead tr { background: var(--bg3); }
+    th {
+      padding: 8px 12px;
+      text-align: left;
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--text2);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      white-space: nowrap;
+    }
+    td {
+      padding: 9px 12px;
+      font-size: 12px;
+      color: var(--text3);
+      border-bottom: 1px solid rgba(48,54,61,0.5);
+      vertical-align: middle;
+    }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: rgba(88,166,255,0.03); }
+
+    table { background: var(--bg2); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
+
+    /* ── Method badges ── */
+    .m {
+      display: inline-block;
+      padding: 2px 7px;
+      border-radius: 4px;
+      font-size: 10px;
+      font-weight: 800;
+      font-family: monospace;
+      min-width: 54px;
+      text-align: center;
+    }
+    .GET    { background:#1a4731; color:#3fb950; }
+    .POST   { background:#1c2b3a; color:#58a6ff; }
+    .PATCH  { background:#2b2200; color:#ffa657; }
+    .DELETE { background:#3b1219; color:#f78166; }
+    .PUT    { background:#1e1a2e; color:#d2a8ff; }
+
+    /* ── Token badge ── */
+    .tok {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 20px;
+      font-size: 10px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+    .tok-yes    { background:#1a4731; color:#3fb950; }
+    .tok-no     { background:#2b2200; color:#ffa657; }
+    .tok-body   { background:#1e1a2e; color:#d2a8ff; }
+
+    /* ── Code ── */
+    code {
+      font-family: 'Cascadia Code','Fira Code',monospace;
+      font-size: 11px;
+      background: rgba(88,166,255,0.07);
+      padding: 1px 5px;
+      border-radius: 3px;
+      color: #79c0ff;
+    }
+    .param { color: #ffa657; }
+
+    /* ── Copy button ── */
+    .copy-btn {
+      background: none;
+      border: 1px solid var(--border);
+      border-radius: 5px;
+      color: var(--text2);
+      font-size: 10px;
+      padding: 2px 7px;
+      cursor: pointer;
+      transition: all 0.1s;
+    }
+    .copy-btn:hover { border-color: var(--accent); color: var(--accent); }
+    .copy-btn.copied { border-color: #3fb950; color: #3fb950; }
+
+    /* ── Hidden rows ── */
+    tr.hidden { display: none; }
+
+    footer {
+      margin-top: 40px;
+      padding-top: 16px;
+      border-top: 1px solid var(--border);
+      font-size: 11px;
+      color: var(--text2);
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>JLC <span>Gamifier</span> — API Endpoint Reference</h1>
+  <p>For frontend developers · All endpoints, methods, auth requirements, and request bodies · April 2026</p>
+</header>
+
+<!-- Search + filter -->
+<div class="search-bar">
+  <input id="search" type="text" placeholder="Search endpoints, paths, descriptions…" oninput="filterRows()"/>
+  <button class="filter-btn active" data-filter="all"    onclick="setFilter('all',this)">All</button>
+  <button class="filter-btn"        data-filter="GET"    onclick="setFilter('GET',this)">GET</button>
+  <button class="filter-btn"        data-filter="POST"   onclick="setFilter('POST',this)">POST</button>
+  <button class="filter-btn"        data-filter="PATCH"  onclick="setFilter('PATCH',this)">PATCH</button>
+  <button class="filter-btn"        data-filter="DELETE" onclick="setFilter('DELETE',this)">DELETE</button>
+  <button class="filter-btn"        data-filter="PUT"    onclick="setFilter('PUT',this)">PUT</button>
+  <button class="filter-btn"        data-filter="auth"   onclick="setFilter('auth',this)">🔒 Token required</button>
+  <button class="filter-btn"        data-filter="noauth" onclick="setFilter('noauth',this)">🔓 Public</button>
+</div>
+
+<!-- ══════════════════════════════════════════
+     1. AUTH
+══════════════════════════════════════════ -->
+<div class="section" data-section="auth">
+  <div class="section-header">
+    <h2>🔑 Auth Service</h2>
+    <span class="base-url">https://arlvajyrck.execute-api.us-east-1.amazonaws.com/dev/auth</span>
+  </div>
+  <table>
+    <thead>
+      <tr>
+        <th>Method</th><th>Path</th><th>Description</th>
+        <th>Request Body</th><th>Response</th><th>Token</th><th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr data-method="POST" data-auth="noauth">
+        <td><span class="m POST">POST</span></td>
+        <td><code>/signup</code></td>
+        <td>Register a new user</td>
+        <td><code>{ email, password, username }</code></td>
+        <td><code>201 { success: true }</code></td>
+        <td><span class="tok tok-no">None</span></td>
+        <td><button class="copy-btn" onclick="copyPath(this,'/signup')">copy</button></td>
+      </tr>
+      <tr data-method="POST" data-auth="noauth">
+        <td><span class="m POST">POST</span></td>
+        <td><code>/confirm</code></td>
+        <td>Verify OTP / confirm email</td>
+        <td><code>{ email, confirmation_code }</code></td>
+        <td><code>200 { success: true }</code></td>
+        <td><span class="tok tok-no">None</span></td>
+        <td><button class="copy-btn" onclick="copyPath(this,'/confirm')">copy</button></td>
+      </tr>
+      <tr data-method="POST" data-auth="noauth">
+        <td><span class="m POST">POST</span></td>
+        <td><code>/signin</code></td>
+        <td>Sign in — returns JWT tokens</td>
+        <td><code>{ email, password }</code></td>
+        <td><code>200 { accessToken, idToken, refreshToken }</code></td>
+        <td><span class="tok tok-no">None</span></td>
+        <td><button class="copy-btn" onclick="copyPath(this,'/signin')">copy</button></td>
+      </tr>
+      <tr data-method="POST" data-auth="noauth">
+        <td><span class="m POST">POST</span></td>
+        <td><code>/signout</code></td>
+        <td>Invalidate session tokens</td>
+        <td><em style="color:var(--text2)">empty</em></td>
+        <td><code>200</code></td>
+        <td><span class="tok tok-no">None</span></td>
+        <td><button class="copy-btn" onclick="copyPath(this,'/signout')">copy</button></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ══════════════════════════════════════════
+     2. GAMIFICATION
+══════════════════════════════════════════ -->
+<div class="section" data-section="gamif">
+  <div class="section-header">
+    <h2>🎮 Gamification Service</h2>
+    <span class="base-url">https://bdmy1zi0va.execute-api.us-east-1.amazonaws.com</span>
+  </div>
+  <table>
+    <thead>
+      <tr><th>Method</th><th>Path</th><th>Description</th><th>Request Body / Params</th><th>Response</th><th>Token</th><th></th></tr>
+    </thead>
+    <tbody>
+      <tr data-method="GET" data-auth="noauth">
+        <td><span class="m GET">GET</span></td>
+        <td><code>/games</code></td>
+        <td>List all registered games</td>
+        <td>—</td>
+        <td><code>200 [ { id, title, ... } ]</code></td>
+        <td><span class="tok tok-no">None</span></td>
+        <td><button class="copy-btn" onclick="copyPath(this,'/games')">copy</button></td>
+      </tr>
+      <tr data-method="GET" data-auth="noauth">
+        <td><span class="m GET">GET</span></td>
+        <td><code>/games/<span class="param">{gameId}</span></code></td>
+        <td>Get a single game</td>
+        <td>—</td>
+        <td><code>200 { id, title, ... }</code></td>
+        <td><span class="tok tok-no">None</span></td>
+        <td><button class="copy-btn" onclick="copyPath(this,'/games/{gameId}')">copy</button></td>
+      </tr>
+      <tr data-method="POST" data-auth="body">
+        <td><span class="m POST">POST</span></td>
+        <td><code>/game-sessions/submit</code></td>
+        <td>Submit a game score</td>
+        <td><code>{ cognitoId, gameId, score }</code></td>
+        <td><code>200 { isNewBest, gameRank, globalRank }</code></td>
+        <td><span class="tok tok-body">cognitoId in body</span></td>
+        <td><button class="copy-btn" onclick="copyPath(this,'/game-sessions/submit')">copy</button></td>
+      </tr>
+      <tr data-method="GET" data-auth="body">
+        <td><span class="m GET">GET</span></td>
+        <td><code>/game-sessions/history/<span class="param">{cognitoId}</span></code></td>
+        <td>Get user's game history</td>
+        <td>—</td>
+        <td><code>200 [ { gameId, score, ... } ]</code></td>
+        <td><span class="tok tok-body">cognitoId in path</span></td>
+        <td><button class="copy-btn" onclick="copyPath(this,'/game-sessions/history/{cognitoId}')">copy</button></td>
+      </tr>
+      <tr data-method="GET" data-auth="noauth">
+        <td><span class="m GET">GET</span></td>
+        <td><code>/leaderboard/global</code></td>
+        <td>Global top leaderboard</td>
+        <td>—</td>
+        <td><code>200 [ { rank, username, totalScore } ]</code></td>
+        <td><span class="tok tok-no">None</span></td>
+        <td><button class="copy-btn" onclick="copyPath(this,'/leaderboard/global')">copy</button></td>
+      </tr>
+      <tr data-method="GET" data-auth="noauth">
+        <td><span class="m GET">GET</span></td>
+        <td><code>/leaderboard/me</code></td>
+        <td>Current user's global rank</td>
+        <td>—</td>
+        <td><code>200 { rank, totalScore }</code></td>
+        <td><span class="tok tok-no">None</span></td>
+        <td><button class="copy-btn" onclick="copyPath(this,'/leaderboard/me')">copy</button></td>
+      </tr>
+      <tr data-method="GET" data-auth="body">
+        <td><span class="m GET">GET</span></td>
+        <td><code>/leaderboard/me/<span class="param">{cognitoId}</span></code></td>
+        <td>User's rank by cognitoId</td>
+        <td>—</td>
+        <td><code>200 { rank, totalScore }</code></td>
+        <td><span class="tok tok-body">cognitoId in path</span></td>
+        <td><button class="copy-btn" onclick="copyPath(this,'/leaderboard/me/{cognitoId}')">copy</button></td>
+      </tr>
+      <tr data-method="GET" data-auth="noauth">
+        <td><span class="m GET">GET</span></td>
+        <td><code>/leaderboard/game/<span class="param">{gameId}</span></code></td>
+        <td>Leaderboard for a specific game</td>
+        <td>query: <code>?limit=20</code></td>
+        <td><code>200 [ { rank, username, score } ]</code></td>
+        <td><span class="tok tok-no">None</span></td>
+        <td><button class="copy-btn" onclick="copyPath(this,'/leaderboard/game/{gameId}?limit=20')">copy</button></td>
+      </tr>
+      <tr data-method="GET" data-auth="noauth">
+        <td><span class="m GET">GET</span></td>
+        <td><code>/quiz</code></td>
+        <td>Fetch all quizzes</td>
+        <td>—</td>
+        <td><code>200 [ { id, title, lessonId, questions:[...] } ]</code></td>
+        <td><span class="tok tok-no">None</span></td>
+        <td><button class="copy-btn" onclick="copyPath(this,'/quiz')">copy</button></td>
+      </tr>
+      <tr data-method="GET" data-auth="noauth">
+        <td><span class="m GET">GET</span></td>
+        <td><code>/quiz/lesson/<span class="param">{lessonId}</span></code></td>
+        <td>Fetch quiz for a lesson</td>
+        <td>—</td>
+        <td><code>200 { id, title, passingScore, questions:[...] }</code></td>
+        <td><span class="tok tok-no">None</span></td>
+        <td><button class="copy-btn" onclick="copyPath(this,'/quiz/lesson/{lessonId}')">copy</button></td>
+      </tr>
+      <tr data-method="POST" data-auth="body">
+        <td><span class="m POST">POST</span></td>
+        <td><code>/quiz/submit</code></td>
+        <td>Submit quiz answers for grading</td>
+        <td><code>{ cognitoId, quizId, answers: [{ questionId, answer }] }</code></td>
+        <td><code>200 { score, passed, correct, total, breakdown:[...] }</code></td>
+        <td><span class="tok tok-body">cognitoId in body</span></td>
+        <td><button class="copy-btn" onclick="copyPath(this,'/quiz/submit')">copy</button></td>
+      </tr>
+      <tr data-method="GET" data-auth="noauth">
+        <td><span class="m GET">GET</span></td>
+        <td><code>/grammar/lesson/<span class="param">{lessonId}</span></code></td>
+        <td>Fetch grammar drills for a lesson</td>
+        <td>—</td>
+        <td><code>200 { id, title, drills:[...] }</code></td>
+        <td><span class="tok tok-no">None</span></td>
+        <td><button class="copy-btn" onclick="copyPath(this,'/grammar/lesson/{lessonId}')">copy</button></td>
+      </tr>
+      <tr data-method="GET" data-auth="noauth">
+        <td><span class="m GET">GET</span></td>
+        <td><code>/fill-gaps/lesson/<span class="param">{lessonId}</span></code></td>
+        <td>Fetch fill-in-gaps questions</td>
+        <td>—</td>
+        <td><code>200 { id, title, questions:[...] }</code></td>
+        <td><span class="tok tok-no">None</span></td>
+        <td><button class="copy-btn" onclick="copyPath(this,'/fill-gaps/lesson/{lessonId}')">copy</button></td>
+      </tr>
+      <tr data-method="GET" data-auth="noauth">
+        <td><span class="m GET">GET</span></td>
+        <td><code>/matching/lesson/<span class="param">{lessonId}</span></code></td>
+        <td>Fetch matching pairs</td>
+        <td>—</td>
+        <td><code>200 { id, title, pairs:[...] }</code></td>
+        <td><span class="tok tok-no">None</span></td>
+        <td><button class="copy-btn" onclick="copyPath(this,'/matching/lesson/{lessonId}')">copy</button></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ══════════════════════════════════════════
+     3. LMS
+══════════════════════════════════════════ -->
+<div class="section" data-section="lms">
+  <div class="section-header">
+    <h2>📚 LMS Service</h2>
+    <span class="base-url">https://whvvdypnx0.execute-api.us-east-1.amazonaws.com/dev</span>
+  </div>
+  <table>
+    <thead>
+      <tr><th>Method</th><th>Path</th><th>Description</th><th>Request Body / Params</th><th>Response</th><th>Token</th><th></th></tr>
+    </thead>
+    <tbody>
+      <tr data-method="GET" data-auth="auth">
+        <td><span class="m GET">GET</span></td>
+        <td><code>/courses</code></td>
+        <td>List all available courses</td>
+        <td>—</td>
+        <td><code>200 [ { id, title, level, lessons:[...] } ]</code></td>
+        <td><span class="tok tok-yes">Bearer JWT</span></td>
+        <td><button class="copy-btn" onclick="copyPath(this,'/courses')">copy</button></td>
+      </tr>
+      <tr data-method="GET" data-auth="auth">
+        <td><span class="m GET">GET</span></td>
+        <td><code>/courses/my</code></td>
+        <td>Get user's enrolled courses</td>
+        <td>—</td>
+        <td><code>200 [ { courseId, enrolledAt, ... } ]</code></td>
+        <td><span class="tok tok-yes">Bearer JWT</span></td>
+        <td><button class="copy-btn" onclick="copyPath(this,'/courses/my')">copy</button></td>
+      </tr>
+      <tr data-method="POST" data-auth="auth">
+        <td><span class="m POST">POST</span></td>
+        <td><code>/courses/<span class="param">{courseId}</span>/enroll</code></td>
+        <td>Enroll in a course</td>
+        <td>—</td>
+        <td><code>201 { courseId, enrolledAt }</code></td>
+        <td><span class="tok tok-yes">Bearer JWT</span></td>
+        <td><button class="copy-btn" onclick="copyPath(this,'/courses/{courseId}/enroll')">copy</button></td>
+      </tr>
+      <tr data-method="DELETE" data-auth="auth">
+        <td><span class="m DELETE">DELETE</span></td>
+        <td><code>/courses/<span class="param">{courseId}</span>/enroll</code></td>
+        <td>Unenroll from a course</td>
+        <td>—</td>
+        <td><code>204</code></td>
+        <td><span class="tok tok-yes">Bearer JWT</span></td>
+        <td><button class="copy-btn" onclick="copyPath(this,'/courses/{courseId}/enroll')">copy</button></td>
+      </tr>
+      <tr data-method="PATCH" data-auth="auth">
+        <td><span class="m PATCH">PATCH</span></td>
+        <td><code>/lessons/<span class="param">{lessonId}</span>/progress</code></td>
+        <td>Update lesson completion progress</td>
+        <td><code>{ completed: true, progressPct: 100.0 }</code></td>
+        <td><code>200 { lessonId, progressPct }</code></td>
+        <td><span class="tok tok-yes">Bearer JWT</span></td>
+        <td><button class="copy-btn" onclick="copyPath(this,'/lessons/{lessonId}/progress')">copy</button></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ══════════════════════════════════════════
+     4. FORUM
+══════════════════════════════════════════ -->
+<div class="section" data-section="forum">
+  <div class="section-header">
+    <h2>💬 Forum Service</h2>
+    <span class="base-url">https://u6vokpvxmf.execute-api.us-east-1.amazonaws.com/forum</span>
+  </div>
+  <table>
+    <thead>
+      <tr><th>Method</th><th>Path</th><th>Description</th><th>Request Body / Params</th><th>Response</th><th>Token</th><th></th></tr>
+    </thead>
+    <tbody>
+      <tr data-method="GET" data-auth="auth">
+        <td><span class="m GET">GET</span></td>
+        <td><code>/posts</code></td>
+        <td>List posts (optional filters)</td>
+        <td>query: <code>?category=&authorId=</code></td>
+        <td><code>200 [ { id, title, body, author, ... } ]</code></td>
+        <td><span class="tok tok-yes">Bearer JWT</span></td>
+        <td><button class="copy-btn" onclick="copyPath(this,'/posts')">copy</button></td>
+      </tr>
+      <tr data-method="POST" data-auth="auth">
+        <td><span class="m POST">POST</span></td>
+        <td><code>/posts</code></td>
+        <td>Create a new post</td>
+        <td><code>{ title, body, category }</code></td>
+        <td><code>201 { id, title, body, ... }</code></td>
+        <td><span class="tok tok-yes">Bearer JWT</span></td>
+        <td><button class="copy-btn" onclick="copyPath(this,'/posts')">copy</button></td>
+      </tr>
+      <tr data-method="GET" data-auth="auth">
+        <td><span class="m GET">GET</span></td>
+        <td><code>/posts/<span class="param">{id}</span></code></td>
+        <td>Get post detail</td>
+        <td>—</td>
+        <td><code>200 { id, title, body, comments:[...] }</code></td>
+        <td><span class="tok tok-yes">Bearer JWT</span></td>
+        <td><button class="copy-btn" onclick="copyPath(this,'/posts/{id}')">copy</button></td>
+      </tr>
+      <tr data-method="PUT" data-auth="auth">
+        <td><span class="m PUT">PUT</span></td>
+        <td><code>/posts/<span class="param">{id}</span></code></td>
+        <td>Update a post</td>
+        <td><code>{ title?, body? }</code></td>
+        <td><code>200 { id, title, body, ... }</code></td>
+        <td><span class="tok tok-yes">Bearer JWT</span></td>
+        <td><button class="copy-btn" onclick="copyPath(this,'/posts/{id}')">copy</button></td>
+      </tr>
+      <tr data-method="DELETE" data-auth="auth">
+        <td><span class="m DELETE">DELETE</span></td>
+        <td><code>/posts/<span class="param">{id}</span></code></td>
+        <td>Delete a post</td>
+        <td>—</td>
+        <td><code>200</code></td>
+        <td><span class="tok tok-yes">Bearer JWT</span></td>
+        <td><button class="copy-btn" onclick="copyPath(this,'/posts/{id}')">copy</button></td>
+      </tr>
+      <tr data-method="GET" data-auth="auth">
+        <td><span class="m GET">GET</span></td>
+        <td><code>/posts/<span class="param">{postId}</span>/comments</code></td>
+        <td>List comments on a post</td>
+        <td>—</td>
+        <td><code>200 [ { id, body, author, ... } ]</code></td>
+        <td><span class="tok tok-yes">Bearer JWT</span></td>
+        <td><button class="copy-btn" onclick="copyPath(this,'/posts/{postId}/comments')">copy</button></td>
+      </tr>
+      <tr data-method="POST" data-auth="auth">
+        <td><span class="m POST">POST</span></td>
+        <td><code>/posts/<span class="param">{postId}</span>/comments</code></td>
+        <td>Add a comment</td>
+        <td><code>{ body, authorId }</code></td>
+        <td><code>201 { id, body, ... }</code></td>
+        <td><span class="tok tok-yes">Bearer JWT</span></td>
+        <td><button class="copy-btn" onclick="copyPath(this,'/posts/{postId}/comments')">copy</button></td>
+      </tr>
+      <tr data-method="PUT" data-auth="auth">
+        <td><span class="m PUT">PUT</span></td>
+        <td><code>/comments/<span class="param">{id}</span></code></td>
+        <td>Update a comment</td>
+        <td><code>{ body }</code></td>
+        <td><code>200 { id, body, ... }</code></td>
+        <td><span class="tok tok-yes">Bearer JWT</span></td>
+        <td><button class="copy-btn" onclick="copyPath(this,'/comments/{id}')">copy</button></td>
+      </tr>
+      <tr data-method="DELETE" data-auth="auth">
+        <td><span class="m DELETE">DELETE</span></td>
+        <td><code>/comments/<span class="param">{id}</span></code></td>
+        <td>Delete a comment</td>
+        <td>—</td>
+        <td><code>200</code></td>
+        <td><span class="tok tok-yes">Bearer JWT</span></td>
+        <td><button class="copy-btn" onclick="copyPath(this,'/comments/{id}')">copy</button></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ══════════════════════════════════════════
+     5. ROSTER
+══════════════════════════════════════════ -->
+<div class="section" data-section="roster">
+  <div class="section-header">
+    <h2>👥 Roster &amp; Meetings Service</h2>
+    <span class="base-url">https://u6vokpvxmf.execute-api.us-east-1.amazonaws.com</span>
+  </div>
+  <table>
+    <thead>
+      <tr><th>Method</th><th>Path</th><th>Description</th><th>Request Body / Params</th><th>Response</th><th>Token</th><th></th></tr>
+    </thead>
+    <tbody>
+      <tr data-method="GET" data-auth="auth">
+        <td><span class="m GET">GET</span></td>
+        <td><code>/roster</code></td>
+        <td>List rosters</td>
+        <td>query params (optional)</td>
+        <td><code>200 [ { id, name, ... } ]</code></td>
+        <td><span class="tok tok-yes">Bearer JWT</span></td>
+        <td><button class="copy-btn" onclick="copyPath(this,'/roster')">copy</button></td>
+      </tr>
+      <tr data-method="POST" data-auth="auth">
+        <td><span class="m POST">POST</span></td>
+        <td><code>/roster</code></td>
+        <td>Create a roster</td>
+        <td><code>{ name, ... }</code></td>
+        <td><code>201 { id, name, ... }</code></td>
+        <td><span class="tok tok-yes">Bearer JWT</span></td>
+        <td><button class="copy-btn" onclick="copyPath(this,'/roster')">copy</button></td>
+      </tr>
+      <tr data-method="GET" data-auth="auth">
+        <td><span class="m GET">GET</span></td>
+        <td><code>/roster/<span class="param">{id}</span></code></td>
+        <td>Get roster detail</td>
+        <td>—</td>
+        <td><code>200 { id, name, members:[...] }</code></td>
+        <td><span class="tok tok-yes">Bearer JWT</span></td>
+        <td><button class="copy-btn" onclick="copyPath(this,'/roster/{id}')">copy</button></td>
+      </tr>
+      <tr data-method="DELETE" data-auth="auth">
+        <td><span class="m DELETE">DELETE</span></td>
+        <td><code>/roster/<span class="param">{id}</span></code></td>
+        <td>Delete a roster</td>
+        <td>—</td>
+        <td><code>200</code></td>
+        <td><span class="tok tok-yes">Bearer JWT</span></td>
+        <td><button class="copy-btn" onclick="copyPath(this,'/roster/{id}')">copy</button></td>
+      </tr>
+      <tr data-method="GET" data-auth="auth">
+        <td><span class="m GET">GET</span></td>
+        <td><code>/instructor-roster</code></td>
+        <td>List all instructor rosters</td>
+        <td>—</td>
+        <td><code>200 [ { id, postId, date, timeSlot, ... } ]</code></td>
+        <td><span class="tok tok-yes">Bearer JWT</span></td>
+        <td><button class="copy-btn" onclick="copyPath(this,'/instructor-roster')">copy</button></td>
+      </tr>
+      <tr data-method="GET" data-auth="auth">
+        <td><span class="m GET">GET</span></td>
+        <td><code>/instructor-roster/mine</code></td>
+        <td>Get current instructor's slots</td>
+        <td>—</td>
+        <td><code>200 [ { id, date, timeSlot, ... } ]</code></td>
+        <td><span class="tok tok-yes">Bearer JWT</span></td>
+        <td><button class="copy-btn" onclick="copyPath(this,'/instructor-roster/mine')">copy</button></td>
+      </tr>
+      <tr data-method="GET" data-auth="auth">
+        <td><span class="m GET">GET</span></td>
+        <td><code>/instructor-roster/post/<span class="param">{postId}</span></code></td>
+        <td>Get meetings for a post</td>
+        <td>—</td>
+        <td><code>200 [ { id, date, timeSlot, ... } ]</code></td>
+        <td><span class="tok tok-yes">Bearer JWT</span></td>
+        <td><button class="copy-btn" onclick="copyPath(this,'/instructor-roster/post/{postId}')">copy</button></td>
+      </tr>
+      <tr data-method="POST" data-auth="auth">
+        <td><span class="m POST">POST</span></td>
+        <td><code>/instructor-roster</code></td>
+        <td>Create a meeting slot</td>
+        <td><code>{ postId, date, timeSlot }</code></td>
+        <td><code>201 { id, postId, date, timeSlot }</code></td>
+        <td><span class="tok tok-yes">Bearer JWT</span></td>
+        <td><button class="copy-btn" onclick="copyPath(this,'/instructor-roster')">copy</button></td>
+      </tr>
+      <tr data-method="POST" data-auth="auth">
+        <td><span class="m POST">POST</span></td>
+        <td><code>/instructor-roster/<span class="param">{id}</span>/join</code></td>
+        <td>Student joins a meeting slot</td>
+        <td>—</td>
+        <td><code>200</code></td>
+        <td><span class="tok tok-yes">Bearer JWT</span></td>
+        <td><button class="copy-btn" onclick="copyPath(this,'/instructor-roster/{id}/join')">copy</button></td>
+      </tr>
+      <tr data-method="POST" data-auth="auth">
+        <td><span class="m POST">POST</span></td>
+        <td><code>/instructor-roster/<span class="param">{id}</span>/leave</code></td>
+        <td>Student leaves a meeting slot</td>
+        <td>—</td>
+        <td><code>200</code></td>
+        <td><span class="tok tok-yes">Bearer JWT</span></td>
+        <td><button class="copy-btn" onclick="copyPath(this,'/instructor-roster/{id}/leave')">copy</button></td>
+      </tr>
+      <tr data-method="DELETE" data-auth="auth">
+        <td><span class="m DELETE">DELETE</span></td>
+        <td><code>/instructor-roster/<span class="param">{id}</span></code></td>
+        <td>Delete a meeting slot</td>
+        <td>—</td>
+        <td><code>200</code></td>
+        <td><span class="tok tok-yes">Bearer JWT</span></td>
+        <td><button class="copy-btn" onclick="copyPath(this,'/instructor-roster/{id}')">copy</button></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ══════════════════════════════════════════
+     AUTH NOTE
+══════════════════════════════════════════ -->
+<div style="background:#161b22;border:1px solid #30363d;border-radius:10px;padding:18px 20px;margin-bottom:36px;font-size:12px;color:#8b949e;line-height:1.8;">
+  <strong style="color:#c9d1d9;">🔐 How to authenticate</strong><br/>
+  1. Call <code>POST /signin</code> → receive <code>accessToken</code><br/>
+  2. Store it securely (never in localStorage)<br/>
+  3. Attach to every protected request: <code>Authorization: Bearer &lt;accessToken&gt;</code><br/>
+  4. For Gamification endpoints marked <span class="tok tok-body" style="font-size:10px;">cognitoId in body</span> — decode the JWT locally to extract the <code>sub</code> claim and pass it as <code>cognitoId</code> in the request body. No <code>Authorization</code> header needed for those.
+</div>
+
+<footer>
+  JLC Gamifier · API Endpoint Reference · April 2026
+  &nbsp;·&nbsp; <span style="color:#3fb950;">🟢 37 endpoints</span>
+  &nbsp;·&nbsp; <span style="color:#58a6ff;">5 services</span>
+</footer>
+
+<script>
+  let activeFilter = 'all';
+
+  function filterRows() {
+    const q = document.getElementById('search').value.toLowerCase();
+    document.querySelectorAll('tbody tr').forEach(row => {
+      const text = row.textContent.toLowerCase();
+      const method = row.dataset.method || '';
+      const auth   = row.dataset.auth   || '';
+
+      const matchSearch = !q || text.includes(q);
+      let matchFilter = true;
+      if (activeFilter === 'auth')   matchFilter = auth === 'auth';
+      else if (activeFilter === 'noauth') matchFilter = auth === 'noauth' || auth === 'body';
+      else if (activeFilter !== 'all')    matchFilter = method === activeFilter;
+
+      row.classList.toggle('hidden', !(matchSearch && matchFilter));
+    });
+  }
+
+  function setFilter(f, btn) {
+    activeFilter = f;
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    filterRows();
+  }
+
+  function copyPath(btn, path) {
+    navigator.clipboard.writeText(path).then(() => {
+      btn.textContent = 'copied!';
+      btn.classList.add('copied');
+      setTimeout(() => { btn.textContent = 'copy'; btn.classList.remove('copied'); }, 1500);
+    });
+  }
+</script>
+</body>
+</html>

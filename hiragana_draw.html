@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Hiragana Draw — A・K・S Series</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Segoe UI', sans-serif;
+    background: linear-gradient(135deg, #2c3e50, #4a6491);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    padding: 20px;
+  }
+  .game {
+    background: rgba(0,0,0,0.35);
+    border-radius: 20px;
+    padding: 25px;
+    width: 100%;
+    max-width: 560px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+  }
+  h1 { text-align: center; margin-bottom: 15px; font-size: 24px; }
+  .hud {
+    display: flex;
+    justify-content: space-around;
+    background: rgba(255,255,255,0.1);
+    padding: 10px;
+    border-radius: 10px;
+    margin-bottom: 15px;
+    font-size: 15px;
+    font-weight: bold;
+  }
+  .hud span { color: #ffd86b; }
+  .prompt {
+    text-align: center;
+    background: rgba(255,255,255,0.15);
+    padding: 15px;
+    border-radius: 12px;
+    margin-bottom: 15px;
+  }
+  .prompt .label { font-size: 13px; opacity: 0.85; }
+  .prompt .romaji {
+    font-size: 56px;
+    font-weight: bold;
+    color: #ffd86b;
+    line-height: 1;
+    margin: 5px 0;
+  }
+  .canvas-wrap {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1;
+    background: #fff;
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 12px;
+  }
+  canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    touch-action: none;
+    cursor: crosshair;
+  }
+  #guideCanvas { pointer-events: none; opacity: 0.7; }
+  #drawCanvas { z-index: 2; }
+  .grid-line {
+    position: absolute;
+    background: #ddd;
+    pointer-events: none;
+    z-index: 1;
+  }
+  .controls {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-bottom: 10px;
+  }
+  button.btn {
+    background: #ffd86b;
+    color: #1e3c72;
+    border: none;
+    padding: 10px 18px;
+    font-size: 14px;
+    font-weight: bold;
+    border-radius: 8px;
+    cursor: pointer;
+    flex: 1;
+    min-width: 90px;
+  }
+  button.btn:hover { background: #ffca28; }
+  button.secondary {
+    background: rgba(255,255,255,0.2);
+    color: white;
+  }
+  button.secondary:hover { background: rgba(255,255,255,0.3); }
+  .message {
+    text-align: center;
+    margin-top: 8px;
+    font-size: 15px;
+    min-height: 22px;
+  }
+  .gameover {
+    text-align: center;
+    padding: 25px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 12px;
+  }
+  .gameover h2 { font-size: 28px; margin-bottom: 15px; color: #ffd86b; }
+  .hidden { display: none; }
+  .reveal {
+    text-align: center;
+    font-size: 80px;
+    color: #ffd86b;
+    margin: 10px 0;
+  }
+</style>
+</head>
+<body>
+<div class="game">
+  <h1>✏️ Hiragana Draw</h1>
+
+  <div id="introScreen">
+    <p style="text-align:center; margin-bottom:15px; opacity:0.9;">
+      You'll see a romaji like <b>"ka"</b>. Draw the matching hiragana on the canvas, then check it against the answer.
+    </p>
+    <p style="text-align:center; margin-bottom:20px; opacity:0.85; font-size:14px;">
+      15 hiragana from <b>a・k・s</b> series. You have <b>3 minutes</b>.
+    </p>
+    <div style="text-align:center;">
+      <button class="btn" onclick="startGame()" style="max-width:200px;">Start Drawing</button>
+    </div>
+  </div>
+
+  <div id="playScreen" class="hidden">
+    <div class="hud">
+      <div>⏱️ <span id="time">180</span>s</div>
+      <div>⭐ <span id="score">0</span></div>
+      <div>✅ <span id="done">0</span></div>
+    </div>
+
+    <div class="prompt">
+      <div class="label">Draw the hiragana for:</div>
+      <div class="romaji" id="targetRomaji">a</div>
+    </div>
+
+    <div class="canvas-wrap" id="canvasWrap">
+      <canvas id="guideCanvas"></canvas>
+      <canvas id="drawCanvas"></canvas>
+    </div>
+
+    <div class="controls">
+      <button class="btn secondary" onclick="clearCanvas()">🗑️ Clear</button>
+      <button class="btn secondary" onclick="toggleGuide()">👁️ Guide</button>
+      <button class="btn" onclick="checkAnswer()">✓ Check</button>
+      <button class="btn secondary" onclick="skipRound()">Skip →</button>
+    </div>
+    <div class="message" id="message">Draw freely with mouse or finger.</div>
+  </div>
+
+  <div id="endScreen" class="gameover hidden">
+    <h2>Time's Up!</h2>
+    <p style="font-size:20px; margin:10px 0;">Score: <span id="finalScore">0</span></p>
+    <p style="margin-bottom:20px;">Hiragana drawn: <span id="finalDone">0</span></p>
+    <button class="btn" onclick="startGame()" style="max-width:200px;">Play Again</button>
+  </div>
+</div>
+
+<script>
+  const HIRAGANA = [
+    { char: 'あ', romaji: 'a' },
+    { char: 'い', romaji: 'i' },
+    { char: 'う', romaji: 'u' },
+    { char: 'え', romaji: 'e' },
+    { char: 'お', romaji: 'o' },
+    { char: 'か', romaji: 'ka' },
+    { char: 'き', romaji: 'ki' },
+    { char: 'く', romaji: 'ku' },
+    { char: 'け', romaji: 'ke' },
+    { char: 'こ', romaji: 'ko' },
+    { char: 'さ', romaji: 'sa' },
+    { char: 'し', romaji: 'shi' },
+    { char: 'す', romaji: 'su' },
+    { char: 'せ', romaji: 'se' },
+    { char: 'そ', romaji: 'so' },
+  ];
+
+  let timeLeft, score, doneCount, currentTarget, timerId;
+  let drawCanvas, drawCtx, guideCanvas, guideCtx;
+  let isDrawing = false;
+  let guideVisible = true;
+  let lastX = 0, lastY = 0;
+
+  function pick(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
+
+  function setupCanvas() {
+    drawCanvas = document.getElementById('drawCanvas');
+    guideCanvas = document.getElementById('guideCanvas');
+    const wrap = document.getElementById('canvasWrap');
+    const size = wrap.clientWidth;
+    [drawCanvas, guideCanvas].forEach(c => {
+      c.width = size;
+      c.height = size;
+    });
+    drawCtx = drawCanvas.getContext('2d');
+    guideCtx = guideCanvas.getContext('2d');
+    drawCtx.lineWidth = 8;
+    drawCtx.lineCap = 'round';
+    drawCtx.lineJoin = 'round';
+    drawCtx.strokeStyle = '#222';
+    drawGuideGrid();
+  }
+
+  function drawGuideGrid() {
+    const s = guideCanvas.width;
+    guideCtx.clearRect(0, 0, s, s);
+
+    // Fine grid
+    const fine = s / 20;
+    guideCtx.strokeStyle = '#b8d4e8';
+    guideCtx.lineWidth = 1;
+    guideCtx.beginPath();
+    for (let i = 1; i < 20; i++) {
+      guideCtx.moveTo(i * fine, 0); guideCtx.lineTo(i * fine, s);
+      guideCtx.moveTo(0, i * fine); guideCtx.lineTo(s, i * fine);
+    }
+    guideCtx.stroke();
+
+    // Bold grid every 5 fine cells (4 divisions)
+    guideCtx.strokeStyle = '#7aa8c8';
+    guideCtx.lineWidth = 1.5;
+    guideCtx.beginPath();
+    for (let i = 1; i < 4; i++) {
+      const p = i * (s / 4);
+      guideCtx.moveTo(p, 0); guideCtx.lineTo(p, s);
+      guideCtx.moveTo(0, p); guideCtx.lineTo(s, p);
+    }
+    guideCtx.stroke();
+
+    // Center crosshair (dashed, darker)
+    guideCtx.strokeStyle = '#d04a4a';
+    guideCtx.lineWidth = 1.5;
+    guideCtx.setLineDash([5, 5]);
+    guideCtx.beginPath();
+    guideCtx.moveTo(s/2, 0); guideCtx.lineTo(s/2, s);
+    guideCtx.moveTo(0, s/2); guideCtx.lineTo(s, s/2);
+    guideCtx.stroke();
+    guideCtx.setLineDash([]);
+
+    // Outer border
+    guideCtx.strokeStyle = '#5a8aa8';
+    guideCtx.lineWidth = 2;
+    guideCtx.strokeRect(0, 0, s, s);
+  }
+
+  function drawTargetGuide() {
+    const s = guideCanvas.width;
+    guideCtx.clearRect(0, 0, s, s);
+    drawGuideGrid();
+    if (!guideVisible || !currentTarget) return;
+    guideCtx.fillStyle = '#222';
+    guideCtx.font = (s * 0.75) + "px 'Yu Mincho', 'Hiragino Mincho ProN', serif";
+    guideCtx.textAlign = 'center';
+    guideCtx.textBaseline = 'middle';
+    guideCtx.fillText(currentTarget.char, s/2, s/2);
+  }
+
+  function getPos(e) {
+    const rect = drawCanvas.getBoundingClientRect();
+    const scaleX = drawCanvas.width / rect.width;
+    const scaleY = drawCanvas.height / rect.height;
+    const x = (e.touches ? e.touches[0].clientX : e.clientX) - rect.left;
+    const y = (e.touches ? e.touches[0].clientY : e.clientY) - rect.top;
+    return { x: x * scaleX, y: y * scaleY };
+  }
+
+  function startDraw(e) {
+    e.preventDefault();
+    isDrawing = true;
+    const p = getPos(e);
+    lastX = p.x; lastY = p.y;
+    drawCtx.beginPath();
+    drawCtx.moveTo(lastX, lastY);
+  }
+  function draw(e) {
+    if (!isDrawing) return;
+    e.preventDefault();
+    const p = getPos(e);
+    drawCtx.lineTo(p.x, p.y);
+    drawCtx.stroke();
+    lastX = p.x; lastY = p.y;
+  }
+  function endDraw(e) {
+    if (e) e.preventDefault();
+    isDrawing = false;
+  }
+
+  function clearCanvas() {
+    drawCtx.clearRect(0, 0, drawCanvas.width, drawCanvas.height);
+  }
+
+  function toggleGuide() {
+    // Show the actual hiragana behind the canvas as a tracing aid
+    if (guideVisible) {
+      guideVisible = false;
+      drawGuideGrid();
+    } else {
+      guideVisible = true;
+      drawTargetGuide();
+      score = Math.max(0, score - 2);
+      updateHUD();
+      document.getElementById('message').textContent = '👁️ Guide shown: -2 points';
+    }
+  }
+
+  function startGame() {
+    timeLeft = 180;
+    score = 0;
+    doneCount = 0;
+    document.getElementById('introScreen').classList.add('hidden');
+    document.getElementById('endScreen').classList.add('hidden');
+    document.getElementById('playScreen').classList.remove('hidden');
+    setupCanvas();
+    // Attach drawing handlers
+    drawCanvas.addEventListener('mousedown', startDraw);
+    drawCanvas.addEventListener('mousemove', draw);
+    drawCanvas.addEventListener('mouseup', endDraw);
+    drawCanvas.addEventListener('mouseleave', endDraw);
+    drawCanvas.addEventListener('touchstart', startDraw, { passive: false });
+    drawCanvas.addEventListener('touchmove', draw, { passive: false });
+    drawCanvas.addEventListener('touchend', endDraw);
+    nextRound();
+    clearInterval(timerId);
+    timerId = setInterval(() => {
+      timeLeft--;
+      updateHUD();
+      if (timeLeft <= 0) endGame();
+    }, 1000);
+    updateHUD();
+  }
+
+  function updateHUD() {
+    document.getElementById('time').textContent = timeLeft;
+    document.getElementById('score').textContent = score;
+    document.getElementById('done').textContent = doneCount;
+  }
+
+  function nextRound() {
+    currentTarget = pick(HIRAGANA);
+    document.getElementById('targetRomaji').textContent = currentTarget.romaji;
+    clearCanvas();
+    guideVisible = false;
+    drawGuideGrid();
+    document.getElementById('message').textContent = 'Draw "' + currentTarget.romaji + '" on the canvas.';
+  }
+
+  function computeSimilarity() {
+    // Render target hiragana to an offscreen canvas at same size, then compare pixel coverage
+    const s = drawCanvas.width;
+    const ref = document.createElement('canvas');
+    ref.width = s; ref.height = s;
+    const rctx = ref.getContext('2d');
+    rctx.fillStyle = '#000';
+    rctx.font = (s * 0.75) + "px 'Yu Mincho', 'Hiragino Mincho ProN', serif";
+    rctx.textAlign = 'center';
+    rctx.textBaseline = 'middle';
+    rctx.fillText(currentTarget.char, s/2, s/2);
+
+    const refData = rctx.getImageData(0, 0, s, s).data;
+    const userData = drawCtx.getImageData(0, 0, s, s).data;
+
+    // Build binary masks (1 = ink). Dilate user mask to be tolerant of stroke offset.
+    const total = s * s;
+    const refMask = new Uint8Array(total);
+    const userMask = new Uint8Array(total);
+    for (let i = 0; i < total; i++) {
+      refMask[i] = refData[i*4+3] > 50 ? 1 : 0;
+      userMask[i] = userData[i*4+3] > 50 ? 1 : 0;
+    }
+
+    let refCount = 0, userCount = 0;
+    for (let i = 0; i < total; i++) { refCount += refMask[i]; userCount += userMask[i]; }
+    if (userCount < 50) return { score: 0, reason: 'empty' };
+
+    // Distance-tolerant overlap: for each ref ink pixel, check a small neighborhood in user mask
+    const radius = Math.max(6, Math.floor(s * 0.025));
+    let hit = 0;
+    for (let y = 0; y < s; y += 2) {
+      for (let x = 0; x < s; x += 2) {
+        const idx = y * s + x;
+        if (!refMask[idx]) continue;
+        let found = false;
+        for (let dy = -radius; dy <= radius && !found; dy += 2) {
+          const ny = y + dy;
+          if (ny < 0 || ny >= s) continue;
+          for (let dx = -radius; dx <= radius && !found; dx += 2) {
+            const nx = x + dx;
+            if (nx < 0 || nx >= s) continue;
+            if (userMask[ny * s + nx]) found = true;
+          }
+        }
+        if (found) hit++;
+      }
+    }
+    // Also reverse: how much of user ink lies near ref ink (penalty for stray strokes)
+    let userHit = 0, userSampled = 0;
+    for (let y = 0; y < s; y += 2) {
+      for (let x = 0; x < s; x += 2) {
+        const idx = y * s + x;
+        if (!userMask[idx]) continue;
+        userSampled++;
+        let found = false;
+        for (let dy = -radius; dy <= radius && !found; dy += 2) {
+          const ny = y + dy;
+          if (ny < 0 || ny >= s) continue;
+          for (let dx = -radius; dx <= radius && !found; dx += 2) {
+            const nx = x + dx;
+            if (nx < 0 || nx >= s) continue;
+            if (refMask[ny * s + nx]) found = true;
+          }
+        }
+        if (found) userHit++;
+      }
+    }
+
+    // Sample counts (we sampled every 2nd pixel)
+    let refSampled = 0;
+    for (let y = 0; y < s; y += 2)
+      for (let x = 0; x < s; x += 2)
+        if (refMask[y * s + x]) refSampled++;
+
+    const recall = refSampled ? hit / refSampled : 0;        // coverage of target
+    const precision = userSampled ? userHit / userSampled : 0; // accuracy of strokes
+    const f1 = (recall + precision) ? (2 * recall * precision) / (recall + precision) : 0;
+
+    return { score: f1, recall, precision };
+  }
+
+  function checkAnswer() {
+    const sim = computeSimilarity();
+    const pct = Math.round(sim.score * 100);
+    let earned = 0;
+    let verdict = '';
+    if (sim.score === 0 && sim.reason === 'empty') {
+      verdict = '⚠️ Canvas is empty';
+    } else if (pct >= 70) {
+      earned = 15;
+      verdict = '🌟 Excellent! ' + pct + '% match';
+    } else if (pct >= 50) {
+      earned = 10;
+      verdict = '✅ Good! ' + pct + '% match';
+    } else if (pct >= 30) {
+      earned = 5;
+      verdict = '👍 Close. ' + pct + '% match';
+    } else {
+      earned = 0;
+      verdict = '❌ Off. ' + pct + '% match';
+    }
+
+    // Reveal answer overlay
+    const s = drawCanvas.width;
+    drawCtx.save();
+    drawCtx.globalAlpha = 0.3;
+    drawCtx.fillStyle = '#e74c3c';
+    drawCtx.font = (s * 0.75) + "px 'Yu Mincho', 'Hiragino Mincho ProN', serif";
+    drawCtx.textAlign = 'center';
+    drawCtx.textBaseline = 'middle';
+    drawCtx.fillText(currentTarget.char, s/2, s/2);
+    drawCtx.restore();
+
+    if (earned > 0) {
+      score += earned;
+      doneCount++;
+    }
+    updateHUD();
+    document.getElementById('message').textContent =
+      verdict + (earned ? ' (+' + earned + ')' : '') + ' — Answer: ' + currentTarget.char;
+    setTimeout(nextRound, 1800);
+  }
+
+  function skipRound() {
+    document.getElementById('message').textContent = 'Skipped. Was: ' + currentTarget.char;
+    setTimeout(nextRound, 1200);
+  }
+
+  function endGame() {
+    clearInterval(timerId);
+    document.getElementById('playScreen').classList.add('hidden');
+    document.getElementById('endScreen').classList.remove('hidden');
+    document.getElementById('finalScore').textContent = score;
+    document.getElementById('finalDone').textContent = doneCount;
+  }
+
+  // Resize handling
+  window.addEventListener('resize', () => {
+    if (!document.getElementById('playScreen').classList.contains('hidden')) {
+      const imgData = drawCanvas.toDataURL();
+      setupCanvas();
+      const img = new Image();
+      img.onload = () => drawCtx.drawImage(img, 0, 0, drawCanvas.width, drawCanvas.height);
+      img.src = imgData;
+    }
+  });
+</script>
+</body>
+</html>

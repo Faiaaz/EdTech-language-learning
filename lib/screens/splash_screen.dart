@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'dart:math' as math;
 import 'package:get/get.dart';
 
+import 'package:ez_trainz/controllers/auth_controller.dart';
 import 'package:ez_trainz/screens/login_screen.dart';
+import 'package:ez_trainz/screens/main_shell_screen.dart';
 import 'package:ez_trainz/widgets/ez_logo_boxed.dart';
 import 'package:ez_trainz/utils/spring_curve.dart';
 
@@ -142,9 +144,11 @@ class _SplashScreenState extends State<SplashScreen>
     await _exitCtrl.forward();
 
     if (mounted) {
+      final isAuthed = AuthController.to.isLoggedIn;
       Navigator.of(context).pushReplacement(
         PageRouteBuilder(
-          pageBuilder: (_, __, ___) => const LoginScreen(),
+          pageBuilder: (_, __, ___) =>
+              isAuthed ? const MainShellScreen() : const LoginScreen(),
           transitionDuration: Duration.zero,
           reverseTransitionDuration: Duration.zero,
         ),

@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:ez_trainz/controllers/game_controller.dart';
 import 'package:ez_trainz/models/game.dart';
 import 'package:ez_trainz/screens/game_detail_screen.dart';
+import 'package:ez_trainz/screens/gamification_content_screen.dart';
 
 /// Displays the list of available games fetched from GET /games.
 class GamesScreen extends StatefulWidget {
@@ -34,13 +35,24 @@ class _GamesScreenState extends State<GamesScreen> {
             // ── Header ─────────────────────────────────────────
             Padding(
               padding: const EdgeInsets.fromLTRB(24, 24, 24, 0),
-              child: Text(
-                'games_title'.tr,
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 24,
-                  fontWeight: FontWeight.w800,
-                ),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      'games_title'.tr,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 24,
+                        fontWeight: FontWeight.w800,
+                      ),
+                    ),
+                  ),
+                  IconButton(
+                    onPressed: () => Get.to(() => const GamificationContentScreen()),
+                    icon: const Icon(Icons.quiz_rounded, color: Colors.white),
+                    tooltip: 'Quizzes & drills',
+                  ),
+                ],
               ),
             ),
             Padding(

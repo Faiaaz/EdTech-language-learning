@@ -31,17 +31,17 @@ class IeltsWritingScreen extends StatelessWidget {
                     child: Container(
                       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                       decoration: BoxDecoration(color: Colors.white.withValues(alpha: 0.2), borderRadius: BorderRadius.circular(20), border: Border.all(color: Colors.white38)),
-                      child: const Row(mainAxisSize: MainAxisSize.min, children: [
-                        Icon(Icons.arrow_back_ios_rounded, color: Colors.white, size: 14),
-                        SizedBox(width: 4),
-                        Text('Back', style: TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w600)),
+                      child: Row(mainAxisSize: MainAxisSize.min, children: [
+                        const Icon(Icons.arrow_back_ios_rounded, color: Colors.white, size: 14),
+                        const SizedBox(width: 4),
+                        Text('back'.tr, style: const TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w600)),
                       ]),
                     ),
                   ),
                   const SizedBox(height: 16),
-                  const Text('Writing Practice', style: TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.w900)),
+                  Text('writing_practice'.tr, style: const TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.w900)),
                   const SizedBox(height: 4),
-                  Text('Practice Task 1 & Task 2 with model answers', style: TextStyle(color: Colors.white.withValues(alpha: 0.8), fontSize: 14)),
+                  Text('writing_practice_desc'.tr, style: TextStyle(color: Colors.white.withValues(alpha: 0.8), fontSize: 14)),
                 ],
               ),
             ),
@@ -51,7 +51,7 @@ class IeltsWritingScreen extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text('Select a Task', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800, color: Color(0xFF1A1A2E))),
+                    Text('select_task'.tr, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w800, color: Color(0xFF1A1A2E))),
                     const SizedBox(height: 14),
                     ...List.generate(ctrl.writingTasks.length, (i) {
                       final t = ctrl.writingTasks[i];
@@ -93,16 +93,16 @@ class IeltsWritingScreen extends StatelessWidget {
                     Container(
                       padding: const EdgeInsets.all(16),
                       decoration: BoxDecoration(color: const Color(0xFFFFF3E0), borderRadius: BorderRadius.circular(16), border: Border.all(color: const Color(0xFFFFCC80))),
-                      child: const Column(
+                      child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Row(children: [
-                            Icon(Icons.grading_rounded, color: Color(0xFFE65100), size: 20),
-                            SizedBox(width: 8),
-                            Text('Writing Assessment Criteria', style: TextStyle(color: Color(0xFFBF360C), fontSize: 14, fontWeight: FontWeight.w800)),
+                            const Icon(Icons.grading_rounded, color: Color(0xFFE65100), size: 20),
+                            const SizedBox(width: 8),
+                            Text('writing_criteria'.tr, style: const TextStyle(color: Color(0xFFBF360C), fontSize: 14, fontWeight: FontWeight.w800)),
                           ]),
-                          SizedBox(height: 10),
-                          Text('\u2022 Task Response (25%) — Address all parts of the prompt\n\u2022 Coherence & Cohesion (25%) — Organize logically with linking words\n\u2022 Lexical Resource (25%) — Use varied, accurate vocabulary\n\u2022 Grammar Range & Accuracy (25%) — Mix sentence structures',
+                          const SizedBox(height: 10),
+                          const Text('\u2022 Task Response (25%) — Address all parts of the prompt\n\u2022 Coherence & Cohesion (25%) — Organize logically with linking words\n\u2022 Lexical Resource (25%) — Use varied, accurate vocabulary\n\u2022 Grammar Range & Accuracy (25%) — Mix sentence structures',
                               style: TextStyle(fontSize: 13, height: 1.6, color: Color(0xFF4E342E))),
                         ],
                       ),
@@ -181,10 +181,10 @@ class _WritingPractice extends StatelessWidget {
                         padding: const EdgeInsets.all(16),
                         decoration: BoxDecoration(color: const Color(0xFFFFF3E0), borderRadius: BorderRadius.circular(14)),
                         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                          const Row(children: [
-                            Icon(Icons.format_list_numbered_rounded, color: Color(0xFFE65100), size: 18),
-                            SizedBox(width: 8),
-                            Text('Suggested Outline', style: TextStyle(color: Color(0xFFBF360C), fontSize: 14, fontWeight: FontWeight.w800)),
+                          Row(children: [
+                            const Icon(Icons.format_list_numbered_rounded, color: Color(0xFFE65100), size: 18),
+                            const SizedBox(width: 8),
+                            Text('suggested_outline'.tr, style: const TextStyle(color: Color(0xFFBF360C), fontSize: 14, fontWeight: FontWeight.w800)),
                           ]),
                           const SizedBox(height: 10),
                           ...task.sampleOutline.asMap().entries.map((e) => Padding(
@@ -200,7 +200,7 @@ class _WritingPractice extends StatelessWidget {
                       const SizedBox(height: 16),
 
                       // User writing area
-                      const Text('Your Essay', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w800, color: Color(0xFF1A1A2E))),
+                      Text('your_essay'.tr, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800, color: Color(0xFF1A1A2E))),
                       const SizedBox(height: 10),
                       Container(
                         decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(14), boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.05), blurRadius: 8)]),
@@ -208,7 +208,7 @@ class _WritingPractice extends StatelessWidget {
                           onChanged: (val) => ctrl.updateEssay(val),
                           maxLines: 12,
                           decoration: InputDecoration(
-                            hintText: 'Start writing your essay here...',
+                            hintText: 'essay_hint'.tr,
                             hintStyle: const TextStyle(color: Color(0xFFBDBDBD), fontSize: 14),
                             border: OutlineInputBorder(borderRadius: BorderRadius.circular(14), borderSide: BorderSide.none),
                             contentPadding: const EdgeInsets.all(16),
@@ -275,15 +275,15 @@ class _WritingPractice extends StatelessWidget {
                             border: Border.all(color: const Color(0xFF4CAF50), width: 2),
                           ),
                           child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                            const Row(children: [
-                              Icon(Icons.star_rounded, color: Color(0xFF4CAF50), size: 20),
-                              SizedBox(width: 8),
-                              Text('Model Answer (Band 7-8)', style: TextStyle(color: Color(0xFF2E7D32), fontSize: 14, fontWeight: FontWeight.w800)),
+                            Row(children: [
+                              const Icon(Icons.star_rounded, color: Color(0xFF4CAF50), size: 20),
+                              const SizedBox(width: 8),
+                              Text('model_answer'.tr, style: const TextStyle(color: Color(0xFF2E7D32), fontSize: 14, fontWeight: FontWeight.w800)),
                             ]),
                             const SizedBox(height: 12),
                             Text(task.modelAnswer, style: const TextStyle(fontSize: 14, height: 1.7, color: Color(0xFF333333))),
                             const SizedBox(height: 16),
-                            const Text('Assessment Criteria:', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w800, color: Color(0xFF1A1A2E))),
+                            Text('assessment_criteria'.tr, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w800, color: Color(0xFF1A1A2E))),
                             const SizedBox(height: 8),
                             ...task.criteria.map((c) => Padding(
                               padding: const EdgeInsets.only(bottom: 8),

@@ -62,7 +62,7 @@ class ComingSoonScreen extends StatelessWidget {
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  'We\'re working on it. Check back later!',
+                  'coming_soon_body'.tr,
                   style: TextStyle(
                     color: Colors.white.withValues(alpha: 0.7),
                     fontSize: 14,

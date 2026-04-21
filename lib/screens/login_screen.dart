@@ -54,6 +54,7 @@ class _LoginScreenState extends State<LoginScreen> {
       final token = response['accessToken'] as String? ?? '';
       final idToken =
           response['idToken'] as String? ?? response['token'] as String?;
+      final refreshToken = response['refreshToken'] as String?;
       final user = response['user'] as Map<String, dynamic>? ?? {};
       final name = user['name'] as String? ?? email.split('@').first;
       final userEmail = user['email'] as String? ?? email;
@@ -66,6 +67,7 @@ class _LoginScreenState extends State<LoginScreen> {
         name: name,
         email: userEmail,
         cognitoId: cognitoId,
+        refreshToken: refreshToken,
       );
 
       if (mounted) setState(() => _isLoading = false);
@@ -176,42 +178,13 @@ class _LoginScreenState extends State<LoginScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Container(
-                    width: 50,
-                    height: 50,
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                      color: yellow,
-                      borderRadius: BorderRadius.circular(6),
-                      border: Border.all(color: ezBlue, width: 1.5),
-                    ),
-                    child: const Text(
-                      'EZ',
-                      style: TextStyle(
-                        color: ezBlue,
-                        fontSize: 22,
-                        fontWeight: FontWeight.w900,
-                        height: 1,
-                        letterSpacing: -0.5,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 10),
-                  const Text(
-                    'TRAINZ',
-                    style: TextStyle(
-                      color: ezBlue,
-                      fontSize: 24,
-                      fontWeight: FontWeight.w900,
-                      letterSpacing: 1.2,
-                      height: 1,
-                    ),
-                  ),
-                ],
+              Center(
+                child: Image.asset(
+                  'assets/images/ez_trainz_logo_text_clean.png',
+                  height: 56,
+                  fit: BoxFit.contain,
+                  filterQuality: FilterQuality.high,
+                ),
               ),
 
               const SizedBox(height: 18),

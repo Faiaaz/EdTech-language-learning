@@ -5,7 +5,6 @@ import 'package:ez_trainz/controllers/auth_controller.dart';
 import 'package:ez_trainz/controllers/course_controller.dart';
 import 'package:ez_trainz/controllers/program_controller.dart';
 import 'package:ez_trainz/models/program.dart';
-import 'package:ez_trainz/screens/course_detail_screen.dart';
 import 'package:ez_trainz/screens/main_shell_screen.dart';
 import 'package:ez_trainz/screens/login_screen.dart';
 
@@ -194,13 +193,13 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                               border: Border.all(
                                   color: Colors.white38, width: 1),
                             ),
-                            child: const Row(
+                            child: Row(
                               children: [
-                                Icon(Icons.logout_rounded,
+                                const Icon(Icons.logout_rounded,
                                     color: Colors.white, size: 15),
-                                SizedBox(width: 5),
-                                Text('Logout',
-                                    style: TextStyle(
+                                const SizedBox(width: 5),
+                                Text('logout'.tr,
+                                    style: const TextStyle(
                                       color: Colors.white,
                                       fontSize: 13,
                                       fontWeight: FontWeight.w600,
@@ -216,7 +215,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
 
                     // ── GREETING ───────────────────────────────────
                     Text(
-                      'Hello,',
+                      'hello'.tr,
                       style: TextStyle(
                         color: Colors.white.withValues(alpha: 0.8),
                         fontSize: 26,
@@ -237,7 +236,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                     const SizedBox(height: 8),
 
                     Text(
-                      'Choose a language program to start',
+                      'choose_program'.tr,
                       style: TextStyle(
                         color: Colors.white.withValues(alpha: 0.75),
                         fontSize: 15,
@@ -340,7 +339,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                     // ── TAGLINE ────────────────────────────────────
                     Center(
                       child: Text(
-                        'ভাষা শিখুন, ভবিষ্যৎ গড়ুন',
+                        'home_tagline'.tr,
                         style: TextStyle(
                           color: Colors.white.withValues(alpha: 0.6),
                           fontSize: 14,

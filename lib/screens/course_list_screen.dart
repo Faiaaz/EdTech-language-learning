@@ -6,6 +6,7 @@ import 'package:ez_trainz/controllers/course_controller.dart';
 import 'package:ez_trainz/controllers/program_controller.dart';
 import 'package:ez_trainz/models/course.dart';
 import 'package:ez_trainz/screens/course_detail_screen.dart';
+import 'package:ez_trainz/screens/lms_api_screen.dart';
 import 'package:ez_trainz/screens/login_screen.dart';
 
 class CourseListScreen extends StatelessWidget {
@@ -90,6 +91,12 @@ class CourseListScreen extends StatelessWidget {
                                 height: 1,
                               )),
                         ],
+                      ),
+                      IconButton(
+                        onPressed: () => Get.to(() => const LmsApiScreen()),
+                        icon: const Icon(Icons.cloud_rounded,
+                            color: Colors.white),
+                        tooltip: 'LMS API',
                       ),
                       GestureDetector(
                         onTap: () {

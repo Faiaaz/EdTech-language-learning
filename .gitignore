@@ -1,3 +1,6 @@
+# Salesforce DX (local tooling / cache)
+.sfdx/
+
 # Miscellaneous
 *.class
 *.log

@@ -1,12 +1,12 @@
 {
-    "name": "ez_trainz",
-    "short_name": "ez_trainz",
+    "name": "EZ Trainz",
+    "short_name": "EZ Trainz",
     "start_url": ".",
     "display": "standalone",
-    "background_color": "#0175C2",
-    "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
-    "orientation": "portrait-primary",
+    "background_color": "#4DA6E8",
+    "theme_color": "#4DA6E8",
+    "description": "Language learning and practice.",
+    "orientation": "any",
     "prefer_related_applications": false,
     "icons": [
         {

@@ -40,12 +40,12 @@ class IeltsReadingScreen extends StatelessWidget {
                         borderRadius: BorderRadius.circular(20),
                         border: Border.all(color: Colors.white38),
                       ),
-                      child: const Row(
+                      child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          Icon(Icons.arrow_back_ios_rounded, color: Colors.white, size: 14),
-                          SizedBox(width: 4),
-                          Text('Back', style: TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w600)),
+                          const Icon(Icons.arrow_back_ios_rounded, color: Colors.white, size: 14),
+                          const SizedBox(width: 4),
+                          Text('back'.tr, style: const TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w600)),
                         ],
                       ),
                     ),
@@ -91,7 +91,7 @@ class _PassageSelector extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text('Select a Passage', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800, color: Color(0xFF1A1A2E))),
+          Text('select_passage'.tr, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w800, color: Color(0xFF1A1A2E))),
           const SizedBox(height: 14),
           ...List.generate(ctrl.passages.length, (i) {
             final p = ctrl.passages[i];
@@ -158,24 +158,24 @@ class _PassageSelector extends StatelessWidget {
               borderRadius: BorderRadius.circular(16),
               border: Border.all(color: const Color(0xFFA5D6A7)),
             ),
-            child: const Column(
+            child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Row(
                   children: [
-                    Icon(Icons.lightbulb_rounded, color: Color(0xFF388E3C), size: 20),
-                    SizedBox(width: 8),
-                    Text('Reading Strategies', style: TextStyle(color: Color(0xFF1B5E20), fontSize: 14, fontWeight: FontWeight.w800)),
+                    const Icon(Icons.lightbulb_rounded, color: Color(0xFF388E3C), size: 20),
+                    const SizedBox(width: 8),
+                    Text('reading_strategies'.tr, style: const TextStyle(color: Color(0xFF1B5E20), fontSize: 14, fontWeight: FontWeight.w800)),
                   ],
                 ),
-                SizedBox(height: 10),
-                _StrategyItem(title: 'Skim first', text: 'Read the passage quickly to get the main idea before looking at questions'),
-                SizedBox(height: 8),
-                _StrategyItem(title: 'Scan for keywords', text: 'Look for specific words from questions in the passage'),
-                SizedBox(height: 8),
-                _StrategyItem(title: 'Don\'t spend too long', text: 'If stuck on a question, move on and come back later'),
-                SizedBox(height: 8),
-                _StrategyItem(title: 'Watch for synonyms', text: 'IELTS paraphrases — the answer may use different words'),
+                const SizedBox(height: 10),
+                const _StrategyItem(title: 'Skim first', text: 'Read the passage quickly to get the main idea before looking at questions'),
+                const SizedBox(height: 8),
+                const _StrategyItem(title: 'Scan for keywords', text: 'Look for specific words from questions in the passage'),
+                const SizedBox(height: 8),
+                const _StrategyItem(title: 'Don\'t spend too long', text: 'If stuck on a question, move on and come back later'),
+                const SizedBox(height: 8),
+                const _StrategyItem(title: 'Watch for synonyms', text: 'IELTS paraphrases — the answer may use different words'),
               ],
             ),
           ),
@@ -291,7 +291,7 @@ class _ReadingPractice extends StatelessWidget {
                       ),
 
                       const SizedBox(height: 24),
-                      const Text('Questions', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800, color: Color(0xFF1A1A2E))),
+                      Text('questions'.tr, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w800, color: Color(0xFF1A1A2E))),
                       const SizedBox(height: 14),
 
                       // Questions
@@ -318,8 +318,8 @@ class _ReadingPractice extends StatelessWidget {
                               gradient: const LinearGradient(colors: [Color(0xFF4CAF50), Color(0xFF2E7D32)]),
                               borderRadius: BorderRadius.circular(14),
                             ),
-                            child: const Center(
-                              child: Text('Submit Answers', style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w800)),
+                            child: Center(
+                              child: Text('submit_answers'.tr, style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w800)),
                             ),
                           ),
                         ),
@@ -341,7 +341,7 @@ class _ReadingPractice extends StatelessWidget {
                                 style: const TextStyle(color: Colors.white, fontSize: 32, fontWeight: FontWeight.w900),
                               ),
                               const SizedBox(height: 4),
-                              const Text('Correct Answers', style: TextStyle(color: Colors.white70, fontSize: 14)),
+                              Text('correct_answers'.tr, style: const TextStyle(color: Colors.white70, fontSize: 14)),
                               const SizedBox(height: 16),
                               GestureDetector(
                                 onTap: () {
@@ -352,7 +352,7 @@ class _ReadingPractice extends StatelessWidget {
                                 child: Container(
                                   padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
                                   decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(12)),
-                                  child: const Text('Try Another Passage', style: TextStyle(color: Color(0xFF2E7D32), fontSize: 14, fontWeight: FontWeight.w700)),
+                                  child: Text('try_another_passage'.tr, style: const TextStyle(color: Color(0xFF2E7D32), fontSize: 14, fontWeight: FontWeight.w700)),
                                 ),
                               ),
                             ],
@@ -473,7 +473,7 @@ class _QuestionCard extends StatelessWidget {
               onChanged: (val) => ctrl.setReadingAnswer(question.id, val),
               enabled: !submitted,
               decoration: InputDecoration(
-                hintText: 'Type your answer...',
+                hintText: 'type_answer'.tr,
                 hintStyle: const TextStyle(color: Color(0xFFBDBDBD), fontSize: 14),
                 filled: true,
                 fillColor: const Color(0xFFF5F5F5),
@@ -516,7 +516,7 @@ class _QuestionCard extends StatelessWidget {
                   Text(question.explanation, style: const TextStyle(fontSize: 12, color: Color(0xFF555555), height: 1.4)),
                   if (question.tip != null) ...[
                     const SizedBox(height: 6),
-                    Text('\u{1F4A1} Tip: ${question.tip!}', style: const TextStyle(fontSize: 12, color: Color(0xFFF57F17), fontWeight: FontWeight.w600)),
+                    Text('\u{1F4A1} ${'tip_prefix'.tr}: ${question.tip!}', style: const TextStyle(fontSize: 12, color: Color(0xFFF57F17), fontWeight: FontWeight.w600)),
                   ],
                 ],
               ),

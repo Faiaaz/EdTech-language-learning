@@ -6,6 +6,7 @@ import 'package:ez_trainz/controllers/forum_controller.dart';
 import 'package:ez_trainz/models/forum_post.dart';
 import 'package:ez_trainz/screens/forum_compose_screen.dart';
 import 'package:ez_trainz/screens/forum_post_detail_screen.dart';
+import 'package:ez_trainz/screens/roster_screen.dart';
 
 /// Community tab — forum threads from API.
 class ForumScreen extends StatelessWidget {
@@ -75,6 +76,12 @@ class ForumScreen extends StatelessWidget {
                   IconButton(
                     onPressed: ctrl.loadThreads,
                     icon: const Icon(Icons.refresh_rounded, color: Colors.white),
+                  ),
+                  IconButton(
+                    onPressed: () => Get.to(() => const RosterScreen()),
+                    icon: const Icon(Icons.event_available_rounded,
+                        color: Colors.white),
+                    tooltip: 'Roster & meetings',
                   ),
                 ],
               ),

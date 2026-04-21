@@ -38,20 +38,20 @@ class IeltsListeningScreen extends StatelessWidget {
                         borderRadius: BorderRadius.circular(20),
                         border: Border.all(color: Colors.white38),
                       ),
-                      child: const Row(
+                      child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          Icon(Icons.arrow_back_ios_rounded, color: Colors.white, size: 14),
-                          SizedBox(width: 4),
-                          Text('Back', style: TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w600)),
+                          const Icon(Icons.arrow_back_ios_rounded, color: Colors.white, size: 14),
+                          const SizedBox(width: 4),
+                          Text('back'.tr, style: const TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w600)),
                         ],
                       ),
                     ),
                   ),
                   const SizedBox(height: 16),
-                  const Text('Listening Practice', style: TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.w900)),
+                  Text('listening_practice'.tr, style: const TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.w900)),
                   const SizedBox(height: 4),
-                  Text('Read transcripts and answer comprehension questions',
+                  Text('listening_practice_desc'.tr,
                       style: TextStyle(color: Colors.white.withValues(alpha: 0.8), fontSize: 14)),
                 ],
               ),
@@ -62,7 +62,7 @@ class IeltsListeningScreen extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text('Select a Section', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800, color: Color(0xFF1A1A2E))),
+                    Text('select_section'.tr, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w800, color: Color(0xFF1A1A2E))),
                     const SizedBox(height: 14),
                     ...List.generate(ctrl.listeningSections.length, (i) {
                       final s = ctrl.listeningSections[i];
@@ -118,16 +118,16 @@ class IeltsListeningScreen extends StatelessWidget {
                         borderRadius: BorderRadius.circular(16),
                         border: Border.all(color: const Color(0xFF90CAF9)),
                       ),
-                      child: const Column(
+                      child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Row(children: [
-                            Icon(Icons.lightbulb_rounded, color: Color(0xFF1976D2), size: 20),
-                            SizedBox(width: 8),
-                            Text('Listening Tips', style: TextStyle(color: Color(0xFF0D47A1), fontSize: 14, fontWeight: FontWeight.w800)),
+                            const Icon(Icons.lightbulb_rounded, color: Color(0xFF1976D2), size: 20),
+                            const SizedBox(width: 8),
+                            Text('listening_tips'.tr, style: const TextStyle(color: Color(0xFF0D47A1), fontSize: 14, fontWeight: FontWeight.w800)),
                           ]),
-                          SizedBox(height: 10),
-                          Text('\u2022 Read questions before listening to know what to listen for\n\u2022 Pay attention to signpost words: "however", "firstly", "in contrast"\n\u2022 Watch for distractors — answers may be corrected or changed\n\u2022 Spelling counts! Practice common academic word spellings\n\u2022 Numbers and names are frequently tested',
+                          const SizedBox(height: 10),
+                          const Text('\u2022 Read questions before listening to know what to listen for\n\u2022 Pay attention to signpost words: "however", "firstly", "in contrast"\n\u2022 Watch for distractors — answers may be corrected or changed\n\u2022 Spelling counts! Practice common academic word spellings\n\u2022 Numbers and names are frequently tested',
                               style: TextStyle(fontSize: 13, height: 1.5, color: Color(0xFF1565C0))),
                         ],
                       ),
@@ -228,7 +228,7 @@ class _ListeningPractice extends StatelessWidget {
                       ],
 
                       const SizedBox(height: 20),
-                      const Text('Questions', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800, color: Color(0xFF1A1A2E))),
+                      Text('questions'.tr, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w800, color: Color(0xFF1A1A2E))),
                       const SizedBox(height: 14),
 
                       ...List.generate(section.questions.length, (i) {
@@ -247,7 +247,7 @@ class _ListeningPractice extends StatelessWidget {
                               gradient: const LinearGradient(colors: [Color(0xFF2196F3), Color(0xFF1565C0)]),
                               borderRadius: BorderRadius.circular(14),
                             ),
-                            child: const Center(child: Text('Submit Answers', style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w800))),
+                            child: Center(child: Text('submit_answers'.tr, style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w800))),
                           ),
                         ),
 
@@ -265,7 +265,7 @@ class _ListeningPractice extends StatelessWidget {
                               Text('${ctrl.listeningScore.value} / ${section.questions.length}',
                                   style: const TextStyle(color: Colors.white, fontSize: 32, fontWeight: FontWeight.w900)),
                               const SizedBox(height: 4),
-                              const Text('Correct Answers', style: TextStyle(color: Colors.white70, fontSize: 14)),
+                              Text('correct_answers'.tr, style: const TextStyle(color: Colors.white70, fontSize: 14)),
                               const SizedBox(height: 16),
                               GestureDetector(
                                 onTap: () {
@@ -276,7 +276,7 @@ class _ListeningPractice extends StatelessWidget {
                                 child: Container(
                                   padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
                                   decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(12)),
-                                  child: const Text('Try Another Section', style: TextStyle(color: Color(0xFF1565C0), fontSize: 14, fontWeight: FontWeight.w700)),
+                                  child: Text('try_another_section'.tr, style: const TextStyle(color: Color(0xFF1565C0), fontSize: 14, fontWeight: FontWeight.w700)),
                                 ),
                               ),
                             ],
@@ -360,7 +360,7 @@ class _ListeningQuestionCard extends StatelessWidget {
               onChanged: (val) => ctrl.setListeningAnswer(question.id, val),
               enabled: !submitted,
               decoration: InputDecoration(
-                hintText: 'Type your answer...',
+                hintText: 'type_answer'.tr,
                 hintStyle: const TextStyle(color: Color(0xFFBDBDBD), fontSize: 14),
                 filled: true, fillColor: const Color(0xFFF5F5F5),
                 border: OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: BorderSide.none),
@@ -388,7 +388,7 @@ class _ListeningQuestionCard extends StatelessWidget {
                 Text(question.explanation, style: const TextStyle(fontSize: 12, color: Color(0xFF555555), height: 1.4)),
                 if (question.tip != null) ...[
                   const SizedBox(height: 6),
-                  Text('\u{1F4A1} Tip: ${question.tip!}', style: const TextStyle(fontSize: 12, color: Color(0xFFF57F17), fontWeight: FontWeight.w600)),
+                  Text('\u{1F4A1} ${'tip_prefix'.tr}: ${question.tip!}', style: const TextStyle(fontSize: 12, color: Color(0xFFF57F17), fontWeight: FontWeight.w600)),
                 ],
               ]),
             ),

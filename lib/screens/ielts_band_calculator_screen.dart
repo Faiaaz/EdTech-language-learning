@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import 'package:ez_trainz/controllers/ielts_controller.dart';
 import 'package:ez_trainz/services/ielts_service.dart';
 
 /// IELTS Band Score Calculator — estimate overall band from section scores.
@@ -21,13 +20,13 @@ class _IeltsBandCalculatorScreenState extends State<IeltsBandCalculatorScreen> {
   double get _overall => IeltsService.calculateOverallBand(_reading, _listening, _writing, _speaking);
 
   String _bandLabel(double band) {
-    if (band >= 9.0) return 'Expert';
-    if (band >= 8.0) return 'Very Good';
-    if (band >= 7.0) return 'Good';
-    if (band >= 6.0) return 'Competent';
-    if (band >= 5.0) return 'Modest';
-    if (band >= 4.0) return 'Limited';
-    return 'Developing';
+    if (band >= 9.0) return 'expert'.tr;
+    if (band >= 8.0) return 'very_good'.tr;
+    if (band >= 7.0) return 'good'.tr;
+    if (band >= 6.0) return 'competent'.tr;
+    if (band >= 5.0) return 'modest'.tr;
+    if (band >= 4.0) return 'limited'.tr;
+    return 'developing'.tr;
   }
 
   Color _bandColor(double band) {
@@ -57,17 +56,17 @@ class _IeltsBandCalculatorScreenState extends State<IeltsBandCalculatorScreen> {
                     child: Container(
                       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                       decoration: BoxDecoration(color: Colors.white.withValues(alpha: 0.2), borderRadius: BorderRadius.circular(20), border: Border.all(color: Colors.white38)),
-                      child: const Row(mainAxisSize: MainAxisSize.min, children: [
-                        Icon(Icons.arrow_back_ios_rounded, color: Colors.white, size: 14),
-                        SizedBox(width: 4),
-                        Text('Back', style: TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w600)),
+                      child: Row(mainAxisSize: MainAxisSize.min, children: [
+                        const Icon(Icons.arrow_back_ios_rounded, color: Colors.white, size: 14),
+                        const SizedBox(width: 4),
+                        Text('back'.tr, style: const TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w600)),
                       ]),
                     ),
                   ),
                   const SizedBox(height: 16),
-                  const Text('Band Score Calculator', style: TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.w900)),
+                  Text('band_calc'.tr, style: const TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.w900)),
                   const SizedBox(height: 4),
-                  Text('Estimate your overall IELTS band score', style: TextStyle(color: Colors.white.withValues(alpha: 0.8), fontSize: 14)),
+                  Text('band_calc_desc'.tr, style: TextStyle(color: Colors.white.withValues(alpha: 0.8), fontSize: 14)),
                 ],
               ),
             ),
@@ -85,7 +84,7 @@ class _IeltsBandCalculatorScreenState extends State<IeltsBandCalculatorScreen> {
                         boxShadow: [BoxShadow(color: _bandColor(_overall).withValues(alpha: 0.2), blurRadius: 20, offset: const Offset(0, 8))],
                       ),
                       child: Column(children: [
-                        const Text('Overall Band Score', style: TextStyle(fontSize: 14, color: Color(0xFF6B7280), fontWeight: FontWeight.w600)),
+                        Text('overall_band'.tr, style: const TextStyle(fontSize: 14, color: Color(0xFF6B7280), fontWeight: FontWeight.w600)),
                         const SizedBox(height: 8),
                         Text(
                           _overall.toStringAsFixed(1),
@@ -103,7 +102,7 @@ class _IeltsBandCalculatorScreenState extends State<IeltsBandCalculatorScreen> {
 
                     // Section sliders
                     _BandSlider(
-                      label: 'Reading',
+                      label: 'ielts_reading'.tr,
                       icon: Icons.menu_book_rounded,
                       color: const Color(0xFF4CAF50),
                       value: _reading,
@@ -111,7 +110,7 @@ class _IeltsBandCalculatorScreenState extends State<IeltsBandCalculatorScreen> {
                     ),
                     const SizedBox(height: 16),
                     _BandSlider(
-                      label: 'Listening',
+                      label: 'ielts_listening'.tr,
                       icon: Icons.headphones_rounded,
                       color: const Color(0xFF2196F3),
                       value: _listening,
@@ -119,7 +118,7 @@ class _IeltsBandCalculatorScreenState extends State<IeltsBandCalculatorScreen> {
                     ),
                     const SizedBox(height: 16),
                     _BandSlider(
-                      label: 'Writing',
+                      label: 'ielts_writing'.tr,
                       icon: Icons.edit_note_rounded,
                       color: const Color(0xFFFF9800),
                       value: _writing,
@@ -127,7 +126,7 @@ class _IeltsBandCalculatorScreenState extends State<IeltsBandCalculatorScreen> {
                     ),
                     const SizedBox(height: 16),
                     _BandSlider(
-                      label: 'Speaking',
+                      label: 'ielts_speaking'.tr,
                       icon: Icons.record_voice_over_rounded,
                       color: const Color(0xFF9C27B0),
                       value: _speaking,
@@ -147,7 +146,7 @@ class _IeltsBandCalculatorScreenState extends State<IeltsBandCalculatorScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Text('Band Scale Reference', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w800, color: Color(0xFF1A1A2E))),
+                          Text('band_reference'.tr, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800, color: Color(0xFF1A1A2E))),
                           const SizedBox(height: 12),
                           ...IeltsService.bandDescriptors.map((bd) => Padding(
                             padding: const EdgeInsets.only(bottom: 10),
@@ -178,21 +177,21 @@ class _IeltsBandCalculatorScreenState extends State<IeltsBandCalculatorScreen> {
                         borderRadius: BorderRadius.circular(16),
                         border: Border.all(color: const Color(0xFF90CAF9)),
                       ),
-                      child: const Column(
+                      child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Row(children: [
-                            Icon(Icons.school_rounded, color: Color(0xFF1565C0), size: 20),
-                            SizedBox(width: 8),
-                            Text('Common Score Requirements', style: TextStyle(color: Color(0xFF0D47A1), fontSize: 14, fontWeight: FontWeight.w800)),
+                            const Icon(Icons.school_rounded, color: Color(0xFF1565C0), size: 20),
+                            const SizedBox(width: 8),
+                            Text('score_requirements'.tr, style: const TextStyle(color: Color(0xFF0D47A1), fontSize: 14, fontWeight: FontWeight.w800)),
                           ]),
-                          SizedBox(height: 10),
-                          _RequirementRow(label: 'UK Universities (undergrad)', band: '6.0 - 6.5'),
-                          _RequirementRow(label: 'UK Universities (postgrad)', band: '6.5 - 7.0'),
-                          _RequirementRow(label: 'Australian Migration', band: '6.0 - 7.0'),
-                          _RequirementRow(label: 'Canadian PR', band: '6.0+'),
-                          _RequirementRow(label: 'US Top Universities', band: '7.0 - 7.5'),
-                          _RequirementRow(label: 'Medical/Nursing Registration', band: '7.0 - 7.5'),
+                          const SizedBox(height: 10),
+                          const _RequirementRow(label: 'UK Universities (undergrad)', band: '6.0 - 6.5'),
+                          const _RequirementRow(label: 'UK Universities (postgrad)', band: '6.5 - 7.0'),
+                          const _RequirementRow(label: 'Australian Migration', band: '6.0 - 7.0'),
+                          const _RequirementRow(label: 'Canadian PR', band: '6.0+'),
+                          const _RequirementRow(label: 'US Top Universities', band: '7.0 - 7.5'),
+                          const _RequirementRow(label: 'Medical/Nursing Registration', band: '7.0 - 7.5'),
                         ],
                       ),
                     ),

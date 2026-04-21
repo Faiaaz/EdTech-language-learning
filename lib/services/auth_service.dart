@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'dart:io';
+import 'dart:async';
 import 'package:http/http.dart' as http;
 
 class AuthException implements Exception {
@@ -41,10 +41,22 @@ class AuthService {
       response = await http
           .post(uri, headers: headers, body: jsonEncode(payload))
           .timeout(const Duration(seconds: 20));
-    } on SocketException catch (e) {
-      throw AuthException('No internet connection. ($e)');
-    } on HandshakeException catch (e) {
-      throw AuthException('SSL error. ($e)');
+    } on TimeoutException {
+      throw const AuthException('Request timed out. Please try again.');
+    } on http.ClientException catch (e) {
+      // On web this often surfaces as "XMLHttpRequest error" (CORS, offline, blocked request).
+      final msg = e.message.toLowerCase();
+      if (msg.contains('failed to fetch') || msg.contains('xmlhttprequest')) {
+        throw const AuthException(
+          'Network error (CORS). Your API is blocking web requests.\n'
+          'Fix: enable CORS for this endpoint (OPTIONS) and return headers:\n'
+          '- Access-Control-Allow-Origin: * (or your domain)\n'
+          '- Access-Control-Allow-Headers: Content-Type, Authorization\n'
+          '- Access-Control-Allow-Methods: POST, OPTIONS\n'
+          'Also ensure these headers are included on 4xx/5xx error responses.',
+        );
+      }
+      throw AuthException('Network error: ${e.message}');
     } catch (e) {
       throw AuthException('Network error: $e');
     }

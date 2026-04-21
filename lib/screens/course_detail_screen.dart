@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:ez_trainz/controllers/course_controller.dart';
 import 'package:ez_trainz/models/kana.dart';
 import 'package:ez_trainz/models/lesson.dart';
+import 'package:ez_trainz/screens/hiragana_lesson1_screen.dart';
 import 'package:ez_trainz/screens/lesson_screen.dart';
 import 'package:ez_trainz/screens/n5_kana_modules_screen.dart';
 
@@ -39,14 +40,14 @@ class CourseDetailScreen extends StatelessWidget {
                         border:
                             Border.all(color: Colors.white38, width: 1),
                       ),
-                      child: const Row(
+                      child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          Icon(Icons.arrow_back_ios_rounded,
+                          const Icon(Icons.arrow_back_ios_rounded,
                               color: Colors.white, size: 14),
-                          SizedBox(width: 4),
-                          Text('Back',
-                              style: TextStyle(
+                          const SizedBox(width: 4),
+                          Text('back'.tr,
+                              style: const TextStyle(
                                 color: Colors.white,
                                 fontSize: 13,
                                 fontWeight: FontWeight.w600,
@@ -100,7 +101,7 @@ class CourseDetailScreen extends StatelessWidget {
                   // ── Kana sub-modules (N5 only) ─────────────────
                   if (course.level == 'N5') ...[
                     Text(
-                      'WRITING SYSTEMS',
+                      'writing_systems'.tr,
                       style: TextStyle(
                         color: Colors.white.withValues(alpha: 0.6),
                         fontSize: 13,
@@ -160,9 +161,9 @@ class CourseDetailScreen extends StatelessWidget {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  const Text(
-                                    'Hiragana & Katakana',
-                                    style: TextStyle(
+                                  Text(
+                                    'hiragana_katakana'.tr,
+                                    style: const TextStyle(
                                       color: Colors.white,
                                       fontSize: 16,
                                       fontWeight: FontWeight.w800,
@@ -170,7 +171,7 @@ class CourseDetailScreen extends StatelessWidget {
                                   ),
                                   const SizedBox(height: 3),
                                   Text(
-                                    'Interactive charts, games & mnemonics',
+                                    'kana_module_desc'.tr,
                                     style: TextStyle(
                                       color:
                                           Colors.white.withValues(alpha: 0.8),
@@ -199,7 +200,7 @@ class CourseDetailScreen extends StatelessWidget {
 
                   // ── Section label ────────────────────────────
                   Text(
-                    'Lessons',
+                    'lessons_label'.tr,
                     style: TextStyle(
                       color: Colors.white.withValues(alpha: 0.6),
                       fontSize: 13,
@@ -224,7 +225,7 @@ class CourseDetailScreen extends StatelessWidget {
                 if (ctrl.lessons.isEmpty) {
                   return Center(
                     child: Text(
-                      'No lessons available yet.',
+                      'no_lessons'.tr,
                       style: TextStyle(
                         color: Colors.white.withValues(alpha: 0.7),
                         fontSize: 15,
@@ -266,7 +267,11 @@ class _LessonTile extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         CourseController.to.selectLesson(lesson);
-        Get.to(() => const LessonScreen());
+        if (lesson.id == 1) {
+          Get.to(() => const HiraganaLesson1Screen());
+        } else {
+          Get.to(() => const LessonScreen());
+        }
       },
       child: Container(
         margin: const EdgeInsets.only(bottom: 12),
@@ -337,8 +342,8 @@ class _LessonTile extends StatelessWidget {
                           const Icon(Icons.play_circle_outline_rounded,
                               color: Color(0xFF4DA6E8), size: 16),
                           const SizedBox(width: 4),
-                          const Text('Video',
-                              style: TextStyle(
+                          Text('video'.tr,
+                              style: const TextStyle(
                                 color: Color(0xFF4DA6E8),
                                 fontSize: 11,
                                 fontWeight: FontWeight.w600,
@@ -351,7 +356,9 @@ class _LessonTile extends StatelessWidget {
                               color: Color(0xFFFFA726), size: 16),
                           const SizedBox(width: 4),
                           Text(
-                            '${lesson.quizzes.length} quiz${lesson.quizzes.length > 1 ? 'zes' : ''}',
+                            lesson.quizzes.length > 1
+                                ? 'quiz_count_plural'.trParams({'count': '${lesson.quizzes.length}'})
+                                : 'quiz_count'.trParams({'count': '${lesson.quizzes.length}'}),
                             style: const TextStyle(
                               color: Color(0xFFFFA726),
                               fontSize: 11,

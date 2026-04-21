@@ -9,12 +9,20 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  cupertino_icons: ^1.0.8
   get: ^4.6.6
   http: ^1.2.1
+  record: ^6.2.0
+  path_provider: ^2.1.3
   video_player: ^2.9.2
   flutter_tts: ^4.2.0
   shared_preferences: ^2.2.3
   font_awesome_flutter: ^10.8.0
+  flutter_secure_storage: ^9.2.4
+
+dependency_overrides:
+  # Fix iOS build: ensure federated implementations match the platform interface.
+  record_linux: ^1.3.0
 
 dev_dependencies:
   flutter_test:
@@ -29,3 +37,9 @@ flutter:
     - assets/images/character_3.png
     - assets/images/ninja_penguin_transparent.png
     - assets/images/login_sky_bg.gif
+    - assets/images/ez_trainz_logo.png
+    - assets/images/ez_trainz_logo_text.png
+    - assets/images/ez_trainz_logo_text_clean.png
+    - assets/images/vocab_asa.png
+    - assets/images/vocab_ie.png
+    - assets/images/vocab_sushi.png

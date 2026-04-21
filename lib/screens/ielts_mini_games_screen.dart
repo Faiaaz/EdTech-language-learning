@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import 'package:ez_trainz/controllers/ielts_controller.dart';
-import 'package:ez_trainz/models/ielts.dart';
 import 'package:ez_trainz/services/ielts_service.dart';
 
 /// IELTS Mini Games screen with interactive word games.
@@ -35,17 +34,17 @@ class IeltsMiniGamesScreen extends StatelessWidget {
                     child: Container(
                       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                       decoration: BoxDecoration(color: Colors.white.withValues(alpha: 0.2), borderRadius: BorderRadius.circular(20), border: Border.all(color: Colors.white38)),
-                      child: const Row(mainAxisSize: MainAxisSize.min, children: [
-                        Icon(Icons.arrow_back_ios_rounded, color: Colors.white, size: 14),
-                        SizedBox(width: 4),
-                        Text('Back', style: TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w600)),
+                      child: Row(mainAxisSize: MainAxisSize.min, children: [
+                        const Icon(Icons.arrow_back_ios_rounded, color: Colors.white, size: 14),
+                        const SizedBox(width: 4),
+                        Text('back'.tr, style: const TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w600)),
                       ]),
                     ),
                   ),
                   const SizedBox(height: 16),
-                  const Text('IELTS Mini Games', style: TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.w900)),
+                  Text('ielts_mini_games'.tr, style: const TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.w900)),
                   const SizedBox(height: 4),
-                  Text('Learn while having fun!', style: TextStyle(color: Colors.white.withValues(alpha: 0.8), fontSize: 14)),
+                  Text('learn_having_fun'.tr, style: TextStyle(color: Colors.white.withValues(alpha: 0.8), fontSize: 14)),
                 ],
               ),
             ),
@@ -55,7 +54,7 @@ class IeltsMiniGamesScreen extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text('Choose a Game', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800, color: Color(0xFF1A1A2E))),
+                    Text('choose_game'.tr, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w800, color: Color(0xFF1A1A2E))),
                     const SizedBox(height: 14),
 
                     // Synonym Sprint
@@ -130,7 +129,7 @@ class IeltsMiniGamesScreen extends StatelessWidget {
                           child: const Icon(Icons.sports_esports_rounded, color: _teal, size: 24),
                         ),
                         const SizedBox(width: 14),
-                        const Expanded(child: Text('Total Games Played', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700, color: Color(0xFF1A1A2E)))),
+                        Expanded(child: Text('total_games_played'.tr, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700, color: Color(0xFF1A1A2E)))),
                         Text('${ctrl.totalGamesPlayed.value}', style: const TextStyle(color: _teal, fontSize: 24, fontWeight: FontWeight.w900)),
                       ]),
                     )),
@@ -258,14 +257,14 @@ class _SynonymGameScreenState extends State<_SynonymGameScreen> {
       barrierDismissible: false,
       builder: (_) => AlertDialog(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        title: const Text('Game Over!', textAlign: TextAlign.center, style: TextStyle(fontWeight: FontWeight.w900)),
+        title: Text('game_over'.tr, textAlign: TextAlign.center, style: const TextStyle(fontWeight: FontWeight.w900)),
         content: Column(mainAxisSize: MainAxisSize.min, children: [
           Text('$_score / ${_items.length}', style: const TextStyle(fontSize: 48, fontWeight: FontWeight.w900, color: Color(0xFF2196F3))),
           const SizedBox(height: 8),
-          Text('${(_score / _items.length * 100).round()}% accuracy', style: const TextStyle(fontSize: 16, color: Color(0xFF6B7280))),
+          Text('${(_score / _items.length * 100).round()}% ${'accuracy'.tr}', style: const TextStyle(fontSize: 16, color: Color(0xFF6B7280))),
         ]),
         actions: [
-          TextButton(onPressed: () { Navigator.pop(context); Get.back(); }, child: const Text('Done', style: TextStyle(fontWeight: FontWeight.w700))),
+          TextButton(onPressed: () { Navigator.pop(context); Get.back(); }, child: Text('done'.tr, style: const TextStyle(fontWeight: FontWeight.w700))),
         ],
       ),
     );
@@ -273,7 +272,7 @@ class _SynonymGameScreenState extends State<_SynonymGameScreen> {
 
   @override
   Widget build(BuildContext context) {
-    if (_items.isEmpty) return const Scaffold(body: Center(child: Text('No data')));
+    if (_items.isEmpty) return Scaffold(body: Center(child: Text('no_data'.tr)));
     final item = _items[_currentIndex];
     final word = item['word'] as String;
     final correct = item['synonym'] as String;
@@ -289,7 +288,7 @@ class _SynonymGameScreenState extends State<_SynonymGameScreen> {
               GestureDetector(onTap: () { widget.ctrl.endGame(); Get.back(); }, child: const Icon(Icons.close_rounded, color: Colors.white, size: 24)),
               const SizedBox(width: 12),
               const Expanded(child: Text('Synonym Sprint', style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w700))),
-              Text('$_score pts', style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w900)),
+              Text('$_score ${'pts'.tr}', style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w900)),
             ]),
           ),
           // Progress bar
@@ -377,9 +376,9 @@ class _ErrorSpottingGameScreenState extends State<_ErrorSpottingGameScreen> {
         barrierDismissible: false,
         builder: (_) => AlertDialog(
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-          title: const Text('Game Over!', textAlign: TextAlign.center, style: TextStyle(fontWeight: FontWeight.w900)),
+          title: Text('game_over'.tr, textAlign: TextAlign.center, style: const TextStyle(fontWeight: FontWeight.w900)),
           content: Text('Score: $_score / ${_items.length}', textAlign: TextAlign.center, style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w700)),
-          actions: [TextButton(onPressed: () { Navigator.pop(context); Get.back(); }, child: const Text('Done'))],
+          actions: [TextButton(onPressed: () { Navigator.pop(context); Get.back(); }, child: Text('done'.tr))],
         ),
       );
     }
@@ -387,7 +386,7 @@ class _ErrorSpottingGameScreenState extends State<_ErrorSpottingGameScreen> {
 
   @override
   Widget build(BuildContext context) {
-    if (_items.isEmpty) return const Scaffold(body: Center(child: Text('No data')));
+    if (_items.isEmpty) return Scaffold(body: Center(child: Text('no_data'.tr)));
     final item = _items[_currentIndex];
 
     return Scaffold(
@@ -401,7 +400,7 @@ class _ErrorSpottingGameScreenState extends State<_ErrorSpottingGameScreen> {
               GestureDetector(onTap: () { widget.ctrl.endGame(); Get.back(); }, child: const Icon(Icons.close_rounded, color: Colors.white, size: 24)),
               const SizedBox(width: 12),
               const Expanded(child: Text('Error Detective', style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w700))),
-              Text('$_score pts', style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w900)),
+              Text('$_score ${'pts'.tr}', style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w900)),
             ]),
           ),
           LinearProgressIndicator(value: (_currentIndex + 1) / _items.length, backgroundColor: const Color(0xFFFFCDD2), valueColor: const AlwaysStoppedAnimation(Color(0xFFF44336)), minHeight: 4),
@@ -427,7 +426,7 @@ class _ErrorSpottingGameScreenState extends State<_ErrorSpottingGameScreen> {
                       width: double.infinity,
                       padding: const EdgeInsets.symmetric(vertical: 16),
                       decoration: BoxDecoration(gradient: const LinearGradient(colors: [Color(0xFFF44336), Color(0xFFC62828)]), borderRadius: BorderRadius.circular(14)),
-                      child: const Center(child: Text('Reveal Answer', style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w800))),
+                      child: Center(child: Text('reveal_answer'.tr, style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w800))),
                     ),
                   ),
 
@@ -453,7 +452,7 @@ class _ErrorSpottingGameScreenState extends State<_ErrorSpottingGameScreen> {
                       child: Container(
                         padding: const EdgeInsets.symmetric(vertical: 14),
                         decoration: BoxDecoration(color: const Color(0xFFF44336), borderRadius: BorderRadius.circular(12)),
-                        child: const Center(child: Text('Missed it', style: TextStyle(color: Colors.white, fontWeight: FontWeight.w700))),
+                        child: Center(child: Text('missed_it'.tr, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w700))),
                       ),
                     )),
                     const SizedBox(width: 12),
@@ -462,7 +461,7 @@ class _ErrorSpottingGameScreenState extends State<_ErrorSpottingGameScreen> {
                       child: Container(
                         padding: const EdgeInsets.symmetric(vertical: 14),
                         decoration: BoxDecoration(color: const Color(0xFF4CAF50), borderRadius: BorderRadius.circular(12)),
-                        child: const Center(child: Text('Got it!', style: TextStyle(color: Colors.white, fontWeight: FontWeight.w700))),
+                        child: Center(child: Text('got_it'.tr, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w700))),
                       ),
                     )),
                   ]),
@@ -549,9 +548,9 @@ class _SentenceBuilderGameScreenState extends State<_SentenceBuilderGameScreen> 
         barrierDismissible: false,
         builder: (_) => AlertDialog(
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-          title: const Text('Game Over!', textAlign: TextAlign.center, style: TextStyle(fontWeight: FontWeight.w900)),
+          title: Text('game_over'.tr, textAlign: TextAlign.center, style: const TextStyle(fontWeight: FontWeight.w900)),
           content: Text('Score: $_score / ${_items.length}', textAlign: TextAlign.center, style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w700)),
-          actions: [TextButton(onPressed: () { Navigator.pop(context); Get.back(); }, child: const Text('Done'))],
+          actions: [TextButton(onPressed: () { Navigator.pop(context); Get.back(); }, child: Text('done'.tr))],
         ),
       );
     }
@@ -570,7 +569,7 @@ class _SentenceBuilderGameScreenState extends State<_SentenceBuilderGameScreen> 
               GestureDetector(onTap: () { widget.ctrl.endGame(); Get.back(); }, child: const Icon(Icons.close_rounded, color: Colors.white, size: 24)),
               const SizedBox(width: 12),
               const Expanded(child: Text('Sentence Architect', style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w700))),
-              Text('$_score pts', style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w900)),
+              Text('$_score ${'pts'.tr}', style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w900)),
             ]),
           ),
           LinearProgressIndicator(value: (_currentIndex + 1) / _items.length, backgroundColor: const Color(0xFFE1BEE7), valueColor: const AlwaysStoppedAnimation(Color(0xFF9C27B0)), minHeight: 4),
@@ -624,7 +623,7 @@ class _SentenceBuilderGameScreenState extends State<_SentenceBuilderGameScreen> 
                       width: double.infinity,
                       padding: const EdgeInsets.symmetric(vertical: 16),
                       decoration: BoxDecoration(gradient: const LinearGradient(colors: [Color(0xFF9C27B0), Color(0xFF6A1B9A)]), borderRadius: BorderRadius.circular(14)),
-                      child: const Center(child: Text('Check', style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w800))),
+                      child: Center(child: Text('check'.tr, style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w800))),
                     ),
                   ),
 
@@ -636,7 +635,7 @@ class _SentenceBuilderGameScreenState extends State<_SentenceBuilderGameScreen> 
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                      Text(_isCorrect ? 'Correct!' : 'Not quite. Correct answer:', style: TextStyle(fontWeight: FontWeight.w800, color: _isCorrect ? const Color(0xFF2E7D32) : const Color(0xFFC62828))),
+                      Text(_isCorrect ? 'correct_feedback'.tr : 'wrong_feedback'.tr, style: TextStyle(fontWeight: FontWeight.w800, color: _isCorrect ? const Color(0xFF2E7D32) : const Color(0xFFC62828))),
                       if (!_isCorrect) ...[
                         const SizedBox(height: 6),
                         Text(_items[_currentIndex]['correct'] as String, style: const TextStyle(fontSize: 14, color: Color(0xFF333333), fontStyle: FontStyle.italic)),
@@ -650,7 +649,7 @@ class _SentenceBuilderGameScreenState extends State<_SentenceBuilderGameScreen> 
                       width: double.infinity,
                       padding: const EdgeInsets.symmetric(vertical: 16),
                       decoration: BoxDecoration(gradient: const LinearGradient(colors: [Color(0xFF9C27B0), Color(0xFF6A1B9A)]), borderRadius: BorderRadius.circular(14)),
-                      child: const Center(child: Text('Next', style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w800))),
+                      child: Center(child: Text('next'.tr, style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w800))),
                     ),
                   ),
                 ],
@@ -720,9 +719,9 @@ class _CollocationGameScreenState extends State<_CollocationGameScreen> {
           barrierDismissible: false,
           builder: (_) => AlertDialog(
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-            title: const Text('Game Over!', textAlign: TextAlign.center, style: TextStyle(fontWeight: FontWeight.w900)),
+            title: Text('game_over'.tr, textAlign: TextAlign.center, style: const TextStyle(fontWeight: FontWeight.w900)),
             content: Text('Score: $_score / ${_items.length}', textAlign: TextAlign.center, style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w700)),
-            actions: [TextButton(onPressed: () { Navigator.pop(context); Get.back(); }, child: const Text('Done'))],
+            actions: [TextButton(onPressed: () { Navigator.pop(context); Get.back(); }, child: Text('done'.tr))],
           ),
         );
       }
@@ -731,7 +730,7 @@ class _CollocationGameScreenState extends State<_CollocationGameScreen> {
 
   @override
   Widget build(BuildContext context) {
-    if (_items.isEmpty) return const Scaffold(body: Center(child: Text('No data')));
+    if (_items.isEmpty) return Scaffold(body: Center(child: Text('no_data'.tr)));
     final item = _items[_currentIndex];
     final correct = item['second'] as String;
 
@@ -746,7 +745,7 @@ class _CollocationGameScreenState extends State<_CollocationGameScreen> {
               GestureDetector(onTap: () { widget.ctrl.endGame(); Get.back(); }, child: const Icon(Icons.close_rounded, color: Colors.white, size: 24)),
               const SizedBox(width: 12),
               const Expanded(child: Text('Collocation Connect', style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w700))),
-              Text('$_score pts', style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w900)),
+              Text('$_score ${'pts'.tr}', style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w900)),
             ]),
           ),
           LinearProgressIndicator(value: (_currentIndex + 1) / _items.length, backgroundColor: const Color(0xFFFFE0B2), valueColor: const AlwaysStoppedAnimation(Color(0xFFFF9800)), minHeight: 4),
