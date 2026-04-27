@@ -56,17 +56,17 @@ class _HatPreviewInterstitialScreenState
                 ),
               ),
             ),
-            // Hero image (scrollable in case of small screens)
+            // Hero image — fills available space, no scrolling
             Expanded(
-              child: SingleChildScrollView(
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(20, 4, 20, 20),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(22),
-                    child: Image.asset(
-                      'assets/images/stitch_hat_preview.png',
-                      fit: BoxFit.contain,
-                    ),
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(20, 4, 20, 0),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(22),
+                  child: Image.asset(
+                    'assets/images/stitch_hat_preview.png',
+                    fit: BoxFit.contain,
+                    width: double.infinity,
+                    height: double.infinity,
                   ),
                 ),
               ),
