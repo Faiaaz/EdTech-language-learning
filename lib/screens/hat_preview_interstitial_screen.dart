@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import 'package:ez_trainz/controllers/journey_controller.dart';
 import 'package:ez_trainz/screens/lesson1_game_flow_screen.dart';
 
 /// Shown right after the Lesson 1 video finishes (or when the user taps
@@ -25,6 +26,8 @@ class _HatPreviewInterstitialScreenState
   @override
   void initState() {
     super.initState();
+    // Reset XP so the hat is earned fresh through the game.
+    JourneyController.to.resetProgress();
     _slideIn = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 650),
