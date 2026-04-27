@@ -2,12 +2,14 @@ import 'package:get/get.dart';
 
 import 'package:ez_trainz/models/kana.dart';
 import 'package:ez_trainz/services/sm2_srs_service.dart';
+import 'package:ez_trainz/services/srs_storage_service.dart';
 
 /// GetX controller that wraps [Sm2SrsService] and exposes reactive state.
 ///
 /// Pre-loads all Hiragana and Katakana from [KanaData] on init.
 /// Registered as a permanent singleton in main.dart.
 class SrsController extends GetxController {
+  static SrsController get to => Get.find();
   final _service = Sm2SrsService();
 
   // Reactive stats
@@ -24,11 +26,20 @@ class SrsController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    _loadKanaCards();
-    _refreshStats();
+    // ignore: discarded_futures
+    _hydrate();
   }
 
   // ── Setup ────────────────────────────────────────────────────────
+
+  Future<void> _hydrate() async {
+    final saved = await SrsStorageService.loadSm2Cards();
+    if (saved.isNotEmpty) {
+      _service.importJson(saved);
+    }
+    _loadKanaCards();
+    _refreshStats();
+  }
 
   void _loadKanaCards() {
     // Register all hiragana
@@ -48,6 +59,10 @@ class SrsController extends GetxController {
     dueCount.value = _service.dueCount;
     totalCount.value = _service.allCards.length;
   }
+
+  List<SrsCard> get dueCards => _service.dueCards;
+
+  SrsCard? getCard(String id) => _service.getCard(id);
 
   // ── Session management ───────────────────────────────────────────
 
@@ -81,6 +96,8 @@ class SrsController extends GetxController {
     if (card == null) return;
 
     _service.review(card.id, quality);
+    // ignore: discarded_futures
+    SrsStorageService.saveSm2Cards(_service.exportJson());
     sessionReviewed.value++;
     if (quality.value >= 3) sessionCorrect.value++;
 
@@ -89,10 +106,40 @@ class SrsController extends GetxController {
     _refreshStats();
   }
 
+  void reviewCard(String cardId, RecallQuality quality) {
+    _service.review(cardId, quality);
+    // ignore: discarded_futures
+    SrsStorageService.saveSm2Cards(_service.exportJson());
+    _refreshStats();
+  }
+
   void endSession() {
     sessionQueue.clear();
     currentIndex.value = 0;
     isAnswerShown.value = false;
+    _refreshStats();
+  }
+
+  /// Register review cards for LMS lesson/quiz items.
+  /// This allows the daily session to pull them into SRS over time.
+  void registerLmsCards({
+    required String lessonId,
+    required String lessonTitle,
+    required List<String> quizTitles,
+  }) {
+    final cards = <SrsCard>[];
+    for (var i = 0; i < quizTitles.length; i++) {
+      final qt = quizTitles[i].trim();
+      if (qt.isEmpty) continue;
+      cards.add(SrsCard(
+        id: 'lms_${lessonId}_quiz_$i',
+        label: '$lessonTitle • $qt',
+      ));
+    }
+    if (cards.isEmpty) return;
+    _service.addCards(cards);
+    // ignore: discarded_futures
+    SrsStorageService.saveSm2Cards(_service.exportJson());
     _refreshStats();
   }
 

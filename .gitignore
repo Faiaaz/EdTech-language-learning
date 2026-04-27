@@ -46,3 +46,12 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# Raw illustration sources (processed PNGs live under assets/avatars/)
+smiling-redhaired-boy-illustration/
+*.eps
+
+# Reference screenshots / design dumps (keep out of git)
+WhatsApp Image *.jpeg
+duolingo/
+a_clean_modern_vector_illustration_of_the_same_young_man_with_red_hair_and_a_green_hoodie._he_is_wearing_a_brown_explorer_hat_that_is_properly_sized_to_his_head._a_single_feather_is_tucked_neatly_behind_the_hatband._the_feather_has_distinct.png

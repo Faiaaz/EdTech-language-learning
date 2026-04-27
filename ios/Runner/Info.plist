@@ -31,6 +31,8 @@
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>We use your microphone for the Speech Game to transcribe your spoken Japanese.</string>
+	<key>NSSpeechRecognitionUsageDescription</key>
+	<string>We use on-device speech recognition to check your Lesson 1 pronunciation.</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>UIApplicationSceneManifest</key>

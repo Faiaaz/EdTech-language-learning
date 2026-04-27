@@ -7,6 +7,7 @@ import 'package:ez_trainz/controllers/program_controller.dart';
 import 'package:ez_trainz/models/program.dart';
 import 'package:ez_trainz/screens/main_shell_screen.dart';
 import 'package:ez_trainz/screens/login_screen.dart';
+import 'package:ez_trainz/widgets/streak_pill.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -182,6 +183,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                 )),
                           ],
                         ),
+                        const StreakPill(),
                         GestureDetector(
                           onTap: _onLogout,
                           child: Container(

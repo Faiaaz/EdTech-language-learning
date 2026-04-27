@@ -11,6 +11,7 @@ import 'package:ez_trainz/screens/ielts_dashboard_screen.dart';
 import 'package:ez_trainz/screens/leaderboard_screen.dart';
 import 'package:ez_trainz/screens/profile_screen.dart';
 import 'package:ez_trainz/widgets/language_switcher.dart';
+import 'package:ez_trainz/widgets/streak_pill.dart';
 
 /// Main container after login. Fixed bottom nav with five tabs.
 /// Learn tab shows program picker (JLC/KLC/ELC/GLC) or course list when a program is selected.
@@ -167,6 +168,7 @@ class _ProgramPickerView extends StatelessWidget {
                           )),
                     ],
                   ),
+                  const StreakPill(),
                   const LanguageSwitcher(),
                 ],
               ),

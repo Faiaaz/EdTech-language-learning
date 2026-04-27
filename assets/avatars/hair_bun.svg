@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 260" fill="none">
+  <!-- Samurai-style top knot (male anime). Tinted at runtime. -->
+
+  <!-- Tight pulled-back hair hugging the scalp -->
+  <path
+    d="M60 98
+       C58 74 72 58 100 58
+       C128 58 142 74 140 98
+       C136 90 128 88 120 88
+       Q108 86 100 86
+       Q92 86 80 88
+       C72 88 64 90 60 98 Z"
+    fill="#FFFFFF"
+  />
+
+  <!-- Thin front bangs (parted, anime-style) -->
+  <path d="M74 84 L70 98 L80 86 Z" fill="#FFFFFF"/>
+  <path d="M92 84 L90 102 L100 86 Z" fill="#FFFFFF"/>
+  <path d="M112 84 L114 102 L120 86 Z" fill="#FFFFFF"/>
+  <path d="M130 84 L132 98 L124 86 Z" fill="#FFFFFF"/>
+
+  <!-- Top-knot base (tight ring) -->
+  <ellipse cx="100" cy="60" rx="12" ry="5" fill="#FFFFFF" opacity="0.9"/>
+
+  <!-- Top knot bundle -->
+  <path
+    d="M92 58
+       C90 40 96 30 100 30
+       C104 30 110 40 108 58
+       Q100 64 92 58 Z"
+    fill="#FFFFFF"
+  />
+
+  <!-- Tiny topknot tie (darker band) -->
+  <ellipse cx="100" cy="52" rx="9" ry="2.2" fill="#FFFFFF" opacity="0.75"/>
+</svg>

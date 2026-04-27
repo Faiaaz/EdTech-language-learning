@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 260" fill="none">
+  <!-- Master stripe: golden curved band with glow. -->
+  <defs>
+    <radialGradient id="goldGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#FFE9A8" stop-opacity="0.95"/>
+      <stop offset="55%" stop-color="#FBBF24" stop-opacity="0.35"/>
+      <stop offset="100%" stop-color="#F59E0B" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="goldStroke" x1="156" y1="40" x2="186" y2="6" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#F59E0B"/>
+      <stop offset="0.5" stop-color="#FFD27A"/>
+      <stop offset="1" stop-color="#F59E0B"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Glow halo behind the band -->
+  <ellipse cx="172" cy="20" rx="28" ry="14" fill="url(#goldGlow)"/>
+
+  <!-- Band -->
+  <path d="M164 40 C172 28 180 16 188 4" stroke="url(#goldStroke)" stroke-width="5.2" stroke-linecap="round"/>
+  <path d="M164 40 C172 28 180 16 188 4" stroke="#FFF7D1" stroke-opacity="0.35" stroke-width="2.0" stroke-linecap="round"/>
+</svg>

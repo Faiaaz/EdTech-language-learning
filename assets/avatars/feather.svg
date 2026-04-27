@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 260" fill="none">
+  <!-- Premium feather with soft shading and crisp edges. -->
+  <defs>
+    <linearGradient id="featherFill" x1="132" y1="72" x2="178" y2="10" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#FFF2D6"/>
+      <stop offset="0.55" stop-color="#F2D9B0"/>
+      <stop offset="1" stop-color="#E5C08E"/>
+    </linearGradient>
+    <linearGradient id="featherShade" x1="140" y1="70" x2="176" y2="14" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#B08968" stop-opacity="0.25"/>
+      <stop offset="1" stop-color="#B08968" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Shaft -->
+  <path d="M134 74 C150 54 162 32 174 10" stroke="#EAD9BA" stroke-width="2.4" stroke-linecap="round"/>
+  <path d="M134 74 C150 54 162 32 174 10" stroke="#8B6A4A" stroke-opacity="0.18" stroke-width="1.2" stroke-linecap="round"/>
+
+  <!-- Feather body -->
+  <path
+    d="M132 74
+       C144 58 156 40 174 10
+       C170 22 168 30 166 36
+       C160 38 154 44 150 52
+       C146 62 142 70 138 76
+       C136 78 134 78 132 74 Z"
+    fill="url(#featherFill)"
+  />
+
+  <!-- Inner shade -->
+  <path
+    d="M146 58 C154 44 162 32 172 14
+       C168 26 164 34 160 40
+       C154 44 150 50 146 58 Z"
+    fill="url(#featherShade)"
+  />
+
+  <!-- Barbs (subtle lines) -->
+  <path d="M142 66 C150 54 158 42 166 26" stroke="#8B6A4A" stroke-opacity="0.18" stroke-width="1.2" stroke-linecap="round"/>
+  <path d="M140 70 C150 58 160 46 168 34" stroke="#8B6A4A" stroke-opacity="0.16" stroke-width="1.2" stroke-linecap="round"/>
+</svg>

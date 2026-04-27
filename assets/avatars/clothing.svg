@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 260" fill="none">
+  <!-- Clothing layer (fixed color - NOT tinted at runtime). Gives the
+       avatar a proper silhouette with shoulders + hoodie + collar so
+       the Novice state feels "complete" even before any gear is earned. -->
+  <defs>
+    <linearGradient id="hoodieFill" x1="100" y1="168" x2="100" y2="260" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#3B82F6"/>
+      <stop offset="0.55" stop-color="#2E63C7"/>
+      <stop offset="1" stop-color="#1E3A8A"/>
+    </linearGradient>
+    <linearGradient id="hoodieShade" x1="100" y1="168" x2="100" y2="260" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#000000" stop-opacity="0"/>
+      <stop offset="1" stop-color="#000000" stop-opacity="0.18"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Main hoodie body: curved shoulders tapering to torso -->
+  <path
+    d="M40 236
+       Q44 198 64 180
+       Q76 170 88 168
+       L92 178
+       Q100 184 108 178
+       L112 168
+       Q124 170 136 180
+       Q156 198 160 236
+       Q130 252 100 252
+       Q70 252 40 236 Z"
+    fill="url(#hoodieFill)"
+  />
+
+  <!-- Depth shade at the bottom -->
+  <path
+    d="M40 236
+       Q70 252 100 252
+       Q130 252 160 236
+       Q130 258 100 258
+       Q70 258 40 236 Z"
+    fill="url(#hoodieShade)"
+  />
+
+  <!-- Inner collar shadow (the V where the neck meets the shirt) -->
+  <path
+    d="M88 168
+       L92 178
+       Q100 184 108 178
+       L112 168
+       Q100 176 88 168 Z"
+    fill="#0B1220"
+    opacity="0.35"
+  />
+
+  <!-- Hood edge (subtle fabric line) -->
+  <path
+    d="M66 182
+       Q100 190 134 182"
+    stroke="#FFFFFF"
+    stroke-opacity="0.18"
+    stroke-width="2"
+    stroke-linecap="round"
+  />
+
+  <!-- Hoodie drawstrings -->
+  <path d="M94 178 L92 212" stroke="#FFFFFF" stroke-opacity="0.55" stroke-width="2" stroke-linecap="round"/>
+  <path d="M106 178 L108 212" stroke="#FFFFFF" stroke-opacity="0.55" stroke-width="2" stroke-linecap="round"/>
+  <circle cx="92" cy="214" r="2" fill="#FFFFFF" opacity="0.7"/>
+  <circle cx="108" cy="214" r="2" fill="#FFFFFF" opacity="0.7"/>
+
+  <!-- Pocket hint -->
+  <path d="M72 220 Q100 226 128 220" stroke="#FFFFFF" stroke-opacity="0.14" stroke-width="2" stroke-linecap="round"/>
+</svg>

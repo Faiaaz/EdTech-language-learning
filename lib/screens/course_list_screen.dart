@@ -8,6 +8,7 @@ import 'package:ez_trainz/models/course.dart';
 import 'package:ez_trainz/screens/course_detail_screen.dart';
 import 'package:ez_trainz/screens/lms_api_screen.dart';
 import 'package:ez_trainz/screens/login_screen.dart';
+import 'package:ez_trainz/widgets/streak_pill.dart';
 
 class CourseListScreen extends StatelessWidget {
   const CourseListScreen({super.key});
@@ -92,6 +93,7 @@ class CourseListScreen extends StatelessWidget {
                               )),
                         ],
                       ),
+                      const StreakPill(),
                       IconButton(
                         onPressed: () => Get.to(() => const LmsApiScreen()),
                         icon: const Icon(Icons.cloud_rounded,

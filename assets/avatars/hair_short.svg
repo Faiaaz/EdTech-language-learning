@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 260" fill="none">
+  <!-- Spiky male anime hair (shonen protagonist style). Tinted at runtime. -->
+
+  <!-- Outer spiky silhouette (zig-zagged top, smooth sides) -->
+  <path
+    d="M58 98
+       C56 74 64 56 74 50
+       L78 70
+       L86 42
+       L92 66
+       L100 38
+       L108 66
+       L114 42
+       L122 70
+       L126 50
+       C136 56 144 74 142 98
+       C138 92 132 88 124 86
+       Q112 82 100 82
+       Q88 82 76 86
+       C68 88 62 92 58 98 Z"
+    fill="#FFFFFF"
+  />
+
+  <!-- Front bangs hanging over the forehead (3 pointed clumps) -->
+  <path d="M72 86 L70 104 L82 90 Z" fill="#FFFFFF"/>
+  <path d="M90 86 L88 110 L100 90 Z" fill="#FFFFFF"/>
+  <path d="M112 86 L116 108 L120 90 Z" fill="#FFFFFF"/>
+
+  <!-- Sideburns at the temples -->
+  <path d="M58 98 L60 116 L70 100 Z" fill="#FFFFFF"/>
+  <path d="M142 98 L140 116 L130 100 Z" fill="#FFFFFF"/>
+
+  <!-- Small shadow tuft at nape (peeks behind ear) -->
+  <path d="M62 98 Q60 110 64 122 L72 108 Z" fill="#FFFFFF" opacity="0.9"/>
+  <path d="M138 98 Q140 110 136 122 L128 108 Z" fill="#FFFFFF" opacity="0.9"/>
+</svg>

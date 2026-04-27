@@ -10,6 +10,7 @@ import 'package:ez_trainz/controllers/course_controller.dart';
 import 'package:ez_trainz/controllers/game_controller.dart';
 import 'package:ez_trainz/models/game.dart';
 import 'package:ez_trainz/screens/game_detail_screen.dart';
+import 'package:ez_trainz/screens/daily_session_runner_screen.dart';
 
 class LessonScreen extends StatefulWidget {
   const LessonScreen({super.key});
@@ -324,6 +325,69 @@ class _LessonScreenState extends State<LessonScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      // ── Daily session CTA (3–7 min) ─────────────────
+                      GestureDetector(
+                        onTap: () => Get.to(
+                          () => DailySessionRunnerScreen(lesson: lesson),
+                          transition: Transition.downToUp,
+                          duration: const Duration(milliseconds: 280),
+                        ),
+                        child: Container(
+                          width: double.infinity,
+                          padding: const EdgeInsets.all(14),
+                          decoration: BoxDecoration(
+                            color: const Color(0xFFFFE000).withValues(alpha: 0.2),
+                            borderRadius: BorderRadius.circular(16),
+                            border: Border.all(
+                              color: const Color(0xFFFFE000).withValues(alpha: 0.55),
+                            ),
+                          ),
+                          child: Row(
+                            children: [
+                              Container(
+                                width: 40,
+                                height: 40,
+                                decoration: BoxDecoration(
+                                  color: const Color(0xFFFFE000).withValues(alpha: 0.35),
+                                  shape: BoxShape.circle,
+                                ),
+                                child: const Icon(
+                                  Icons.play_arrow_rounded,
+                                  color: Color(0xFF1A1A2E),
+                                  size: 24,
+                                ),
+                              ),
+                              const SizedBox(width: 12),
+                              const Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      'Start today’s session',
+                                      style: TextStyle(
+                                        color: Color(0xFF1A1A2E),
+                                        fontWeight: FontWeight.w900,
+                                        fontSize: 14,
+                                      ),
+                                    ),
+                                    SizedBox(height: 2),
+                                    Text(
+                                      '3–7 minutes • streak-safe',
+                                      style: TextStyle(
+                                        color: Color(0xFF6B7280),
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 12,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              const Icon(Icons.chevron_right_rounded, color: Color(0xFF1A1A2E)),
+                            ],
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 18),
                       Text(
                         lesson.title,
                         style: const TextStyle(

@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 260" fill="none">
+  <!-- Male anime head shape: broad at temples, narrowing through the
+       jaw to a defined chin. All fills are white for runtime tinting. -->
+
+  <!-- Neck -->
+  <path
+    d="M88 142
+       L88 170
+       Q100 176 112 170
+       L112 142 Z"
+    fill="#FFFFFF"
+  />
+
+  <!-- Head: temple-wide, angular jawline, pointed chin -->
+  <path
+    d="M100 50
+       C76 50 62 66 60 90
+       C58 102 60 116 66 128
+       C72 140 82 152 92 158
+       L108 158
+       C118 152 128 140 134 128
+       C140 116 142 102 140 90
+       C138 66 124 50 100 50 Z"
+    fill="#FFFFFF"
+  />
+
+  <!-- Ears (smaller, closer to head) -->
+  <path d="M60 100 C56 96 56 90 60 86 C64 82 70 86 70 94 C70 102 64 104 60 100 Z" fill="#FFFFFF"/>
+  <path d="M140 100 C144 96 144 90 140 86 C136 82 130 86 130 94 C130 102 136 104 140 100 Z" fill="#FFFFFF"/>
+
+  <!-- Shoulder peek that tucks under the clothing layer -->
+  <path
+    d="M74 168
+       Q100 176 126 168
+       L130 184
+       Q100 190 70 184 Z"
+    fill="#FFFFFF"
+  />
+</svg>

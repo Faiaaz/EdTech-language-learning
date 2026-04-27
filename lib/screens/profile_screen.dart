@@ -145,6 +145,68 @@ class ProfileScreen extends StatelessWidget {
                     ),
                     const SizedBox(height: 14),
 
+                    // ── Journey & Achievements ────────────────────
+                    GestureDetector(
+                      onTap: () => Get.toNamed('/journey'),
+                      child: Container(
+                        width: double.infinity,
+                        padding: const EdgeInsets.all(20),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(16),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withValues(alpha: 0.06),
+                              blurRadius: 12,
+                              offset: const Offset(0, 4),
+                            ),
+                          ],
+                        ),
+                        child: Row(
+                          children: [
+                            Container(
+                              width: 44,
+                              height: 44,
+                              decoration: BoxDecoration(
+                                color: _accentColor.withValues(alpha: 0.16),
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              child: const Icon(Icons.explore_rounded,
+                                  color: _accentColor, size: 22),
+                            ),
+                            const SizedBox(width: 16),
+                            const Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Journey & Achievements',
+                                    style: TextStyle(
+                                      color: Color(0xFF6B7280),
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                  SizedBox(height: 4),
+                                  Text(
+                                    'Customize your avatar, earn XP, and unlock gear',
+                                    style: TextStyle(
+                                      color: Color(0xFF1A1A2E),
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            const Icon(Icons.arrow_forward_ios_rounded,
+                                color: Color(0xFF6B7280), size: 16),
+                          ],
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 14),
+
                     // ── My History button ────────────────────────
                     GestureDetector(
                       onTap: () => Get.to(() => const UserHistoryScreen()),

@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 260" fill="none">
+  <!-- Curved stripe band that hugs the feather for a premium look. -->
+  <path
+    d="M140 62 C148 50 156 38 164 26"
+    stroke="#3B82F6"
+    stroke-width="4.2"
+    stroke-linecap="round"
+  />
+  <path
+    d="M140 62 C148 50 156 38 164 26"
+    stroke="#FFFFFF"
+    stroke-opacity="0.22"
+    stroke-width="1.6"
+    stroke-linecap="round"
+  />
+</svg>

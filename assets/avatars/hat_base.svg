@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 260" fill="none">
+  <!-- Premium explorer hat with depth and subtle highlights. -->
+  <defs>
+    <linearGradient id="crown" x1="60" y1="18" x2="140" y2="78" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#B17642"/>
+      <stop offset="0.55" stop-color="#8A552F"/>
+      <stop offset="1" stop-color="#6B3F22"/>
+    </linearGradient>
+    <linearGradient id="brim" x1="44" y1="60" x2="156" y2="78" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#7A4A29"/>
+      <stop offset="1" stop-color="#4F2D18"/>
+    </linearGradient>
+    <linearGradient id="band" x1="56" y1="54" x2="144" y2="70" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#2B1A10"/>
+      <stop offset="0.55" stop-color="#3A2416"/>
+      <stop offset="1" stop-color="#24160E"/>
+    </linearGradient>
+    <radialGradient id="shine" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(92 38) rotate(35) scale(60 36)">
+      <stop offset="0" stop-color="#F3D6A7" stop-opacity="0.6"/>
+      <stop offset="1" stop-color="#F3D6A7" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <!-- Brim shadow -->
+  <path d="M46 72 Q100 86 154 72 Q150 82 140 86 Q100 96 60 86 Q50 82 46 72 Z" fill="#000000" opacity="0.16"/>
+
+  <!-- Brim -->
+  <path d="M42 66 Q100 50 158 66 Q158 76 150 80 Q120 90 100 90 Q80 90 50 80 Q42 76 42 66 Z" fill="url(#brim)"/>
+
+  <!-- Crown -->
+  <path d="M62 64 Q64 24 100 20 Q136 24 138 64 Q120 70 100 70 Q80 70 62 64 Z" fill="url(#crown)"/>
+
+  <!-- Crown shine -->
+  <path d="M62 64 Q64 24 100 20 Q136 24 138 64 Q120 70 100 70 Q80 70 62 64 Z" fill="url(#shine)"/>
+
+  <!-- Band -->
+  <path d="M58 58 Q100 50 142 58 L142 72 Q100 80 58 72 Z" fill="url(#band)"/>
+
+  <!-- Band stitch -->
+  <path d="M60 66 Q100 74 140 66" stroke="#FFFFFF" stroke-opacity="0.15" stroke-width="2" stroke-linecap="round"/>
+
+  <!-- Medallion -->
+  <circle cx="100" cy="66" r="7" fill="#D4AF37"/>
+  <circle cx="100" cy="66" r="4" fill="#6B3F22" opacity="0.55"/>
+  <path d="M96.5 66 L99 68.5 L103.5 63.5" stroke="#FFF3C4" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" opacity="0.9"/>
+</svg>

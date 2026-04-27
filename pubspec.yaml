@@ -16,9 +16,14 @@ dependencies:
   path_provider: ^2.1.3
   video_player: ^2.9.2
   flutter_tts: ^4.2.0
+  speech_to_text: ^7.0.0
   shared_preferences: ^2.2.3
   font_awesome_flutter: ^10.8.0
   flutter_secure_storage: ^9.2.4
+  flutter_svg: ^2.0.10+1
+  image_picker: ^1.1.2
+  image: ^4.2.0
+  confetti: ^0.7.0
 
 dependency_overrides:
   # Fix iOS build: ensure federated implementations match the platform interface.
@@ -43,3 +48,4 @@ flutter:
     - assets/images/vocab_asa.png
     - assets/images/vocab_ie.png
     - assets/images/vocab_sushi.png
+    - assets/avatars/

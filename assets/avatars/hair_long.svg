@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 260" fill="none">
+  <!-- Long male anime hair (side-swept bangs, hair down to jaw). Tinted at runtime. -->
+
+  <!-- Back mass of hair behind head (down to jaw) -->
+  <path
+    d="M56 100
+       C52 72 66 52 100 50
+       C134 52 148 72 144 100
+       C148 130 144 156 136 168
+       L124 158
+       L120 120
+       Q110 112 100 112
+       Q90 112 80 120
+       L76 158
+       L64 168
+       C56 156 52 130 56 100 Z"
+    fill="#FFFFFF"
+  />
+
+  <!-- Swept side bangs (asymmetrical, typical shonen look) -->
+  <path
+    d="M64 80
+       C70 62 86 58 100 58
+       C118 58 130 66 134 82
+       L128 92
+       Q118 84 104 84
+       L102 120
+       L94 118
+       L94 90
+       Q82 88 72 96
+       L64 80 Z"
+    fill="#FFFFFF"
+  />
+
+  <!-- Long side locks framing face -->
+  <path d="M62 110 L60 160 L72 150 L70 118 Z" fill="#FFFFFF"/>
+  <path d="M138 110 L140 160 L128 150 L130 118 Z" fill="#FFFFFF"/>
+</svg>

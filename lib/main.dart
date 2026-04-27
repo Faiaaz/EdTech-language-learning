@@ -15,11 +15,16 @@ import 'package:ez_trainz/controllers/srs_controller.dart';
 import 'package:ez_trainz/controllers/lms_controller.dart';
 import 'package:ez_trainz/controllers/gamification_content_controller.dart';
 import 'package:ez_trainz/controllers/roster_controller.dart';
+import 'package:ez_trainz/controllers/journey_controller.dart';
+import 'package:ez_trainz/controllers/streak_controller.dart';
+import 'package:ez_trainz/controllers/lightning_streak_controller.dart';
 import 'package:ez_trainz/l10n/app_translations.dart';
 import 'package:ez_trainz/screens/course_list_screen.dart';
 import 'package:ez_trainz/screens/login_screen.dart';
 import 'package:ez_trainz/screens/main_shell_screen.dart';
 import 'package:ez_trainz/screens/splash_screen.dart';
+import 'package:ez_trainz/screens/avatar_onboarding_screen.dart';
+import 'package:ez_trainz/screens/journey_screen.dart';
 
 const bool _kBypassAuth = false;
 
@@ -38,6 +43,9 @@ Future<void> main() async {
   Get.put(LmsController(), permanent: true);
   Get.put(GamificationContentController(), permanent: true);
   Get.put(RosterController(), permanent: true);
+  Get.put(JourneyController(), permanent: true);
+  Get.put(StreakController(), permanent: true);
+  Get.put(LightningStreakController(), permanent: true);
 
   await auth.restoreSession();
 
@@ -65,6 +73,16 @@ class MyApp extends StatelessWidget {
       getPages: [
         GetPage(name: '/login', page: () => const LoginScreen()),
         GetPage(name: '/courses', page: () => const CourseListScreen()),
+        GetPage(
+          name: '/journey',
+          page: () => const JourneyScreen(),
+          transition: Transition.fadeIn,
+        ),
+        GetPage(
+          name: '/journey/onboarding',
+          page: () => const AvatarOnboardingScreen(),
+          transition: Transition.fadeIn,
+        ),
       ],
       home: _kBypassAuth ? const MainShellScreen() : const SplashScreen(),
     );
