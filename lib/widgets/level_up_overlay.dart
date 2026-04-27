@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 
 import 'package:ez_trainz/models/avatar_config.dart';
 import 'package:ez_trainz/models/hat_tier.dart';
-import 'package:ez_trainz/widgets/layered_avatar.dart';
 
 /// Modal-style celebration shown when the user crosses a tier boundary.
 ///
@@ -233,11 +232,17 @@ class _RewardCard extends StatelessWidget {
                     ),
                     child: FadeTransition(opacity: anim, child: child),
                   ),
-                  child: LayeredAvatar(
+                  child: ClipRRect(
                     key: ValueKey(hatRevealed),
-                    config: avatarConfig!,
-                    tier: hatRevealed ? HatTier.base : HatTier.none,
-                    size: 120,
+                    borderRadius: BorderRadius.circular(12),
+                    child: Image.asset(
+                      hatRevealed
+                          ? 'assets/images/girl_avatar_hatted.png'
+                          : 'assets/images/girl_avatar_no_hat.png',
+                      width: 120,
+                      height: 120,
+                      fit: BoxFit.cover,
+                    ),
                   ),
                 ),
                 // "Hat get!" badge that pops in when the hat appears.

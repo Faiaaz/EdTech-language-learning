@@ -50,4 +50,6 @@ flutter:
     - assets/images/vocab_sushi.png
     - assets/images/stitch_hat_preview.png
     - assets/images/stitch_crowned_achievement.png
+    - assets/images/girl_avatar_no_hat.png
+    - assets/images/girl_avatar_hatted.png
     - assets/avatars/

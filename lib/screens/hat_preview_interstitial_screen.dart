@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import 'package:ez_trainz/controllers/journey_controller.dart';
-import 'package:ez_trainz/models/hat_tier.dart';
 import 'package:ez_trainz/screens/lesson1_game_flow_screen.dart';
-import 'package:ez_trainz/widgets/layered_avatar.dart';
 
 class HatPreviewInterstitialScreen extends StatefulWidget {
   const HatPreviewInterstitialScreen({super.key});
@@ -41,7 +39,6 @@ class _HatPreviewInterstitialScreenState
 
   @override
   Widget build(BuildContext context) {
-    final avatar = JourneyController.to.avatar.value;
 
     return Scaffold(
       backgroundColor: _bg,
@@ -86,7 +83,7 @@ class _HatPreviewInterstitialScreenState
                   child: Column(
                     children: [
                       // Avatar card
-                      _AvatarCard(avatar: avatar),
+                      const _AvatarCard(),
 
                       const SizedBox(height: 20),
 
@@ -119,8 +116,7 @@ class _HatPreviewInterstitialScreenState
 // ── Avatar card ─────────────────────────────────────────────────────────────
 
 class _AvatarCard extends StatelessWidget {
-  const _AvatarCard({required this.avatar});
-  final dynamic avatar;
+  const _AvatarCard();
 
   static const _gold = Color(0xFFFFE000);
 
@@ -141,17 +137,17 @@ class _AvatarCard extends StatelessWidget {
       ),
       child: Column(
         children: [
-          const SizedBox(height: 20),
-          // Avatar — no hat yet
-          Center(
-            child: LayeredAvatar(
-              config: avatar,
-              tier: HatTier.none,
-              size: 190,
-              showHatGear: false,
+          const SizedBox(height: 16),
+          // Girl avatar — no hat yet
+          ClipRRect(
+            borderRadius: BorderRadius.circular(16),
+            child: Image.asset(
+              'assets/images/girl_avatar_no_hat.png',
+              fit: BoxFit.cover,
+              width: double.infinity,
             ),
           ),
-          const SizedBox(height: 10),
+          const SizedBox(height: 12),
           // Level badge
           Container(
             margin: const EdgeInsets.only(bottom: 20),
