@@ -80,7 +80,10 @@ class _JourneyScreenState extends State<JourneyScreen>
         barrierLabel: 'Level up',
         barrierColor: Colors.transparent,
         transitionDuration: const Duration(milliseconds: 320),
-        pageBuilder: (_, __, ___) => LevelUpOverlay(tier: t),
+        pageBuilder: (_, __, ___) => LevelUpOverlay(
+          tier: t,
+          avatarConfig: JourneyController.to.avatar.value,
+        ),
         transitionBuilder: (_, anim, __, child) => FadeTransition(
           opacity: CurvedAnimation(parent: anim, curve: Curves.easeOutCubic),
           child: child,
@@ -203,6 +206,14 @@ class _JourneyScreenState extends State<JourneyScreen>
                   ),
                 ),
               ),
+              // Show motivation card at Level 1 before the hat is earned.
+              if (tier == HatTier.none)
+                const SliverToBoxAdapter(
+                  child: Padding(
+                    padding: EdgeInsets.fromLTRB(20, 14, 20, 0),
+                    child: _AvatarHatPromptCard(),
+                  ),
+                ),
               const SliverToBoxAdapter(child: SizedBox(height: 18)),
               SliverToBoxAdapter(
                 child: Padding(
@@ -368,6 +379,124 @@ class _DemoActionStrip extends StatelessWidget {
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+/// Motivational card shown when the user is at Level 1 (no hat yet).
+/// Pulses with a golden glow to draw attention to the upgrade path.
+class _AvatarHatPromptCard extends StatefulWidget {
+  const _AvatarHatPromptCard();
+
+  @override
+  State<_AvatarHatPromptCard> createState() => _AvatarHatPromptCardState();
+}
+
+class _AvatarHatPromptCardState extends State<_AvatarHatPromptCard>
+    with SingleTickerProviderStateMixin {
+  static const _gold = Color(0xFFFFE000);
+
+  late final AnimationController _pulseAnim;
+
+  @override
+  void initState() {
+    super.initState();
+    _pulseAnim = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 2200),
+    )..repeat(reverse: true);
+  }
+
+  @override
+  void dispose() {
+    _pulseAnim.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedBuilder(
+      animation: _pulseAnim,
+      builder: (_, child) {
+        final t = Curves.easeInOut.transform(_pulseAnim.value);
+        return Container(
+          padding: const EdgeInsets.fromLTRB(16, 14, 16, 14),
+          decoration: BoxDecoration(
+            color: const Color(0xFF1A2235),
+            borderRadius: BorderRadius.circular(18),
+            border: Border.all(
+              color: _gold.withValues(alpha: 0.22 + 0.28 * t),
+              width: 1.5,
+            ),
+            boxShadow: [
+              BoxShadow(
+                color: _gold.withValues(alpha: 0.06 + 0.10 * t),
+                blurRadius: 20,
+                spreadRadius: 2,
+              ),
+            ],
+          ),
+          child: child,
+        );
+      },
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Container(
+            width: 46,
+            height: 46,
+            decoration: BoxDecoration(
+              color: _gold.withValues(alpha: 0.12),
+              shape: BoxShape.circle,
+              border: Border.all(color: _gold.withValues(alpha: 0.38)),
+            ),
+            child: const Icon(
+              Icons.military_tech_rounded,
+              color: _gold,
+              size: 26,
+            ),
+          ),
+          const SizedBox(width: 14),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  'This is your avatar',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w800,
+                    fontSize: 14,
+                    letterSpacing: 0.2,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  'Enhance your avatar by finishing the Lesson 1 challenge',
+                  style: TextStyle(
+                    color: Colors.white.withValues(alpha: 0.62),
+                    fontSize: 12.5,
+                    height: 1.38,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(width: 10),
+          Container(
+            padding: const EdgeInsets.all(7),
+            decoration: BoxDecoration(
+              color: _gold.withValues(alpha: 0.14),
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: const Icon(
+              Icons.arrow_forward_rounded,
+              color: _gold,
+              size: 16,
+            ),
+          ),
+        ],
       ),
     );
   }

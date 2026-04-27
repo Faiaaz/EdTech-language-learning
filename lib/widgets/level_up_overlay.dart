@@ -3,20 +3,21 @@ import 'dart:math' as math;
 import 'package:confetti/confetti.dart';
 import 'package:flutter/material.dart';
 
+import 'package:ez_trainz/models/avatar_config.dart';
 import 'package:ez_trainz/models/hat_tier.dart';
+import 'package:ez_trainz/widgets/layered_avatar.dart';
 
 /// Modal-style celebration shown when the user crosses a tier boundary.
 ///
-/// Combines:
-///  - A Confetti Burst behind the card
-///  - A bouncy scale/fade-in of the "new reward" card
-///  - A soft shimmer sweep across the unlocked item
-///
-/// The caller is responsible for routing — show this via
-/// `showDialog(..., builder: (_) => LevelUpOverlay(tier: t))`.
+/// For [HatTier.base] (Explorer unlock), an animated avatar transition
+/// plays — avatar without hat → hat materialises on head — to make the
+/// hat-obtain moment feel special.
 class LevelUpOverlay extends StatefulWidget {
-  const LevelUpOverlay({super.key, required this.tier});
+  const LevelUpOverlay({super.key, required this.tier, this.avatarConfig});
   final HatTier tier;
+
+  /// Needed for the hat-reveal animation on the Explorer tier.
+  final AvatarConfig? avatarConfig;
 
   @override
   State<LevelUpOverlay> createState() => _LevelUpOverlayState();
@@ -27,6 +28,10 @@ class _LevelUpOverlayState extends State<LevelUpOverlay>
   late final ConfettiController _confetti;
   late final AnimationController _cardAnim;
   late final AnimationController _shimmerAnim;
+
+  // For HatTier.base: starts false (no hat shown), flips to true to
+  // reveal the hat on the avatar after a short dramatic pause.
+  bool _hatRevealed = false;
 
   @override
   void initState() {
@@ -46,6 +51,13 @@ class _LevelUpOverlayState extends State<LevelUpOverlay>
       _cardAnim.forward();
       _shimmerAnim.repeat();
     });
+
+    // Dramatic pause before the hat materialises on the avatar.
+    if (widget.tier == HatTier.base) {
+      Future.delayed(const Duration(milliseconds: 900), () {
+        if (mounted) setState(() => _hatRevealed = true);
+      });
+    }
   }
 
   @override
@@ -92,22 +104,27 @@ class _LevelUpOverlayState extends State<LevelUpOverlay>
             ],
           ),
         ),
-        // Card
+        // Card — not using AnimatedBuilder child: optimisation so that
+        // setState(_hatRevealed) triggers a rebuild of the card.
         AnimatedBuilder(
           animation: _cardAnim,
-          builder: (_, child) {
+          builder: (_, __) {
             final t = Curves.elasticOut.transform(_cardAnim.value);
             return Opacity(
               opacity: _cardAnim.value.clamp(0.0, 1.0),
-              child: Transform.scale(scale: 0.6 + 0.4 * t, child: child),
+              child: Transform.scale(
+                scale: 0.6 + 0.4 * t,
+                child: _RewardCard(
+                  tier: widget.tier,
+                  accent: accent,
+                  shimmer: _shimmerAnim,
+                  avatarConfig: widget.avatarConfig,
+                  hatRevealed: _hatRevealed,
+                  onDismiss: () => Navigator.of(context).maybePop(),
+                ),
+              ),
             );
           },
-          child: _RewardCard(
-            tier: widget.tier,
-            accent: accent,
-            shimmer: _shimmerAnim,
-            onDismiss: () => Navigator.of(context).maybePop(),
-          ),
         ),
       ],
     );
@@ -120,15 +137,21 @@ class _RewardCard extends StatelessWidget {
     required this.accent,
     required this.shimmer,
     required this.onDismiss,
+    this.avatarConfig,
+    this.hatRevealed = false,
   });
 
   final HatTier tier;
   final Color accent;
   final Animation<double> shimmer;
   final VoidCallback onDismiss;
+  final AvatarConfig? avatarConfig;
+  final bool hatRevealed;
 
   @override
   Widget build(BuildContext context) {
+    final showHatReveal = tier == HatTier.base && avatarConfig != null;
+
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 28),
       padding: const EdgeInsets.fromLTRB(24, 28, 24, 20),
@@ -175,6 +198,82 @@ class _RewardCard extends StatelessWidget {
               fontWeight: FontWeight.w600,
             ),
           ),
+          // Hat materialise animation — only for the Explorer (base) tier.
+          if (showHatReveal) ...[
+            const SizedBox(height: 16),
+            Stack(
+              alignment: Alignment.center,
+              children: [
+                // Glow halo behind avatar that pulses when hat appears.
+                AnimatedOpacity(
+                  duration: const Duration(milliseconds: 500),
+                  opacity: hatRevealed ? 1.0 : 0.0,
+                  child: Container(
+                    width: 134,
+                    height: 134,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      boxShadow: [
+                        BoxShadow(
+                          color: accent.withValues(alpha: 0.45),
+                          blurRadius: 32,
+                          spreadRadius: 8,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                AnimatedSwitcher(
+                  duration: const Duration(milliseconds: 700),
+                  switchInCurve: Curves.easeOutBack,
+                  switchOutCurve: Curves.easeIn,
+                  transitionBuilder: (child, anim) => ScaleTransition(
+                    scale: Tween<double>(begin: 0.65, end: 1.0).animate(
+                      CurvedAnimation(parent: anim, curve: Curves.easeOutBack),
+                    ),
+                    child: FadeTransition(opacity: anim, child: child),
+                  ),
+                  child: LayeredAvatar(
+                    key: ValueKey(hatRevealed),
+                    config: avatarConfig!,
+                    tier: hatRevealed ? HatTier.base : HatTier.none,
+                    size: 120,
+                  ),
+                ),
+                // "Hat get!" badge that pops in when the hat appears.
+                if (hatRevealed)
+                  Positioned(
+                    top: 0,
+                    right: 0,
+                    child: TweenAnimationBuilder<double>(
+                      tween: Tween(begin: 0.0, end: 1.0),
+                      duration: const Duration(milliseconds: 400),
+                      curve: Curves.easeOutBack,
+                      builder: (_, v, child) => Transform.scale(
+                        scale: v,
+                        child: child,
+                      ),
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 8, vertical: 4),
+                        decoration: BoxDecoration(
+                          color: accent,
+                          borderRadius: BorderRadius.circular(999),
+                        ),
+                        child: const Text(
+                          '🎩 Earned!',
+                          style: TextStyle(
+                            color: Colors.black87,
+                            fontSize: 10,
+                            fontWeight: FontWeight.w900,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+              ],
+            ),
+          ],
           const SizedBox(height: 18),
           // Reward plate with shimmer sweep
           ClipRRect(
