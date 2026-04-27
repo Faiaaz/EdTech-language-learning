@@ -59,17 +59,19 @@ class _HatPreviewInterstitialScreenState
                 ),
               ),
             ),
-            // Hero image — fills available space, no scrolling
+            // Hero image — full width, no side padding, covers the area
             Expanded(
               child: Padding(
-                padding: const EdgeInsets.fromLTRB(20, 4, 20, 0),
+                padding: const EdgeInsets.only(top: 4),
                 child: ClipRRect(
-                  borderRadius: BorderRadius.circular(22),
+                  borderRadius: const BorderRadius.vertical(
+                    bottom: Radius.circular(0),
+                  ),
                   child: Image.asset(
                     'assets/images/stitch_hat_preview.png',
-                    fit: BoxFit.contain,
+                    fit: BoxFit.cover,
                     width: double.infinity,
-                    height: double.infinity,
+                    alignment: Alignment.topCenter,
                   ),
                 ),
               ),

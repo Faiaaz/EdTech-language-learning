@@ -114,12 +114,14 @@ class _HatEarnedScreenState extends State<HatEarnedScreen>
                           scale: 0.5 + 0.5 * t, child: child);
                     },
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      padding: const EdgeInsets.only(top: 4),
                       child: ClipRRect(
-                        borderRadius: BorderRadius.circular(22),
+                        borderRadius: BorderRadius.zero,
                         child: Image.asset(
                           'assets/images/stitch_crowned_achievement.png',
-                          fit: BoxFit.contain,
+                          fit: BoxFit.cover,
+                          width: double.infinity,
+                          alignment: Alignment.topCenter,
                         ),
                       ),
                     ),
