@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 
 import 'package:ez_trainz/controllers/lightning_streak_controller.dart';
 import 'package:ez_trainz/models/hiragana_lesson_data.dart';
+import 'package:ez_trainz/screens/hat_earned_screen.dart';
 import 'package:ez_trainz/widgets/lightning_streak_bar.dart';
 
 /// Duolingo-style lesson flow that starts immediately after Lesson 1.
@@ -179,7 +180,8 @@ class _Lesson1GameFlowScreenState extends State<Lesson1GameFlowScreen>
       if (_i < _steps.length - 1) {
         _i++;
       } else {
-        Get.back();
+        // Replace game screen with the hat-earned celebration.
+        Get.off(() => const HatEarnedScreen());
       }
     });
 

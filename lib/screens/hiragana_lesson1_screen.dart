@@ -9,6 +9,7 @@ import 'package:get/get.dart';
 import 'package:video_player/video_player.dart';
 
 import 'package:ez_trainz/controllers/course_controller.dart';
+import 'package:ez_trainz/screens/hat_preview_interstitial_screen.dart';
 import 'package:ez_trainz/screens/lesson1_game_flow_screen.dart';
 
 class HiraganaLesson1Screen extends StatefulWidget {
@@ -165,7 +166,7 @@ class _HiraganaLesson1ScreenState extends State<HiraganaLesson1Screen> {
             builder: (_) => _SpeechGamePrompt(
               onStart: () {
                 Navigator.of(context).pop();
-                Get.to(() => const Lesson1GameFlowScreen());
+                Get.to(() => const HatPreviewInterstitialScreen());
               },
             ),
           );
@@ -520,7 +521,7 @@ class _HiraganaLesson1ScreenState extends State<HiraganaLesson1Screen> {
                       child: ElevatedButton.icon(
                         onPressed: () {
                           HapticFeedback.selectionClick();
-                          Get.to(() => const Lesson1GameFlowScreen());
+                          Get.to(() => const HatPreviewInterstitialScreen());
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: const Color(0xFF1E88E5),
