@@ -3,7 +3,6 @@ import 'dart:math' as math;
 import 'package:get/get.dart';
 
 import 'package:ez_trainz/controllers/auth_controller.dart';
-import 'package:ez_trainz/screens/login_screen.dart';
 import 'package:ez_trainz/screens/main_shell_screen.dart';
 import 'package:ez_trainz/widgets/ez_logo_boxed.dart';
 import 'package:ez_trainz/utils/spring_curve.dart';
@@ -144,11 +143,9 @@ class _SplashScreenState extends State<SplashScreen>
     await _exitCtrl.forward();
 
     if (mounted) {
-      final isAuthed = AuthController.to.isLoggedIn;
       Navigator.of(context).pushReplacement(
         PageRouteBuilder(
-          pageBuilder: (_, __, ___) =>
-              isAuthed ? const MainShellScreen() : const LoginScreen(),
+          pageBuilder: (_, __, ___) => const _AirplaneTransitionScreen(),
           transitionDuration: Duration.zero,
           reverseTransitionDuration: Duration.zero,
         ),
@@ -182,7 +179,7 @@ class _SplashScreenState extends State<SplashScreen>
       backgroundColor: const Color(0xFF4DA6E8),
       body: Stack(
         children: [
-          const LoginScreen(),
+          const _SkyBackground(),
           AnimatedBuilder(
             animation: Listenable.merge([
               _scaleRotateUpCtrl,
@@ -281,6 +278,95 @@ class _SplashScreenState extends State<SplashScreen>
             },
           ),
         ],
+      ),
+    );
+  }
+}
+
+// ── Shared sky background (GIF + gradient, no navigation logic) ──────────────
+
+class _SkyBackground extends StatelessWidget {
+  const _SkyBackground();
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: const BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [
+            Color(0xFF5BBAD9),
+            Color(0xFF8ED4EE),
+            Color(0xFFB8E4F8),
+            Color(0xFFD8EFF8),
+            Color(0xFFEDF8FD),
+          ],
+          stops: [0.0, 0.22, 0.45, 0.72, 1.0],
+        ),
+      ),
+      child: Center(
+        child: Image.asset(
+          'assets/images/login_sky_bg.gif',
+          fit: BoxFit.contain,
+          width: double.infinity,
+          gaplessPlayback: true,
+        ),
+      ),
+    );
+  }
+}
+
+// ── Airplane transition screen (shown after splash, before dashboard) ─────────
+
+class _AirplaneTransitionScreen extends StatefulWidget {
+  const _AirplaneTransitionScreen();
+
+  @override
+  State<_AirplaneTransitionScreen> createState() =>
+      _AirplaneTransitionScreenState();
+}
+
+class _AirplaneTransitionScreenState extends State<_AirplaneTransitionScreen>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _fadeOut;
+
+  @override
+  void initState() {
+    super.initState();
+    _fadeOut = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 700),
+    );
+    Future.delayed(const Duration(milliseconds: 3000), _navigateToDashboard);
+  }
+
+  Future<void> _navigateToDashboard() async {
+    if (!mounted) return;
+    await _fadeOut.forward();
+    if (mounted) {
+      Navigator.of(context).pushReplacement(
+        PageRouteBuilder(
+          pageBuilder: (_, __, ___) => const MainShellScreen(),
+          transitionDuration: Duration.zero,
+          reverseTransitionDuration: Duration.zero,
+        ),
+      );
+    }
+  }
+
+  @override
+  void dispose() {
+    _fadeOut.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: FadeTransition(
+        opacity: ReverseAnimation(_fadeOut),
+        child: const _SkyBackground(),
       ),
     );
   }
