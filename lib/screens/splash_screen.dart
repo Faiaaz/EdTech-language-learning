@@ -288,46 +288,74 @@ class _SplashScreenState extends State<SplashScreen>
 class _SkyBackground extends StatelessWidget {
   const _SkyBackground();
 
+  // Sampled from GIF frame pixels
+  static const _topSky    = Color(0xFF3AACCF);
+  static const _bottomCloud = Color(0xFFF5FBFF);
+
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(builder: (_, constraints) {
-      final w = constraints.maxWidth;
-      final h = constraints.maxHeight;
+      final featherH = constraints.maxHeight * 0.40;
 
-      // GIF is 1080×1080 (square). BoxFit.contain on a portrait screen
-      // constrains it to the full width, so displayed height == width.
-      final gifH = w.clamp(0.0, h);
-      final topFrac = ((h - gifH) / 2 / h).clamp(0.0, 0.45);
-      final botFrac = (1.0 - topFrac).clamp(0.55, 1.0);
-      final mid1 = topFrac + (botFrac - topFrac) * 0.38;
-      final mid2 = topFrac + (botFrac - topFrac) * 0.65;
+      return Stack(
+        fit: StackFit.expand,
+        children: [
+          // 1. Full-screen gradient — extends the GIF's sky palette above & below
+          const DecoratedBox(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [_topSky, _bottomCloud],
+              ),
+            ),
+          ),
 
-      return Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            // Colours sampled directly from the GIF frames:
-            //   top edge  → #4ABDE6   bottom edge → #EFF7FF
-            colors: const [
-              Color(0xFF3AACCF), // deep sky above GIF
-              Color(0xFF4ABDE6), // exact GIF top-edge
-              Color(0xFF7BCEE6), // GIF upper-quarter
-              Color(0xFF87C9E4), // GIF centre
-              Color(0xFFEFF7FF), // exact GIF bottom-edge
-              Color(0xFFF8FCFF), // soft haze below GIF
-            ],
-            stops: [0.0, topFrac, mid1, mid2, botFrac, 1.0],
+          // 2. GIF centred with contain (no distortion)
+          Center(
+            child: Image.asset(
+              'assets/images/login_sky_bg.gif',
+              fit: BoxFit.contain,
+              width: double.infinity,
+              gaplessPlayback: true,
+            ),
           ),
-        ),
-        child: Center(
-          child: Image.asset(
-            'assets/images/login_sky_bg.gif',
-            fit: BoxFit.contain,
-            width: double.infinity,
-            gaplessPlayback: true,
+
+          // 3. Top feather — fades background colour *into* the GIF's sky,
+          //    dissolving the join from above regardless of device height.
+          Positioned(
+            top: 0, left: 0, right: 0,
+            height: featherH,
+            child: const IgnorePointer(
+              child: DecoratedBox(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [_topSky, Color(0x003AACCF)],
+                  ),
+                ),
+              ),
+            ),
           ),
-        ),
+
+          // 4. Bottom feather — fades GIF clouds into background colour.
+          Positioned(
+            bottom: 0, left: 0, right: 0,
+            height: featherH,
+            child: const IgnorePointer(
+              child: DecoratedBox(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [Color(0x00F5FBFF), _bottomCloud],
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
       );
     });
   }
