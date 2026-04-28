@@ -288,14 +288,14 @@ class _SplashScreenState extends State<SplashScreen>
 class _SkyBackground extends StatelessWidget {
   const _SkyBackground();
 
-  // Sampled from GIF frame pixels
-  static const _topSky    = Color(0xFF3AACCF);
-  static const _bottomCloud = Color(0xFFF5FBFF);
+  // Pixel-sampled from cropped GIF: row 0 → #51BCE6, row 1079 → #E9F7FA
+  static const _topSky     = Color(0xFF51BCE6);
+  static const _bottomCloud = Color(0xFFE9F7FA);
 
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(builder: (_, constraints) {
-      final featherH = constraints.maxHeight * 0.40;
+      final featherH = constraints.maxHeight * 0.55;
 
       return Stack(
         fit: StackFit.expand,
@@ -332,7 +332,7 @@ class _SkyBackground extends StatelessWidget {
                   gradient: LinearGradient(
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
-                    colors: [_topSky, Color(0x003AACCF)],
+                    colors: [_topSky, Color(0x0051BCE6)],
                   ),
                 ),
               ),
@@ -349,7 +349,7 @@ class _SkyBackground extends StatelessWidget {
                   gradient: LinearGradient(
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
-                    colors: [Color(0x00F5FBFF), _bottomCloud],
+                    colors: [Color(0x00E9F7FA), _bottomCloud],
                   ),
                 ),
               ),
