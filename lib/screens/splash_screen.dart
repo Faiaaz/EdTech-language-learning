@@ -288,9 +288,9 @@ class _SplashScreenState extends State<SplashScreen>
 class _SkyBackground extends StatelessWidget {
   const _SkyBackground();
 
-  // Pixel-sampled from cropped GIF: row 0 → #4DBBE1, row last → #EAF4F9
-  static const _topSky     = Color(0xFF4DBBE1);
-  static const _bottomCloud = Color(0xFFEAF4F9);
+  // Pixel-sampled from popup_screen.gif edges
+  static const _topSky     = Color(0xFF50BEE2);
+  static const _bottomCloud = Color(0xFFE9F7FA);
 
   @override
   Widget build(BuildContext context) {
@@ -314,7 +314,7 @@ class _SkyBackground extends StatelessWidget {
           // 2. GIF centred with contain (no distortion)
           Center(
             child: Image.asset(
-              'assets/images/login_sky_bg.gif',
+              'assets/images/popup_screen.gif',
               fit: BoxFit.contain,
               width: double.infinity,
               gaplessPlayback: true,
@@ -332,7 +332,7 @@ class _SkyBackground extends StatelessWidget {
                   gradient: LinearGradient(
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
-                    colors: [_topSky, Color(0x004DBBE1)],
+                    colors: [_topSky, Color(0x0050BEE2)],
                   ),
                 ),
               ),
@@ -349,7 +349,7 @@ class _SkyBackground extends StatelessWidget {
                   gradient: LinearGradient(
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
-                    colors: [Color(0x00EAF4F9), _bottomCloud],
+                    colors: [Color(0x00E9F7FA), _bottomCloud],
                   ),
                 ),
               ),
