@@ -290,30 +290,46 @@ class _SkyBackground extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: const BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [
-            Color(0xFF5BBAD9),
-            Color(0xFF8ED4EE),
-            Color(0xFFB8E4F8),
-            Color(0xFFD8EFF8),
-            Color(0xFFEDF8FD),
-          ],
-          stops: [0.0, 0.22, 0.45, 0.72, 1.0],
+    return LayoutBuilder(builder: (_, constraints) {
+      final w = constraints.maxWidth;
+      final h = constraints.maxHeight;
+
+      // GIF is 1080×1080 (square). BoxFit.contain on a portrait screen
+      // constrains it to the full width, so displayed height == width.
+      final gifH = w.clamp(0.0, h);
+      final topFrac = ((h - gifH) / 2 / h).clamp(0.0, 0.45);
+      final botFrac = (1.0 - topFrac).clamp(0.55, 1.0);
+      final mid1 = topFrac + (botFrac - topFrac) * 0.38;
+      final mid2 = topFrac + (botFrac - topFrac) * 0.65;
+
+      return Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            // Colours sampled directly from the GIF frames:
+            //   top edge  → #4ABDE6   bottom edge → #EFF7FF
+            colors: const [
+              Color(0xFF3AACCF), // deep sky above GIF
+              Color(0xFF4ABDE6), // exact GIF top-edge
+              Color(0xFF7BCEE6), // GIF upper-quarter
+              Color(0xFF87C9E4), // GIF centre
+              Color(0xFFEFF7FF), // exact GIF bottom-edge
+              Color(0xFFF8FCFF), // soft haze below GIF
+            ],
+            stops: [0.0, topFrac, mid1, mid2, botFrac, 1.0],
+          ),
         ),
-      ),
-      child: Center(
-        child: Image.asset(
-          'assets/images/login_sky_bg.gif',
-          fit: BoxFit.contain,
-          width: double.infinity,
-          gaplessPlayback: true,
+        child: Center(
+          child: Image.asset(
+            'assets/images/login_sky_bg.gif',
+            fit: BoxFit.contain,
+            width: double.infinity,
+            gaplessPlayback: true,
+          ),
         ),
-      ),
-    );
+      );
+    });
   }
 }
 
