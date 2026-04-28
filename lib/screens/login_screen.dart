@@ -7,13 +7,13 @@ class LoginScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFB8E4F8),
-      body: Image.asset(
-        'assets/images/login_sky_bg.gif',
-        fit: BoxFit.cover,
-        width: double.infinity,
-        height: double.infinity,
-        alignment: Alignment.topCenter,
-        gaplessPlayback: true,
+      body: Center(
+        child: Image.asset(
+          'assets/images/login_sky_bg.gif',
+          fit: BoxFit.contain,
+          width: double.infinity,
+          gaplessPlayback: true,
+        ),
       ),
     );
   }
