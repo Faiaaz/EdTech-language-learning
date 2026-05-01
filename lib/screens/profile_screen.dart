@@ -10,7 +10,7 @@ import 'package:ez_trainz/screens/user_history_screen.dart';
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
 
-  static const _bgColor = Color(0xFF4DA6E8);
+  static const _bgColor = Color(0xFF0F172A);
   static const _accentColor = Color(0xFFFFE000);
 
   @override
@@ -65,14 +65,15 @@ class ProfileScreen extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(
                           horizontal: 14, vertical: 8),
                       decoration: BoxDecoration(
-                        color: Colors.white.withValues(alpha: 0.2),
+                        color: const Color(0xFF1E293B),
                         borderRadius: BorderRadius.circular(20),
-                        border: Border.all(color: Colors.white38, width: 1),
+                        border: Border.all(
+                            color: const Color(0xFF334155), width: 1),
                       ),
                       child: Row(
                         children: [
                           const Icon(Icons.logout_rounded,
-                              color: Colors.white, size: 15),
+                              color: const Color(0xFF1E293B), size: 15),
                           const SizedBox(width: 5),
                           Text('logout'.tr,
                               style: const TextStyle(
@@ -97,8 +98,8 @@ class ProfileScreen extends StatelessWidget {
                 children: [
                   Text(
                     'profile'.tr,
-                    style: TextStyle(
-                      color: Colors.white.withValues(alpha: 0.8),
+                    style: const TextStyle(
+                      color: Color(0xFF94A3B8),
                       fontSize: 14,
                       fontWeight: FontWeight.w500,
                     ),
@@ -152,15 +153,10 @@ class ProfileScreen extends StatelessWidget {
                         width: double.infinity,
                         padding: const EdgeInsets.all(20),
                         decoration: BoxDecoration(
-                          color: Colors.white,
+                          color: const Color(0xFF1E293B),
                           borderRadius: BorderRadius.circular(16),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withValues(alpha: 0.06),
-                              blurRadius: 12,
-                              offset: const Offset(0, 4),
-                            ),
-                          ],
+                          border:
+                              Border.all(color: const Color(0xFF334155)),
                         ),
                         child: Row(
                           children: [
@@ -182,7 +178,7 @@ class ProfileScreen extends StatelessWidget {
                                   Text(
                                     'Journey & Achievements',
                                     style: TextStyle(
-                                      color: Color(0xFF6B7280),
+                                      color: Color(0xFF94A3B8),
                                       fontSize: 12,
                                       fontWeight: FontWeight.w600,
                                     ),
@@ -191,7 +187,7 @@ class ProfileScreen extends StatelessWidget {
                                   Text(
                                     'Customize your avatar, earn XP, and unlock gear',
                                     style: TextStyle(
-                                      color: Color(0xFF1A1A2E),
+                                      color: Colors.white,
                                       fontSize: 16,
                                       fontWeight: FontWeight.w500,
                                     ),
@@ -200,7 +196,7 @@ class ProfileScreen extends StatelessWidget {
                               ),
                             ),
                             const Icon(Icons.arrow_forward_ios_rounded,
-                                color: Color(0xFF6B7280), size: 16),
+                                color: Color(0xFF94A3B8), size: 16),
                           ],
                         ),
                       ),
@@ -214,7 +210,7 @@ class ProfileScreen extends StatelessWidget {
                         width: double.infinity,
                         padding: const EdgeInsets.all(20),
                         decoration: BoxDecoration(
-                          color: Colors.white,
+                          color: const Color(0xFF1E293B),
                           borderRadius: BorderRadius.circular(16),
                           boxShadow: [
                             BoxShadow(
@@ -230,12 +226,12 @@ class ProfileScreen extends StatelessWidget {
                               width: 44,
                               height: 44,
                               decoration: BoxDecoration(
-                                color: const Color(0xFF4DA6E8)
+                                color: const Color(0xFF3B82F6)
                                     .withValues(alpha: 0.12),
                                 borderRadius: BorderRadius.circular(12),
                               ),
                               child: const Icon(Icons.history_rounded,
-                                  color: Color(0xFF4DA6E8), size: 22),
+                                  color: const Color(0xFF3B82F6), size: 22),
                             ),
                             const SizedBox(width: 16),
                             Expanded(
@@ -293,7 +289,7 @@ class _LanguagePickerCard extends StatelessWidget {
       width: double.infinity,
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: const Color(0xFF1E293B),
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
@@ -312,11 +308,11 @@ class _LanguagePickerCard extends StatelessWidget {
                 width: 44,
                 height: 44,
                 decoration: BoxDecoration(
-                  color: const Color(0xFF4DA6E8).withValues(alpha: 0.12),
+                  color: const Color(0xFF3B82F6).withValues(alpha: 0.12),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: const Icon(Icons.language_rounded,
-                    color: Color(0xFF4DA6E8), size: 22),
+                    color: const Color(0xFF3B82F6), size: 22),
               ),
               const SizedBox(width: 16),
               Text(
@@ -374,10 +370,10 @@ class _LangButton extends StatelessWidget {
         duration: const Duration(milliseconds: 200),
         padding: const EdgeInsets.symmetric(vertical: 12),
         decoration: BoxDecoration(
-          color: selected ? const Color(0xFF4DA6E8) : const Color(0xFFF3F4F6),
+          color: selected ? const Color(0xFF3B82F6) : const Color(0xFF1E293B),
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
-            color: selected ? const Color(0xFF4DA6E8) : const Color(0xFFE5E7EB),
+            color: selected ? const Color(0xFF3B82F6) : const Color(0xFF334155),
             width: 1.5,
           ),
         ),
@@ -415,7 +411,7 @@ class _ProfileRow extends StatelessWidget {
       width: double.infinity,
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: const Color(0xFF1E293B),
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
@@ -432,10 +428,10 @@ class _ProfileRow extends StatelessWidget {
             width: 44,
             height: 44,
             decoration: BoxDecoration(
-              color: const Color(0xFF4DA6E8).withValues(alpha: 0.12),
+              color: const Color(0xFF3B82F6).withValues(alpha: 0.12),
               borderRadius: BorderRadius.circular(12),
             ),
-            child: Icon(icon, color: const Color(0xFF4DA6E8), size: 22),
+            child: Icon(icon, color: const Color(0xFF3B82F6), size: 22),
           ),
           const SizedBox(width: 16),
           Expanded(

@@ -18,17 +18,19 @@ import 'package:ez_trainz/screens/login_screen.dart';
 class IeltsDashboardScreen extends StatelessWidget {
   const IeltsDashboardScreen({super.key});
 
-  // ELC gradient: pink → red
-  static const _pink = Color(0xFFF093FB);
-  static const _red = Color(0xFFF5576C);
-  static const _bgLight = Color(0xFFFFF0F5);
+  // Navy theme colours
+  static const _navyBg     = Color(0xFF0F172A);
+  static const _navyCard   = Color(0xFF1E293B);
+  static const _navyBorder = Color(0xFF334155);
+  static const _textMuted  = Color(0xFF94A3B8);
+  static const _accentBlue = Color(0xFF3B82F6);
 
   @override
   Widget build(BuildContext context) {
     final ctrl = IeltsController.to;
 
     return Scaffold(
-      backgroundColor: _bgLight,
+      backgroundColor: _navyBg,
       body: SafeArea(
         child: Column(
           children: [
@@ -36,12 +38,9 @@ class IeltsDashboardScreen extends StatelessWidget {
             Container(
               width: double.infinity,
               padding: const EdgeInsets.fromLTRB(20, 12, 20, 24),
-              decoration: const BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [_pink, _red],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                ),
+              decoration: BoxDecoration(
+                color: _navyCard,
+                border: Border(bottom: BorderSide(color: _navyBorder)),
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -54,14 +53,14 @@ class IeltsDashboardScreen extends StatelessWidget {
                         child: Container(
                           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                           decoration: BoxDecoration(
-                            color: Colors.white.withValues(alpha: 0.2),
+                            color: Colors.white.withValues(alpha: 0.08),
                             borderRadius: BorderRadius.circular(20),
-                            border: Border.all(color: Colors.white38),
+                            border: Border.all(color: _navyBorder),
                           ),
                           child: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              const Icon(Icons.apps_rounded, color: Colors.white, size: 16),
+                              const Icon(Icons.apps_rounded, color: const Color(0xFF1E293B), size: 16),
                               const SizedBox(width: 6),
                               Text('programs'.tr, style: const TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w600)),
                             ],
@@ -76,13 +75,13 @@ class IeltsDashboardScreen extends StatelessWidget {
                         child: Container(
                           padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
                           decoration: BoxDecoration(
-                            color: Colors.white.withValues(alpha: 0.2),
+                            color: Colors.white.withValues(alpha: 0.08),
                             borderRadius: BorderRadius.circular(20),
-                            border: Border.all(color: Colors.white38),
+                            border: Border.all(color: _navyBorder),
                           ),
                           child: Row(
                             children: [
-                              const Icon(Icons.logout_rounded, color: Colors.white, size: 15),
+                              const Icon(Icons.logout_rounded, color: const Color(0xFF1E293B), size: 15),
                               const SizedBox(width: 5),
                               Text('logout'.tr, style: const TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w600)),
                             ],
@@ -104,7 +103,7 @@ class IeltsDashboardScreen extends StatelessWidget {
                   const SizedBox(height: 4),
                   Text(
                     'Research-based strategies for top scores',
-                    style: TextStyle(color: Colors.white.withValues(alpha: 0.85), fontSize: 14),
+                    style: TextStyle(color: _textMuted, fontSize: 14),
                   ),
                 ],
               ),
@@ -120,11 +119,9 @@ class IeltsDashboardScreen extends StatelessWidget {
                 margin: const EdgeInsets.fromLTRB(20, 16, 20, 0),
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: _navyCard,
                   borderRadius: BorderRadius.circular(16),
-                  boxShadow: [
-                    BoxShadow(color: _pink.withValues(alpha: 0.1), blurRadius: 12, offset: const Offset(0, 4)),
-                  ],
+                  border: Border.all(color: _navyBorder),
                 ),
                 child: Row(
                   children: [
@@ -132,31 +129,31 @@ class IeltsDashboardScreen extends StatelessWidget {
                       width: 44,
                       height: 44,
                       decoration: BoxDecoration(
-                        gradient: const LinearGradient(colors: [_pink, _red]),
+                        color: _accentBlue.withValues(alpha: 0.15),
                         borderRadius: BorderRadius.circular(12),
                       ),
-                      child: const Icon(Icons.trending_up_rounded, color: Colors.white, size: 24),
+                      child: const Icon(Icons.trending_up_rounded, color: _accentBlue, size: 24),
                     ),
                     const SizedBox(width: 14),
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text('practice_sessions'.tr, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700, color: Color(0xFF1A1A2E))),
+                          Text('practice_sessions'.tr, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700, color: Colors.white)),
                           const SizedBox(height: 4),
-                          Text('sessions_completed'.trParams({'total': '$total'}), style: const TextStyle(fontSize: 12, color: Color(0xFF6B7280))),
+                          Text('sessions_completed'.trParams({'total': '$total'}), style: const TextStyle(fontSize: 12, color: _textMuted)),
                         ],
                       ),
                     ),
                     Container(
                       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                       decoration: BoxDecoration(
-                        color: _pink.withValues(alpha: 0.12),
+                        color: _accentBlue.withValues(alpha: 0.15),
                         borderRadius: BorderRadius.circular(20),
                       ),
                       child: Text(
                         '$total',
-                        style: const TextStyle(color: _red, fontSize: 18, fontWeight: FontWeight.w900),
+                        style: const TextStyle(color: Color(0xFFFFE000), fontSize: 18, fontWeight: FontWeight.w900),
                       ),
                     ),
                   ],
@@ -173,7 +170,7 @@ class IeltsDashboardScreen extends StatelessWidget {
                   children: [
                     Text(
                       'ielts_sections_label'.tr,
-                      style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w800, color: Color(0xFF1A1A2E)),
+                      style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w800, color: Colors.white),
                     ),
                     const SizedBox(height: 14),
 
@@ -246,7 +243,7 @@ class IeltsDashboardScreen extends StatelessWidget {
 
                     Text(
                       'study_tools'.tr,
-                      style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w800, color: Color(0xFF1A1A2E)),
+                      style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w800, color: Colors.white),
                     ),
                     const SizedBox(height: 14),
 
@@ -259,7 +256,7 @@ class IeltsDashboardScreen extends StatelessWidget {
                       trailing: Obx(() => Text(
                         '${ctrl.vocabDueCount.value} ${'ielts_due'.tr}',
                         style: TextStyle(
-                          color: ctrl.vocabDueCount.value > 0 ? const Color(0xFFFFCC02) : Colors.white70,
+                          color: ctrl.vocabDueCount.value > 0 ? const Color(0xFFFFE000) : Colors.white70,
                           fontSize: 14,
                           fontWeight: FontWeight.w800,
                         ),
@@ -310,18 +307,18 @@ class IeltsDashboardScreen extends StatelessWidget {
                     Container(
                       padding: const EdgeInsets.all(16),
                       decoration: BoxDecoration(
-                        color: const Color(0xFFFFF8E1),
+                        color: _navyCard,
                         borderRadius: BorderRadius.circular(16),
-                        border: Border.all(color: const Color(0xFFFFE082)),
+                        border: Border.all(color: const Color(0xFFFFE000).withValues(alpha: 0.35)),
                       ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Row(
                             children: [
-                              const Icon(Icons.tips_and_updates_rounded, color: Color(0xFFFFA000), size: 20),
+                              const Icon(Icons.tips_and_updates_rounded, color: Color(0xFFFFE000), size: 20),
                               const SizedBox(width: 8),
-                              Text('top_score_tips'.tr, style: const TextStyle(color: Color(0xFFF57F17), fontSize: 14, fontWeight: FontWeight.w800)),
+                              Text('top_score_tips'.tr, style: const TextStyle(color: Color(0xFFFFE000), fontSize: 14, fontWeight: FontWeight.w800)),
                             ],
                           ),
                           const SizedBox(height: 10),
@@ -372,11 +369,9 @@ class _SectionCard extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(18),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: const Color(0xFF1E293B),
           borderRadius: BorderRadius.circular(18),
-          boxShadow: [
-            BoxShadow(color: color.withValues(alpha: 0.12), blurRadius: 12, offset: const Offset(0, 4)),
-          ],
+          border: Border.all(color: const Color(0xFF334155)),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -385,15 +380,15 @@ class _SectionCard extends StatelessWidget {
               width: 44,
               height: 44,
               decoration: BoxDecoration(
-                color: color.withValues(alpha: 0.12),
+                color: color.withValues(alpha: 0.15),
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Icon(icon, color: color, size: 24),
             ),
             const SizedBox(height: 14),
-            Text(title, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800, color: Color(0xFF1A1A2E))),
+            Text(title, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800, color: const Color(0xFF1E293B))),
             const SizedBox(height: 4),
-            Text(subtitle, style: const TextStyle(fontSize: 12, color: Color(0xFF6B7280))),
+            Text(subtitle, style: const TextStyle(fontSize: 12, color: Color(0xFF94A3B8))),
           ],
         ),
       ),
@@ -441,7 +436,7 @@ class _ToolCard extends StatelessWidget {
                 color: Colors.white.withValues(alpha: 0.2),
                 borderRadius: BorderRadius.circular(12),
               ),
-              child: Icon(icon, color: Colors.white, size: 24),
+              child: Icon(icon, color: const Color(0xFF1E293B), size: 24),
             ),
             const SizedBox(width: 14),
             Expanded(
@@ -471,9 +466,9 @@ class _TipItem extends StatelessWidget {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text('  \u2022  ', style: TextStyle(color: Color(0xFFFFA000), fontSize: 13)),
+        const Text('  •  ', style: TextStyle(color: Color(0xFFFFE000), fontSize: 13)),
         Expanded(
-          child: Text(text, style: const TextStyle(color: Color(0xFF5D4037), fontSize: 13, height: 1.3)),
+          child: Text(text, style: const TextStyle(color: Color(0xFF94A3B8), fontSize: 13, height: 1.3)),
         ),
       ],
     );

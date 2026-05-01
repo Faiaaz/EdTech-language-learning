@@ -17,7 +17,7 @@ class CourseDetailScreen extends StatelessWidget {
     final course = ctrl.selectedCourse!;
 
     return Scaffold(
-      backgroundColor: const Color(0xFF4DA6E8),
+      backgroundColor: const Color(0xFF0F172A),
       body: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -44,7 +44,7 @@ class CourseDetailScreen extends StatelessWidget {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           const Icon(Icons.arrow_back_ios_rounded,
-                              color: Colors.white, size: 14),
+                              color: const Color(0xFF1E293B), size: 14),
                           const SizedBox(width: 4),
                           Text('back'.tr,
                               style: const TextStyle(
@@ -150,7 +150,7 @@ class CourseDetailScreen extends StatelessWidget {
                               child: const Center(
                                 child: Text('あア',
                                     style: TextStyle(
-                                      color: Colors.white,
+                                      color: const Color(0xFF1E293B),
                                       fontSize: 18,
                                       fontWeight: FontWeight.w800,
                                     )),
@@ -189,7 +189,7 @@ class CourseDetailScreen extends StatelessWidget {
                                 shape: BoxShape.circle,
                               ),
                               child: const Icon(Icons.arrow_forward_rounded,
-                                  color: Colors.white, size: 18),
+                                  color: const Color(0xFF1E293B), size: 18),
                             ),
                           ],
                         ),
@@ -277,7 +277,7 @@ class _LessonTile extends StatelessWidget {
         margin: const EdgeInsets.only(bottom: 12),
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: const Color(0xFF1E293B),
           borderRadius: BorderRadius.circular(14),
           boxShadow: [
             BoxShadow(
@@ -294,14 +294,14 @@ class _LessonTile extends StatelessWidget {
               width: 42,
               height: 42,
               decoration: BoxDecoration(
-                color: const Color(0xFF4DA6E8).withValues(alpha: 0.12),
+                color: const Color(0xFF0F172A).withValues(alpha: 0.12),
                 shape: BoxShape.circle,
               ),
               child: Center(
                 child: Text(
                   '$index',
                   style: const TextStyle(
-                    color: Color(0xFF4DA6E8),
+                    color: const Color(0xFF0F172A),
                     fontSize: 17,
                     fontWeight: FontWeight.w800,
                   ),
@@ -340,11 +340,11 @@ class _LessonTile extends StatelessWidget {
                       children: [
                         if (hasVideo) ...[
                           const Icon(Icons.play_circle_outline_rounded,
-                              color: Color(0xFF4DA6E8), size: 16),
+                              color: const Color(0xFF0F172A), size: 16),
                           const SizedBox(width: 4),
                           Text('video'.tr,
                               style: const TextStyle(
-                                color: Color(0xFF4DA6E8),
+                                color: const Color(0xFF0F172A),
                                 fontSize: 11,
                                 fontWeight: FontWeight.w600,
                               )),

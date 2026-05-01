@@ -41,15 +41,15 @@ class IeltsListeningScreen extends StatelessWidget {
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          const Icon(Icons.arrow_back_ios_rounded, color: Colors.white, size: 14),
+                          const Icon(Icons.arrow_back_ios_rounded, color: const Color(0xFF1E293B), size: 14),
                           const SizedBox(width: 4),
-                          Text('back'.tr, style: const TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w600)),
+                          Text('back'.tr, style: const TextStyle(color: const Color(0xFF1E293B), fontSize: 13, fontWeight: FontWeight.w600)),
                         ],
                       ),
                     ),
                   ),
                   const SizedBox(height: 16),
-                  Text('listening_practice'.tr, style: const TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.w900)),
+                  Text('listening_practice'.tr, style: const TextStyle(color: const Color(0xFF1E293B), fontSize: 24, fontWeight: FontWeight.w900)),
                   const SizedBox(height: 4),
                   Text('listening_practice_desc'.tr,
                       style: TextStyle(color: Colors.white.withValues(alpha: 0.8), fontSize: 14)),
@@ -80,7 +80,7 @@ class IeltsListeningScreen extends StatelessWidget {
                           child: Container(
                             padding: const EdgeInsets.all(18),
                             decoration: BoxDecoration(
-                              color: Colors.white,
+                              color: const Color(0xFF1E293B),
                               borderRadius: BorderRadius.circular(16),
                               boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.06), blurRadius: 10, offset: const Offset(0, 4))],
                             ),
@@ -159,10 +159,10 @@ class _ListeningPractice extends StatelessWidget {
               color: const Color(0xFF2196F3),
               child: Row(
                 children: [
-                  GestureDetector(onTap: () => Get.back(), child: const Icon(Icons.arrow_back_ios_rounded, color: Colors.white, size: 20)),
+                  GestureDetector(onTap: () => Get.back(), child: const Icon(Icons.arrow_back_ios_rounded, color: const Color(0xFF1E293B), size: 20)),
                   const SizedBox(width: 12),
                   Expanded(
-                    child: Text(ctrl.currentListening.title, style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w700), maxLines: 1, overflow: TextOverflow.ellipsis),
+                    child: Text(ctrl.currentListening.title, style: const TextStyle(color: const Color(0xFF1E293B), fontSize: 16, fontWeight: FontWeight.w700), maxLines: 1, overflow: TextOverflow.ellipsis),
                   ),
                 ],
               ),
@@ -198,7 +198,7 @@ class _ListeningPractice extends StatelessWidget {
                         child: Container(
                           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                           decoration: BoxDecoration(
-                            color: Colors.white,
+                            color: const Color(0xFF1E293B),
                             borderRadius: BorderRadius.circular(12),
                             border: Border.all(color: const Color(0xFF90CAF9)),
                           ),
@@ -219,7 +219,7 @@ class _ListeningPractice extends StatelessWidget {
                         Container(
                           padding: const EdgeInsets.all(16),
                           decoration: BoxDecoration(
-                            color: Colors.white,
+                            color: const Color(0xFF1E293B),
                             borderRadius: BorderRadius.circular(14),
                             boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.05), blurRadius: 8)],
                           ),
@@ -247,7 +247,7 @@ class _ListeningPractice extends StatelessWidget {
                               gradient: const LinearGradient(colors: [Color(0xFF2196F3), Color(0xFF1565C0)]),
                               borderRadius: BorderRadius.circular(14),
                             ),
-                            child: Center(child: Text('submit_answers'.tr, style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w800))),
+                            child: Center(child: Text('submit_answers'.tr, style: const TextStyle(color: const Color(0xFF1E293B), fontSize: 16, fontWeight: FontWeight.w800))),
                           ),
                         ),
 
@@ -260,10 +260,10 @@ class _ListeningPractice extends StatelessWidget {
                           ),
                           child: Column(
                             children: [
-                              const Icon(Icons.check_circle_rounded, color: Colors.white, size: 48),
+                              const Icon(Icons.check_circle_rounded, color: const Color(0xFF1E293B), size: 48),
                               const SizedBox(height: 12),
                               Text('${ctrl.listeningScore.value} / ${section.questions.length}',
-                                  style: const TextStyle(color: Colors.white, fontSize: 32, fontWeight: FontWeight.w900)),
+                                  style: const TextStyle(color: const Color(0xFF1E293B), fontSize: 32, fontWeight: FontWeight.w900)),
                               const SizedBox(height: 4),
                               Text('correct_answers'.tr, style: const TextStyle(color: Colors.white70, fontSize: 14)),
                               const SizedBox(height: 16),
@@ -275,7 +275,7 @@ class _ListeningPractice extends StatelessWidget {
                                 },
                                 child: Container(
                                   padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                                  decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(12)),
+                                  decoration: BoxDecoration(color: const Color(0xFF1E293B), borderRadius: BorderRadius.circular(12)),
                                   child: Text('try_another_section'.tr, style: const TextStyle(color: Color(0xFF1565C0), fontSize: 14, fontWeight: FontWeight.w700)),
                                 ),
                               ),
@@ -312,7 +312,7 @@ class _ListeningQuestionCard extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: 16),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: const Color(0xFF1E293B),
         borderRadius: BorderRadius.circular(14),
         border: submitted ? Border.all(color: isCorrect ? const Color(0xFF4CAF50) : const Color(0xFFF44336), width: 2) : null,
         boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.04), blurRadius: 6)],

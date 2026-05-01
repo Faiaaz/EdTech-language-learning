@@ -247,7 +247,7 @@ class _LessonScreenState extends State<LessonScreen> {
 
     // ── NORMAL layout ──────────────────────────────────────────────
     return Scaffold(
-      backgroundColor: const Color(0xFF4DA6E8),
+      backgroundColor: const Color(0xFF0F172A),
       body: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -264,15 +264,15 @@ class _LessonScreenState extends State<LessonScreen> {
                   padding:
                       const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                   decoration: BoxDecoration(
-                    color: Colors.white.withValues(alpha: 0.2),
+                    color: const Color(0xFF1E293B),
                     borderRadius: BorderRadius.circular(20),
-                    border: Border.all(color: Colors.white38, width: 1),
+                    border: Border.all(color: const Color(0xFF334155), width: 1),
                   ),
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       const Icon(Icons.arrow_back_ios_rounded,
-                          color: Colors.white, size: 14),
+                          color: const Color(0xFF1E293B), size: 14),
                       const SizedBox(width: 4),
                       Text(
                         'back'.tr,
@@ -317,7 +317,7 @@ class _LessonScreenState extends State<LessonScreen> {
                 width: double.infinity,
                 padding: const EdgeInsets.fromLTRB(24, 28, 24, 24),
                 decoration: const BoxDecoration(
-                  color: Colors.white,
+                  color: Color(0xFF1E293B),
                   borderRadius:
                       BorderRadius.vertical(top: Radius.circular(28)),
                 ),
@@ -363,18 +363,18 @@ class _LessonScreenState extends State<LessonScreen> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      'Start today’s session',
+                                      ‘Start today’s session’,
                                       style: TextStyle(
-                                        color: Color(0xFF1A1A2E),
+                                        color: Colors.white,
                                         fontWeight: FontWeight.w900,
                                         fontSize: 14,
                                       ),
                                     ),
                                     SizedBox(height: 2),
                                     Text(
-                                      '3–7 minutes • streak-safe',
+                                      ‘3–7 minutes • streak-safe’,
                                       style: TextStyle(
-                                        color: Color(0xFF6B7280),
+                                        color: Color(0xFF94A3B8),
                                         fontWeight: FontWeight.w600,
                                         fontSize: 12,
                                       ),
@@ -382,7 +382,7 @@ class _LessonScreenState extends State<LessonScreen> {
                                   ],
                                 ),
                               ),
-                              const Icon(Icons.chevron_right_rounded, color: Color(0xFF1A1A2E)),
+                              const Icon(Icons.chevron_right_rounded, color: Colors.white),
                             ],
                           ),
                         ),
@@ -391,7 +391,7 @@ class _LessonScreenState extends State<LessonScreen> {
                       Text(
                         lesson.title,
                         style: const TextStyle(
-                          color: Color(0xFF1A1A2E),
+                          color: Colors.white,
                           fontSize: 22,
                           fontWeight: FontWeight.w900,
                           height: 1.2,
@@ -401,18 +401,18 @@ class _LessonScreenState extends State<LessonScreen> {
                       Text(
                         lesson.description,
                         style: const TextStyle(
-                          color: Color(0xFF6B7280),
+                          color: Color(0xFF94A3B8),
                           fontSize: 14,
                           fontWeight: FontWeight.w400,
                         ),
                       ),
                       const SizedBox(height: 20),
-                      Container(height: 1, color: const Color(0xFFE5E7EB)),
+                      Container(height: 1, color: const Color(0xFF334155)),
                       const SizedBox(height: 20),
                       Text(
                         lesson.content.body,
                         style: const TextStyle(
-                          color: Color(0xFF374151),
+                          color: Colors.white,
                           fontSize: 16,
                           fontWeight: FontWeight.w400,
                           height: 1.6,
@@ -486,7 +486,7 @@ class _LessonScreenState extends State<LessonScreen> {
                                   child: Text(
                                     'start'.tr,
                                     style: const TextStyle(
-                                      color: Colors.white,
+                                      color: const Color(0xFF1E293B),
                                       fontSize: 12,
                                       fontWeight: FontWeight.w700,
                                     ),
@@ -506,7 +506,7 @@ class _LessonScreenState extends State<LessonScreen> {
                             padding: EdgeInsets.only(top: 28),
                             child: Center(
                               child: CircularProgressIndicator(
-                                color: Color(0xFF4DA6E8),
+                                color: const Color(0xFF3B82F6),
                               ),
                             ),
                           );
@@ -549,7 +549,7 @@ class _LessonScreenState extends State<LessonScreen> {
   Widget _buildVideoContent() {
     if (_videoError) {
       return Container(
-        color: Colors.black,
+        color: Colors.white,
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -569,7 +569,7 @@ class _LessonScreenState extends State<LessonScreen> {
 
     if (!_videoInitialised) {
       return Container(
-        color: Colors.black,
+        color: Colors.white,
         child: const Center(
           child: CircularProgressIndicator(color: Colors.white),
         ),
@@ -863,16 +863,16 @@ class _LessonGameCard extends StatelessWidget {
         margin: const EdgeInsets.only(bottom: 10),
         padding: const EdgeInsets.all(14),
         decoration: BoxDecoration(
-          color: const Color(0xFF4DA6E8).withValues(alpha: 0.08),
+          color: const Color(0xFF3B82F6).withValues(alpha: 0.08),
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
-            color: const Color(0xFF4DA6E8).withValues(alpha: 0.25),
+            color: const Color(0xFF3B82F6).withValues(alpha: 0.25),
           ),
         ),
         child: Row(
           children: [
             const Icon(Icons.sports_esports_rounded,
-                color: Color(0xFF4DA6E8), size: 22),
+                color: const Color(0xFF3B82F6), size: 22),
             const SizedBox(width: 12),
             Expanded(
               child: Column(
@@ -903,13 +903,13 @@ class _LessonGameCard extends StatelessWidget {
               padding:
                   const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
               decoration: BoxDecoration(
-                color: const Color(0xFF4DA6E8).withValues(alpha: 0.12),
+                color: const Color(0xFF3B82F6).withValues(alpha: 0.12),
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Text(
                 game.type,
                 style: const TextStyle(
-                  color: Color(0xFF4DA6E8),
+                  color: const Color(0xFF3B82F6),
                   fontSize: 11,
                   fontWeight: FontWeight.w600,
                 ),

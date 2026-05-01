@@ -51,7 +51,7 @@ class _KanaChartScreenState extends State<KanaChartScreen> {
     final list = _displayList;
 
     return Scaffold(
-      backgroundColor: _sakuraLight,
+      backgroundColor: const Color(0xFF0F172A),
       body: SafeArea(
         child: Column(
           children: [
@@ -84,7 +84,7 @@ class _KanaChartScreenState extends State<KanaChartScreen> {
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               const Icon(Icons.arrow_back_ios_rounded,
-                                  color: Colors.white, size: 14),
+                                  color: const Color(0xFF1E293B), size: 14),
                               const SizedBox(width: 4),
                               Text('back'.tr,
                                   style: const TextStyle(
@@ -179,16 +179,16 @@ class _KanaChartScreenState extends State<KanaChartScreen> {
                       duration: const Duration(milliseconds: 200),
                       decoration: BoxDecoration(
                         color: isSelected
-                            ? _sakura.withValues(alpha: 0.15)
-                            : Colors.white,
+                            ? _sakura.withValues(alpha: 0.18)
+                            : const Color(0xFF1E293B),
                         borderRadius: BorderRadius.circular(14),
                         border: Border.all(
-                          color: isSelected ? _sakura : const Color(0xFFE0E0E0),
+                          color: isSelected ? _sakura : const Color(0xFF334155),
                           width: isSelected ? 2 : 1,
                         ),
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.black.withValues(alpha: 0.04),
+                            color: Colors.black.withValues(alpha: 0.2),
                             blurRadius: 6,
                             offset: const Offset(0, 2),
                           ),
@@ -203,8 +203,8 @@ class _KanaChartScreenState extends State<KanaChartScreen> {
                               fontSize: 28,
                               fontWeight: FontWeight.w700,
                               color: isSelected
-                                  ? _sakuraDark
-                                  : const Color(0xFF1A1A2E),
+                                  ? _sakura
+                                  : Colors.white,
                             ),
                           ),
                           const SizedBox(height: 4),
@@ -215,7 +215,7 @@ class _KanaChartScreenState extends State<KanaChartScreen> {
                               fontWeight: FontWeight.w600,
                               color: isSelected
                                   ? _sakura
-                                  : const Color(0xFF6B7280),
+                                  : const Color(0xFF94A3B8),
                             ),
                           ),
                         ],
@@ -319,7 +319,7 @@ class _KanaDetailSheetState extends State<_KanaDetailSheet>
     return Container(
       padding: const EdgeInsets.fromLTRB(24, 16, 24, 32),
       decoration: const BoxDecoration(
-        color: Colors.white,
+        color: Color(0xFF1E293B),
         borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
       ),
       child: Column(
@@ -330,7 +330,7 @@ class _KanaDetailSheetState extends State<_KanaDetailSheet>
             width: 40,
             height: 4,
             decoration: BoxDecoration(
-              color: const Color(0xFFE0E0E0),
+              color: const Color(0xFF334155),
               borderRadius: BorderRadius.circular(2),
             ),
           ),
@@ -345,9 +345,9 @@ class _KanaDetailSheetState extends State<_KanaDetailSheet>
                 width: 100,
                 height: 100,
                 decoration: BoxDecoration(
-                  color: _sakura.withValues(alpha: 0.08),
+                  color: _sakura.withValues(alpha: 0.12),
                   borderRadius: BorderRadius.circular(20),
-                  border: Border.all(color: _sakura.withValues(alpha: 0.3)),
+                  border: Border.all(color: _sakura.withValues(alpha: 0.4)),
                 ),
                 child: Center(
                   child: Text(
@@ -355,7 +355,7 @@ class _KanaDetailSheetState extends State<_KanaDetailSheet>
                     style: const TextStyle(
                       fontSize: 56,
                       fontWeight: FontWeight.w700,
-                      color: Color(0xFF1A1A2E),
+                      color: const Color(0xFF1E293B),
                     ),
                   ),
                 ),
@@ -369,9 +369,9 @@ class _KanaDetailSheetState extends State<_KanaDetailSheet>
                   width: 100,
                   height: 100,
                   decoration: BoxDecoration(
-                    color: const Color(0xFFF5F5F5),
+                    color: const Color(0xFF0F172A),
                     borderRadius: BorderRadius.circular(20),
-                    border: Border.all(color: const Color(0xFFE0E0E0)),
+                    border: Border.all(color: const Color(0xFF334155)),
                   ),
                   child: AnimatedBuilder(
                     animation: _strokeProgress,
@@ -412,7 +412,7 @@ class _KanaDetailSheetState extends State<_KanaDetailSheet>
             child: Text(
               kana.romaji.toUpperCase(),
               style: const TextStyle(
-                color: Colors.white,
+                color: const Color(0xFF1E293B),
                 fontSize: 20,
                 fontWeight: FontWeight.w800,
                 letterSpacing: 2,
@@ -427,14 +427,14 @@ class _KanaDetailSheetState extends State<_KanaDetailSheet>
             width: double.infinity,
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: const Color(0xFFFFF8E1),
+              color: const Color(0xFF0F172A),
               borderRadius: BorderRadius.circular(14),
-              border: Border.all(color: const Color(0xFFFFE082)),
+              border: Border.all(color: const Color(0xFF334155)),
             ),
             child: Row(
               children: [
                 const Icon(Icons.lightbulb_outline_rounded,
-                    color: Color(0xFFFFA000), size: 22),
+                    color: Color(0xFFFFE000), size: 22),
                 const SizedBox(width: 12),
                 Expanded(
                   child: Column(
@@ -443,7 +443,7 @@ class _KanaDetailSheetState extends State<_KanaDetailSheet>
                       Text(
                         'memory_hint'.tr,
                         style: const TextStyle(
-                          color: Color(0xFFF57F17),
+                          color: Color(0xFFFFE000),
                           fontSize: 11,
                           fontWeight: FontWeight.w700,
                           letterSpacing: 0.5,
@@ -453,7 +453,7 @@ class _KanaDetailSheetState extends State<_KanaDetailSheet>
                       Text(
                         kana.mnemonic,
                         style: const TextStyle(
-                          color: Color(0xFF5D4037),
+                          color: Color(0xFF94A3B8),
                           fontSize: 14,
                           fontWeight: FontWeight.w500,
                         ),
@@ -522,7 +522,7 @@ class _KanaDetailSheetState extends State<_KanaDetailSheet>
                   width: 56,
                   height: 56,
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: const Color(0xFF0F172A),
                     borderRadius: BorderRadius.circular(16),
                     border: Border.all(color: _sakura, width: 2),
                   ),
@@ -534,10 +534,10 @@ class _KanaDetailSheetState extends State<_KanaDetailSheet>
                         color: _sakura,
                         size: 22,
                       ),
-                      const Text(
+                      Text(
                         'Slow',
                         style: TextStyle(
-                          color: Color(0xFFE91E63),
+                          color: _sakura,
                           fontSize: 9,
                           fontWeight: FontWeight.w700,
                         ),
@@ -598,7 +598,7 @@ class _StrokeOrderPainter extends CustomPainter {
 
     // Draw guide lines
     final guidePaint = Paint()
-      ..color = const Color(0xFFE0E0E0)
+      ..color = const Color(0xFF334155)
       ..strokeWidth = 0.5;
 
     canvas.drawLine(

@@ -32,7 +32,7 @@ class IeltsWritingScreen extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                       decoration: BoxDecoration(color: Colors.white.withValues(alpha: 0.2), borderRadius: BorderRadius.circular(20), border: Border.all(color: Colors.white38)),
                       child: Row(mainAxisSize: MainAxisSize.min, children: [
-                        const Icon(Icons.arrow_back_ios_rounded, color: Colors.white, size: 14),
+                        const Icon(Icons.arrow_back_ios_rounded, color: const Color(0xFF1E293B), size: 14),
                         const SizedBox(width: 4),
                         Text('back'.tr, style: const TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w600)),
                       ]),
@@ -65,7 +65,7 @@ class IeltsWritingScreen extends StatelessWidget {
                           child: Container(
                             padding: const EdgeInsets.all(18),
                             decoration: BoxDecoration(
-                              color: Colors.white,
+                              color: const Color(0xFF1E293B),
                               borderRadius: BorderRadius.circular(16),
                               boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.06), blurRadius: 10, offset: const Offset(0, 4))],
                             ),
@@ -156,7 +156,7 @@ class _WritingPractice extends StatelessWidget {
                       Container(
                         padding: const EdgeInsets.all(16),
                         decoration: BoxDecoration(
-                          color: Colors.white,
+                          color: const Color(0xFF1E293B),
                           borderRadius: BorderRadius.circular(14),
                           border: Border.all(color: const Color(0xFFFFCC80)),
                         ),
@@ -203,7 +203,7 @@ class _WritingPractice extends StatelessWidget {
                       Text('your_essay'.tr, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800, color: Color(0xFF1A1A2E))),
                       const SizedBox(height: 10),
                       Container(
-                        decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(14), boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.05), blurRadius: 8)]),
+                        decoration: BoxDecoration(color: const Color(0xFF1E293B), borderRadius: BorderRadius.circular(14), boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.05), blurRadius: 8)]),
                         child: TextField(
                           onChanged: (val) => ctrl.updateEssay(val),
                           maxLines: 12,
@@ -259,7 +259,7 @@ class _WritingPractice extends StatelessWidget {
                           child: Center(
                             child: Text(
                               ctrl.showModelAnswer.value ? 'Hide Model Answer' : 'Show Model Answer',
-                              style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w800),
+                              style: const TextStyle(color: const Color(0xFF1E293B), fontSize: 16, fontWeight: FontWeight.w800),
                             ),
                           ),
                         ),
@@ -270,7 +270,7 @@ class _WritingPractice extends StatelessWidget {
                         Container(
                           padding: const EdgeInsets.all(16),
                           decoration: BoxDecoration(
-                            color: Colors.white,
+                            color: const Color(0xFF1E293B),
                             borderRadius: BorderRadius.circular(14),
                             border: Border.all(color: const Color(0xFF4CAF50), width: 2),
                           ),

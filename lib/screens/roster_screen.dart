@@ -12,7 +12,7 @@ class RosterScreen extends StatefulWidget {
 }
 
 class _RosterScreenState extends State<RosterScreen> with SingleTickerProviderStateMixin {
-  static const _bg = Color(0xFF4DA6E8);
+  static const _bg = Color(0xFF0F172A);
   static const _accent = Color(0xFFFFE000);
 
   late TabController _tabs;
@@ -105,7 +105,7 @@ class _RostersTab extends StatelessWidget {
           if (ctrl.error.value.isNotEmpty)
             Padding(
               padding: const EdgeInsets.only(bottom: 12),
-              child: Text(ctrl.error.value, style: const TextStyle(color: Colors.white)),
+              child: Text(ctrl.error.value, style: const TextStyle(color: const Color(0xFF1E293B))),
             ),
           _Glass(
             title: 'Create roster',
@@ -141,7 +141,7 @@ class _RostersTab extends StatelessWidget {
           const Text(
             'Your rosters',
             style: TextStyle(
-              color: Colors.white,
+              color: const Color(0xFF1E293B),
               fontWeight: FontWeight.w900,
               fontSize: 16,
             ),
@@ -157,7 +157,7 @@ class _RostersTab extends StatelessWidget {
               (r) => Padding(
                 padding: const EdgeInsets.only(bottom: 10),
                 child: Material(
-                  color: Colors.white,
+                  color: const Color(0xFF1E293B),
                   borderRadius: BorderRadius.circular(16),
                   child: ListTile(
                     title: Text(
@@ -243,7 +243,7 @@ class _SlotsTab extends StatelessWidget {
             Text(
               title,
               style: const TextStyle(
-                color: Colors.white,
+                color: const Color(0xFF1E293B),
                 fontWeight: FontWeight.w900,
                 fontSize: 16,
               ),
@@ -280,7 +280,7 @@ class _SlotCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final ctrl = RosterController.to;
     return Material(
-      color: Colors.white,
+      color: const Color(0xFF1E293B),
       borderRadius: BorderRadius.circular(16),
       child: Padding(
         padding: const EdgeInsets.all(16),
@@ -304,7 +304,7 @@ class _SlotCard extends StatelessWidget {
               const SizedBox(height: 4),
               Text(
                 'post: ${slot.postId}',
-                style: TextStyle(color: Colors.grey.shade700, fontSize: 12),
+                style: TextStyle(color: const Color(0xFF94A3B8), fontSize: 12),
               ),
             ],
             if (showActions) ...[
@@ -372,7 +372,7 @@ class _Glass extends StatelessWidget {
           Text(
             title,
             style: const TextStyle(
-              color: Colors.white,
+              color: const Color(0xFF1E293B),
               fontWeight: FontWeight.w900,
               fontSize: 14,
             ),

@@ -9,7 +9,7 @@ class LmsCourseDetailScreen extends StatelessWidget {
 
   final LmsCourseSummary course;
 
-  static const _bg = Color(0xFF4DA6E8);
+  static const _bg = Color(0xFF0F172A);
   static const _accent = Color(0xFFFFE000);
 
   Future<void> _progressDialog(BuildContext context, {String? presetLessonId}) async {
@@ -111,7 +111,7 @@ class LmsCourseDetailScreen extends StatelessWidget {
             Container(
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: const Color(0xFF1E293B),
                 borderRadius: BorderRadius.circular(16),
                 boxShadow: [
                   BoxShadow(
@@ -144,7 +144,7 @@ class LmsCourseDetailScreen extends StatelessWidget {
                     Text(
                       course.description!,
                       style: TextStyle(
-                        color: Colors.grey.shade800,
+                        color: Colors.white,
                         height: 1.35,
                         fontSize: 14,
                       ),
@@ -154,7 +154,7 @@ class LmsCourseDetailScreen extends StatelessWidget {
                   Text(
                     '${course.lessons.length} lessons',
                     style: TextStyle(
-                      color: Colors.grey.shade700,
+                      color: const Color(0xFF94A3B8),
                       fontWeight: FontWeight.w600,
                     ),
                   ),
@@ -167,7 +167,7 @@ class LmsCourseDetailScreen extends StatelessWidget {
                 const Text(
                   'Lessons',
                   style: TextStyle(
-                    color: Colors.white,
+                    color: const Color(0xFF1E293B),
                     fontSize: 18,
                     fontWeight: FontWeight.w900,
                   ),

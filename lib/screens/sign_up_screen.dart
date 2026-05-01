@@ -468,7 +468,7 @@ class _SignUpScreenState extends State<SignUpScreen>
                                                 height: 22,
                                                 child:
                                                     CircularProgressIndicator(
-                                                  color: Colors.white,
+                                                  color: const Color(0xFF1E293B),
                                                   strokeWidth: 2.5,
                                                 ),
                                               )

@@ -22,7 +22,7 @@ class DailySessionRunnerScreen extends StatefulWidget {
 }
 
 class _DailySessionRunnerScreenState extends State<DailySessionRunnerScreen> {
-  static const _bg = Color(0xFF4DA6E8);
+  static const _bg = const Color(0xFF0F172A);
   static const _accent = Color(0xFFFFE000);
 
   late final DailySessionPlan _plan;
@@ -73,7 +73,7 @@ class _DailySessionRunnerScreenState extends State<DailySessionRunnerScreen> {
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          const Icon(Icons.close_rounded, color: Colors.white, size: 16),
+                          const Icon(Icons.close_rounded, color: const Color(0xFF1E293B), size: 16),
                           const SizedBox(width: 6),
                           Text(
                             'Exit',
@@ -106,7 +106,7 @@ class _DailySessionRunnerScreenState extends State<DailySessionRunnerScreen> {
                 child: LinearProgressIndicator(
                   value: progress,
                   minHeight: 7,
-                  backgroundColor: Colors.white.withValues(alpha: 0.25),
+                  backgroundColor: const Color(0xFF0F172A).withValues(alpha: 0.25),
                   valueColor: const AlwaysStoppedAnimation<Color>(_accent),
                 ),
               ),
@@ -117,7 +117,7 @@ class _DailySessionRunnerScreenState extends State<DailySessionRunnerScreen> {
                 width: double.infinity,
                 padding: const EdgeInsets.fromLTRB(20, 18, 20, 22),
                 decoration: const BoxDecoration(
-                  color: Colors.white,
+                  color: const Color(0xFF1E293B),
                   borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
                 ),
                 child: step == null
@@ -236,9 +236,9 @@ class _SrsReviewState extends State<_SrsReview> {
                 width: double.infinity,
                 padding: const EdgeInsets.symmetric(vertical: 34, horizontal: 18),
                 decoration: BoxDecoration(
-                  color: const Color(0xFF4DA6E8).withValues(alpha: 0.08),
+                  color: const Color(0xFF0F172A).withValues(alpha: 0.08),
                   borderRadius: BorderRadius.circular(18),
-                  border: Border.all(color: const Color(0xFF4DA6E8).withValues(alpha: 0.25)),
+                  border: Border.all(color: const Color(0xFF0F172A).withValues(alpha: 0.25)),
                 ),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
@@ -249,7 +249,7 @@ class _SrsReviewState extends State<_SrsReview> {
                       style: TextStyle(
                         fontSize: _showAnswer ? 18 : 16,
                         fontWeight: FontWeight.w800,
-                        color: const Color(0xFF1A1A2E),
+                        color: Colors.white,
                         height: 1.35,
                       ),
                     ),
@@ -259,7 +259,7 @@ class _SrsReviewState extends State<_SrsReview> {
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontSize: 12,
-                        color: const Color(0xFF6B7280).withValues(alpha: 0.85),
+                        color: const Color(0xFF94A3B8).withValues(alpha: 0.85),
                       ),
                     ),
                   ],
@@ -446,7 +446,7 @@ class _WrapUpState extends State<_WrapUp> {
             shouldLoop: false,
             colors: const [
               Color(0xFFFFE000),
-              Color(0xFF4DA6E8),
+              const Color(0xFF0F172A),
               Color(0xFF43A047),
               Color(0xFFE53935),
             ],
@@ -582,9 +582,9 @@ class _SecondaryButton extends StatelessWidget {
         width: double.infinity,
         padding: const EdgeInsets.symmetric(vertical: 14),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: const Color(0xFF1E293B),
           borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: const Color(0xFFE5E7EB)),
+          border: Border.all(color: const Color(0xFF1E293B)),
         ),
         child: Center(
           child: Text(

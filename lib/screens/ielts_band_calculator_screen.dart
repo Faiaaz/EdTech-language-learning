@@ -57,14 +57,14 @@ class _IeltsBandCalculatorScreenState extends State<IeltsBandCalculatorScreen> {
                       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                       decoration: BoxDecoration(color: Colors.white.withValues(alpha: 0.2), borderRadius: BorderRadius.circular(20), border: Border.all(color: Colors.white38)),
                       child: Row(mainAxisSize: MainAxisSize.min, children: [
-                        const Icon(Icons.arrow_back_ios_rounded, color: Colors.white, size: 14),
+                        const Icon(Icons.arrow_back_ios_rounded, color: const Color(0xFF1E293B), size: 14),
                         const SizedBox(width: 4),
-                        Text('back'.tr, style: const TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w600)),
+                        Text('back'.tr, style: const TextStyle(color: const Color(0xFF1E293B), fontSize: 13, fontWeight: FontWeight.w600)),
                       ]),
                     ),
                   ),
                   const SizedBox(height: 16),
-                  Text('band_calc'.tr, style: const TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.w900)),
+                  Text('band_calc'.tr, style: const TextStyle(color: const Color(0xFF1E293B), fontSize: 24, fontWeight: FontWeight.w900)),
                   const SizedBox(height: 4),
                   Text('band_calc_desc'.tr, style: TextStyle(color: Colors.white.withValues(alpha: 0.8), fontSize: 14)),
                 ],
@@ -79,7 +79,7 @@ class _IeltsBandCalculatorScreenState extends State<IeltsBandCalculatorScreen> {
                     Container(
                       padding: const EdgeInsets.all(28),
                       decoration: BoxDecoration(
-                        color: Colors.white,
+                        color: const Color(0xFF1E293B),
                         borderRadius: BorderRadius.circular(20),
                         boxShadow: [BoxShadow(color: _bandColor(_overall).withValues(alpha: 0.2), blurRadius: 20, offset: const Offset(0, 8))],
                       ),
@@ -139,7 +139,7 @@ class _IeltsBandCalculatorScreenState extends State<IeltsBandCalculatorScreen> {
                     Container(
                       padding: const EdgeInsets.all(16),
                       decoration: BoxDecoration(
-                        color: Colors.white,
+                        color: const Color(0xFF1E293B),
                         borderRadius: BorderRadius.circular(16),
                         boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.06), blurRadius: 10)],
                       ),
@@ -221,7 +221,7 @@ class _BandSlider extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: const Color(0xFF1E293B),
         borderRadius: BorderRadius.circular(14),
         boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.04), blurRadius: 6)],
       ),
@@ -278,7 +278,7 @@ class _RequirementRow extends StatelessWidget {
         Expanded(child: Text(label, style: const TextStyle(fontSize: 13, color: Color(0xFF1565C0)))),
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 2),
-          decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(8)),
+          decoration: BoxDecoration(color: const Color(0xFF1E293B), borderRadius: BorderRadius.circular(8)),
           child: Text(band, style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w800, color: Color(0xFF1565C0))),
         ),
       ]),

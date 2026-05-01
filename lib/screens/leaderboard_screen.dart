@@ -14,7 +14,7 @@ class LeaderboardScreen extends StatefulWidget {
 }
 
 class _LeaderboardScreenState extends State<LeaderboardScreen> {
-  static const _bgColor = Color(0xFF4DA6E8);
+  static const _bgColor = Color(0xFF0F172A);
   static const _accentColor = Color(0xFFFFE000);
 
   @override
@@ -43,7 +43,7 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
                   Text(
                     'nav_leaderboard'.tr,
                     style: const TextStyle(
-                      color: Colors.white,
+                      color: const Color(0xFF1E293B),
                       fontSize: 24,
                       fontWeight: FontWeight.w800,
                     ),
@@ -122,7 +122,7 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
                                 backgroundColor: _accentColor),
                             child: Text('retry'.tr,
                                 style:
-                                    const TextStyle(color: Colors.black87)),
+                                    const TextStyle(color: Colors.white)),
                           ),
                         ],
                       ),
@@ -265,7 +265,7 @@ class _LeaderboardRow extends StatelessWidget {
                 Text(
                   entry.userName,
                   style: const TextStyle(
-                    color: Colors.white,
+                    color: const Color(0xFF1E293B),
                     fontSize: 15,
                     fontWeight: FontWeight.w700,
                   ),

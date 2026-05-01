@@ -34,14 +34,14 @@ class IeltsVocabularyScreen extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                       decoration: BoxDecoration(color: Colors.white.withValues(alpha: 0.2), borderRadius: BorderRadius.circular(20), border: Border.all(color: Colors.white38)),
                       child: const Row(mainAxisSize: MainAxisSize.min, children: [
-                        Icon(Icons.arrow_back_ios_rounded, color: Colors.white, size: 14),
+                        Icon(Icons.arrow_back_ios_rounded, color: const Color(0xFF1E293B), size: 14),
                         SizedBox(width: 4),
-                        Text('Back', style: TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w600)),
+                        Text('Back', style: TextStyle(color: const Color(0xFF1E293B), fontSize: 13, fontWeight: FontWeight.w600)),
                       ]),
                     ),
                   ),
                   const SizedBox(height: 16),
-                  const Text('Academic Vocabulary', style: TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.w900)),
+                  const Text('Academic Vocabulary', style: TextStyle(color: const Color(0xFF1E293B), fontSize: 24, fontWeight: FontWeight.w900)),
                   const SizedBox(height: 4),
                   Text('Master high-frequency IELTS words with spaced repetition', style: TextStyle(color: Colors.white.withValues(alpha: 0.8), fontSize: 14)),
                   const SizedBox(height: 12),
@@ -116,11 +116,11 @@ class _VocabHome extends StatelessWidget {
                 Container(
                   width: 52, height: 52,
                   decoration: BoxDecoration(color: Colors.white.withValues(alpha: 0.2), borderRadius: BorderRadius.circular(14)),
-                  child: const Icon(Icons.play_arrow_rounded, color: Colors.white, size: 32),
+                  child: const Icon(Icons.play_arrow_rounded, color: const Color(0xFF1E293B), size: 32),
                 ),
                 const SizedBox(width: 16),
                 const Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                  Text('Start Review Session', style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.w800)),
+                  Text('Start Review Session', style: TextStyle(color: const Color(0xFF1E293B), fontSize: 18, fontWeight: FontWeight.w800)),
                   SizedBox(height: 2),
                   Text('Review due vocabulary with flashcards', style: TextStyle(color: Colors.white70, fontSize: 13)),
                 ])),
@@ -159,7 +159,7 @@ class _VocabWordCard extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: 10),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: const Color(0xFF1E293B),
         borderRadius: BorderRadius.circular(14),
         boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.04), blurRadius: 6)],
       ),
@@ -239,7 +239,7 @@ class _VocabReviewSession extends StatelessWidget {
               width: double.infinity,
               padding: const EdgeInsets.all(28),
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: const Color(0xFF1E293B),
                 borderRadius: BorderRadius.circular(20),
                 boxShadow: [BoxShadow(color: const Color(0xFF667EEA).withValues(alpha: 0.15), blurRadius: 20, offset: const Offset(0, 8))],
               ),
@@ -281,7 +281,7 @@ class _VocabReviewSession extends StatelessWidget {
                   gradient: const LinearGradient(colors: [Color(0xFF667EEA), Color(0xFF764BA2)]),
                   borderRadius: BorderRadius.circular(14),
                 ),
-                child: const Center(child: Text('Show Answer', style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w800))),
+                child: const Center(child: Text('Show Answer', style: TextStyle(color: const Color(0xFF1E293B), fontSize: 16, fontWeight: FontWeight.w800))),
               ),
             ),
 
@@ -318,7 +318,7 @@ class _RatingButton extends StatelessWidget {
         child: Container(
           padding: const EdgeInsets.symmetric(vertical: 14),
           decoration: BoxDecoration(color: color, borderRadius: BorderRadius.circular(12)),
-          child: Center(child: Text(label, style: const TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w700))),
+          child: Center(child: Text(label, style: const TextStyle(color: const Color(0xFF1E293B), fontSize: 14, fontWeight: FontWeight.w700))),
         ),
       ),
     );
@@ -344,7 +344,7 @@ class _VocabSessionSummary extends StatelessWidget {
           Container(
             padding: const EdgeInsets.all(28),
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: const Color(0xFF1E293B),
               borderRadius: BorderRadius.circular(20),
               boxShadow: [BoxShadow(color: const Color(0xFF667EEA).withValues(alpha: 0.15), blurRadius: 20, offset: const Offset(0, 8))],
             ),
@@ -370,7 +370,7 @@ class _VocabSessionSummary extends StatelessWidget {
                 gradient: const LinearGradient(colors: [Color(0xFF667EEA), Color(0xFF764BA2)]),
                 borderRadius: BorderRadius.circular(14),
               ),
-              child: const Center(child: Text('Done', style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w800))),
+              child: const Center(child: Text('Done', style: TextStyle(color: const Color(0xFF1E293B), fontSize: 16, fontWeight: FontWeight.w800))),
             ),
           ),
         ],

@@ -13,7 +13,7 @@ class ComingSoonScreen extends StatelessWidget {
   final String titleKey;
   final IconData? icon;
 
-  static const _bgColor = Color(0xFF4DA6E8);
+  static const _bgColor = Color(0xFF0F172A);
   static const _accentColor = Color(0xFFFFE000);
 
   @override
@@ -45,7 +45,7 @@ class ComingSoonScreen extends StatelessWidget {
                 Text(
                   titleKey.tr,
                   style: const TextStyle(
-                    color: Colors.white,
+                    color: const Color(0xFF1E293B),
                     fontSize: 22,
                     fontWeight: FontWeight.w800,
                   ),
