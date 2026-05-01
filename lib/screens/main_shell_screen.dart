@@ -4,8 +4,8 @@ import 'package:get/get.dart';
 import 'package:ez_trainz/controllers/course_controller.dart';
 import 'package:ez_trainz/controllers/program_controller.dart';
 import 'package:ez_trainz/models/program.dart';
+import 'package:ez_trainz/screens/duo_learn_screen.dart';
 import 'package:ez_trainz/screens/forum_screen.dart';
-import 'package:ez_trainz/screens/course_list_screen.dart';
 import 'package:ez_trainz/screens/games_screen.dart';
 import 'package:ez_trainz/screens/ielts_dashboard_screen.dart';
 import 'package:ez_trainz/screens/leaderboard_screen.dart';
@@ -30,11 +30,11 @@ class _MainShellScreenState extends State<MainShellScreen> {
   static const _unselectedColor = Color(0xFF94A3B8);
 
   static const _tabs = [
-    _NavItem(icon: Icons.school_rounded, labelKey: 'nav_learn'),
-    _NavItem(icon: Icons.fitness_center_rounded, labelKey: 'nav_practice'),
-    _NavItem(icon: Icons.person_rounded, labelKey: 'nav_profile'),
-    _NavItem(icon: Icons.people_rounded, labelKey: 'nav_community'),
-    _NavItem(icon: Icons.emoji_events_rounded, labelKey: 'nav_leaderboard'),
+    _NavItem(icon: Icons.shield_rounded),
+    _NavItem(icon: Icons.fitness_center_rounded),
+    _NavItem(icon: Icons.emoji_events_rounded),
+    _NavItem(icon: Icons.people_alt_rounded),
+    _NavItem(icon: Icons.person_rounded),
   ];
 
   @override
@@ -51,65 +51,58 @@ class _MainShellScreenState extends State<MainShellScreen> {
             if (ProgramController.to.current == Program.elc) {
               return const IeltsDashboardScreen();
             }
-            return const CourseListScreen();
+            return const DuoLearnScreen();
           }),
           const GamesScreen(),
-          const ProfileScreen(),
-          const ForumScreen(),
           const LeaderboardScreen(),
+          const ForumScreen(),
+          const ProfileScreen(),
         ],
       ),
       bottomNavigationBar: Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           color: _navBgColor,
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.12),
-              blurRadius: 12,
-              offset: const Offset(0, -4),
-            ),
-          ],
+          border: Border(
+            top: BorderSide(color: Color(0xFF334155), width: 1),
+          ),
         ),
         child: SafeArea(
+          top: false,
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: List.generate(_tabs.length, (i) {
                 final tab = _tabs[i];
                 final selected = _currentIndex == i;
-                return GestureDetector(
-                  onTap: () => setState(() => _currentIndex = i),
-                  behavior: HitTestBehavior.opaque,
-                  child: AnimatedContainer(
-                    duration: const Duration(milliseconds: 200),
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 12, vertical: 10),
-                    decoration: BoxDecoration(
-                      color: selected
-                          ? _selectedColor.withValues(alpha: 0.25)
-                          : Colors.transparent,
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(
+                return Expanded(
+                  child: GestureDetector(
+                    onTap: () => setState(() => _currentIndex = i),
+                    behavior: HitTestBehavior.opaque,
+                    child: AnimatedContainer(
+                      duration: const Duration(milliseconds: 180),
+                      margin: const EdgeInsets.symmetric(horizontal: 4),
+                      padding: const EdgeInsets.symmetric(vertical: 10),
+                      decoration: BoxDecoration(
+                        color: selected
+                            ? _selectedColor.withValues(alpha: 0.18)
+                            : Colors.transparent,
+                        borderRadius: BorderRadius.circular(14),
+                        border: Border.all(
+                          color: selected
+                              ? _selectedColor.withValues(alpha: 0.55)
+                              : Colors.transparent,
+                          width: 1.4,
+                        ),
+                      ),
+                      child: Center(
+                        child: Icon(
                           tab.icon,
-                          size: 24,
-                          color: selected ? _selectedColor : _unselectedColor,
+                          size: 28,
+                          color:
+                              selected ? _selectedColor : _unselectedColor,
                         ),
-                        const SizedBox(height: 4),
-                        Text(
-                          tab.labelKey.tr,
-                          style: TextStyle(
-                            fontSize: 11,
-                            fontWeight:
-                                selected ? FontWeight.w700 : FontWeight.w500,
-                            color: selected ? _selectedColor : _unselectedColor,
-                          ),
-                        ),
-                      ],
+                      ),
                     ),
                   ),
                 );
@@ -123,9 +116,8 @@ class _MainShellScreenState extends State<MainShellScreen> {
 }
 
 class _NavItem {
-  const _NavItem({required this.icon, required this.labelKey});
+  const _NavItem({required this.icon});
   final IconData icon;
-  final String labelKey;
 }
 
 /// Shown in Learn tab when no program is selected. Tapping a card sets program and loads courses.
