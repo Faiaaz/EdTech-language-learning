@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'dart:math' as math;
-import 'dart:ui';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -31,10 +30,11 @@ class _HiraganaLesson1ScreenState extends State<HiraganaLesson1Screen> {
 
   static const _seekStep = Duration(seconds: 10);
   static const _autoHide = Duration(seconds: 3);
-  static const _dark = Color(0xFF1A1A2E);
-  static const _bgTop = Color(0xFFF2FBFF);
-  static const _bgMid = Color(0xFFBFEFFF);
-  static const _bgBottom = Color(0xFF2BA8D6);
+  static const _navyBg = Color(0xFF0F172A);
+  static const _navyCard = Color(0xFF1E293B);
+  static const _navyBorder = Color(0xFF334155);
+  static const _textMuted = Color(0xFF94A3B8);
+  static const _accentBlue = Color(0xFF3B82F6);
 
   // ── Interactive checkpoint (Lesson 1) ─────────────────────────
   static const Duration _mcqPauseAt = Duration(seconds: 70); // 1:10
@@ -307,245 +307,396 @@ class _HiraganaLesson1ScreenState extends State<HiraganaLesson1Screen> {
     }
 
     return Scaffold(
-      body: Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [_bgTop, _bgMid, _bgBottom],
-            stops: [0.0, 0.45, 1.0],
-          ),
-        ),
-        child: SafeArea(
-          child: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.fromLTRB(18, 12, 18, 0),
-                child: Row(
-                  children: [
-                    InkWell(
-                      onTap: () {
-                        _videoCtrl?.pause();
-                        Get.back();
-                      },
-                      borderRadius: BorderRadius.circular(999),
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 14, vertical: 9),
-                        decoration: BoxDecoration(
-                          color: Colors.white.withValues(alpha: 0.55),
-                          borderRadius: BorderRadius.circular(999),
-                          border: Border.all(
-                              color: Colors.white.withValues(alpha: 0.65),
-                              width: 1),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withValues(alpha: 0.06),
-                              blurRadius: 16,
-                              offset: const Offset(0, 8),
-                            ),
-                          ],
+      backgroundColor: _navyBg,
+      body: SafeArea(
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(16, 12, 16, 8),
+              child: Row(
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      _videoCtrl?.pause();
+                      Get.back();
+                    },
+                    child: const Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(Icons.arrow_back_ios_new_rounded,
+                            color: _textMuted, size: 18),
+                        SizedBox(width: 4),
+                        Text(
+                          'レッスン',
+                          style: TextStyle(
+                            color: _textMuted,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                          ),
                         ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  const Expanded(
+                    child: Text(
+                      'Lesson 1: Hiragana Part 1',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w800,
+                      ),
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            if (hasVideo)
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(14),
+                  child: AspectRatio(
+                    aspectRatio: 16 / 9,
+                    child: Stack(fit: StackFit.expand, children: [
+                      _videoSurface(),
+                      const Positioned(
+                        top: 8,
+                        left: 10,
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            const Icon(Icons.arrow_back_ios_new_rounded,
-                                color: Color(0xFF1E88E5), size: 16),
-                            const SizedBox(width: 6),
                             Text(
-                              'back'.tr,
-                              style: const TextStyle(
-                                color: Color(0xFF1E88E5),
-                                fontSize: 13,
+                              'EZ',
+                              style: TextStyle(
+                                color: Color(0xFFFFE000),
+                                fontSize: 11,
+                                fontWeight: FontWeight.w900,
+                                height: 1,
+                              ),
+                            ),
+                            SizedBox(width: 2),
+                            Text(
+                              'TRAINZ',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 10,
                                 fontWeight: FontWeight.w800,
+                                letterSpacing: 1,
+                                height: 1,
                               ),
                             ),
                           ],
                         ),
                       ),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 12),
-              if (hasVideo)
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 18),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(18),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withValues(alpha: 0.14),
-                          blurRadius: 26,
-                          offset: const Offset(0, 18),
-                        ),
-                      ],
-                    ),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(18),
-                      child: AspectRatio(
-                        aspectRatio: 16 / 9,
-                        child: Stack(fit: StackFit.expand, children: [
-                          _videoSurface(),
-                          _controlsOverlay(false),
-                        ]),
-                      ),
-                    ),
+                      _controlsOverlay(false),
+                    ]),
                   ),
                 ),
-              if (hasVideo) const SizedBox(height: 12),
-              Expanded(child: _buildContent(lesson)),
-            ],
-          ),
+              ),
+            if (hasVideo) const SizedBox(height: 14),
+            Expanded(child: _buildContent(lesson)),
+          ],
         ),
       ),
     );
   }
 
   Widget _buildContent(dynamic lesson) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(18, 0, 18, 14),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(26),
-        child: BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: 18, sigmaY: 18),
-          child: Container(
-            width: double.infinity,
-            decoration: BoxDecoration(
-              color: Colors.white.withValues(alpha: 0.38),
-              borderRadius: BorderRadius.circular(26),
-              border:
-                  Border.all(color: Colors.white.withValues(alpha: 0.60), width: 1.2),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.10),
-                  blurRadius: 28,
-                  offset: const Offset(0, 18),
-                ),
-              ],
-            ),
+    return SingleChildScrollView(
+      physics: const BouncingScrollPhysics(),
+      padding: const EdgeInsets.fromLTRB(16, 0, 16, 24),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _card(
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Expanded(
-                  child: SingleChildScrollView(
-                    physics: const BouncingScrollPhysics(),
-                    padding: const EdgeInsets.fromLTRB(20, 18, 20, 12),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          lesson.title,
-                          style: const TextStyle(
-                            color: _dark,
-                            fontSize: 22,
-                            fontWeight: FontWeight.w900,
-                            height: 1.2,
-                          ),
-                        ),
-                        const SizedBox(height: 6),
-                        Text(
-                          lesson.description,
-                          style: const TextStyle(
-                            color: Color(0xFF4B5563),
-                            fontSize: 14,
-                            fontWeight: FontWeight.w500,
-                            height: 1.35,
-                          ),
-                        ),
-                        const SizedBox(height: 18),
-                        const Text(
-                          'What we are learning',
-                          style: TextStyle(
-                            color: _dark,
-                            fontSize: 18,
-                            fontWeight: FontWeight.w900,
-                          ),
-                        ),
-                        const SizedBox(height: 10),
-                        Text(
-                          lesson.description,
-                          style: TextStyle(
-                            color: _dark.withValues(alpha: 0.75),
-                            fontSize: 14,
-                            height: 1.5,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                        const SizedBox(height: 16),
-                        Container(
-                          padding: const EdgeInsets.all(14),
-                          decoration: BoxDecoration(
-                            color: Colors.white.withValues(alpha: 0.55),
-                            borderRadius: BorderRadius.circular(16),
-                            border: Border.all(
-                                color: Colors.white.withValues(alpha: 0.70)),
-                          ),
-                          child: Row(
-                            children: [
-                              Container(
-                                width: 40,
-                                height: 40,
-                                decoration: BoxDecoration(
-                                  color: const Color(0xFF1E88E5)
-                                      .withValues(alpha: 0.16),
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
-                                child: const Icon(Icons.quiz_rounded,
-                                    color: Color(0xFF1E88E5)),
-                              ),
-                              const SizedBox(width: 12),
-                              Expanded(
-                                child: Text(
-                                  'Interactive checkpoints: 1:10, 1:56, 2:40',
-                                  style: TextStyle(
-                                    color: _dark.withValues(alpha: 0.78),
-                                    fontWeight: FontWeight.w800,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        const SizedBox(height: 10),
-                      ],
-                    ),
+                Text(
+                  lesson.title,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 18,
+                    fontWeight: FontWeight.w800,
+                    height: 1.2,
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(20, 0, 20, 16),
-                  child: Align(
-                    alignment: Alignment.center,
-                    child: ConstrainedBox(
-                      constraints: const BoxConstraints(maxWidth: 220),
-                      child: ElevatedButton.icon(
-                        onPressed: () {
-                          HapticFeedback.selectionClick();
-                          Get.to(() => const HatPreviewInterstitialScreen());
-                        },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFF1E88E5),
-                          foregroundColor: Colors.white,
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 18, vertical: 12),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(999),
-                          ),
-                          elevation: 0,
-                        ),
-                        icon: const Icon(Icons.arrow_forward_rounded, size: 18),
-                        label: const Text(
-                          'Next',
-                          style: TextStyle(fontWeight: FontWeight.w900),
-                        ),
-                      ),
-                    ),
+                const SizedBox(height: 6),
+                Text(
+                  lesson.description,
+                  style: const TextStyle(
+                    color: _textMuted,
+                    fontSize: 13,
+                    fontWeight: FontWeight.w500,
+                    height: 1.4,
                   ),
                 ),
               ],
             ),
           ),
+          const SizedBox(height: 12),
+          _card(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Container(
+                      width: 32,
+                      height: 32,
+                      decoration: BoxDecoration(
+                        color: _accentBlue.withValues(alpha: 0.18),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: const Icon(Icons.flag_rounded,
+                          color: _accentBlue, size: 18),
+                    ),
+                    const SizedBox(width: 10),
+                    const Text(
+                      'Interactive Checkpoints',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 15,
+                        fontWeight: FontWeight.w800,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 14),
+                _checkpoint('1:10', 'Introduction',
+                    Icons.play_circle_outline_rounded),
+                const SizedBox(height: 10),
+                _checkpoint('1:56', 'Vowel Sounds', Icons.music_note_rounded),
+                const SizedBox(height: 10),
+                _checkpoint(
+                    '2:40', 'Basic Characters', Icons.translate_rounded),
+              ],
+            ),
+          ),
+          const SizedBox(height: 12),
+          _card(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Container(
+                      width: 32,
+                      height: 32,
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFFFE000).withValues(alpha: 0.15),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: const Icon(Icons.quiz_rounded,
+                          color: Color(0xFFFFE000), size: 18),
+                    ),
+                    const SizedBox(width: 10),
+                    const Text(
+                      'Practice Quizzes',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 15,
+                        fontWeight: FontWeight.w800,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 14),
+                Row(
+                  children: [
+                    Expanded(
+                        child: _quizCard('Speaking\nQuiz', Icons.mic_rounded,
+                            const Color(0xFFEC4899))),
+                    const SizedBox(width: 10),
+                    Expanded(
+                        child: _quizCard('Listening\nQuiz',
+                            Icons.headphones_rounded, _accentBlue)),
+                  ],
+                ),
+                const SizedBox(height: 10),
+                Row(
+                  children: [
+                    Expanded(
+                        child: _quizCard('Writing\nQuiz', Icons.edit_rounded,
+                            const Color(0xFF10B981))),
+                    const SizedBox(width: 10),
+                    Expanded(
+                        child: _quizCard('Reading\nQuiz',
+                            Icons.menu_book_rounded, const Color(0xFFFFE000))),
+                  ],
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 12),
+          _rainbowBorderCard(
+            child: Row(
+              children: [
+                Container(
+                  width: 44,
+                  height: 44,
+                  decoration: BoxDecoration(
+                    gradient: const LinearGradient(
+                      colors: [Color(0xFF6366F1), Color(0xFFEC4899)],
+                    ),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: const Icon(Icons.video_call_rounded,
+                      color: Colors.white, size: 24),
+                ),
+                const SizedBox(width: 14),
+                const Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Book a Live Lesson',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 15,
+                          fontWeight: FontWeight.w800,
+                        ),
+                      ),
+                      Text(
+                        '20 mins • 1-on-1 with a tutor',
+                        style: TextStyle(
+                          color: _textMuted,
+                          fontSize: 12,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const Icon(Icons.arrow_forward_ios_rounded,
+                    color: _textMuted, size: 16),
+              ],
+            ),
+          ),
+          const SizedBox(height: 20),
+          SizedBox(
+            width: double.infinity,
+            height: 52,
+            child: ElevatedButton(
+              onPressed: () {
+                HapticFeedback.selectionClick();
+                Get.to(() => const HatPreviewInterstitialScreen());
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: _accentBlue,
+                foregroundColor: Colors.white,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(14),
+                ),
+                elevation: 0,
+              ),
+              child: const Text(
+                'Next',
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w900),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _card({required Widget child}) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: _navyCard,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: _navyBorder, width: 1),
+      ),
+      child: child,
+    );
+  }
+
+  Widget _checkpoint(String time, String label, IconData icon) {
+    return Row(
+      children: [
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+          decoration: BoxDecoration(
+            color: _accentBlue.withValues(alpha: 0.18),
+            borderRadius: BorderRadius.circular(6),
+          ),
+          child: Text(
+            time,
+            style: const TextStyle(
+              color: _accentBlue,
+              fontSize: 12,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
         ),
+        const SizedBox(width: 12),
+        Icon(icon, color: _textMuted, size: 18),
+        const SizedBox(width: 8),
+        Text(
+          label,
+          style: const TextStyle(
+            color: Colors.white,
+            fontSize: 14,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _quizCard(String label, IconData icon, Color color) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+      decoration: BoxDecoration(
+        color: color.withValues(alpha: 0.10),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: color.withValues(alpha: 0.25), width: 1),
+      ),
+      child: Row(
+        children: [
+          Icon(icon, color: color, size: 22),
+          const SizedBox(width: 10),
+          Text(
+            label,
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 13,
+              fontWeight: FontWeight.w700,
+              height: 1.3,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _rainbowBorderCard({required Widget child}) {
+    return Container(
+      padding: const EdgeInsets.all(2),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(18),
+        gradient: const LinearGradient(
+          colors: [
+            Color(0xFF6366F1),
+            Color(0xFFEC4899),
+            Color(0xFFFFE000),
+            Color(0xFF10B981),
+            Color(0xFF3B82F6),
+          ],
+        ),
+      ),
+      child: Container(
+        padding: const EdgeInsets.all(14),
+        decoration: BoxDecoration(
+          color: _navyCard,
+          borderRadius: BorderRadius.circular(16),
+        ),
+        child: child,
       ),
     );
   }
