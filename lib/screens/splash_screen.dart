@@ -289,13 +289,20 @@ class _SkyBackground extends StatelessWidget {
   const _SkyBackground();
 
   // Pixel-sampled from popup_screen.gif edges
-  static const _topSky     = Color(0xFF4EBCE2);
-  static const _bottomCloud = Color(0xFFE8F6FA);
+  static const _topSky     = Color(0xFF52BEE2);
+  static const _bottomCloud = Color(0xFFE9F7FB);
 
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(builder: (_, constraints) {
-      final featherH = constraints.maxHeight * 0.15;
+      // GIF is square (460×460). On a portrait screen it's width-constrained,
+      // leaving (screenH - screenW) / 2 gap on each side.
+      // Feather covers the gap plus a small bleed into the GIF.
+      final w = constraints.maxWidth;
+      final h = constraints.maxHeight;
+      final gifDisplayH = w.clamp(0.0, h);
+      final gapFraction = ((h - gifDisplayH) / 2 / h).clamp(0.0, 0.45);
+      final featherH = h * (gapFraction + 0.06); // gap + 6% bleed
 
       return Stack(
         fit: StackFit.expand,
@@ -332,7 +339,7 @@ class _SkyBackground extends StatelessWidget {
                   gradient: LinearGradient(
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
-                    colors: [_topSky, Color(0x004EBCE2)],
+                    colors: [_topSky, Color(0x0052BEE2)],
                   ),
                 ),
               ),
@@ -349,7 +356,7 @@ class _SkyBackground extends StatelessWidget {
                   gradient: LinearGradient(
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
-                    colors: [Color(0x00E8F6FA), _bottomCloud],
+                    colors: [Color(0x00E9F7FB), _bottomCloud],
                   ),
                 ),
               ),
