@@ -53,4 +53,7 @@ flutter:
     - assets/images/stitch_crowned_achievement.png
     - assets/images/girl_avatar_no_hat.png
     - assets/images/girl_avatar_hatted.png
+    - assets/images/trial_end_popup.png
+    - assets/images/trial_subscribe_popup.png
+    - assets/images/signup_form_popup.png
     - assets/avatars/

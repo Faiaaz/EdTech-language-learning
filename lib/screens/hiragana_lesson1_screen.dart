@@ -6,10 +6,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:video_player/video_player.dart';
+import 'package:confetti/confetti.dart';
 
 import 'package:ez_trainz/controllers/course_controller.dart';
+import 'package:ez_trainz/controllers/collectibles_controller.dart';
 import 'package:ez_trainz/screens/hat_preview_interstitial_screen.dart';
-import 'package:ez_trainz/screens/lesson1_game_flow_screen.dart';
 
 class HiraganaLesson1Screen extends StatefulWidget {
   const HiraganaLesson1Screen({super.key});
@@ -27,6 +28,7 @@ class _HiraganaLesson1ScreenState extends State<HiraganaLesson1Screen> {
   bool _isDragging = false;
   double _sliderVal = 0.0;
   Timer? _hideTimer;
+  bool _leafCelebrated = false;
 
   static const _seekStep = Duration(seconds: 10);
   static const _autoHide = Duration(seconds: 3);
@@ -158,6 +160,20 @@ class _HiraganaLesson1ScreenState extends State<HiraganaLesson1Screen> {
       if (!_speechPrompted && !_mcqOpen) {
         _speechPrompted = true;
         Future<void>(() async {
+          if (!mounted) return;
+          if (!_leafCelebrated) {
+            _leafCelebrated = true;
+            final awarded =
+                await CollectiblesController.to.awardLesson1LeafIfNeeded();
+            if (awarded && mounted) {
+              await showDialog<void>(
+                context: context,
+                barrierDismissible: true,
+                barrierColor: Colors.black.withValues(alpha: 0.72),
+                builder: (_) => const _LeafEarnedDialog(),
+              );
+            }
+          }
           if (!mounted) return;
           await showDialog<void>(
             context: context,
@@ -1435,6 +1451,176 @@ class _SpeechGamePrompt extends StatelessWidget {
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+class _LeafEarnedDialog extends StatefulWidget {
+  const _LeafEarnedDialog();
+
+  @override
+  State<_LeafEarnedDialog> createState() => _LeafEarnedDialogState();
+}
+
+class _LeafEarnedDialogState extends State<_LeafEarnedDialog>
+    with TickerProviderStateMixin {
+  static const _gold = Color(0xFFFFE000);
+
+  late final ConfettiController _confetti;
+  late final AnimationController _drop;
+  late final AnimationController _pulse;
+
+  @override
+  void initState() {
+    super.initState();
+    _confetti = ConfettiController(duration: const Duration(seconds: 2));
+    _drop = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 900),
+    );
+    _pulse = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 1400),
+    )..repeat(reverse: true);
+
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      HapticFeedback.heavyImpact();
+      _confetti.play();
+      await _drop.forward();
+    });
+  }
+
+  @override
+  void dispose() {
+    _confetti.dispose();
+    _drop.dispose();
+    _pulse.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Dialog(
+      backgroundColor: const Color(0xFF111827),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(22)),
+      child: Stack(
+        alignment: Alignment.topCenter,
+        children: [
+          Padding(
+            padding: const EdgeInsets.fromLTRB(18, 22, 18, 16),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const SizedBox(height: 12),
+                AnimatedBuilder(
+                  animation: Listenable.merge([_drop, _pulse]),
+                  builder: (_, __) {
+                    final t = Curves.easeOutBack.transform(_drop.value);
+                    final y = (1 - t) * -70;
+                    final glow = 0.25 + 0.20 * _pulse.value;
+                    return Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        Container(
+                          width: 120,
+                          height: 120,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            gradient: RadialGradient(
+                              colors: [
+                                _gold.withValues(alpha: glow),
+                                _gold.withValues(alpha: 0.0),
+                              ],
+                            ),
+                          ),
+                        ),
+                        Transform.translate(
+                          offset: Offset(0, y),
+                          child: Transform.rotate(
+                            angle: -0.4 + 0.25 * _pulse.value,
+                            child: Icon(
+                              Icons.eco_rounded,
+                              size: 64,
+                              color: _gold,
+                              shadows: [
+                                Shadow(
+                                  color: _gold.withValues(alpha: 0.55),
+                                  blurRadius: 24,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    );
+                  },
+                ),
+                const SizedBox(height: 12),
+                const Text(
+                  'Leaf earned!',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 18,
+                    fontWeight: FontWeight.w900,
+                  ),
+                ),
+                const SizedBox(height: 6),
+                Text(
+                  'Lesson 1 complete. Your tree just grew.',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: Colors.white.withValues(alpha: 0.65),
+                    fontSize: 13.5,
+                    height: 1.25,
+                  ),
+                ),
+                const SizedBox(height: 14),
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: () => Navigator.of(context).pop(),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: _gold,
+                      foregroundColor: Colors.black87,
+                      padding: const EdgeInsets.symmetric(vertical: 14),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(999),
+                      ),
+                      elevation: 0,
+                    ),
+                    child: const Text(
+                      'Awesome',
+                      style: TextStyle(
+                        fontWeight: FontWeight.w900,
+                        fontSize: 14.5,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Align(
+            alignment: Alignment.topCenter,
+            child: ConfettiWidget(
+              confettiController: _confetti,
+              blastDirection: math.pi / 2,
+              numberOfParticles: 18,
+              maxBlastForce: 22,
+              minBlastForce: 10,
+              gravity: 0.22,
+              emissionFrequency: 0.07,
+              colors: const [
+                Color(0xFFFFE000),
+                Color(0xFF3B82F6),
+                Color(0xFF10B981),
+                Color(0xFF8B5CF6),
+                Color(0xFFF59E0B),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }

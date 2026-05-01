@@ -18,6 +18,8 @@ import 'package:ez_trainz/controllers/roster_controller.dart';
 import 'package:ez_trainz/controllers/journey_controller.dart';
 import 'package:ez_trainz/controllers/streak_controller.dart';
 import 'package:ez_trainz/controllers/lightning_streak_controller.dart';
+import 'package:ez_trainz/controllers/collectibles_controller.dart';
+import 'package:ez_trainz/controllers/hearts_controller.dart';
 import 'package:ez_trainz/l10n/app_translations.dart';
 import 'package:ez_trainz/screens/course_list_screen.dart';
 import 'package:ez_trainz/screens/login_screen.dart';
@@ -25,6 +27,8 @@ import 'package:ez_trainz/screens/main_shell_screen.dart';
 import 'package:ez_trainz/screens/splash_screen.dart';
 import 'package:ez_trainz/screens/avatar_onboarding_screen.dart';
 import 'package:ez_trainz/screens/journey_screen.dart';
+import 'package:ez_trainz/screens/lesson_quiz_screen.dart';
+import 'package:ez_trainz/models/lesson_challenge.dart';
 import 'package:ez_trainz/utils/app_theme.dart';
 
 const bool _kBypassAuth = false;
@@ -47,6 +51,8 @@ Future<void> main() async {
   Get.put(JourneyController(), permanent: true);
   Get.put(StreakController(), permanent: true);
   Get.put(LightningStreakController(), permanent: true);
+  Get.put(CollectiblesController(), permanent: true);
+  Get.put(HeartsController(), permanent: true);
 
   await auth.restoreSession();
 
@@ -75,6 +81,43 @@ class MyApp extends StatelessWidget {
       getPages: [
         GetPage(name: '/login', page: () => const LoginScreen()),
         GetPage(name: '/courses', page: () => const CourseListScreen()),
+        GetPage(
+          name: '/lesson/quiz',
+          page: () => const LessonQuizScreen(
+            challenges: [
+              LessonChallenge(
+                id: 'c1',
+                type: LessonChallengeType.selectCorrect,
+                prompt: 'Which word matches this?',
+                jp: 'あさ',
+                romaji: 'asa',
+                correctChoiceId: 'a',
+                choices: [
+                  LessonChoice(id: 'a', label: 'morning'),
+                  LessonChoice(id: 'b', label: 'house'),
+                  LessonChoice(id: 'c', label: 'sushi'),
+                  LessonChoice(id: 'd', label: 'goodbye'),
+                ],
+              ),
+              LessonChallenge(
+                id: 'c2',
+                type: LessonChallengeType.assist,
+                prompt: 'Select the correct romaji.',
+                jp: 'いえ',
+                romaji: 'ie',
+                correctChoiceId: 'b',
+                choices: [
+                  LessonChoice(id: 'a', label: 'asa'),
+                  LessonChoice(id: 'b', label: 'ie'),
+                  LessonChoice(id: 'c', label: 'sushi'),
+                  LessonChoice(id: 'd', label: 'konnichiwa'),
+                ],
+              ),
+            ],
+          ),
+          transition: Transition.rightToLeftWithFade,
+          transitionDuration: const Duration(milliseconds: 260),
+        ),
         GetPage(
           name: '/journey',
           page: () => const JourneyScreen(),

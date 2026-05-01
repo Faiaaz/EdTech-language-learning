@@ -9,6 +9,7 @@ import 'package:ez_trainz/controllers/lightning_streak_controller.dart';
 import 'package:ez_trainz/models/hiragana_lesson_data.dart';
 import 'package:ez_trainz/screens/hat_earned_screen.dart';
 import 'package:ez_trainz/widgets/lightning_streak_bar.dart';
+import 'package:ez_trainz/widgets/tree_shadow.dart';
 
 /// Duolingo-style lesson flow that starts immediately after Lesson 1.
 /// Includes lightning streak + smooth drawing validator (pixel similarity).
@@ -217,6 +218,7 @@ class _Lesson1GameFlowScreenState extends State<Lesson1GameFlowScreen>
         ),
         child: Stack(
           children: [
+            const TreeShadow(alignment: Alignment.bottomRight),
             // Dark scrim so white UI stays readable.
             Container(color: const Color(0xFF061118).withValues(alpha: 0.52)),
             Stack(
@@ -569,12 +571,8 @@ class _Header extends StatelessWidget {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        Image.asset(
-          'assets/images/ninja_penguin_transparent.png',
-          width: 58,
-          height: 58,
-        ),
-        const SizedBox(width: 12),
+        const Icon(Icons.park_rounded, color: Colors.white70, size: 26),
+        const SizedBox(width: 10),
         Expanded(
           child: Text(
             title,
