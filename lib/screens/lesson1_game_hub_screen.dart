@@ -11,7 +11,7 @@ class Lesson1GameHubScreen extends StatelessWidget {
 
   static const _bgTop = Color(0xFF0B1220);
   static const _bgMid = Color(0xFF123B8A);
-  static const _bgBottom = Color(0xFF2BA8D6);
+  static const _bgBottom = Color(0xFF0F172A);
 
   @override
   Widget build(BuildContext context) {
@@ -35,14 +35,14 @@ class Lesson1GameHubScreen extends StatelessWidget {
                     IconButton(
                       onPressed: () => Get.back(),
                       icon: const Icon(Icons.arrow_back_rounded,
-                          color: Colors.white),
+                          color: const Color(0xFF1E293B)),
                     ),
                     const SizedBox(width: 6),
                     const Expanded(
                       child: Text(
                         'Lesson 1 Games',
                         style: TextStyle(
-                          color: Colors.white,
+                          color: const Color(0xFF1E293B),
                           fontWeight: FontWeight.w900,
                           fontSize: 18,
                         ),
@@ -156,7 +156,7 @@ class _HeroHeader extends StatelessWidget {
                   Text(
                     'Pick a game to practice Lesson 1',
                     style: TextStyle(
-                      color: Colors.white,
+                      color: const Color(0xFF1E293B),
                       fontWeight: FontWeight.w900,
                       fontSize: 16,
                     ),
@@ -165,7 +165,7 @@ class _HeroHeader extends StatelessWidget {
                   Text(
                     'Everything here uses only Lesson 1 kana and 3 words.',
                     style: TextStyle(
-                      color: Color(0xFFD1D5DB),
+                      color: const Color(0xFF1E293B),
                       fontWeight: FontWeight.w600,
                       height: 1.35,
                     ),
@@ -280,7 +280,7 @@ class _GameCard extends StatelessWidget {
                 Text(
                   title,
                   style: const TextStyle(
-                    color: Colors.white,
+                    color: const Color(0xFF1E293B),
                     fontWeight: FontWeight.w900,
                     fontSize: 18,
                     height: 1.15,
@@ -488,7 +488,7 @@ class _KanaSprintScreenState extends State<KanaSprintScreen> {
             child: Container(
               padding: const EdgeInsets.all(18),
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: const Color(0xFF1E293B),
                 borderRadius: BorderRadius.circular(22),
                 boxShadow: [
                   BoxShadow(
@@ -578,14 +578,14 @@ class _KanaSprintScreenState extends State<KanaSprintScreen> {
                     IconButton(
                       onPressed: () => Get.back(),
                       icon: const Icon(Icons.arrow_back_rounded,
-                          color: Colors.white),
+                          color: const Color(0xFF1E293B)),
                     ),
                     const SizedBox(width: 6),
                     const Expanded(
                       child: Text(
                         'Kana Sprint',
                         style: TextStyle(
-                          color: Colors.white,
+                          color: const Color(0xFF1E293B),
                           fontWeight: FontWeight.w900,
                           fontSize: 18,
                         ),
@@ -756,7 +756,7 @@ class _KanaChoice extends StatelessWidget {
             child: Text(
               kana,
               style: const TextStyle(
-                color: Colors.white,
+                color: const Color(0xFF1E293B),
                 fontSize: 34,
                 fontWeight: FontWeight.w900,
                 height: 1,
@@ -857,7 +857,7 @@ class _PictureWordsScreenState extends State<PictureWordsScreen> {
             child: Container(
               padding: const EdgeInsets.all(18),
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: const Color(0xFF1E293B),
                 borderRadius: BorderRadius.circular(22),
                 boxShadow: [
                   BoxShadow(
@@ -947,14 +947,14 @@ class _PictureWordsScreenState extends State<PictureWordsScreen> {
                     IconButton(
                       onPressed: () => Get.back(),
                       icon: const Icon(Icons.arrow_back_rounded,
-                          color: Colors.white),
+                          color: const Color(0xFF1E293B)),
                     ),
                     const SizedBox(width: 6),
                     const Expanded(
                       child: Text(
                         'Picture Words',
                         style: TextStyle(
-                          color: Colors.white,
+                          color: const Color(0xFF1E293B),
                           fontWeight: FontWeight.w900,
                           fontSize: 18,
                         ),
@@ -1126,7 +1126,7 @@ class _WordChoice extends StatelessWidget {
                 child: Text(
                   word,
                   style: const TextStyle(
-                    color: Colors.white,
+                    color: const Color(0xFF1E293B),
                     fontSize: 26,
                     fontWeight: FontWeight.w900,
                     height: 1,

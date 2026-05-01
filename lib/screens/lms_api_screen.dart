@@ -14,7 +14,7 @@ class LmsApiScreen extends StatefulWidget {
 
 class _LmsApiScreenState extends State<LmsApiScreen>
     with SingleTickerProviderStateMixin {
-  static const _bg = Color(0xFF4DA6E8);
+  static const _bg = Color(0xFF0F172A);
   static const _accent = Color(0xFFFFE000);
 
   late TabController _tabs;
@@ -86,7 +86,7 @@ class _LmsApiScreenState extends State<LmsApiScreen>
                   'Not in catalog',
                   'This enrollment id was not found in the loaded catalog list.',
                   snackPosition: SnackPosition.BOTTOM,
-                  backgroundColor: Colors.white,
+                  backgroundColor: const Color(0xFF0F172A),
                   colorText: const Color(0xFF1A1A2E),
                 );
               }
@@ -123,7 +123,7 @@ class _CatalogTab extends StatelessWidget {
             child: Text(
               ctrl.error.value,
               textAlign: TextAlign.center,
-              style: const TextStyle(color: Colors.white),
+              style: const TextStyle(color: const Color(0xFF1E293B)),
             ),
           ),
         );
@@ -140,7 +140,7 @@ class _CatalogTab extends StatelessWidget {
           itemBuilder: (_, i) {
             final c = ctrl.catalogCourses[i];
             return Material(
-              color: Colors.white,
+              color: const Color(0xFF1E293B),
               borderRadius: BorderRadius.circular(16),
               clipBehavior: Clip.antiAlias,
               child: InkWell(
@@ -181,7 +181,7 @@ class _CatalogTab extends StatelessWidget {
                             _Chip(text: c.level!, color: const Color(0xFF1E88E5)),
                           _Chip(
                             text: '${c.lessons.length} lessons',
-                            color: Colors.grey.shade700,
+                            color: const Color(0xFF94A3B8),
                           ),
                         ],
                       ),
@@ -191,7 +191,7 @@ class _CatalogTab extends StatelessWidget {
                           c.description!,
                           maxLines: 3,
                           overflow: TextOverflow.ellipsis,
-                          style: TextStyle(color: Colors.grey.shade800, height: 1.3),
+                          style: TextStyle(color: Colors.white, height: 1.3),
                         ),
                       ],
                     ],
@@ -237,7 +237,7 @@ class _MyCoursesTab extends StatelessWidget {
           itemBuilder: (_, i) {
             final e = ctrl.myEnrollments[i];
             return Material(
-              color: Colors.white,
+              color: const Color(0xFF1E293B),
               borderRadius: BorderRadius.circular(16),
               clipBehavior: Clip.antiAlias,
               child: Padding(
@@ -257,7 +257,7 @@ class _MyCoursesTab extends StatelessWidget {
                       const SizedBox(height: 6),
                       Text(
                         'Enrolled: ${e.enrolledAt}',
-                        style: TextStyle(color: Colors.grey.shade700, fontSize: 13),
+                        style: TextStyle(color: const Color(0xFF94A3B8), fontSize: 13),
                       ),
                     ],
                     const SizedBox(height: 12),
@@ -320,7 +320,7 @@ class _ActionsTab extends StatelessWidget {
               padding: const EdgeInsets.only(bottom: 12),
               child: Text(
                 ctrl.error.value,
-                style: const TextStyle(color: Colors.white),
+                style: const TextStyle(color: const Color(0xFF1E293B)),
               ),
             ),
           _GlassCard(
@@ -397,7 +397,7 @@ class _ActionsTab extends StatelessWidget {
                 SwitchListTile.adaptive(
                   value: completed,
                   onChanged: loading ? null : onCompletedChanged,
-                  title: const Text('completed', style: TextStyle(color: Colors.white)),
+                  title: const Text('completed', style: TextStyle(color: const Color(0xFF1E293B))),
                   contentPadding: EdgeInsets.zero,
                 ),
                 SizedBox(
@@ -462,7 +462,7 @@ class _GlassCard extends StatelessWidget {
           Text(
             title,
             style: const TextStyle(
-              color: Colors.white,
+              color: const Color(0xFF1E293B),
               fontWeight: FontWeight.w900,
               fontSize: 14,
             ),

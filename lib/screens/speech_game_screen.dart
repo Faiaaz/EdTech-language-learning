@@ -298,14 +298,14 @@ class _SpeechGameScreenState extends State<SpeechGameScreen> {
                     IconButton(
                       onPressed: () => Get.back(),
                       icon: const Icon(Icons.arrow_back_rounded,
-                          color: Colors.white),
+                          color: const Color(0xFF1E293B)),
                     ),
                     const SizedBox(width: 4),
                     const Expanded(
                       child: Text(
                         'Speech (Lesson 1)',
                         style: TextStyle(
-                          color: Colors.white,
+                          color: const Color(0xFF1E293B),
                           fontWeight: FontWeight.w900,
                           fontSize: 18,
                         ),
@@ -479,12 +479,12 @@ class _Pill extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(icon, color: Colors.white, size: 16),
+          Icon(icon, color: const Color(0xFF1E293B), size: 16),
           const SizedBox(width: 6),
           Text(
             text,
             style: const TextStyle(
-              color: Colors.white,
+              color: const Color(0xFF1E293B),
               fontWeight: FontWeight.w900,
               fontSize: 12,
             ),
@@ -588,7 +588,7 @@ class _JudgeBanner extends StatelessWidget {
           Text(
             title,
             style: const TextStyle(
-              color: Colors.white,
+              color: const Color(0xFF1E293B),
               fontWeight: FontWeight.w900,
             ),
           ),
@@ -632,13 +632,13 @@ class _ErrorCard extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Icon(Icons.error_outline_rounded, color: Colors.white),
+          const Icon(Icons.error_outline_rounded, color: const Color(0xFF1E293B)),
           const SizedBox(width: 10),
           Expanded(
             child: Text(
               text,
               style: const TextStyle(
-                color: Colors.white,
+                color: const Color(0xFF1E293B),
                 fontWeight: FontWeight.w700,
                 fontSize: 12,
                 height: 1.3,

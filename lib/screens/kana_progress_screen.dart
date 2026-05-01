@@ -103,7 +103,7 @@ class _KanaProgressScreenState extends State<KanaProgressScreen> {
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               Icon(Icons.arrow_back_ios_rounded,
-                                  color: Colors.white, size: 14),
+                                  color: const Color(0xFF1E293B), size: 14),
                               SizedBox(width: 4),
                               Text('Back',
                                   style: TextStyle(
@@ -182,7 +182,7 @@ class _KanaProgressScreenState extends State<KanaProgressScreen> {
                           Container(
                             padding: const EdgeInsets.all(14),
                             decoration: BoxDecoration(
-                              color: Colors.white,
+                              color: const Color(0xFF1E293B),
                               borderRadius: BorderRadius.circular(14),
                               boxShadow: [
                                 BoxShadow(
@@ -319,7 +319,7 @@ class _KanaProgressScreenState extends State<KanaProgressScreen> {
       builder: (_) => Container(
         padding: const EdgeInsets.fromLTRB(24, 16, 24, 32),
         decoration: const BoxDecoration(
-          color: Colors.white,
+          color: const Color(0xFF1E293B),
           borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
         ),
         child: Column(
@@ -395,7 +395,7 @@ class _KanaProgressScreenState extends State<KanaProgressScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Icon(Icons.schedule_rounded,
-                    color: const Color(0xFF6B7280), size: 14),
+                    color: const Color(0xFF94A3B8), size: 14),
                 const SizedBox(width: 6),
                 Text(
                   prog.isDue
@@ -446,7 +446,7 @@ class _StatCard extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(14),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: const Color(0xFF1E293B),
           borderRadius: BorderRadius.circular(16),
           boxShadow: [
             BoxShadow(

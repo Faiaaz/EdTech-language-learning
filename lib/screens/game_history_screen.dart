@@ -16,7 +16,7 @@ class GameHistoryScreen extends StatefulWidget {
 }
 
 class _GameHistoryScreenState extends State<GameHistoryScreen> {
-  static const _bgColor = Color(0xFF4DA6E8);
+  static const _bgColor = Color(0xFF0F172A);
   static const _accentColor = Color(0xFFFFE000);
 
   @override
@@ -50,11 +50,11 @@ class _GameHistoryScreenState extends State<GameHistoryScreen> {
                 child: Row(
                   children: [
                     const Icon(Icons.arrow_back_rounded,
-                        color: Colors.white, size: 22),
+                        color: const Color(0xFF1E293B), size: 22),
                     const SizedBox(width: 8),
                     Text('back'.tr,
                         style: const TextStyle(
-                            color: Colors.white, fontSize: 16)),
+                            color: const Color(0xFF1E293B), fontSize: 16)),
                   ],
                 ),
               ),
@@ -66,7 +66,7 @@ class _GameHistoryScreenState extends State<GameHistoryScreen> {
                     ? '${'game_history'.tr} — ${widget.gameName}'
                     : 'game_history'.tr,
                 style: const TextStyle(
-                  color: Colors.white,
+                  color: const Color(0xFF1E293B),
                   fontSize: 22,
                   fontWeight: FontWeight.w800,
                 ),
@@ -105,7 +105,7 @@ class _GameHistoryScreenState extends State<GameHistoryScreen> {
                                 backgroundColor: _accentColor),
                             child: Text('retry'.tr,
                                 style:
-                                    const TextStyle(color: Colors.black87)),
+                                    const TextStyle(color: Colors.white)),
                           ),
                         ],
                       ),
@@ -163,7 +163,7 @@ class _SessionCard extends StatelessWidget {
               Text(
                 '${'game_score'.tr}: ${session.score}',
                 style: const TextStyle(
-                  color: Colors.white,
+                  color: const Color(0xFF1E293B),
                   fontSize: 17,
                   fontWeight: FontWeight.w700,
                 ),

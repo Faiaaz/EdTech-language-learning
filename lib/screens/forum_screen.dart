@@ -12,7 +12,7 @@ import 'package:ez_trainz/screens/roster_screen.dart';
 class ForumScreen extends StatelessWidget {
   const ForumScreen({super.key});
 
-  static const _bg = Color(0xFF4DA6E8);
+  static const _bg = Color(0xFF0F172A);
   static const _accent = Color(0xFFFFE000);
 
   static String _formatDate(String iso) {
@@ -36,7 +36,7 @@ class ForumScreen extends StatelessWidget {
               'forum_login_required_title'.tr,
               'forum_login_required_body'.tr,
               snackPosition: SnackPosition.BOTTOM,
-              backgroundColor: Colors.white,
+              backgroundColor: const Color(0xFF0F172A),
               colorText: const Color(0xFF1A1A2E),
             );
             return;
@@ -186,9 +186,13 @@ class _ThreadTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final authorName = post.author?.name ?? 'forum_anonymous'.tr;
     return Material(
-      color: Colors.white,
+      color: const Color(0xFF1E293B),
       borderRadius: BorderRadius.circular(16),
       clipBehavior: Clip.antiAlias,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(16),
+        side: const BorderSide(color: Color(0xFF334155)),
+      ),
       child: InkWell(
         onTap: onTap,
         child: Padding(
@@ -201,7 +205,7 @@ class _ThreadTile extends StatelessWidget {
                 style: const TextStyle(
                   fontSize: 17,
                   fontWeight: FontWeight.w800,
-                  color: Color(0xFF1A1A2E),
+                  color: Colors.white,
                 ),
               ),
               const SizedBox(height: 8),
@@ -209,24 +213,24 @@ class _ThreadTile extends StatelessWidget {
                 post.content,
                 maxLines: 3,
                 overflow: TextOverflow.ellipsis,
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 14,
                   height: 1.35,
-                  color: Colors.grey.shade700,
+                  color: Color(0xFF94A3B8),
                 ),
               ),
               const SizedBox(height: 12),
               Row(
                 children: [
-                  Icon(Icons.person_outline_rounded,
-                      size: 16, color: Colors.grey.shade600),
+                  const Icon(Icons.person_outline_rounded,
+                      size: 16, color: Color(0xFF94A3B8)),
                   const SizedBox(width: 4),
                   Expanded(
                     child: Text(
                       authorName,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 12,
-                        color: Colors.grey.shade600,
+                        color: Color(0xFF94A3B8),
                         fontWeight: FontWeight.w600,
                       ),
                     ),
@@ -234,21 +238,21 @@ class _ThreadTile extends StatelessWidget {
                   if (dateLabel.isNotEmpty)
                     Text(
                       dateLabel,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 12,
-                        color: Colors.grey.shade500,
+                        color: Color(0xFF94A3B8),
                       ),
                     ),
                   const SizedBox(width: 12),
-                  Icon(Icons.chat_bubble_outline_rounded,
-                      size: 16, color: Colors.grey.shade600),
+                  const Icon(Icons.chat_bubble_outline_rounded,
+                      size: 16, color: Color(0xFF94A3B8)),
                   const SizedBox(width: 4),
                   Text(
                     '${post.commentCount}',
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.w700,
-                      color: Colors.grey.shade700,
+                      color: Color(0xFF94A3B8),
                     ),
                   ),
                 ],

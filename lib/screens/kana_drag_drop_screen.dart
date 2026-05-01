@@ -205,11 +205,11 @@ class _KanaDragDropScreenState extends State<KanaDragDropScreen>
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               Icon(Icons.arrow_back_ios_rounded,
-                                  color: Colors.white, size: 14),
+                                  color: const Color(0xFF1E293B), size: 14),
                               SizedBox(width: 4),
                               Text('Back',
                                   style: TextStyle(
-                                    color: Colors.white,
+                                    color: const Color(0xFF1E293B),
                                     fontSize: 13,
                                     fontWeight: FontWeight.w600,
                                   )),
@@ -223,7 +223,7 @@ class _KanaDragDropScreenState extends State<KanaDragDropScreen>
                           Text(
                             'Kana Drag & Drop',
                             style: const TextStyle(
-                              color: Colors.white,
+                              color: const Color(0xFF1E293B),
                               fontSize: 18,
                               fontWeight: FontWeight.w900,
                             ),
@@ -489,7 +489,7 @@ class _KanaDragDropScreenState extends State<KanaDragDropScreen>
           child: Text(
             kana.romaji.toUpperCase(),
             style: const TextStyle(
-              color: Colors.white,
+              color: const Color(0xFF1E293B),
               fontSize: 18,
               fontWeight: FontWeight.w800,
               letterSpacing: 1,
@@ -518,7 +518,7 @@ class _KanaDragDropScreenState extends State<KanaDragDropScreen>
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: const Color(0xFF1E293B),
           borderRadius: BorderRadius.circular(12),
           border: Border.all(color: _sakura.withValues(alpha: 0.4)),
           boxShadow: [
@@ -577,7 +577,7 @@ class _KanaDragDropScreenState extends State<KanaDragDropScreen>
             Text(
               'You matched all characters!',
               style: TextStyle(
-                color: const Color(0xFF6B7280),
+                color: const Color(0xFF94A3B8),
                 fontSize: 16,
               ),
             ),
@@ -657,7 +657,7 @@ class _StatChip extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(icon, color: Colors.white, size: 16),
+          Icon(icon, color: const Color(0xFF1E293B), size: 16),
           const SizedBox(width: 6),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -673,7 +673,7 @@ class _StatChip extends StatelessWidget {
               Text(
                 value,
                 style: const TextStyle(
-                  color: Colors.white,
+                  color: const Color(0xFF1E293B),
                   fontSize: 14,
                   fontWeight: FontWeight.w800,
                 ),

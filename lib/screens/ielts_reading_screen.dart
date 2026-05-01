@@ -43,9 +43,9 @@ class IeltsReadingScreen extends StatelessWidget {
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          const Icon(Icons.arrow_back_ios_rounded, color: Colors.white, size: 14),
+                          const Icon(Icons.arrow_back_ios_rounded, color: const Color(0xFF1E293B), size: 14),
                           const SizedBox(width: 4),
-                          Text('back'.tr, style: const TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w600)),
+                          Text('back'.tr, style: const TextStyle(color: const Color(0xFF1E293B), fontSize: 13, fontWeight: FontWeight.w600)),
                         ],
                       ),
                     ),
@@ -53,7 +53,7 @@ class IeltsReadingScreen extends StatelessWidget {
                   const SizedBox(height: 16),
                   const Text(
                     'Reading Practice',
-                    style: TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.w900),
+                    style: TextStyle(color: const Color(0xFF1E293B), fontSize: 24, fontWeight: FontWeight.w900),
                   ),
                   const SizedBox(height: 4),
                   Text(
@@ -109,7 +109,7 @@ class _PassageSelector extends StatelessWidget {
                 child: Container(
                   padding: const EdgeInsets.all(18),
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: const Color(0xFF1E293B),
                     borderRadius: BorderRadius.circular(16),
                     boxShadow: [
                       BoxShadow(color: Colors.black.withValues(alpha: 0.06), blurRadius: 10, offset: const Offset(0, 4)),
@@ -231,13 +231,13 @@ class _ReadingPractice extends StatelessWidget {
                 children: [
                   GestureDetector(
                     onTap: () => Get.back(),
-                    child: const Icon(Icons.arrow_back_ios_rounded, color: Colors.white, size: 20),
+                    child: const Icon(Icons.arrow_back_ios_rounded, color: const Color(0xFF1E293B), size: 20),
                   ),
                   const SizedBox(width: 12),
                   Expanded(
                     child: Text(
                       ctrl.currentPassage.title,
-                      style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w700),
+                      style: const TextStyle(color: const Color(0xFF1E293B), fontSize: 16, fontWeight: FontWeight.w700),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
@@ -260,7 +260,7 @@ class _ReadingPractice extends StatelessWidget {
                       Container(
                         padding: const EdgeInsets.all(16),
                         decoration: BoxDecoration(
-                          color: Colors.white,
+                          color: const Color(0xFF1E293B),
                           borderRadius: BorderRadius.circular(16),
                           boxShadow: [
                             BoxShadow(color: Colors.black.withValues(alpha: 0.05), blurRadius: 8),
@@ -319,7 +319,7 @@ class _ReadingPractice extends StatelessWidget {
                               borderRadius: BorderRadius.circular(14),
                             ),
                             child: Center(
-                              child: Text('submit_answers'.tr, style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w800)),
+                              child: Text('submit_answers'.tr, style: const TextStyle(color: const Color(0xFF1E293B), fontSize: 16, fontWeight: FontWeight.w800)),
                             ),
                           ),
                         ),
@@ -334,11 +334,11 @@ class _ReadingPractice extends StatelessWidget {
                           ),
                           child: Column(
                             children: [
-                              const Icon(Icons.check_circle_rounded, color: Colors.white, size: 48),
+                              const Icon(Icons.check_circle_rounded, color: const Color(0xFF1E293B), size: 48),
                               const SizedBox(height: 12),
                               Text(
                                 '${ctrl.readingScore.value} / ${passage.questions.length}',
-                                style: const TextStyle(color: Colors.white, fontSize: 32, fontWeight: FontWeight.w900),
+                                style: const TextStyle(color: const Color(0xFF1E293B), fontSize: 32, fontWeight: FontWeight.w900),
                               ),
                               const SizedBox(height: 4),
                               Text('correct_answers'.tr, style: const TextStyle(color: Colors.white70, fontSize: 14)),
@@ -351,7 +351,7 @@ class _ReadingPractice extends StatelessWidget {
                                 },
                                 child: Container(
                                   padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                                  decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(12)),
+                                  decoration: BoxDecoration(color: const Color(0xFF1E293B), borderRadius: BorderRadius.circular(12)),
                                   child: Text('try_another_passage'.tr, style: const TextStyle(color: Color(0xFF2E7D32), fontSize: 14, fontWeight: FontWeight.w700)),
                                 ),
                               ),
@@ -394,7 +394,7 @@ class _QuestionCard extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: 16),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: const Color(0xFF1E293B),
         borderRadius: BorderRadius.circular(14),
         border: submitted
             ? Border.all(color: isCorrect ? const Color(0xFF4CAF50) : const Color(0xFFF44336), width: 2)

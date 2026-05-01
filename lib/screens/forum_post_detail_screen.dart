@@ -25,7 +25,7 @@ class _ForumPostDetailScreenState extends State<ForumPostDetailScreen> {
   var _sending = false;
   final _commentCtrl = TextEditingController();
 
-  static const _bg = Color(0xFF4DA6E8);
+  static const _bg = Color(0xFF0F172A);
   static const _accent = Color(0xFFFFE000);
 
   @override
@@ -340,8 +340,9 @@ class _ForumPostDetailScreenState extends State<ForumPostDetailScreen> {
                           width: double.infinity,
                           padding: const EdgeInsets.all(18),
                           decoration: BoxDecoration(
-                            color: Colors.white,
+                            color: const Color(0xFF1E293B),
                             borderRadius: BorderRadius.circular(16),
+                            border: Border.all(color: const Color(0xFF334155)),
                           ),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -351,37 +352,37 @@ class _ForumPostDetailScreenState extends State<ForumPostDetailScreen> {
                                 style: const TextStyle(
                                   fontSize: 22,
                                   fontWeight: FontWeight.w900,
-                                  color: Color(0xFF1A1A2E),
+                                  color: Colors.white,
                                 ),
                               ),
                               const SizedBox(height: 10),
                               Text(
                                 _post.content,
-                                style: TextStyle(
+                                style: const TextStyle(
                                   fontSize: 15,
                                   height: 1.45,
-                                  color: Colors.grey.shade800,
+                                  color: Color(0xFF94A3B8),
                                 ),
                               ),
                               const SizedBox(height: 14),
                               Row(
                                 children: [
-                                  Icon(Icons.person_outline_rounded,
-                                      size: 18, color: Colors.grey.shade600),
+                                  const Icon(Icons.person_outline_rounded,
+                                      size: 18, color: Color(0xFF94A3B8)),
                                   const SizedBox(width: 6),
                                   Text(
                                     authorName,
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                       fontWeight: FontWeight.w600,
-                                      color: Colors.grey.shade700,
+                                      color: Color(0xFF94A3B8),
                                     ),
                                   ),
                                   const Spacer(),
                                   Text(
                                     _formatDate(_post.createdAt),
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                       fontSize: 12,
-                                      color: Colors.grey.shade600,
+                                      color: Color(0xFF94A3B8),
                                     ),
                                   ),
                                 ],
@@ -430,10 +431,13 @@ class _ForumPostDetailScreenState extends State<ForumPostDetailScreen> {
                     8 + MediaQuery.paddingOf(context).bottom,
                   ),
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: const Color(0xFF1E293B),
+                    border: const Border(
+                      top: BorderSide(color: Color(0xFF334155)),
+                    ),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black.withValues(alpha: 0.08),
+                        color: Colors.black.withValues(alpha: 0.2),
                         blurRadius: 12,
                         offset: const Offset(0, -4),
                       ),
@@ -455,7 +459,7 @@ class _ForumPostDetailScreenState extends State<ForumPostDetailScreen> {
                                   vertical: 6,
                                 ),
                                 decoration: BoxDecoration(
-                                  color: const Color(0xFFE3F2FD),
+                                  color: const Color(0xFF334155),
                                   borderRadius: BorderRadius.circular(10),
                                 ),
                                 child: Row(
@@ -466,12 +470,16 @@ class _ForumPostDetailScreenState extends State<ForumPostDetailScreen> {
                                             .trParams({'name': _replyTo!.authorName}),
                                         maxLines: 1,
                                         overflow: TextOverflow.ellipsis,
-                                        style: const TextStyle(fontSize: 12),
+                                        style: const TextStyle(
+                                          fontSize: 12,
+                                          color: Color(0xFF94A3B8),
+                                        ),
                                       ),
                                     ),
                                     GestureDetector(
                                       onTap: () => setState(() => _replyTo = null),
-                                      child: const Icon(Icons.close, size: 16),
+                                      child: const Icon(Icons.close,
+                                          size: 16, color: Color(0xFF94A3B8)),
                                     ),
                                   ],
                                 ),
@@ -481,12 +489,24 @@ class _ForumPostDetailScreenState extends State<ForumPostDetailScreen> {
                               minLines: 1,
                               maxLines: 4,
                               enabled: _loggedIn,
+                              style: const TextStyle(color: Colors.white),
                               decoration: InputDecoration(
                                 hintText: _loggedIn
                                     ? (_replyTo == null
                                         ? 'forum_comment_hint'.tr
                                         : 'forum_reply_hint'.tr)
                                     : 'forum_login_to_comment'.tr,
+                                hintStyle: const TextStyle(color: Color(0xFF94A3B8)),
+                                filled: true,
+                                fillColor: const Color(0xFF0F172A),
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                  borderSide: const BorderSide(color: Color(0xFF334155)),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                  borderSide: const BorderSide(color: Color(0xFF3B82F6)),
+                                ),
                                 border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(12),
                                 ),

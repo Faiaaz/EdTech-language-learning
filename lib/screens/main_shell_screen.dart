@@ -25,9 +25,9 @@ class MainShellScreen extends StatefulWidget {
 class _MainShellScreenState extends State<MainShellScreen> {
   int _currentIndex = 0;
 
-  static const _navBgColor = Color(0xFF4DA6E8);
+  static const _navBgColor = Color(0xFF1E293B);
   static const _selectedColor = Color(0xFFFFE000);
-  static const _unselectedColor = Colors.white70;
+  static const _unselectedColor = Color(0xFF94A3B8);
 
   static const _tabs = [
     _NavItem(icon: Icons.school_rounded, labelKey: 'nav_learn'),
@@ -135,7 +135,7 @@ class _ProgramPickerView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF4DA6E8),
+      backgroundColor: const Color(0xFF0F172A),
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(horizontal: 24),
@@ -175,8 +175,8 @@ class _ProgramPickerView extends StatelessWidget {
               const SizedBox(height: 28),
               Text(
                 'choose_language_program'.tr,
-                style: TextStyle(
-                  color: Colors.white.withValues(alpha: 0.9),
+                style: const TextStyle(
+                  color: Colors.white,
                   fontSize: 20,
                   fontWeight: FontWeight.w700,
                   height: 1.2,
@@ -185,8 +185,8 @@ class _ProgramPickerView extends StatelessWidget {
               const SizedBox(height: 6),
               Text(
                 'select_one_subtitle'.tr,
-                style: TextStyle(
-                  color: Colors.white.withValues(alpha: 0.75),
+                style: const TextStyle(
+                  color: Color(0xFF94A3B8),
                   fontSize: 14,
                   fontWeight: FontWeight.w400,
                 ),
@@ -295,7 +295,7 @@ class _ProgramCard extends StatelessWidget {
                 color: Colors.white.withValues(alpha: 0.2),
                 shape: BoxShape.circle,
               ),
-              child: const Icon(Icons.arrow_forward_rounded, color: Colors.white, size: 18),
+              child: const Icon(Icons.arrow_forward_rounded, color: const Color(0xFF1E293B), size: 18),
             ),
           ],
         ),

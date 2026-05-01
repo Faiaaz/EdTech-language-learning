@@ -25,6 +25,7 @@ import 'package:ez_trainz/screens/main_shell_screen.dart';
 import 'package:ez_trainz/screens/splash_screen.dart';
 import 'package:ez_trainz/screens/avatar_onboarding_screen.dart';
 import 'package:ez_trainz/screens/journey_screen.dart';
+import 'package:ez_trainz/utils/app_theme.dart';
 
 const bool _kBypassAuth = false;
 
@@ -63,6 +64,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
+      theme: buildAppTheme(),
       translations: AppTranslations(),
       locale: LocaleController.to.locale,
       fallbackLocale: const Locale('en', 'US'),

@@ -7,7 +7,7 @@ import 'package:get/get.dart';
 
 import 'package:ez_trainz/models/hiragana_lesson_data.dart';
 
-const _blue = Color(0xFF4DA6E8);
+const _blue = Color(0xFF3B82F6);
 const _dark = Color(0xFF1A1A2E);
 const _yellow = Color(0xFFFFE000);
 const _green = Color(0xFF4CAF50);
@@ -196,7 +196,7 @@ class _FlashcardDrillState extends State<FlashcardDrillScreen>
     return Container(
       key: ValueKey('front_$key'),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: const Color(0xFF1E293B),
         borderRadius: BorderRadius.circular(24),
         border: Border.all(color: accent.withValues(alpha: 0.45), width: 2.5),
         boxShadow: [
@@ -441,7 +441,7 @@ class _KanaQuizState extends State<KanaQuizScreen> {
                 width: 140,
                 height: 140,
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: const Color(0xFF1E293B),
                   borderRadius: BorderRadius.circular(24),
                   border: Border.all(
                       color: _yellow.withValues(alpha: 0.65), width: 2),
@@ -705,7 +705,7 @@ class _KanaMatchState extends State<KanaMatchScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF3A9ADE),
+      backgroundColor: const Color(0xFF0F172A),
       body: SafeArea(
         child: Column(
           children: [
@@ -980,7 +980,7 @@ class _VocabQuizState extends State<VocabQuizScreen> {
   Widget build(BuildContext context) {
     final q = _questions[_qi];
     return Scaffold(
-      backgroundColor: const Color(0xFF7E57C2),
+      backgroundColor: const Color(0xFF0F172A),
       body: SafeArea(
         child: Column(
           children: [
@@ -1148,7 +1148,7 @@ class _VocabQuizState extends State<VocabQuizScreen> {
               width: 160,
               height: 120,
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: const Color(0xFF1E293B),
                 borderRadius: BorderRadius.circular(22),
                 border: Border.all(
                     color: _yellow.withValues(alpha: 0.7), width: 2),
@@ -1203,7 +1203,7 @@ class _VocabQuizState extends State<VocabQuizScreen> {
                       style: const TextStyle(
                           fontSize: 32,
                           fontWeight: FontWeight.w800,
-                          color: Colors.white)),
+                          color: const Color(0xFF1E293B))),
                   const SizedBox(height: 4),
                   Text(q.vocab.meaningBn,
                       style: TextStyle(
@@ -1255,7 +1255,7 @@ Widget _header(String title, String badge) {
               shape: BoxShape.circle,
             ),
             child: const Icon(Icons.arrow_back_rounded,
-                color: Colors.white, size: 20),
+                color: const Color(0xFF1E293B), size: 20),
           ),
         ),
         const SizedBox(width: 12),
@@ -1274,7 +1274,7 @@ Widget _header(String title, String badge) {
           ),
           child: Text(badge,
               style: const TextStyle(
-                  color: Colors.white,
+                  color: const Color(0xFF1E293B),
                   fontSize: 12,
                   fontWeight: FontWeight.w700)),
         ),

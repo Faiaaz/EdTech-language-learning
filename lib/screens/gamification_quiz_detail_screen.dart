@@ -15,7 +15,7 @@ class GamificationQuizDetailScreen extends StatefulWidget {
 }
 
 class _GamificationQuizDetailScreenState extends State<GamificationQuizDetailScreen> {
-  static const _bg = Color(0xFF4DA6E8);
+  static const _bg = Color(0xFF0F172A);
   static const _accent = Color(0xFFFFE000);
 
   final _answerCtrls = <String, TextEditingController>{};
@@ -70,7 +70,7 @@ class _GamificationQuizDetailScreenState extends State<GamificationQuizDetailScr
         'Submitted',
         'No structured result returned.',
         snackPosition: SnackPosition.BOTTOM,
-        backgroundColor: Colors.white,
+        backgroundColor: const Color(0xFF0F172A),
         colorText: const Color(0xFF1A1A2E),
       );
       return;

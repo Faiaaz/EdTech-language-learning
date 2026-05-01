@@ -27,7 +27,7 @@ class CourseListScreen extends StatelessWidget {
     final ctrl = CourseController.to;
 
     return Scaffold(
-      backgroundColor: const Color(0xFF4DA6E8),
+      backgroundColor: const Color(0xFF0F172A),
       body: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -50,16 +50,16 @@ class CourseListScreen extends StatelessWidget {
                           padding: const EdgeInsets.symmetric(
                               horizontal: 12, vertical: 8),
                           decoration: BoxDecoration(
-                            color: Colors.white.withValues(alpha: 0.2),
+                            color: const Color(0xFF1E293B),
                             borderRadius: BorderRadius.circular(20),
-                            border:
-                                Border.all(color: Colors.white38, width: 1),
+                            border: Border.all(
+                                color: const Color(0xFF334155), width: 1),
                           ),
                           child: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               const Icon(Icons.apps_rounded,
-                                  color: Colors.white, size: 16),
+                                  color: const Color(0xFF1E293B), size: 16),
                               const SizedBox(width: 6),
                               Text('programs'.tr,
                                   style: const TextStyle(
@@ -109,15 +109,15 @@ class CourseListScreen extends StatelessWidget {
                           padding: const EdgeInsets.symmetric(
                               horizontal: 14, vertical: 8),
                           decoration: BoxDecoration(
-                            color: Colors.white.withValues(alpha: 0.2),
+                            color: const Color(0xFF1E293B),
                             borderRadius: BorderRadius.circular(20),
-                            border:
-                                Border.all(color: Colors.white38, width: 1),
+                            border: Border.all(
+                                color: const Color(0xFF334155), width: 1),
                           ),
                           child: Row(
                             children: [
                               const Icon(Icons.logout_rounded,
-                                  color: Colors.white, size: 15),
+                                  color: const Color(0xFF1E293B), size: 15),
                               const SizedBox(width: 5),
                               Text('logout'.tr,
                                   style: const TextStyle(
@@ -148,8 +148,8 @@ class CourseListScreen extends StatelessWidget {
                     ProgramController.to.hasProgram
                         ? '${ProgramController.to.current!.name} (${ProgramController.to.current!.shortName}) · ${'choose_course'.tr}'
                         : 'choose_course'.tr,
-                    style: TextStyle(
-                      color: Colors.white.withValues(alpha: 0.75),
+                    style: const TextStyle(
+                      color: Color(0xFF94A3B8),
                       fontSize: 15,
                       fontWeight: FontWeight.w400,
                     ),
@@ -206,7 +206,7 @@ class _CourseCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final badgeColor = CourseListScreen._levelColors[course.level] ??
-        const Color(0xFF4DA6E8);
+        const Color(0xFF3B82F6);
 
     return GestureDetector(
       onTap: () {
@@ -217,11 +217,12 @@ class _CourseCard extends StatelessWidget {
         margin: const EdgeInsets.only(bottom: 16),
         padding: const EdgeInsets.all(20),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: const Color(0xFF1E293B),
           borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: const Color(0xFF334155)),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withValues(alpha: 0.08),
+              color: Colors.black.withValues(alpha: 0.2),
               blurRadius: 12,
               offset: const Offset(0, 4),
             ),
@@ -259,7 +260,7 @@ class _CourseCard extends StatelessWidget {
                   Text(
                     course.title,
                     style: const TextStyle(
-                      color: Color(0xFF1A1A2E),
+                      color: Colors.white,
                       fontSize: 17,
                       fontWeight: FontWeight.w700,
                     ),
@@ -268,7 +269,7 @@ class _CourseCard extends StatelessWidget {
                   Text(
                     course.description,
                     style: const TextStyle(
-                      color: Color(0xFF6B7280),
+                      color: Color(0xFF94A3B8),
                       fontSize: 13,
                       fontWeight: FontWeight.w400,
                     ),
@@ -289,7 +290,7 @@ class _CourseCard extends StatelessWidget {
             ),
 
             const Icon(Icons.chevron_right_rounded,
-                color: Color(0xFFB0B0B0), size: 24),
+                color: Color(0xFF94A3B8), size: 24),
           ],
         ),
       ),

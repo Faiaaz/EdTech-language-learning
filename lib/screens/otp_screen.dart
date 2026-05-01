@@ -181,7 +181,7 @@ class _OtpScreenState extends State<OtpScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF4DA6E8),
+      backgroundColor: const Color(0xFF0F172A),
       resizeToAvoidBottomInset: false,
       body: SafeArea(
         child: Column(
@@ -202,7 +202,7 @@ class _OtpScreenState extends State<OtpScreen>
                       ),
                       child: const Icon(
                         Icons.arrow_back_ios_new_rounded,
-                        color: Colors.white,
+                        color: const Color(0xFF1E293B),
                         size: 18,
                       ),
                     ),
@@ -564,7 +564,7 @@ class _SuccessDialogState extends State<_SuccessDialog>
         scale: _scale,
         child: Dialog(
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
-          backgroundColor: const Color(0xFF4DA6E8),
+          backgroundColor: const Color(0xFF0F172A),
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 32),
             child: Column(
@@ -577,7 +577,7 @@ class _SuccessDialogState extends State<_SuccessDialog>
                   decoration: BoxDecoration(
                     color: Colors.white.withValues(alpha: 0.2),
                     shape: BoxShape.circle,
-                    border: Border.all(color: Colors.white, width: 2),
+                    border: Border.all(color: const Color(0xFF1E293B), width: 2),
                   ),
                   child: const Icon(
                     Icons.check_rounded,
@@ -611,8 +611,8 @@ class _SuccessDialogState extends State<_SuccessDialog>
                   child: ElevatedButton(
                     onPressed: () => Navigator.of(context).pop(),
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.white,
-                      foregroundColor: const Color(0xFF4DA6E8),
+                      backgroundColor: const Color(0xFF0F172A),
+                      foregroundColor: const Color(0xFF3B82F6),
                       elevation: 0,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(30),

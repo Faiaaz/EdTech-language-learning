@@ -58,7 +58,7 @@ class _Lesson1GameFlowScreenState extends State<Lesson1GameFlowScreen>
   // Lesson 1 cloud-blue background.
   static const _bgTop = Color(0xFFF2FBFF);
   static const _bgMid = Color(0xFFBFEFFF);
-  static const _bgBottom = Color(0xFF2BA8D6);
+  static const _bgBottom = Color(0xFF0F172A);
   static const _green = Color(0xFF9AE11B);
 
   final _rng = math.Random();
@@ -579,7 +579,7 @@ class _Header extends StatelessWidget {
           child: Text(
             title,
             style: const TextStyle(
-              color: Colors.white,
+              color: const Color(0xFF1E293B),
               fontWeight: FontWeight.w900,
               fontSize: 22,
               height: 1.1,
@@ -735,7 +735,7 @@ class _KanaMcq extends StatelessWidget {
                   child: Text(
                     k,
                     style: const TextStyle(
-                      color: Colors.white,
+                      color: const Color(0xFF1E293B),
                       fontWeight: FontWeight.w900,
                       fontSize: 52,
                     ),
@@ -795,7 +795,7 @@ class _ListenKana extends StatelessWidget {
                 borderRadius: BorderRadius.circular(22),
               ),
               child: const Icon(Icons.volume_up_rounded,
-                  color: Colors.black, size: 46),
+                  color: Colors.white, size: 46),
             ),
           ),
         ),
@@ -812,7 +812,7 @@ class _ListenKana extends StatelessWidget {
                   child: Text(
                     k,
                     style: const TextStyle(
-                      color: Colors.white,
+                      color: const Color(0xFF1E293B),
                       fontWeight: FontWeight.w900,
                       fontSize: 52,
                     ),
@@ -883,7 +883,7 @@ class _DrawKana extends StatelessWidget {
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: const Icon(Icons.volume_up_rounded,
-                    color: Colors.black, size: 24),
+                    color: Colors.white, size: 24),
               ),
             ),
             const SizedBox(width: 12),
@@ -893,7 +893,7 @@ class _DrawKana extends StatelessWidget {
                 Text(
                   kana,
                   style: const TextStyle(
-                    color: Colors.white,
+                    color: const Color(0xFF1E293B),
                     fontWeight: FontWeight.w900,
                     fontSize: 20,
                     height: 1,
@@ -952,7 +952,7 @@ class _DrawKana extends StatelessWidget {
                             child: Text(
                               '$pct%',
                               style: const TextStyle(
-                                color: Colors.white,
+                                color: const Color(0xFF1E293B),
                                 fontWeight: FontWeight.w900,
                                 fontSize: 12,
                               ),
@@ -1609,7 +1609,7 @@ class _WordChip extends StatelessWidget {
             child: Text(
               word,
               style: const TextStyle(
-                color: Colors.white,
+                color: const Color(0xFF1E293B),
                 fontWeight: FontWeight.w900,
                 fontSize: 26,
               ),
