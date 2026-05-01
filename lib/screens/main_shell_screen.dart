@@ -10,6 +10,8 @@ import 'package:ez_trainz/screens/games_screen.dart';
 import 'package:ez_trainz/screens/ielts_dashboard_screen.dart';
 import 'package:ez_trainz/screens/leaderboard_screen.dart';
 import 'package:ez_trainz/screens/profile_screen.dart';
+import 'package:ez_trainz/screens/collectibles_screen.dart';
+import 'package:ez_trainz/screens/trial_game_language_picker_screen.dart';
 import 'package:ez_trainz/widgets/language_switcher.dart';
 import 'package:ez_trainz/widgets/streak_pill.dart';
 
@@ -32,6 +34,7 @@ class _MainShellScreenState extends State<MainShellScreen> {
   static const _tabs = [
     _NavItem(icon: Icons.school_rounded, labelKey: 'nav_learn'),
     _NavItem(icon: Icons.fitness_center_rounded, labelKey: 'nav_practice'),
+    _NavItem(icon: Icons.park_rounded, labelKey: 'nav_collectibles'),
     _NavItem(icon: Icons.person_rounded, labelKey: 'nav_profile'),
     _NavItem(icon: Icons.people_rounded, labelKey: 'nav_community'),
     _NavItem(icon: Icons.emoji_events_rounded, labelKey: 'nav_leaderboard'),
@@ -54,6 +57,7 @@ class _MainShellScreenState extends State<MainShellScreen> {
             return const CourseListScreen();
           }),
           const GamesScreen(),
+          const CollectiblesScreen(),
           const ProfileScreen(),
           const ForumScreen(),
           const LeaderboardScreen(),
@@ -202,6 +206,14 @@ class _ProgramPickerView extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 24),
+              _TrialGameCard(
+                onTap: () => Get.to(
+                  () => const TrialGameLanguagePickerScreen(),
+                  transition: Transition.rightToLeftWithFade,
+                  duration: const Duration(milliseconds: 260),
+                ),
+              ),
+              const SizedBox(height: 14),
               _ProgramCard(program: Program.jlc),
               const SizedBox(height: 14),
               _ProgramCard(program: Program.klc),
@@ -212,6 +224,108 @@ class _ProgramPickerView extends StatelessWidget {
               const SizedBox(height: 32),
             ],
           ),
+        ),
+      ),
+    );
+  }
+}
+
+class _TrialGameCard extends StatelessWidget {
+  const _TrialGameCard({required this.onTap});
+
+  final VoidCallback onTap;
+
+  static const _gold = Color(0xFFFFE000);
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        width: double.infinity,
+        padding: const EdgeInsets.fromLTRB(18, 16, 16, 16),
+        decoration: BoxDecoration(
+          gradient: const LinearGradient(
+            colors: [Color(0xFF1E3A8A), Color(0xFF0EA5E9)],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+          borderRadius: BorderRadius.circular(18),
+          border: Border.all(color: _gold.withValues(alpha: 0.35), width: 1),
+          boxShadow: [
+            BoxShadow(
+              color: const Color(0xFF0EA5E9).withValues(alpha: 0.22),
+              blurRadius: 18,
+              offset: const Offset(0, 8),
+            ),
+          ],
+        ),
+        child: Row(
+          children: [
+            Container(
+              width: 52,
+              height: 52,
+              decoration: BoxDecoration(
+                color: Colors.white.withValues(alpha: 0.18),
+                borderRadius: BorderRadius.circular(16),
+                border:
+                    Border.all(color: Colors.white.withValues(alpha: 0.24)),
+              ),
+              alignment: Alignment.center,
+              child: const Icon(Icons.bolt_rounded,
+                  color: _gold, size: 30),
+            ),
+            const SizedBox(width: 14),
+            const Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Trial Game',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 18,
+                      fontWeight: FontWeight.w900,
+                      height: 1.1,
+                    ),
+                  ),
+                  SizedBox(height: 4),
+                  Text(
+                    'Try a language in 60 seconds with a mini-game.',
+                    style: TextStyle(
+                      color: Colors.white70,
+                      fontSize: 13,
+                      height: 1.25,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+              decoration: BoxDecoration(
+                color: _gold,
+                borderRadius: BorderRadius.circular(999),
+              ),
+              child: const Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    'TRY',
+                    style: TextStyle(
+                      color: Colors.black87,
+                      fontSize: 12,
+                      fontWeight: FontWeight.w900,
+                      letterSpacing: 0.6,
+                    ),
+                  ),
+                  SizedBox(width: 6),
+                  Icon(Icons.arrow_forward_rounded,
+                      color: Colors.black87, size: 16),
+                ],
+              ),
+            ),
+          ],
         ),
       ),
     );

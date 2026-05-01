@@ -29,6 +29,8 @@ const _en = <String, String>{
   'login_email_or_phone_hint': 'Email or Phone Number',
   'login_password_hint': 'Password',
   'continue_as_guest': 'Continue as a Guest',
+  'trial_end_headline': 'Start your language learning journey now!',
+  'trial_end_cta': 'Sign Up & Subscribe',
 
   // ── Sign Up ─────────────────────────────────────────────────────
   'signup_title': 'Create your Account',
@@ -101,6 +103,7 @@ const _en = <String, String>{
   // ── Nav (bottom bar) ───────────────────────────────────────────
   'nav_learn': 'Learn',
   'nav_practice': 'Practice',
+    'nav_collectibles': 'Collect',
   'nav_profile': 'Profile',
   'nav_community': 'Community',
   'nav_leaderboard': 'Leaderboard',
@@ -493,6 +496,8 @@ const _bn = <String, String>{
   'login_email_or_phone_hint': 'ইমেইল বা ফোন নম্বর',
   'login_password_hint': 'পাসওয়ার্ড',
   'continue_as_guest': 'অতিথি হিসেবে চালিয়ে যান',
+  'trial_end_headline': 'এখনই শুরু হোক\nআপনার ভাষা শেখা যাত্রার\nহিরোগিরি!',
+  'trial_end_cta': 'Sign Up & Subscribe',
 
   // ── Sign Up ─────────────────────────────────────────────────────
   'signup_title': 'নতুন একাউন্ট তৈরি করুন',

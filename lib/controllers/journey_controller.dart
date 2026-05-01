@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 
 import 'package:ez_trainz/models/avatar_config.dart';
 import 'package:ez_trainz/models/hat_tier.dart';
+import 'package:ez_trainz/models/journey_stage.dart';
 import 'package:ez_trainz/models/xp_event.dart';
 import 'package:ez_trainz/services/avatar_storage_service.dart';
 import 'package:ez_trainz/services/xp_service.dart';
@@ -27,6 +28,7 @@ class JourneyController extends GetxController {
 
   // ── XP ────────────────────────────────────────────────────────────
   final events = <XpEvent>[].obs;
+  final stage = JourneyStage.beginning.obs;
 
   int get totalXp => XpService.totalFromEvents(events);
   HatTier get tier => HatTier.fromXp(totalXp);
@@ -70,6 +72,8 @@ class JourneyController extends GetxController {
       }
       final savedEvents = await AvatarStorageService.loadXpEvents();
       events.assignAll(savedEvents);
+      stage.value = await AvatarStorageService.loadJourneyStage();
+      _syncStageFromTier();
     } catch (e) {
       if (kDebugMode) debugPrint('JourneyController restore failed: $e');
     }
@@ -95,6 +99,7 @@ class JourneyController extends GetxController {
     required XpSource source,
     int? amount,
     String? note,
+    bool silentLevelUp = false,
   }) async {
     final reward = amount ?? XpRewards.forSource(source);
     final previousTier = tier;
@@ -109,14 +114,41 @@ class JourneyController extends GetxController {
     events.add(event);
     await AvatarStorageService.saveXpEvents(events.toList());
 
-    if (tier.level > previousTier.level) {
+    if (!silentLevelUp && tier.level > previousTier.level) {
       pendingLevelUp.value = tier;
     }
+
+    _syncStageFromTier();
   }
 
   Future<void> resetProgress() async {
     events.clear();
     pendingLevelUp.value = null;
+    stage.value = JourneyStage.beginning;
     await AvatarStorageService.clearXpEvents();
+    await AvatarStorageService.clearJourneyStage();
+  }
+
+  void _syncStageFromTier() {
+    final next = switch (tier) {
+      HatTier.none => JourneyStage.beginning,
+      HatTier.base => JourneyStage.explorersDiscovery,
+      HatTier.feather => JourneyStage.mastersQuest,
+      HatTier.stripe1 => JourneyStage.mastersQuest,
+      HatTier.stripe2 => JourneyStage.mastersQuest,
+      HatTier.stripe3 => JourneyStage.mastersQuest,
+      HatTier.stripe4 => JourneyStage.mastersQuest,
+      HatTier.master => JourneyStage.mastersQuest,
+    };
+    if (stage.value != next) {
+      stage.value = next;
+      // ignore: discarded_futures
+      AvatarStorageService.saveJourneyStage(next);
+    }
+  }
+
+  Future<void> setJourneyStage(JourneyStage next) async {
+    stage.value = next;
+    await AvatarStorageService.saveJourneyStage(next);
   }
 }

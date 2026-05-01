@@ -1,11 +1,30 @@
+import 'dart:math' as math;
+
+import 'package:confetti/confetti.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
 import 'package:ez_trainz/controllers/journey_controller.dart';
 import 'package:ez_trainz/screens/lesson1_game_flow_screen.dart';
+import 'package:ez_trainz/widgets/hero_path_journey_map.dart';
 
 class HatPreviewInterstitialScreen extends StatefulWidget {
-  const HatPreviewInterstitialScreen({super.key});
+  const HatPreviewInterstitialScreen({
+    super.key,
+    this.resetOnEntry = true,
+    this.celebrate = false,
+  });
+
+  /// If `true`, [JourneyController.resetProgress] is called on entry
+  /// (treating this as a fresh start). When the user comes here from
+  /// [HatEarnedScreen] via "Claim Your Hat", set this to `false` so the
+  /// hat they just earned persists.
+  final bool resetOnEntry;
+
+  /// If `true`, plays a confetti / haptic celebration on entry to carry
+  /// the hat-earned moment through to this screen.
+  final bool celebrate;
 
   @override
   State<HatPreviewInterstitialScreen> createState() =>
@@ -14,26 +33,52 @@ class HatPreviewInterstitialScreen extends StatefulWidget {
 
 class _HatPreviewInterstitialScreenState
     extends State<HatPreviewInterstitialScreen>
-    with SingleTickerProviderStateMixin {
+    with TickerProviderStateMixin {
   static const _gold = Color(0xFFFFE000);
   static const _bg = Color(0xFF0B1326);
   static const _surface = Color(0xFF111827);
 
   late final AnimationController _fadeIn;
+  late final ConfettiController _confettiLeft;
+  late final ConfettiController _confettiCenter;
+  late final ConfettiController _confettiRight;
 
   @override
   void initState() {
     super.initState();
-    JourneyController.to.resetProgress();
+    if (widget.resetOnEntry) {
+      JourneyController.to.resetProgress();
+    }
     _fadeIn = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 700),
     )..forward();
+    _confettiLeft =
+        ConfettiController(duration: const Duration(seconds: 3));
+    _confettiCenter =
+        ConfettiController(duration: const Duration(seconds: 4));
+    _confettiRight =
+        ConfettiController(duration: const Duration(seconds: 3));
+    if (widget.celebrate) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        HapticFeedback.heavyImpact();
+        _confettiCenter.play();
+        Future.delayed(const Duration(milliseconds: 120), () {
+          if (mounted) _confettiLeft.play();
+        });
+        Future.delayed(const Duration(milliseconds: 240), () {
+          if (mounted) _confettiRight.play();
+        });
+      });
+    }
   }
 
   @override
   void dispose() {
     _fadeIn.dispose();
+    _confettiLeft.dispose();
+    _confettiCenter.dispose();
+    _confettiRight.dispose();
     super.dispose();
   }
 
@@ -42,76 +87,123 @@ class _HatPreviewInterstitialScreenState
 
     return Scaffold(
       backgroundColor: _bg,
-      body: SafeArea(
-        child: Column(
-          children: [
-            // ── Header ──────────────────────────────────────────────
-            Padding(
-              padding: const EdgeInsets.fromLTRB(4, 8, 16, 0),
-              child: Row(
-                children: [
-                  IconButton(
-                    onPressed: () => Get.back(),
-                    icon: const Icon(Icons.arrow_back_rounded,
-                        color: Colors.white54),
-                  ),
-                  const Expanded(
-                    child: Text(
-                      "HERO'S PATH",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: _gold,
-                        fontSize: 18,
-                        fontWeight: FontWeight.w900,
-                        letterSpacing: 2.5,
-                      ),
-                    ),
-                  ),
-                  const Icon(Icons.settings_rounded,
-                      color: Colors.white30, size: 22),
-                  const SizedBox(width: 4),
-                ],
-              ),
-            ),
-
-            // ── Scrollable body ──────────────────────────────────────
-            Expanded(
-              child: FadeTransition(
-                opacity: _fadeIn,
-                child: SingleChildScrollView(
-                  padding: const EdgeInsets.fromLTRB(20, 12, 20, 20),
-                  child: Column(
+      body: Stack(
+        children: [
+          SafeArea(
+            child: Column(
+              children: [
+                // ── Header ──────────────────────────────────────────────
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(4, 8, 16, 0),
+                  child: Row(
                     children: [
-                      // Avatar card
-                      const _AvatarCard(),
-
-                      const SizedBox(height: 20),
-
-                      // XP bar section
-                      const _XpSection(),
-
-                      const SizedBox(height: 28),
-
-                      // Journey path
-                      const _JourneyPath(),
-
-                      const SizedBox(height: 8),
+                      IconButton(
+                        onPressed: () => Get.back(),
+                        icon: const Icon(Icons.arrow_back_rounded,
+                            color: Colors.white54),
+                      ),
+                      const Expanded(
+                        child: Text(
+                          "HERO'S PATH",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: _gold,
+                            fontSize: 18,
+                            fontWeight: FontWeight.w900,
+                            letterSpacing: 2.5,
+                          ),
+                        ),
+                      ),
+                      const Icon(Icons.settings_rounded,
+                          color: Colors.white30, size: 22),
+                      const SizedBox(width: 4),
                     ],
                   ),
                 ),
-              ),
+                // ── Scrollable body ──────────────────────────────────────
+                Expanded(
+                  child: FadeTransition(
+                    opacity: _fadeIn,
+                    child: SingleChildScrollView(
+                      padding: const EdgeInsets.fromLTRB(20, 12, 20, 20),
+                      child: Column(
+                        children: [
+                          const _AvatarCard(),
+                          const SizedBox(height: 20),
+                          const _XpSection(),
+                          const SizedBox(height: 28),
+                          const _JourneyPath(),
+                          const SizedBox(height: 8),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                // ── Fixed bottom CTA ────────────────────────────────────
+                _BottomCard(
+                  onStart: () =>
+                      Get.off(() => const Lesson1GameFlowScreen()),
+                ),
+              ],
             ),
-
-            // ── Fixed bottom CTA ────────────────────────────────────
-            _BottomCard(
-              onStart: () => Get.off(() => const Lesson1GameFlowScreen()),
+          ),
+          // ── Confetti emitters (only fire if `celebrate` is true) ──
+          Positioned(
+            top: 0,
+            left: 24,
+            child: ConfettiWidget(
+              confettiController: _confettiLeft,
+              blastDirection: math.pi / 2 + 0.4,
+              numberOfParticles: 18,
+              maxBlastForce: 24,
+              minBlastForce: 10,
+              gravity: 0.20,
+              emissionFrequency: 0.05,
+              colors: _confettiColors,
             ),
-          ],
-        ),
+          ),
+          Align(
+            alignment: Alignment.topCenter,
+            child: ConfettiWidget(
+              confettiController: _confettiCenter,
+              blastDirection: math.pi / 2,
+              numberOfParticles: 28,
+              maxBlastForce: 32,
+              minBlastForce: 14,
+              gravity: 0.22,
+              emissionFrequency: 0.04,
+              colors: _confettiColors,
+            ),
+          ),
+          Positioned(
+            top: 0,
+            right: 24,
+            child: ConfettiWidget(
+              confettiController: _confettiRight,
+              blastDirection: math.pi / 2 - 0.4,
+              numberOfParticles: 18,
+              maxBlastForce: 24,
+              minBlastForce: 10,
+              gravity: 0.20,
+              emissionFrequency: 0.05,
+              colors: _confettiColors,
+            ),
+          ),
+        ],
       ),
     );
   }
 }
+
+const _confettiColors = <Color>[
+  Color(0xFFFFE000),
+  Color(0xFF3B82F6),
+  Color(0xFF10B981),
+  Color(0xFF8B5CF6),
+  Color(0xFFEF4444),
+  Color(0xFFF59E0B),
+  Color(0xFFEC4899),
+];
 
 // ── Avatar card ─────────────────────────────────────────────────────────────
 
@@ -263,235 +355,7 @@ class _JourneyPath extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          'YOUR JOURNEY',
-          style: TextStyle(
-            color: Colors.white.withValues(alpha: 0.4),
-            fontSize: 11,
-            fontWeight: FontWeight.w700,
-            letterSpacing: 1.5,
-          ),
-        ),
-        const SizedBox(height: 16),
-        _PathNode(
-          icon: Icons.person_rounded,
-          title: 'The Beginning',
-          subtitle: 'Earn XP to start your journey.',
-          isActive: true,
-          isFirst: true,
-          badge: 'NOW',
-        ),
-        _PathConnector(active: false),
-        _PathNode(
-          icon: Icons.military_tech_rounded,
-          title: "Explorer's Discovery",
-          subtitle: 'Earn your first explorer hat.',
-          isActive: false,
-          trailing: '50 XP',
-          highlightTrailing: true,
-        ),
-        _PathConnector(active: false),
-        _PathNode(
-          icon: Icons.auto_awesome_rounded,
-          title: "Master's Quest",
-          subtitle: 'A feather tucked into your hat.',
-          isActive: false,
-          trailing: '150 XP',
-          isLast: true,
-        ),
-      ],
-    );
-  }
-}
-
-class _PathConnector extends StatelessWidget {
-  const _PathConnector({required this.active});
-  final bool active;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(left: 21),
-      child: CustomPaint(
-        size: const Size(2, 32),
-        painter: _DashedLinePainter(
-          color: active
-              ? const Color(0xFFFFE000)
-              : Colors.white.withValues(alpha: 0.15),
-        ),
-      ),
-    );
-  }
-}
-
-class _DashedLinePainter extends CustomPainter {
-  const _DashedLinePainter({required this.color});
-  final Color color;
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final paint = Paint()
-      ..color = color
-      ..strokeWidth = 2
-      ..style = PaintingStyle.stroke;
-    const dashH = 4.0;
-    const gapH = 4.0;
-    double y = 0;
-    while (y < size.height) {
-      canvas.drawLine(
-          Offset(size.width / 2, y),
-          Offset(size.width / 2, (y + dashH).clamp(0, size.height)),
-          paint);
-      y += dashH + gapH;
-    }
-  }
-
-  @override
-  bool shouldRepaint(_DashedLinePainter old) => old.color != color;
-}
-
-class _PathNode extends StatelessWidget {
-  const _PathNode({
-    required this.icon,
-    required this.title,
-    required this.subtitle,
-    required this.isActive,
-    this.isFirst = false,
-    this.isLast = false,
-    this.badge,
-    this.trailing,
-    this.highlightTrailing = false,
-  });
-
-  final IconData icon;
-  final String title;
-  final String subtitle;
-  final bool isActive;
-  final bool isFirst;
-  final bool isLast;
-  final String? badge;
-  final String? trailing;
-  final bool highlightTrailing;
-
-  static const _gold = Color(0xFFFFE000);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
-      decoration: BoxDecoration(
-        color: isActive
-            ? _gold.withValues(alpha: 0.07)
-            : Colors.white.withValues(alpha: 0.03),
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(
-          color: isActive
-              ? _gold.withValues(alpha: 0.35)
-              : Colors.white.withValues(alpha: 0.07),
-          width: isActive ? 1.5 : 1,
-        ),
-      ),
-      child: Row(
-        children: [
-          // Icon circle
-          Container(
-            width: 44,
-            height: 44,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: isActive
-                  ? _gold.withValues(alpha: 0.15)
-                  : Colors.white.withValues(alpha: 0.06),
-              border: Border.all(
-                color: isActive
-                    ? _gold.withValues(alpha: 0.6)
-                    : Colors.white.withValues(alpha: 0.12),
-                width: 1.5,
-              ),
-            ),
-            child: Icon(
-              isActive ? icon : Icons.lock_rounded,
-              color: isActive
-                  ? _gold
-                  : Colors.white.withValues(alpha: 0.25),
-              size: isActive ? 22 : 18,
-            ),
-          ),
-          const SizedBox(width: 12),
-          // Text
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    Flexible(
-                      child: Text(
-                        title,
-                        style: TextStyle(
-                          color: isActive
-                              ? Colors.white
-                              : Colors.white.withValues(alpha: 0.4),
-                          fontWeight: FontWeight.w700,
-                          fontSize: 13.5,
-                        ),
-                      ),
-                    ),
-                    if (badge != null) ...[
-                      const SizedBox(width: 8),
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 8, vertical: 2),
-                        decoration: BoxDecoration(
-                          color: _gold,
-                          borderRadius: BorderRadius.circular(999),
-                        ),
-                        child: Text(
-                          badge!,
-                          style: const TextStyle(
-                            color: Colors.black87,
-                            fontSize: 9,
-                            fontWeight: FontWeight.w900,
-                            letterSpacing: 0.5,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ],
-                ),
-                const SizedBox(height: 3),
-                Text(
-                  subtitle,
-                  style: TextStyle(
-                    color: Colors.white.withValues(
-                        alpha: isActive ? 0.55 : 0.25),
-                    fontSize: 11.5,
-                    height: 1.3,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          // Trailing XP
-          if (trailing != null) ...[
-            const SizedBox(width: 8),
-            Text(
-              trailing!,
-              style: TextStyle(
-                color: highlightTrailing
-                    ? _gold.withValues(alpha: 0.9)
-                    : Colors.white.withValues(alpha: 0.25),
-                fontSize: 12,
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-          ],
-        ],
-      ),
-    );
+    return Obx(() => HeroPathJourneyMap(stage: JourneyController.to.stage.value));
   }
 }
 

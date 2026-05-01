@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:ez_trainz/models/avatar_config.dart';
+import 'package:ez_trainz/models/journey_stage.dart';
 import 'package:ez_trainz/models/xp_event.dart';
 
 /// Local persistence for avatar config + XP event log.
@@ -16,6 +17,7 @@ import 'package:ez_trainz/models/xp_event.dart';
 class AvatarStorageService {
   static const _kAvatarKey = 'journey_avatar_config_v1';
   static const _kXpEventsKey = 'journey_xp_events_v1';
+  static const _kJourneyStageKey = 'journey_stage_v1';
 
   static Future<AvatarConfig?> loadAvatar() async {
     final prefs = await SharedPreferences.getInstance();
@@ -58,5 +60,24 @@ class AvatarStorageService {
   static Future<void> clearXpEvents() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove(_kXpEventsKey);
+  }
+
+  static Future<JourneyStage> loadJourneyStage() async {
+    final prefs = await SharedPreferences.getInstance();
+    final raw = prefs.getString(_kJourneyStageKey);
+    return JourneyStage.values.firstWhere(
+      (s) => s.name == raw,
+      orElse: () => JourneyStage.beginning,
+    );
+  }
+
+  static Future<void> saveJourneyStage(JourneyStage stage) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString(_kJourneyStageKey, stage.name);
+  }
+
+  static Future<void> clearJourneyStage() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove(_kJourneyStageKey);
   }
 }

@@ -18,6 +18,7 @@ import 'package:ez_trainz/controllers/roster_controller.dart';
 import 'package:ez_trainz/controllers/journey_controller.dart';
 import 'package:ez_trainz/controllers/streak_controller.dart';
 import 'package:ez_trainz/controllers/lightning_streak_controller.dart';
+import 'package:ez_trainz/controllers/collectibles_controller.dart';
 import 'package:ez_trainz/l10n/app_translations.dart';
 import 'package:ez_trainz/screens/course_list_screen.dart';
 import 'package:ez_trainz/screens/login_screen.dart';
@@ -46,6 +47,7 @@ Future<void> main() async {
   Get.put(JourneyController(), permanent: true);
   Get.put(StreakController(), permanent: true);
   Get.put(LightningStreakController(), permanent: true);
+  Get.put(CollectiblesController(), permanent: true);
 
   await auth.restoreSession();
 
