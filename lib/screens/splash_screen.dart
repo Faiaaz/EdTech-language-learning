@@ -289,8 +289,8 @@ class _SkyBackground extends StatelessWidget {
   const _SkyBackground();
 
   // Pixel-sampled from popup_screen.gif edges
-  static const _topSky     = Color(0xFF52BEE2);
-  static const _bottomCloud = Color(0xFFE9F7FB);
+  static const _topSky     = Color(0xFF5BC1E4);
+  static const _bottomCloud = Color(0xFFE6F4F9);
 
   @override
   Widget build(BuildContext context) {
@@ -339,7 +339,7 @@ class _SkyBackground extends StatelessWidget {
                   gradient: LinearGradient(
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
-                    colors: [_topSky, Color(0x0052BEE2)],
+                    colors: [_topSky, Color(0x005BC1E4)],
                   ),
                 ),
               ),
@@ -356,7 +356,7 @@ class _SkyBackground extends StatelessWidget {
                   gradient: LinearGradient(
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
-                    colors: [Color(0x00E9F7FB), _bottomCloud],
+                    colors: [Color(0x00E6F4F9), _bottomCloud],
                   ),
                 ),
               ),
