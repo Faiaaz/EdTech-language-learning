@@ -363,7 +363,7 @@ class _LessonScreenState extends State<LessonScreen> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      ‘Start today’s session’,
+                                      "Start today's session",
                                       style: TextStyle(
                                         color: Colors.white,
                                         fontWeight: FontWeight.w900,
@@ -372,7 +372,7 @@ class _LessonScreenState extends State<LessonScreen> {
                                     ),
                                     SizedBox(height: 2),
                                     Text(
-                                      ‘3–7 minutes • streak-safe’,
+                                      '3-7 minutes \u2022 streak-safe',
                                       style: TextStyle(
                                         color: Color(0xFF94A3B8),
                                         fontWeight: FontWeight.w600,

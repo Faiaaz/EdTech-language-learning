@@ -103,7 +103,7 @@ const _en = <String, String>{
   // ── Nav (bottom bar) ───────────────────────────────────────────
   'nav_learn': 'Learn',
   'nav_practice': 'Practice',
-    'nav_collectibles': 'Collect',
+  'nav_collectibles': 'Collect',
   'nav_profile': 'Profile',
   'nav_community': 'Community',
   'nav_leaderboard': 'Leaderboard',
@@ -570,6 +570,7 @@ const _bn = <String, String>{
   // ── Nav (bottom bar) ───────────────────────────────────────────
   'nav_learn': 'শিখুন',
   'nav_practice': 'অনুশীলন',
+  'nav_collectibles': 'Collect',
   'nav_profile': 'প্রোফাইল',
   'nav_community': 'সম্প্রদায়',
   'nav_leaderboard': 'লিডারবোর্ড',

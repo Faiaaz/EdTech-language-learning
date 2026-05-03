@@ -13,9 +13,11 @@ class ProgramController extends GetxController {
 
   void setProgram(Program program) {
     _current.value = program;
+    update();
   }
 
   void clearProgram() {
     _current.value = null;
+    update();
   }
 }

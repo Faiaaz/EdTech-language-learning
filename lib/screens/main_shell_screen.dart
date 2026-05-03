@@ -4,18 +4,18 @@ import 'package:get/get.dart';
 import 'package:ez_trainz/controllers/course_controller.dart';
 import 'package:ez_trainz/controllers/program_controller.dart';
 import 'package:ez_trainz/models/program.dart';
-import 'package:ez_trainz/screens/duo_learn_screen.dart';
+import 'package:ez_trainz/screens/collectibles_screen.dart';
+import 'package:ez_trainz/screens/course_list_screen.dart';
 import 'package:ez_trainz/screens/forum_screen.dart';
 import 'package:ez_trainz/screens/games_screen.dart';
 import 'package:ez_trainz/screens/ielts_dashboard_screen.dart';
 import 'package:ez_trainz/screens/leaderboard_screen.dart';
 import 'package:ez_trainz/screens/profile_screen.dart';
-import 'package:ez_trainz/screens/collectibles_screen.dart';
 import 'package:ez_trainz/screens/trial_game_language_picker_screen.dart';
 import 'package:ez_trainz/widgets/language_switcher.dart';
 import 'package:ez_trainz/widgets/streak_pill.dart';
 
-/// Main container after login. Fixed bottom nav with five tabs.
+/// Main container after login. Fixed bottom nav (Learn, Practice, Collect, Profile, Community, Leaderboard).
 /// Learn tab shows program picker (JLC/KLC/ELC/GLC) or course list when a program is selected.
 class MainShellScreen extends StatefulWidget {
   const MainShellScreen({super.key});
@@ -28,50 +28,68 @@ class _MainShellScreenState extends State<MainShellScreen> {
   int _currentIndex = 0;
 
   static const _navBgColor = Color(0xFF1E293B);
+  /// Aligns bottom bar with JLC course list sky-blue theme (was clashing with slate).
+  static const _jlcLearnNavBg = Color(0xFF1A4A7A);
   static const _selectedColor = Color(0xFFFFE000);
   static const _unselectedColor = Color(0xFF94A3B8);
 
   static const _tabs = [
-    _NavItem(icon: Icons.shield_rounded),
-    _NavItem(icon: Icons.fitness_center_rounded),
-    _NavItem(icon: Icons.emoji_events_rounded),
-    _NavItem(icon: Icons.people_alt_rounded),
-    _NavItem(icon: Icons.person_rounded),
+    _NavItem(icon: Icons.school_rounded, labelKey: 'nav_learn'),
+    _NavItem(icon: Icons.fitness_center_rounded, labelKey: 'nav_practice'),
+    _NavItem(icon: Icons.park_rounded, labelKey: 'nav_collectibles'),
+    _NavItem(icon: Icons.person_rounded, labelKey: 'nav_profile'),
+    _NavItem(icon: Icons.people_alt_rounded, labelKey: 'nav_community'),
+    _NavItem(icon: Icons.emoji_events_rounded, labelKey: 'nav_leaderboard'),
   ];
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: IndexedStack(
-        index: _currentIndex,
-        children: [
-          Obx(() {
-            if (!ProgramController.to.hasProgram) {
-              return const _ProgramPickerView();
-            }
-            // Route ELC (English) to the IELTS dashboard
-            if (ProgramController.to.current == Program.elc) {
-              return const IeltsDashboardScreen();
-            }
-            return const DuoLearnScreen();
-          }),
-          const GamesScreen(),
-          const LeaderboardScreen(),
-          const ForumScreen(),
-          const ProfileScreen(),
-        ],
+    return GetBuilder<ProgramController>(
+      builder: (_) {
+        final jlcLearn = _currentIndex == 0 &&
+            ProgramController.to.current == Program.jlc;
+        return Scaffold(
+      resizeToAvoidBottomInset: false,
+      body: SizedBox.expand(
+        child: IndexedStack(
+          sizing: StackFit.expand,
+          index: _currentIndex,
+          children: [
+            GetBuilder<ProgramController>(
+              builder: (_) {
+                if (!ProgramController.to.hasProgram) {
+                  return const _ProgramPickerView();
+                }
+                if (ProgramController.to.current == Program.elc) {
+                  return const IeltsDashboardScreen();
+                }
+                return const CourseListScreen();
+              },
+            ),
+            const GamesScreen(),
+            const CollectiblesScreen(),
+            const ProfileScreen(),
+            const ForumScreen(),
+            const LeaderboardScreen(),
+          ],
+        ),
       ),
       bottomNavigationBar: Container(
-        decoration: const BoxDecoration(
-          color: _navBgColor,
+        decoration: BoxDecoration(
+          color: jlcLearn ? _jlcLearnNavBg : _navBgColor,
           border: Border(
-            top: BorderSide(color: Color(0xFF334155), width: 1),
+            top: BorderSide(
+              color: jlcLearn
+                  ? const Color(0xFF4DA6E8).withValues(alpha: 0.42)
+                  : const Color(0xFF334155),
+              width: 1,
+            ),
           ),
         ),
         child: SafeArea(
           top: false,
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+            padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: List.generate(_tabs.length, (i) {
@@ -83,8 +101,8 @@ class _MainShellScreenState extends State<MainShellScreen> {
                     behavior: HitTestBehavior.opaque,
                     child: AnimatedContainer(
                       duration: const Duration(milliseconds: 180),
-                      margin: const EdgeInsets.symmetric(horizontal: 4),
-                      padding: const EdgeInsets.symmetric(vertical: 10),
+                      margin: const EdgeInsets.symmetric(horizontal: 2),
+                      padding: const EdgeInsets.symmetric(vertical: 6),
                       decoration: BoxDecoration(
                         color: selected
                             ? _selectedColor.withValues(alpha: 0.18)
@@ -97,13 +115,36 @@ class _MainShellScreenState extends State<MainShellScreen> {
                           width: 1.4,
                         ),
                       ),
-                      child: Center(
-                        child: Icon(
-                          tab.icon,
-                          size: 28,
-                          color:
-                              selected ? _selectedColor : _unselectedColor,
-                        ),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(
+                            tab.icon,
+                            size: 22,
+                            color: selected
+                                ? _selectedColor
+                                : _unselectedColor,
+                          ),
+                          const SizedBox(height: 2),
+                          FittedBox(
+                            fit: BoxFit.scaleDown,
+                            child: Text(
+                              tab.labelKey.tr,
+                              maxLines: 1,
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontSize: 9,
+                                height: 1.1,
+                                fontWeight: selected
+                                    ? FontWeight.w700
+                                    : FontWeight.w500,
+                                color: selected
+                                    ? _selectedColor
+                                    : _unselectedColor,
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ),
@@ -114,12 +155,15 @@ class _MainShellScreenState extends State<MainShellScreen> {
         ),
       ),
     );
+      },
+    );
   }
 }
 
 class _NavItem {
-  const _NavItem({required this.icon});
+  const _NavItem({required this.icon, required this.labelKey});
   final IconData icon;
+  final String labelKey;
 }
 
 /// Shown in Learn tab when no program is selected. Tapping a card sets program and loads courses.
@@ -128,10 +172,11 @@ class _ProgramPickerView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xFF0F172A),
-      body: SafeArea(
-        child: SingleChildScrollView(
+    return Material(
+      color: const Color(0xFF0F172A),
+      child: SafeArea(
+        child: SizedBox.expand(
+          child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(horizontal: 24),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -214,6 +259,7 @@ class _ProgramPickerView extends StatelessWidget {
               const SizedBox(height: 32),
             ],
           ),
+        ),
         ),
       ),
     );

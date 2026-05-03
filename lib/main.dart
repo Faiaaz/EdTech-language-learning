@@ -23,7 +23,7 @@ import 'package:ez_trainz/controllers/hearts_controller.dart';
 import 'package:ez_trainz/l10n/app_translations.dart';
 import 'package:ez_trainz/screens/course_list_screen.dart';
 import 'package:ez_trainz/screens/login_screen.dart';
-import 'package:ez_trainz/screens/main_shell_screen.dart';
+import 'package:ez_trainz/screens/home_screen.dart';
 import 'package:ez_trainz/screens/splash_screen.dart';
 import 'package:ez_trainz/screens/avatar_onboarding_screen.dart';
 import 'package:ez_trainz/screens/journey_screen.dart';
@@ -129,7 +129,7 @@ class MyApp extends StatelessWidget {
           transition: Transition.fadeIn,
         ),
       ],
-      home: _kBypassAuth ? const MainShellScreen() : const SplashScreen(),
+      home: _kBypassAuth ? const HomeScreen() : const SplashScreen(),
     );
   }
 }
