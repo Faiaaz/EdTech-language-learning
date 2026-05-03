@@ -27,7 +27,7 @@ class CourseListScreen extends StatelessWidget {
     final ctrl = CourseController.to;
 
     return Scaffold(
-      backgroundColor: const Color(0xFF4DA6E8),
+      backgroundColor: const Color(0xFF0B1326),
       body: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
