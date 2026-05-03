@@ -7,6 +7,7 @@ import 'package:ez_trainz/controllers/program_controller.dart';
 import 'package:ez_trainz/models/program.dart';
 import 'package:ez_trainz/screens/main_shell_screen.dart';
 import 'package:ez_trainz/screens/login_screen.dart';
+import 'package:ez_trainz/screens/trial_game_language_picker_screen.dart';
 import 'package:ez_trainz/widgets/streak_pill.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -32,6 +33,8 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   late Animation<Offset>   _card3Slide;
   late Animation<double>   _card4Fade;
   late Animation<Offset>   _card4Slide;
+  late Animation<double>   _card5Fade;
+  late Animation<Offset>   _card5Slide;
 
   // ── Waving arm animation ───────────────────────────────────────
   late AnimationController _waveCtrl;
@@ -85,6 +88,13 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     );
     _card4Slide = Tween<Offset>(begin: const Offset(0.3, 0), end: Offset.zero).animate(
       CurvedAnimation(parent: _cardsCtrl, curve: const Interval(0.5, 1.0, curve: Curves.easeOutCubic)),
+    );
+
+    _card5Fade = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(parent: _cardsCtrl, curve: const Interval(0.6, 1.0, curve: Curves.easeOut)),
+    );
+    _card5Slide = Tween<Offset>(begin: const Offset(0.3, 0), end: Offset.zero).animate(
+      CurvedAnimation(parent: _cardsCtrl, curve: const Interval(0.6, 1.0, curve: Curves.easeOutCubic)),
     );
 
     Future.delayed(const Duration(milliseconds: 400), () {
@@ -248,6 +258,28 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
 
                     const SizedBox(height: 32),
 
+                    // ── TRIAL GAME CARD ─────────────────────────────
+                    AnimatedBuilder(
+                      animation: _cardsCtrl,
+                      builder: (context, _) {
+                        return SlideTransition(
+                          position: _card1Slide,
+                          child: FadeTransition(
+                            opacity: _card1Fade,
+                            child: _TrialGameCard(
+                              onTap: () => Get.to(
+                                () => const TrialGameLanguagePickerScreen(),
+                                transition: Transition.rightToLeftWithFade,
+                                duration: const Duration(milliseconds: 260),
+                              ),
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+
+                    const SizedBox(height: 14),
+
                     // ── PROGRAM CARDS (JLC, KLC, ELC, GLC) ─────────
                     AnimatedBuilder(
                       animation: _cardsCtrl,
@@ -255,9 +287,9 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                         return Column(
                           children: [
                             SlideTransition(
-                              position: _card1Slide,
+                              position: _card2Slide,
                               child: FadeTransition(
-                                opacity: _card1Fade,
+                                opacity: _card2Fade,
                                 child: _NavCard(
                                   title: Program.jlc.name,
                                   subtitle: Program.jlc.subtitle,
@@ -269,9 +301,9 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                             ),
                             const SizedBox(height: 14),
                             SlideTransition(
-                              position: _card2Slide,
+                              position: _card3Slide,
                               child: FadeTransition(
-                                opacity: _card2Fade,
+                                opacity: _card3Fade,
                                 child: _NavCard(
                                   title: Program.klc.name,
                                   subtitle: Program.klc.subtitle,
@@ -283,9 +315,9 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                             ),
                             const SizedBox(height: 14),
                             SlideTransition(
-                              position: _card3Slide,
+                              position: _card4Slide,
                               child: FadeTransition(
-                                opacity: _card3Fade,
+                                opacity: _card4Fade,
                                 child: _NavCard(
                                   title: Program.elc.name,
                                   subtitle: Program.elc.subtitle,
@@ -297,9 +329,9 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                             ),
                             const SizedBox(height: 14),
                             SlideTransition(
-                              position: _card4Slide,
+                              position: _card5Slide,
                               child: FadeTransition(
-                                opacity: _card4Fade,
+                                opacity: _card5Fade,
                                 child: _NavCard(
                                   title: Program.glc.name,
                                   subtitle: Program.glc.subtitle,
@@ -357,6 +389,106 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
               ),
             ),
           ),
+        ),
+      ),
+    );
+  }
+}
+
+// ── TRIAL GAME CARD ────────────────────────────────────────────────────
+class _TrialGameCard extends StatelessWidget {
+  const _TrialGameCard({required this.onTap});
+
+  final VoidCallback onTap;
+
+  static const _gold = Color(0xFFFFE000);
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        width: double.infinity,
+        padding: const EdgeInsets.fromLTRB(18, 16, 16, 16),
+        decoration: BoxDecoration(
+          gradient: const LinearGradient(
+            colors: [Color(0xFF1E3A8A), Color(0xFF0EA5E9)],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+          borderRadius: BorderRadius.circular(18),
+          border: Border.all(color: _gold.withValues(alpha: 0.35), width: 1),
+          boxShadow: [
+            BoxShadow(
+              color: const Color(0xFF0EA5E9).withValues(alpha: 0.22),
+              blurRadius: 18,
+              offset: const Offset(0, 8),
+            ),
+          ],
+        ),
+        child: Row(
+          children: [
+            Container(
+              width: 52,
+              height: 52,
+              decoration: BoxDecoration(
+                color: Colors.white.withValues(alpha: 0.18),
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(color: Colors.white.withValues(alpha: 0.24)),
+              ),
+              alignment: Alignment.center,
+              child: const Icon(Icons.bolt_rounded, color: _gold, size: 30),
+            ),
+            const SizedBox(width: 14),
+            const Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Trial Game',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 18,
+                      fontWeight: FontWeight.w900,
+                      height: 1.1,
+                    ),
+                  ),
+                  SizedBox(height: 4),
+                  Text(
+                    'Try a language in 60 seconds with a mini-game.',
+                    style: TextStyle(
+                      color: Colors.white70,
+                      fontSize: 13,
+                      height: 1.25,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+              decoration: BoxDecoration(
+                color: _gold,
+                borderRadius: BorderRadius.circular(999),
+              ),
+              child: const Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    'TRY',
+                    style: TextStyle(
+                      color: Colors.black87,
+                      fontSize: 12,
+                      fontWeight: FontWeight.w900,
+                      letterSpacing: 0.6,
+                    ),
+                  ),
+                  SizedBox(width: 6),
+                  Icon(Icons.arrow_forward_rounded, color: Colors.black87, size: 16),
+                ],
+              ),
+            ),
+          ],
         ),
       ),
     );
