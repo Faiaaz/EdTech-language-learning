@@ -28,8 +28,6 @@ class _MainShellScreenState extends State<MainShellScreen> {
   int _currentIndex = 0;
 
   static const _navBgColor = Color(0xFF1E293B);
-  /// Aligns bottom bar with JLC course list sky-blue theme (was clashing with slate).
-  static const _jlcLearnNavBg = Color(0xFF1A4A7A);
   static const _selectedColor = Color(0xFFFFE000);
   static const _unselectedColor = Color(0xFF94A3B8);
 
@@ -46,8 +44,6 @@ class _MainShellScreenState extends State<MainShellScreen> {
   Widget build(BuildContext context) {
     return GetBuilder<ProgramController>(
       builder: (_) {
-        final jlcLearn = _currentIndex == 0 &&
-            ProgramController.to.current == Program.jlc;
         return Scaffold(
       resizeToAvoidBottomInset: false,
       body: SizedBox.expand(
@@ -75,13 +71,11 @@ class _MainShellScreenState extends State<MainShellScreen> {
         ),
       ),
       bottomNavigationBar: Container(
-        decoration: BoxDecoration(
-          color: jlcLearn ? _jlcLearnNavBg : _navBgColor,
+        decoration: const BoxDecoration(
+          color: _navBgColor,
           border: Border(
             top: BorderSide(
-              color: jlcLearn
-                  ? const Color(0xFF4DA6E8).withValues(alpha: 0.42)
-                  : const Color(0xFF334155),
+              color: Color(0xFF334155),
               width: 1,
             ),
           ),
