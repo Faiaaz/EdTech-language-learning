@@ -598,7 +598,7 @@ class _HiraganaLesson1ScreenState extends State<HiraganaLesson1Screen> {
             child: ElevatedButton(
               onPressed: () {
                 HapticFeedback.selectionClick();
-                Get.to(() => const HatPreviewInterstitialScreen());
+                Get.back();
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: _accentBlue,
