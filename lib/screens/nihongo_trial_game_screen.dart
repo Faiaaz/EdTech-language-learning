@@ -404,28 +404,15 @@ class _NihongoTrialGameScreenState extends State<NihongoTrialGameScreen>
                       end: Alignment.bottomRight,
                     ),
                   ),
-                  child: Stack(
-                    children: [
-                      Positioned.fill(
-                        child: Opacity(
-                          opacity: 0.10,
-                          child: Image.asset(
-                            q.image,
-                            fit: BoxFit.cover,
-                          ),
-                        ),
+                  child: Center(
+                    child: Padding(
+                      padding: const EdgeInsets.all(18),
+                      child: Image.asset(
+                        q.image,
+                        height: 150,
+                        fit: BoxFit.contain,
                       ),
-                      Center(
-                        child: Padding(
-                          padding: const EdgeInsets.all(18),
-                          child: Image.asset(
-                            q.image,
-                            height: 150,
-                            fit: BoxFit.contain,
-                          ),
-                        ),
-                      ),
-                    ],
+                    ),
                   ),
                 ),
               ),
@@ -602,29 +589,19 @@ class _VocabSlide extends StatelessWidget {
                 end: Alignment.bottomRight,
               ),
             ),
-            child: Stack(
-              children: [
-                Positioned.fill(
-                  child: Opacity(
-                    opacity: 0.08,
-                    child: Image.asset(vocab.image, fit: BoxFit.cover),
-                  ),
+            child: Center(
+              child: AnimatedBuilder(
+                animation: pulse,
+                builder: (_, child) => Transform.translate(
+                  offset: Offset(0, -6 * pulse.value),
+                  child: child,
                 ),
-                Center(
-                  child: AnimatedBuilder(
-                    animation: pulse,
-                    builder: (_, child) => Transform.translate(
-                      offset: Offset(0, -6 * pulse.value),
-                      child: child,
-                    ),
-                    child: Image.asset(
-                      vocab.image,
-                      height: 170,
-                      fit: BoxFit.contain,
-                    ),
-                  ),
+                child: Image.asset(
+                  vocab.image,
+                  height: 170,
+                  fit: BoxFit.contain,
                 ),
-              ],
+              ),
             ),
           ),
         ),
