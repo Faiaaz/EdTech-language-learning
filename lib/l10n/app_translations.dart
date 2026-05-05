@@ -167,6 +167,7 @@ const _en = <String, String>{
   'game_score': 'Score',
   'game_correct': 'correct',
   'retry': 'Retry',
+  'skip': 'Skip',
 
   // ── Leaderboard ──────────────────────────────────────────────
   'leaderboard_global': 'Global',
@@ -304,6 +305,46 @@ const _en = <String, String>{
   'hiragana_hunt_final_stats': 'Correct taps: @c | Wrong: @w',
   'hiragana_hunt_desc':
       'Hunt matching kana on a 12-tile board — combos, streaks, and round bonuses.',
+
+  // ── Hiragana Lesson 1 video screen ───────────────────────────────
+  'lesson_nav_chip': 'レッスン',
+  'hiragana_l1_screen_title': 'Lesson 1: Hiragana Part 1',
+  'hiragana_l1_screen_desc':
+      'Introduction to Hiragana — the foundational Japanese syllabary.',
+  'hiragana_l1_checkpoints_heading': 'Interactive Checkpoints',
+  'hiragana_l1_checkpoint_intro': 'Introduction',
+  'hiragana_l1_checkpoint_vowel': 'Vowel Sounds',
+  'hiragana_l1_checkpoint_basic': 'Basic Characters',
+  'hiragana_l1_quizzes_heading': 'Practice Quizzes',
+  'hiragana_l1_quiz_speaking': 'Speaking\nQuiz',
+  'hiragana_l1_quiz_listening': 'Listening\nQuiz',
+  'hiragana_l1_quiz_writing': 'Writing\nQuiz',
+  'hiragana_l1_quiz_reading': 'Reading\nQuiz',
+  'hiragana_l1_live_lesson': 'Book a Live Lesson',
+  'hiragana_l1_live_lesson_sub':
+      '20 mins • 1-on-1 with a tutor',
+  'hiragana_l1_quick_check_vowels': 'Quick Check — Vowels',
+  'hiragana_l1_quick_check_k_row': 'Quick Check — K Row',
+  'hiragana_l1_quick_check_s_row': 'Quick Check — S Row',
+  'hiragana_l1_mcq_prompt': 'Tap the hiragana for',
+  'hiragana_l1_mcq_hint': 'Choose wisely…',
+  'hiragana_l1_mcq_correct': 'Correct!',
+  'hiragana_l1_mcq_try_next': 'Not quite — try the next one.',
+  'hiragana_l1_mcq_score': 'Score: @cur/@total',
+  'hiragana_l1_quick_done_title': 'Nice!',
+  'hiragana_l1_quick_skipped_title': 'Quiz skipped',
+  'hiragana_l1_quick_skipped_body':
+      'You can replay the video and try it anytime.',
+  'hiragana_l1_quick_done_body':
+      'You scored @cur/@total on this quick check.',
+  'hiragana_l1_continue_video': 'Continue video',
+  'hiragana_l1_speech_title': 'Great job finishing the video!',
+  'hiragana_l1_speech_body':
+      'Now try our Speech Game — upload a short audio clip and we\'ll transcribe it to Japanese, romaji, and English.',
+  'hiragana_l1_speech_cta': 'Start Speech Game',
+  'hiragana_l1_leaf_title': 'Leaf earned!',
+  'hiragana_l1_leaf_body': 'Lesson 1 complete. Your tree just grew.',
+  'hiragana_l1_leaf_cta': 'Awesome',
 
   // ── Home screen ─────────────────────────────────────────────────
   'hello': 'Hello,',
@@ -634,6 +675,7 @@ const _bn = <String, String>{
   'game_score': 'নম্বর',
   'game_correct': 'সঠিক',
   'retry': 'আবার চেষ্টা করুন',
+  'skip': 'এড়িয়ে যান',
 
   // ── Leaderboard ──────────────────────────────────────────────
   'leaderboard_global': 'বিশ্বব্যাপী',
@@ -771,6 +813,49 @@ const _bn = <String, String>{
   'hiragana_hunt_final_stats': 'সঠিক ট্যাপ: @c | ভুল: @w',
   'hiragana_hunt_desc':
       '১২টি টাইলে মিল খুঁজুন — কম্বো, ধারা ও রাউন্ড বোনাস।',
+
+  // ── Hiragana Lesson 1 video screen ───────────────────────────────
+  'lesson_nav_chip': 'পাঠ',
+  'hiragana_l1_screen_title': 'পাঠ ১: হিরাগানা (প্রথম ভাগ)',
+  'hiragana_l1_screen_desc':
+      'হিরাগানা পরিচয় — জাপানি ভাষার এই মৌলিক ও কণ্ঠস্থ অক্ষরলিপি।',
+  'hiragana_l1_checkpoints_heading': 'ইন্টার‍্যাকটিভ চেকপয়েন্ট',
+  'hiragana_l1_checkpoint_intro': 'ভূমিকা',
+  'hiragana_l1_checkpoint_vowel': 'স্বরধ্বনি',
+  'hiragana_l1_checkpoint_basic': 'মৌলিক অক্ষর',
+  'hiragana_l1_quizzes_heading': 'অনুশীলনের কুইজ',
+  'hiragana_l1_quiz_speaking': 'বলার কুইজ',
+  'hiragana_l1_quiz_listening': 'শোনার কুইজ',
+  'hiragana_l1_quiz_writing': 'লেখার কুইজ',
+  'hiragana_l1_quiz_reading': 'পড়ার কুইজ',
+  'hiragana_l1_live_lesson': 'লাইভ ক্লাস বুক করুন',
+  'hiragana_l1_live_lesson_sub':
+      '২০ মিনিট • শিক্ষকের সঙ্গে একক সেশন',
+  'hiragana_l1_quick_check_vowels': 'দ্রুত যাচাই — স্বরধ্বনির হিরাগানা',
+  'hiragana_l1_quick_check_k_row':
+      'দ্রুত যাচাই — ক থেকে শুরু সারির হিরাগানা',
+  'hiragana_l1_quick_check_s_row':
+      'দ্রুত যাচাই — স থেকে শুরু সারির হিরাগানা',
+  'hiragana_l1_mcq_prompt':
+      'রোমাজি অনুযায়ী সঠিক হিরাগানা ট্যাপ করুন',
+  'hiragana_l1_mcq_hint': 'ভালো করে চিন্তা করুন…',
+  'hiragana_l1_mcq_correct': 'সঠিক!',
+  'hiragana_l1_mcq_try_next':
+      'এখনও ঠিক হয়নি — পরেরটায় চেষ্টা করুন।',
+  'hiragana_l1_mcq_score': 'স্কোর: @cur/@total',
+  'hiragana_l1_quick_done_title': 'দারুণ!',
+  'hiragana_l1_quick_skipped_title': 'কুইজ এড়িয়ে গেছেন',
+  'hiragana_l1_quick_skipped_body':
+      'যেকোনো সময় ভিডিও আবার চালিয়ে এটি চেষ্টা করতে পারবেন।',
+  'hiragana_l1_quick_done_body':
+      'এই দ্রুত যাচাইতে আপনার স্কোর @cur/@total।',
+  'hiragana_l1_continue_video': 'ভিডিও চালিয়ে যান',
+  'hiragana_l1_speech_title': 'ভিডিও শেষ করায় অসাধারণ!',
+  'hiragana_l1_speech_body':
+      'এখন স্পিচ গেম চেষ্টা করুন — সংক্ষেপে একটি অডিও রেকর্ড আপলোড করুন; আমরা সেটিকে জাপানি, রোমাজি ও ইংরেজিতে ট্রান্সক্রিপ্ট করব।',
+  'hiragana_l1_leaf_title': 'একটি পাতা জিতলেন!',
+  'hiragana_l1_leaf_body': 'পাঠ ১ সম্পূর্ণ। আপনার গাছ একটু বড় হলো।',
+  'hiragana_l1_leaf_cta': 'চমৎকার',
 
   // ── Home screen ─────────────────────────────────────────────────
   'hello': 'হ্যালো,',
