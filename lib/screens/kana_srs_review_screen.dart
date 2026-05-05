@@ -92,11 +92,11 @@ class _ReviewBody extends StatelessWidget {
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             const Icon(Icons.arrow_back_ios_rounded,
-                                color: Colors.white, size: 14),
+                                color: const Color(0xFF1E293B), size: 14),
                             const SizedBox(width: 4),
                             Text('back'.tr,
                                 style: const TextStyle(
-                                  color: Colors.white,
+                                  color: const Color(0xFF1E293B),
                                   fontSize: 13,
                                   fontWeight: FontWeight.w600,
                                 )),
@@ -108,7 +108,7 @@ class _ReviewBody extends StatelessWidget {
                     Text(
                       '${ctrl.currentIndex.value + 1} / ${ctrl.sessionQueue.length}',
                       style: const TextStyle(
-                        color: Colors.white,
+                        color: const Color(0xFF1E293B),
                         fontSize: 14,
                         fontWeight: FontWeight.w700,
                       ),
@@ -119,7 +119,7 @@ class _ReviewBody extends StatelessWidget {
                 Text(
                   'flashcard_review'.tr,
                   style: const TextStyle(
-                    color: Colors.white,
+                    color: const Color(0xFF1E293B),
                     fontSize: 22,
                     fontWeight: FontWeight.w900,
                   ),
@@ -130,7 +130,7 @@ class _ReviewBody extends StatelessWidget {
                   child: LinearProgressIndicator(
                     value: progress,
                     minHeight: 6,
-                    backgroundColor: Colors.white.withValues(alpha: 0.3),
+                    backgroundColor: const Color(0xFF0F172A).withValues(alpha: 0.3),
                     valueColor:
                         const AlwaysStoppedAnimation<Color>(Colors.white),
                   ),
@@ -313,7 +313,7 @@ class _CardFront extends StatelessWidget {
       width: double.infinity,
       padding: const EdgeInsets.symmetric(vertical: 56, horizontal: 24),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: const Color(0xFF1E293B),
         borderRadius: BorderRadius.circular(24),
         boxShadow: [
           BoxShadow(
@@ -373,7 +373,7 @@ class _CardBack extends StatelessWidget {
       width: double.infinity,
       padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 24),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: const Color(0xFF1E293B),
         borderRadius: BorderRadius.circular(24),
         border: Border.all(
             color: scriptColor.withValues(alpha: 0.3), width: 2),
@@ -596,7 +596,7 @@ class _SessionSummary extends StatelessWidget {
                 shape: BoxShape.circle,
               ),
               child: const Icon(Icons.check_rounded,
-                  color: Colors.white, size: 44),
+                  color: const Color(0xFF1E293B), size: 44),
             ),
             const SizedBox(height: 24),
             Text(
@@ -659,7 +659,7 @@ class _SessionSummary extends StatelessWidget {
                 child: Text(
                   'done'.tr,
                   style: const TextStyle(
-                    color: Colors.white,
+                    color: const Color(0xFF1E293B),
                     fontSize: 16,
                     fontWeight: FontWeight.w800,
                   ),

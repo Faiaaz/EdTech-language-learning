@@ -18,7 +18,7 @@ class GameDetailScreen extends StatefulWidget {
 }
 
 class _GameDetailScreenState extends State<GameDetailScreen> {
-  static const _bgColor = Color(0xFF4DA6E8);
+  static const _bgColor = const Color(0xFF0F172A);
   static const _accentColor = Color(0xFFFFE000);
 
   @override
@@ -142,7 +142,7 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
                   icon: const Icon(Icons.history_rounded, size: 20),
                   label: Text('game_view_history'.tr),
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.white.withValues(alpha: 0.2),
+                    backgroundColor: const Color(0xFF0F172A).withValues(alpha: 0.2),
                     foregroundColor: Colors.white,
                     padding: const EdgeInsets.symmetric(vertical: 14),
                     shape: RoundedRectangleBorder(
@@ -237,7 +237,7 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
                         Get.snackbar(
                           'submit_score_success_title'.tr,
                           'submit_score_success'.tr,
-                          backgroundColor: const Color(0xFF4DA6E8),
+                          backgroundColor: const Color(0xFF0F172A),
                           colorText: Colors.white,
                           snackPosition: SnackPosition.BOTTOM,
                           margin: const EdgeInsets.all(16),
@@ -256,7 +256,7 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
                       }
                     },
               style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF4DA6E8),
+                backgroundColor: const Color(0xFF0F172A),
                 foregroundColor: Colors.white,
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10)),
@@ -318,7 +318,7 @@ class _InfoChip extends StatelessWidget {
         children: [
           Text(value,
               style: const TextStyle(
-                  color: Colors.white,
+                  color: const Color(0xFF1E293B),
                   fontSize: 16,
                   fontWeight: FontWeight.w800)),
           const SizedBox(height: 2),

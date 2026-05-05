@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:math' as math;
 import 'package:get/get.dart';
 
-import 'package:ez_trainz/controllers/auth_controller.dart';
-import 'package:ez_trainz/screens/main_shell_screen.dart';
+import 'package:ez_trainz/screens/home_screen.dart';
 import 'package:ez_trainz/widgets/ez_logo_boxed.dart';
 import 'package:ez_trainz/utils/spring_curve.dart';
 
@@ -398,7 +397,7 @@ class _AirplaneTransitionScreenState extends State<_AirplaneTransitionScreen>
     if (mounted) {
       Navigator.of(context).pushReplacement(
         PageRouteBuilder(
-          pageBuilder: (_, __, ___) => const MainShellScreen(),
+          pageBuilder: (_, __, ___) => const HomeScreen(),
           transitionDuration: Duration.zero,
           reverseTransitionDuration: Duration.zero,
         ),

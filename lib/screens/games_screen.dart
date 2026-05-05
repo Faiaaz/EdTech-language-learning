@@ -15,7 +15,7 @@ class GamesScreen extends StatefulWidget {
 }
 
 class _GamesScreenState extends State<GamesScreen> {
-  static const _bgColor = Color(0xFF4DA6E8);
+  static const _bgColor = Color(0xFF0F172A);
   static const _accentColor = Color(0xFFFFE000);
 
   @override
@@ -41,7 +41,7 @@ class _GamesScreenState extends State<GamesScreen> {
                     child: Text(
                       'games_title'.tr,
                       style: const TextStyle(
-                        color: Colors.white,
+                        color: const Color(0xFF1E293B),
                         fontSize: 24,
                         fontWeight: FontWeight.w800,
                       ),
@@ -49,7 +49,7 @@ class _GamesScreenState extends State<GamesScreen> {
                   ),
                   IconButton(
                     onPressed: () => Get.to(() => const GamificationContentScreen()),
-                    icon: const Icon(Icons.quiz_rounded, color: Colors.white),
+                    icon: const Icon(Icons.quiz_rounded, color: const Color(0xFF1E293B)),
                     tooltip: 'Quizzes & drills',
                   ),
                 ],
@@ -100,7 +100,7 @@ class _GamesScreenState extends State<GamesScreen> {
                             style: ElevatedButton.styleFrom(
                                 backgroundColor: _accentColor),
                             child: Text('retry'.tr,
-                                style: const TextStyle(color: Colors.black87)),
+                                style: const TextStyle(color: Colors.white)),
                           ),
                         ],
                       ),
@@ -186,7 +186,7 @@ class _GameCard extends StatelessWidget {
               ),
               alignment: Alignment.center,
               child: const Icon(Icons.sports_esports_rounded,
-                  color: Colors.white, size: 26),
+                  color: const Color(0xFF1E293B), size: 26),
             ),
             const SizedBox(width: 16),
             Expanded(
@@ -196,7 +196,7 @@ class _GameCard extends StatelessWidget {
                   Text(
                     game.title,
                     style: const TextStyle(
-                      color: Colors.white,
+                      color: const Color(0xFF1E293B),
                       fontSize: 17,
                       fontWeight: FontWeight.w800,
                       height: 1.2,
@@ -225,7 +225,7 @@ class _GameCard extends StatelessWidget {
                 shape: BoxShape.circle,
               ),
               child: const Icon(Icons.arrow_forward_rounded,
-                  color: Colors.white, size: 18),
+                  color: const Color(0xFF1E293B), size: 18),
             ),
           ],
         ),

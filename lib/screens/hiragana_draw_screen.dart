@@ -330,7 +330,7 @@ class _HiraganaDrawScreenState extends State<HiraganaDrawScreen> {
       text: TextSpan(
         text: char,
         style: TextStyle(
-          color: Colors.black,
+          color: Colors.white,
           fontSize: size.width * 0.75,
           height: 1.0,
         ),
@@ -391,7 +391,7 @@ class _HiraganaDrawScreenState extends State<HiraganaDrawScreen> {
 
   @override
   Widget build(BuildContext context) {
-    const bg = Color(0xFF34495E);
+    const bg = Color(0xFF0F172A);
     const accent = Color(0xFFFFD86B);
 
     return Scaffold(
@@ -426,13 +426,13 @@ class _HiraganaDrawScreenState extends State<HiraganaDrawScreen> {
                           Get.back();
                         },
                         icon: const Icon(Icons.arrow_back_rounded,
-                            color: Colors.white),
+                            color: const Color(0xFF1E293B)),
                       ),
                     ),
                     const SizedBox(height: 8),
                     Text('hiragana_draw_title'.tr,
                         style: const TextStyle(
-                            color: Colors.white,
+                            color: const Color(0xFF1E293B),
                             fontSize: 24,
                             fontWeight: FontWeight.w800)),
                     const SizedBox(height: 20),
@@ -495,7 +495,7 @@ class _HiraganaDrawScreenState extends State<HiraganaDrawScreen> {
                         fontWeight: FontWeight.w800)),
                 const SizedBox(height: 20),
                 Text('hiragana_draw_final_score'.trParams({'score': '$_score'}),
-                    style: const TextStyle(color: Colors.white, fontSize: 20)),
+                    style: const TextStyle(color: const Color(0xFF1E293B), fontSize: 20)),
                 const SizedBox(height: 12),
                 Text('hiragana_draw_drawn'.trParams({'n': '$_doneCount'}),
                     style: TextStyle(
@@ -554,12 +554,12 @@ class _HiraganaDrawScreenState extends State<HiraganaDrawScreen> {
                   _hapticLight();
                   Get.back();
                 },
-                icon: const Icon(Icons.arrow_back_rounded, color: Colors.white),
+                icon: const Icon(Icons.arrow_back_rounded, color: const Color(0xFF1E293B)),
               ),
               Expanded(
                 child: Text('hiragana_draw_title'.tr,
                     style: const TextStyle(
-                        color: Colors.white,
+                        color: const Color(0xFF1E293B),
                         fontSize: 17,
                         fontWeight: FontWeight.w800)),
               ),
@@ -579,7 +579,7 @@ class _HiraganaDrawScreenState extends State<HiraganaDrawScreen> {
               children: [
                 Text('⏱️ ${'hiragana_draw_hud_time'.trParams({'s': '$_timeLeft'})}',
                     style: const TextStyle(
-                        color: Colors.white,
+                        color: const Color(0xFF1E293B),
                         fontWeight: FontWeight.w700,
                         fontSize: 14)),
                 Text('⭐ $_score',
@@ -658,7 +658,7 @@ class _HiraganaDrawScreenState extends State<HiraganaDrawScreen> {
                                     style: TextStyle(
                                       fontSize: kHiraganaDrawCanvas * 0.72,
                                       fontWeight: FontWeight.w500,
-                                      color: Colors.black87,
+                                      color: Colors.white,
                                     ),
                                   ),
                                 ),

@@ -15,7 +15,7 @@ class UserHistoryScreen extends StatefulWidget {
 }
 
 class _UserHistoryScreenState extends State<UserHistoryScreen> {
-  static const _bgColor = Color(0xFF4DA6E8);
+  static const _bgColor = Color(0xFF0F172A);
   static const _accentColor = Color(0xFFFFE000);
 
   @override
@@ -53,11 +53,11 @@ class _UserHistoryScreenState extends State<UserHistoryScreen> {
                 child: Row(
                   children: [
                     const Icon(Icons.arrow_back_rounded,
-                        color: Colors.white, size: 22),
+                        color: const Color(0xFF1E293B), size: 22),
                     const SizedBox(width: 8),
                     Text('back'.tr,
                         style:
-                            const TextStyle(color: Colors.white, fontSize: 16)),
+                            const TextStyle(color: const Color(0xFF1E293B), fontSize: 16)),
                   ],
                 ),
               ),
@@ -67,7 +67,7 @@ class _UserHistoryScreenState extends State<UserHistoryScreen> {
               child: Text(
                 'history_title'.tr,
                 style: const TextStyle(
-                  color: Colors.white,
+                  color: const Color(0xFF1E293B),
                   fontSize: 26,
                   fontWeight: FontWeight.w800,
                 ),
@@ -118,7 +118,7 @@ class _UserHistoryScreenState extends State<UserHistoryScreen> {
                                 backgroundColor: _accentColor),
                             child: Text('retry'.tr,
                                 style:
-                                    const TextStyle(color: Colors.black87)),
+                                    const TextStyle(color: Colors.white)),
                           ),
                         ],
                       ),
@@ -178,7 +178,7 @@ class _UserHistoryScreenState extends State<UserHistoryScreen> {
                       Text(
                         'history_recent'.tr,
                         style: const TextStyle(
-                          color: Colors.white,
+                          color: const Color(0xFF1E293B),
                           fontSize: 16,
                           fontWeight: FontWeight.w700,
                         ),
@@ -286,7 +286,7 @@ class _StatItem extends StatelessWidget {
           Text(
             value,
             style: const TextStyle(
-              color: Colors.white,
+              color: const Color(0xFF1E293B),
               fontSize: 22,
               fontWeight: FontWeight.w900,
             ),
@@ -333,7 +333,7 @@ class _SessionCard extends StatelessWidget {
                 child: Text(
                   gameName,
                   style: const TextStyle(
-                    color: Colors.white,
+                    color: const Color(0xFF1E293B),
                     fontSize: 15,
                     fontWeight: FontWeight.w700,
                   ),

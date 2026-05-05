@@ -15,7 +15,7 @@ class GamificationContentScreen extends StatefulWidget {
 
 class _GamificationContentScreenState extends State<GamificationContentScreen>
     with SingleTickerProviderStateMixin {
-  static const _bg = Color(0xFF4DA6E8);
+  static const _bg = Color(0xFF0F172A);
   static const _accent = Color(0xFFFFE000);
 
   late TabController _tabs;
@@ -145,7 +145,7 @@ class _QuizCatalogTab extends StatelessWidget {
             child: Text(
               ctrl.error.value,
               textAlign: TextAlign.center,
-              style: const TextStyle(color: Colors.white),
+              style: const TextStyle(color: const Color(0xFF1E293B)),
             ),
           ),
         );
@@ -170,7 +170,7 @@ class _QuizCatalogTab extends StatelessWidget {
           itemBuilder: (_, i) {
             final q = ctrl.quizCatalog[i];
             return Material(
-              color: Colors.white,
+              color: const Color(0xFF1E293B),
               borderRadius: BorderRadius.circular(16),
               clipBehavior: Clip.antiAlias,
               child: ListTile(
@@ -190,7 +190,7 @@ class _QuizCatalogTab extends StatelessWidget {
                     children: [
                       _MiniChip(
                         text: 'id: ${q.id}',
-                        color: Colors.grey.shade800,
+                        color: Colors.white,
                       ),
                       if (q.lessonId != null && q.lessonId!.isNotEmpty)
                         _MiniChip(text: 'lesson: ${q.lessonId}', color: const Color(0xFF1E88E5)),
@@ -238,7 +238,7 @@ class _DrillsTab extends StatelessWidget {
               const Text(
                 'Load by lesson',
                 style: TextStyle(
-                  color: Colors.white,
+                  color: const Color(0xFF1E293B),
                   fontWeight: FontWeight.w900,
                   fontSize: 14,
                 ),
@@ -290,7 +290,7 @@ class _DrillsTab extends StatelessWidget {
               padding: const EdgeInsets.only(bottom: 12),
               child: Text(
                 ctrl.error.value,
-                style: const TextStyle(color: Colors.white),
+                style: const TextStyle(color: const Color(0xFF1E293B)),
               ),
             );
           }
@@ -345,7 +345,7 @@ class _DrillPayloadCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: const Color(0xFF1E293B),
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
@@ -369,7 +369,7 @@ class _DrillPayloadCard extends StatelessWidget {
           const SizedBox(height: 4),
           Text(
             '${payload.kind} · ${payload.items.length} items',
-            style: TextStyle(color: Colors.grey.shade700, fontWeight: FontWeight.w600),
+            style: TextStyle(color: const Color(0xFF94A3B8), fontWeight: FontWeight.w600),
           ),
           const SizedBox(height: 12),
           if (payload.items.isEmpty)

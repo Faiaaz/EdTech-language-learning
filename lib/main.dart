@@ -23,12 +23,13 @@ import 'package:ez_trainz/controllers/hearts_controller.dart';
 import 'package:ez_trainz/l10n/app_translations.dart';
 import 'package:ez_trainz/screens/course_list_screen.dart';
 import 'package:ez_trainz/screens/login_screen.dart';
-import 'package:ez_trainz/screens/main_shell_screen.dart';
+import 'package:ez_trainz/screens/home_screen.dart';
 import 'package:ez_trainz/screens/splash_screen.dart';
 import 'package:ez_trainz/screens/avatar_onboarding_screen.dart';
 import 'package:ez_trainz/screens/journey_screen.dart';
 import 'package:ez_trainz/screens/lesson_quiz_screen.dart';
 import 'package:ez_trainz/models/lesson_challenge.dart';
+import 'package:ez_trainz/utils/app_theme.dart';
 
 const bool _kBypassAuth = false;
 
@@ -69,6 +70,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
+      theme: buildAppTheme(),
       translations: AppTranslations(),
       locale: LocaleController.to.locale,
       fallbackLocale: const Locale('en', 'US'),
@@ -127,7 +129,7 @@ class MyApp extends StatelessWidget {
           transition: Transition.fadeIn,
         ),
       ],
-      home: _kBypassAuth ? const MainShellScreen() : const SplashScreen(),
+      home: _kBypassAuth ? const HomeScreen() : const SplashScreen(),
     );
   }
 }

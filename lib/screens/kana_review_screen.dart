@@ -218,7 +218,7 @@ class _KanaReviewScreenState extends State<KanaReviewScreen>
                   child: const Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Icon(Icons.arrow_back_ios_rounded, color: Colors.white, size: 14),
+                      Icon(Icons.arrow_back_ios_rounded, color: const Color(0xFF1E293B), size: 14),
                       SizedBox(width: 4),
                       Text('Back',
                           style: TextStyle(
@@ -263,7 +263,7 @@ class _KanaReviewScreenState extends State<KanaReviewScreen>
                       value: _dueCards.isEmpty
                           ? 0
                           : _currentIndex / _dueCards.length,
-                      backgroundColor: Colors.white.withValues(alpha: 0.2),
+                      backgroundColor: const Color(0xFF0F172A).withValues(alpha: 0.2),
                       valueColor: const AlwaysStoppedAnimation(Colors.white),
                       minHeight: 6,
                     ),
@@ -279,7 +279,7 @@ class _KanaReviewScreenState extends State<KanaReviewScreen>
                   child: Text(
                     '$remaining left',
                     style: const TextStyle(
-                      color: Colors.white,
+                      color: const Color(0xFF1E293B),
                       fontSize: 12,
                       fontWeight: FontWeight.w700,
                     ),
@@ -358,7 +358,7 @@ class _KanaReviewScreenState extends State<KanaReviewScreen>
       width: double.infinity,
       height: 280,
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: const Color(0xFF1E293B),
         borderRadius: BorderRadius.circular(24),
         boxShadow: [
           BoxShadow(
@@ -443,7 +443,7 @@ class _KanaReviewScreenState extends State<KanaReviewScreen>
             child: Text(
               kana.romaji.toUpperCase(),
               style: const TextStyle(
-                color: Colors.white,
+                color: const Color(0xFF1E293B),
                 fontSize: 28,
                 fontWeight: FontWeight.w800,
                 letterSpacing: 2,
@@ -581,7 +581,7 @@ class _KanaReviewScreenState extends State<KanaReviewScreen>
               'No cards are due for review right now.\nCome back later to keep your memory fresh!',
               textAlign: TextAlign.center,
               style: TextStyle(
-                color: const Color(0xFF6B7280),
+                color: const Color(0xFF94A3B8),
                 fontSize: 14,
                 height: 1.5,
               ),
@@ -639,14 +639,14 @@ class _KanaReviewScreenState extends State<KanaReviewScreen>
             const SizedBox(height: 8),
             Text(
               'Great work! Keep reviewing daily.',
-              style: TextStyle(color: const Color(0xFF6B7280), fontSize: 14),
+              style: TextStyle(color: const Color(0xFF94A3B8), fontSize: 14),
             ),
             const SizedBox(height: 28),
             // ── Stats row ─────────────────────────────────
             Container(
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: const Color(0xFF1E293B),
                 borderRadius: BorderRadius.circular(20),
                 boxShadow: [
                   BoxShadow(

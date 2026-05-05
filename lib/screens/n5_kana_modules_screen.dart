@@ -80,11 +80,11 @@ class _N5KanaModulesScreenState extends State<N5KanaModulesScreen> {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           const Icon(Icons.arrow_back_ios_rounded,
-                              color: Colors.white, size: 14),
+                              color: const Color(0xFF1E293B), size: 14),
                           const SizedBox(width: 4),
                           Text('back'.tr,
                               style: const TextStyle(
-                                color: Colors.white,
+                                color: const Color(0xFF1E293B),
                                 fontSize: 13,
                                 fontWeight: FontWeight.w600,
                               )),
@@ -103,7 +103,7 @@ class _N5KanaModulesScreenState extends State<N5KanaModulesScreen> {
                     child: Text(
                       'n5_beginner'.tr,
                       style: const TextStyle(
-                        color: Colors.white,
+                        color: const Color(0xFF1E293B),
                         fontSize: 12,
                         fontWeight: FontWeight.w700,
                       ),
@@ -113,7 +113,7 @@ class _N5KanaModulesScreenState extends State<N5KanaModulesScreen> {
                   Text(
                     'jp_writing_systems'.tr,
                     style: const TextStyle(
-                      color: Colors.white,
+                      color: const Color(0xFF1E293B),
                       fontSize: 24,
                       fontWeight: FontWeight.w900,
                       height: 1.2,
@@ -319,7 +319,7 @@ class _ModuleSection extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: const Color(0xFF1E293B),
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
@@ -572,7 +572,7 @@ class _SrsReviewCard extends StatelessWidget {
                   ),
                   child: const Icon(
                     Icons.style_rounded,
-                    color: Colors.white,
+                    color: const Color(0xFF1E293B),
                     size: 24,
                   ),
                 ),
@@ -584,7 +584,7 @@ class _SrsReviewCard extends StatelessWidget {
                       Text(
                         'flashcard_review'.tr,
                         style: const TextStyle(
-                          color: Colors.white,
+                          color: const Color(0xFF1E293B),
                           fontSize: 18,
                           fontWeight: FontWeight.w900,
                         ),

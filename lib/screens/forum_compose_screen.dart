@@ -18,7 +18,7 @@ class _ForumComposeScreenState extends State<ForumComposeScreen> {
   final _formKey = GlobalKey<FormState>();
   var _submitting = false;
 
-  static const _bg = Color(0xFF4DA6E8);
+  static const _bg = Color(0xFF0F172A);
   static const _accent = Color(0xFFFFE000);
 
   @override
@@ -94,11 +94,20 @@ class _ForumComposeScreenState extends State<ForumComposeScreen> {
             children: [
               TextFormField(
                 controller: _titleCtrl,
-                style: const TextStyle(color: Color(0xFF1A1A2E)),
+                style: const TextStyle(color: Colors.white),
                 decoration: InputDecoration(
                   labelText: 'forum_title_label'.tr,
+                  labelStyle: const TextStyle(color: Color(0xFF94A3B8)),
                   filled: true,
-                  fillColor: Colors.white,
+                  fillColor: const Color(0xFF1E293B),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: const BorderSide(color: Color(0xFF334155)),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: const BorderSide(color: Color(0xFF3B82F6)),
+                  ),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),
@@ -115,12 +124,21 @@ class _ForumComposeScreenState extends State<ForumComposeScreen> {
                 controller: _bodyCtrl,
                 minLines: 8,
                 maxLines: 16,
-                style: const TextStyle(color: Color(0xFF1A1A2E)),
+                style: const TextStyle(color: Colors.white),
                 decoration: InputDecoration(
                   alignLabelWithHint: true,
                   labelText: 'forum_body_label'.tr,
+                  labelStyle: const TextStyle(color: Color(0xFF94A3B8)),
                   filled: true,
-                  fillColor: Colors.white,
+                  fillColor: const Color(0xFF1E293B),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: const BorderSide(color: Color(0xFF334155)),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: const BorderSide(color: Color(0xFF3B82F6)),
+                  ),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),

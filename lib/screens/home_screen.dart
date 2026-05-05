@@ -153,7 +153,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     final firstName = AuthController.to.firstName;
 
     return Scaffold(
-      backgroundColor: const Color(0xFF4DA6E8),
+      backgroundColor: const Color(0xFF0F172A),
       body: SafeArea(
         child: FadeTransition(
           opacity: _fadeIn,
@@ -208,7 +208,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                             child: Row(
                               children: [
                                 const Icon(Icons.logout_rounded,
-                                    color: Colors.white, size: 15),
+                                    color: const Color(0xFF1E293B), size: 15),
                                 const SizedBox(width: 5),
                                 Text('logout'.tr,
                                     style: const TextStyle(
@@ -631,7 +631,7 @@ class _NavCardState extends State<_NavCard> with SingleTickerProviderStateMixin 
                 ),
                 child: const Icon(
                   Icons.arrow_forward_rounded,
-                  color: Colors.white,
+                  color: const Color(0xFF1E293B),
                   size: 18,
                 ),
               ),

@@ -121,8 +121,10 @@ class _HiraganaLesson1ScreenState extends State<HiraganaLesson1Screen> {
           ? _sRowPairs
           : (shouldTrigger2 ? _kRowPairs : _vowelPairs);
       final title = shouldTrigger3
-          ? 'Quick Check — S Row'
-          : (shouldTrigger2 ? 'Quick Check — K Row' : 'Quick Check — Vowels');
+          ? 'hiragana_l1_quick_check_s_row'.tr
+          : (shouldTrigger2
+              ? 'hiragana_l1_quick_check_k_row'.tr
+              : 'hiragana_l1_quick_check_vowels'.tr);
 
       // Don't block the video listener; run async flow separately.
       Future<void>(() async {
@@ -336,15 +338,15 @@ class _HiraganaLesson1ScreenState extends State<HiraganaLesson1Screen> {
                       _videoCtrl?.pause();
                       Get.back();
                     },
-                    child: const Row(
+                    child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        Icon(Icons.arrow_back_ios_new_rounded,
+                        const Icon(Icons.arrow_back_ios_new_rounded,
                             color: _textMuted, size: 18),
-                        SizedBox(width: 4),
+                        const SizedBox(width: 4),
                         Text(
-                          'レッスン',
-                          style: TextStyle(
+                          'lesson_nav_chip'.tr,
+                          style: const TextStyle(
                             color: _textMuted,
                             fontSize: 14,
                             fontWeight: FontWeight.w600,
@@ -354,10 +356,10 @@ class _HiraganaLesson1ScreenState extends State<HiraganaLesson1Screen> {
                     ),
                   ),
                   const SizedBox(width: 12),
-                  const Expanded(
+                  Expanded(
                     child: Text(
-                      'Lesson 1: Hiragana Part 1',
-                      style: TextStyle(
+                      'hiragana_l1_screen_title'.tr,
+                      style: const TextStyle(
                         color: Colors.white,
                         fontSize: 16,
                         fontWeight: FontWeight.w800,
@@ -412,14 +414,14 @@ class _HiraganaLesson1ScreenState extends State<HiraganaLesson1Screen> {
                 ),
               ),
             if (hasVideo) const SizedBox(height: 14),
-            Expanded(child: _buildContent(lesson)),
+            Expanded(child: _buildContent()),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildContent(dynamic lesson) {
+  Widget _buildContent() {
     return SingleChildScrollView(
       physics: const BouncingScrollPhysics(),
       padding: const EdgeInsets.fromLTRB(16, 0, 16, 24),
@@ -431,7 +433,7 @@ class _HiraganaLesson1ScreenState extends State<HiraganaLesson1Screen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  lesson.title,
+                  'hiragana_l1_screen_title'.tr,
                   style: const TextStyle(
                     color: Colors.white,
                     fontSize: 18,
@@ -441,7 +443,7 @@ class _HiraganaLesson1ScreenState extends State<HiraganaLesson1Screen> {
                 ),
                 const SizedBox(height: 6),
                 Text(
-                  lesson.description,
+                  'hiragana_l1_screen_desc'.tr,
                   style: const TextStyle(
                     color: _textMuted,
                     fontSize: 13,
@@ -470,9 +472,9 @@ class _HiraganaLesson1ScreenState extends State<HiraganaLesson1Screen> {
                           color: _accentBlue, size: 18),
                     ),
                     const SizedBox(width: 10),
-                    const Text(
-                      'Interactive Checkpoints',
-                      style: TextStyle(
+                    Text(
+                      'hiragana_l1_checkpoints_heading'.tr,
+                      style: const TextStyle(
                         color: Colors.white,
                         fontSize: 15,
                         fontWeight: FontWeight.w800,
@@ -481,13 +483,14 @@ class _HiraganaLesson1ScreenState extends State<HiraganaLesson1Screen> {
                   ],
                 ),
                 const SizedBox(height: 14),
-                _checkpoint('1:10', 'Introduction',
+                _checkpoint('1:10', 'hiragana_l1_checkpoint_intro'.tr,
                     Icons.play_circle_outline_rounded),
                 const SizedBox(height: 10),
-                _checkpoint('1:56', 'Vowel Sounds', Icons.music_note_rounded),
+                _checkpoint('1:56', 'hiragana_l1_checkpoint_vowel'.tr,
+                    Icons.music_note_rounded),
                 const SizedBox(height: 10),
-                _checkpoint(
-                    '2:40', 'Basic Characters', Icons.translate_rounded),
+                _checkpoint('2:40', 'hiragana_l1_checkpoint_basic'.tr,
+                    Icons.translate_rounded),
               ],
             ),
           ),
@@ -509,9 +512,9 @@ class _HiraganaLesson1ScreenState extends State<HiraganaLesson1Screen> {
                           color: Color(0xFFFFE000), size: 18),
                     ),
                     const SizedBox(width: 10),
-                    const Text(
-                      'Practice Quizzes',
-                      style: TextStyle(
+                    Text(
+                      'hiragana_l1_quizzes_heading'.tr,
+                      style: const TextStyle(
                         color: Colors.white,
                         fontSize: 15,
                         fontWeight: FontWeight.w800,
@@ -523,11 +526,11 @@ class _HiraganaLesson1ScreenState extends State<HiraganaLesson1Screen> {
                 Row(
                   children: [
                     Expanded(
-                        child: _quizCard('Speaking\nQuiz', Icons.mic_rounded,
-                            const Color(0xFFEC4899))),
+                        child: _quizCard('hiragana_l1_quiz_speaking'.tr,
+                            Icons.mic_rounded, const Color(0xFFEC4899))),
                     const SizedBox(width: 10),
                     Expanded(
-                        child: _quizCard('Listening\nQuiz',
+                        child: _quizCard('hiragana_l1_quiz_listening'.tr,
                             Icons.headphones_rounded, _accentBlue)),
                   ],
                 ),
@@ -535,11 +538,11 @@ class _HiraganaLesson1ScreenState extends State<HiraganaLesson1Screen> {
                 Row(
                   children: [
                     Expanded(
-                        child: _quizCard('Writing\nQuiz', Icons.edit_rounded,
-                            const Color(0xFF10B981))),
+                        child: _quizCard('hiragana_l1_quiz_writing'.tr,
+                            Icons.edit_rounded, const Color(0xFF10B981))),
                     const SizedBox(width: 10),
                     Expanded(
-                        child: _quizCard('Reading\nQuiz',
+                        child: _quizCard('hiragana_l1_quiz_reading'.tr,
                             Icons.menu_book_rounded, const Color(0xFFFFE000))),
                   ],
                 ),
@@ -563,21 +566,21 @@ class _HiraganaLesson1ScreenState extends State<HiraganaLesson1Screen> {
                       color: Colors.white, size: 24),
                 ),
                 const SizedBox(width: 14),
-                const Expanded(
+                Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Book a Live Lesson',
-                        style: TextStyle(
+                        'hiragana_l1_live_lesson'.tr,
+                        style: const TextStyle(
                           color: Colors.white,
                           fontSize: 15,
                           fontWeight: FontWeight.w800,
                         ),
                       ),
                       Text(
-                        '20 mins • 1-on-1 with a tutor',
-                        style: TextStyle(
+                        'hiragana_l1_live_lesson_sub'.tr,
+                        style: const TextStyle(
                           color: _textMuted,
                           fontSize: 12,
                           fontWeight: FontWeight.w500,
@@ -608,9 +611,10 @@ class _HiraganaLesson1ScreenState extends State<HiraganaLesson1Screen> {
                 ),
                 elevation: 0,
               ),
-              child: const Text(
-                'Next',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w900),
+              child: Text(
+                'next'.tr,
+                style:
+                    const TextStyle(fontSize: 16, fontWeight: FontWeight.w900),
               ),
             ),
           ),
@@ -1062,7 +1066,8 @@ class _HiraganaMcqDialogState extends State<_HiraganaMcqDialog> {
                     child: Column(
                       children: [
                         Text(
-                          'Tap the hiragana for',
+                          'hiragana_l1_mcq_prompt'.tr,
+                          textAlign: TextAlign.center,
                           style: TextStyle(
                             color: Colors.white.withValues(alpha: 0.85),
                             fontSize: 13,
@@ -1085,7 +1090,7 @@ class _HiraganaMcqDialogState extends State<_HiraganaMcqDialog> {
                           duration: const Duration(milliseconds: 180),
                           child: _correct == null
                               ? Text(
-                                  'Choose wisely…',
+                                  'hiragana_l1_mcq_hint'.tr,
                                   key: const ValueKey('hint'),
                                   style: TextStyle(
                                     color: Colors.white.withValues(alpha: 0.70),
@@ -1093,7 +1098,9 @@ class _HiraganaMcqDialogState extends State<_HiraganaMcqDialog> {
                                   ),
                                 )
                               : Text(
-                                  _correct! ? 'Correct!' : 'Not quite — try the next one.',
+                                  _correct!
+                                      ? 'hiragana_l1_mcq_correct'.tr
+                                      : 'hiragana_l1_mcq_try_next'.tr,
                                   key: ValueKey(_correct),
                                   style: TextStyle(
                                     color: _correct! ? const Color(0xFFB6F6C9) : const Color(0xFFFFB4B4),
@@ -1173,7 +1180,10 @@ class _HiraganaMcqDialogState extends State<_HiraganaMcqDialog> {
                     children: [
                       Expanded(
                         child: Text(
-                          'Score: $_score/${_pairs.length}',
+                          'hiragana_l1_mcq_score'.trParams({
+                            'cur': '$_score',
+                            'total': '${_pairs.length}',
+                          }),
                           style: TextStyle(
                             color: Colors.white.withValues(alpha: 0.85),
                             fontWeight: FontWeight.w800,
@@ -1191,7 +1201,7 @@ class _HiraganaMcqDialogState extends State<_HiraganaMcqDialog> {
                         },
                         style: TextButton.styleFrom(foregroundColor: Colors.white),
                         child: Text(
-                          'Skip',
+                          'skip'.tr,
                           style: TextStyle(
                             color: Colors.white.withValues(alpha: 0.9),
                             fontWeight: FontWeight.w800,
@@ -1214,10 +1224,15 @@ class _HiraganaMcqDialogState extends State<_HiraganaMcqDialog> {
   }
 
   Future<void> _showFinish({bool skipped = false}) async {
-    final title = skipped ? 'Quiz skipped' : 'Nice!';
+    final title = skipped
+        ? 'hiragana_l1_quick_skipped_title'.tr
+        : 'hiragana_l1_quick_done_title'.tr;
     final subtitle = skipped
-        ? 'You can replay and try it anytime.'
-        : 'You scored $_score/${_pairs.length} on あ・い・う・え・お.';
+        ? 'hiragana_l1_quick_skipped_body'.tr
+        : 'hiragana_l1_quick_done_body'.trParams({
+            'cur': '$_score',
+            'total': '${_pairs.length}',
+          });
 
     await showDialog<void>(
       context: context,
@@ -1283,7 +1298,9 @@ class _HiraganaMcqDialogState extends State<_HiraganaMcqDialog> {
                         padding: const EdgeInsets.symmetric(vertical: 12),
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
                       ),
-                      child: const Text('Continue video', style: TextStyle(fontWeight: FontWeight.w900)),
+                      child: Text('hiragana_l1_continue_video'.tr,
+                          style:
+                              const TextStyle(fontWeight: FontWeight.w900)),
                     ),
                   ),
                 ],
@@ -1416,7 +1433,7 @@ class _SpeechGamePrompt extends StatelessWidget {
               ),
               const SizedBox(height: 12),
               Text(
-                "Great job finishing the video!",
+                'hiragana_l1_speech_title'.tr,
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   color: Colors.white.withValues(alpha: 0.95),
@@ -1426,7 +1443,7 @@ class _SpeechGamePrompt extends StatelessWidget {
               ),
               const SizedBox(height: 6),
               Text(
-                "Now let's try our Speech Game — upload a short audio clip and we’ll transcribe it to Japanese, romaji, and English.",
+                'hiragana_l1_speech_body'.tr,
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   color: Colors.white.withValues(alpha: 0.80),
@@ -1445,7 +1462,9 @@ class _SpeechGamePrompt extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(vertical: 12),
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
                   ),
-                  child: const Text('Start Speech Game', style: TextStyle(fontWeight: FontWeight.w900)),
+                  child: Text('hiragana_l1_speech_cta'.tr,
+                      style:
+                          const TextStyle(fontWeight: FontWeight.w900)),
                 ),
               ),
             ],
@@ -1557,9 +1576,9 @@ class _LeafEarnedDialogState extends State<_LeafEarnedDialog>
                   },
                 ),
                 const SizedBox(height: 12),
-                const Text(
-                  'Leaf earned!',
-                  style: TextStyle(
+                Text(
+                  'hiragana_l1_leaf_title'.tr,
+                  style: const TextStyle(
                     color: Colors.white,
                     fontSize: 18,
                     fontWeight: FontWeight.w900,
@@ -1567,7 +1586,7 @@ class _LeafEarnedDialogState extends State<_LeafEarnedDialog>
                 ),
                 const SizedBox(height: 6),
                 Text(
-                  'Lesson 1 complete. Your tree just grew.',
+                  'hiragana_l1_leaf_body'.tr,
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     color: Colors.white.withValues(alpha: 0.65),
@@ -1589,9 +1608,9 @@ class _LeafEarnedDialogState extends State<_LeafEarnedDialog>
                       ),
                       elevation: 0,
                     ),
-                    child: const Text(
-                      'Awesome',
-                      style: TextStyle(
+                    child: Text(
+                      'hiragana_l1_leaf_cta'.tr,
+                      style: const TextStyle(
                         fontWeight: FontWeight.w900,
                         fontSize: 14.5,
                       ),

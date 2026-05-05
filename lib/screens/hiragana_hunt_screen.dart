@@ -239,7 +239,7 @@ class _HiraganaHuntScreenState extends State<HiraganaHuntScreen> {
     });
   }
 
-  static const _bgTop = Color(0xFF1E3C72);
+  static const _bgTop = Color(0xFF0F172A);
   static const _bgBottom = Color(0xFF2A5298);
   static const _accent = Color(0xFFFFD86B);
 
@@ -279,13 +279,13 @@ class _HiraganaHuntScreenState extends State<HiraganaHuntScreen> {
                 _hapticLight();
                 Get.back();
               },
-              icon: const Icon(Icons.arrow_back_rounded, color: Colors.white),
+              icon: const Icon(Icons.arrow_back_rounded, color: const Color(0xFF1E293B)),
             ),
           ),
           Text('hiragana_hunt_title'.tr,
               textAlign: TextAlign.center,
               style: const TextStyle(
-                  color: Colors.white,
+                  color: const Color(0xFF1E293B),
                   fontSize: 24,
                   fontWeight: FontWeight.w800)),
           const SizedBox(height: 12),
@@ -322,7 +322,7 @@ class _HiraganaHuntScreenState extends State<HiraganaHuntScreen> {
                             fontWeight: FontWeight.w700)),
                     const SizedBox(height: 4),
                     Text(h.romaji,
-                        style: const TextStyle(color: Colors.white, fontSize: 13)),
+                        style: const TextStyle(color: const Color(0xFF1E293B), fontSize: 13)),
                   ],
                 ),
               );
@@ -361,7 +361,7 @@ class _HiraganaHuntScreenState extends State<HiraganaHuntScreen> {
                   color: _accent, fontSize: 30, fontWeight: FontWeight.w800)),
           const SizedBox(height: 20),
           Text('hiragana_hunt_final_score'.trParams({'score': '$_score'}),
-              style: const TextStyle(color: Colors.white, fontSize: 22)),
+              style: const TextStyle(color: const Color(0xFF1E293B), fontSize: 22)),
           const SizedBox(height: 12),
           Text('hiragana_hunt_final_rounds'.trParams({'n': '$_roundCount'}),
               style: TextStyle(color: Colors.white.withValues(alpha: 0.95))),
@@ -424,12 +424,12 @@ class _HiraganaHuntScreenState extends State<HiraganaHuntScreen> {
                   _hapticLight();
                   Get.back();
                 },
-                icon: const Icon(Icons.arrow_back_rounded, color: Colors.white),
+                icon: const Icon(Icons.arrow_back_rounded, color: const Color(0xFF1E293B)),
               ),
               Expanded(
                 child: Text('hiragana_hunt_title'.tr,
                     style: const TextStyle(
-                        color: Colors.white,
+                        color: const Color(0xFF1E293B),
                         fontSize: 17,
                         fontWeight: FontWeight.w800)),
               ),
@@ -449,7 +449,7 @@ class _HiraganaHuntScreenState extends State<HiraganaHuntScreen> {
               children: [
                 Text('⏱️ ${'hiragana_draw_hud_time'.trParams({'s': '$_timeLeft'})}',
                     style: const TextStyle(
-                        color: Colors.white, fontWeight: FontWeight.w700)),
+                        color: const Color(0xFF1E293B), fontWeight: FontWeight.w700)),
                 Text('⭐ $_score',
                     style: const TextStyle(
                         color: _accent, fontWeight: FontWeight.w700)),
@@ -492,7 +492,7 @@ class _HiraganaHuntScreenState extends State<HiraganaHuntScreen> {
                   onPressed: _toggleHint,
                   style: TextButton.styleFrom(
                     foregroundColor: _accent,
-                    backgroundColor: Colors.white.withValues(alpha: 0.12),
+                    backgroundColor: const Color(0xFF0F172A).withValues(alpha: 0.12),
                   ),
                   child: Text(
                     _hintShowsKana

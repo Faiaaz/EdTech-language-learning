@@ -4,18 +4,18 @@ import 'package:get/get.dart';
 import 'package:ez_trainz/controllers/course_controller.dart';
 import 'package:ez_trainz/controllers/program_controller.dart';
 import 'package:ez_trainz/models/program.dart';
-import 'package:ez_trainz/screens/forum_screen.dart';
+import 'package:ez_trainz/screens/collectibles_screen.dart';
 import 'package:ez_trainz/screens/course_list_screen.dart';
+import 'package:ez_trainz/screens/forum_screen.dart';
 import 'package:ez_trainz/screens/games_screen.dart';
 import 'package:ez_trainz/screens/ielts_dashboard_screen.dart';
 import 'package:ez_trainz/screens/leaderboard_screen.dart';
 import 'package:ez_trainz/screens/profile_screen.dart';
-import 'package:ez_trainz/screens/collectibles_screen.dart';
 import 'package:ez_trainz/screens/trial_game_language_picker_screen.dart';
 import 'package:ez_trainz/widgets/language_switcher.dart';
 import 'package:ez_trainz/widgets/streak_pill.dart';
 
-/// Main container after login. Fixed bottom nav with five tabs.
+/// Main container after login. Fixed bottom nav (Learn, Practice, Collect, Profile, Community, Leaderboard).
 /// Learn tab shows program picker (JLC/KLC/ELC/GLC) or course list when a program is selected.
 class MainShellScreen extends StatefulWidget {
   const MainShellScreen({super.key});
@@ -27,93 +27,119 @@ class MainShellScreen extends StatefulWidget {
 class _MainShellScreenState extends State<MainShellScreen> {
   int _currentIndex = 0;
 
-  static const _navBgColor = Color(0xFF4DA6E8);
+  static const _navBgColor = Color(0xFF1E293B);
   static const _selectedColor = Color(0xFFFFE000);
-  static const _unselectedColor = Colors.white70;
+  static const _unselectedColor = Color(0xFF94A3B8);
 
   static const _tabs = [
     _NavItem(icon: Icons.school_rounded, labelKey: 'nav_learn'),
     _NavItem(icon: Icons.fitness_center_rounded, labelKey: 'nav_practice'),
     _NavItem(icon: Icons.park_rounded, labelKey: 'nav_collectibles'),
     _NavItem(icon: Icons.person_rounded, labelKey: 'nav_profile'),
-    _NavItem(icon: Icons.people_rounded, labelKey: 'nav_community'),
+    _NavItem(icon: Icons.people_alt_rounded, labelKey: 'nav_community'),
     _NavItem(icon: Icons.emoji_events_rounded, labelKey: 'nav_leaderboard'),
   ];
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: IndexedStack(
-        index: _currentIndex,
-        children: [
-          Obx(() {
-            if (!ProgramController.to.hasProgram) {
-              return const _ProgramPickerView();
-            }
-            // Route ELC (English) to the IELTS dashboard
-            if (ProgramController.to.current == Program.elc) {
-              return const IeltsDashboardScreen();
-            }
-            return const CourseListScreen();
-          }),
-          const GamesScreen(),
-          const CollectiblesScreen(),
-          const ProfileScreen(),
-          const ForumScreen(),
-          const LeaderboardScreen(),
-        ],
-      ),
-      bottomNavigationBar: Container(
-        decoration: BoxDecoration(
-          color: _navBgColor,
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.12),
-              blurRadius: 12,
-              offset: const Offset(0, -4),
+    return GetBuilder<ProgramController>(
+      builder: (_) {
+        return Scaffold(
+      resizeToAvoidBottomInset: false,
+      body: SizedBox.expand(
+        child: IndexedStack(
+          sizing: StackFit.expand,
+          index: _currentIndex,
+          children: [
+            GetBuilder<ProgramController>(
+              builder: (_) {
+                if (!ProgramController.to.hasProgram) {
+                  return const _ProgramPickerView();
+                }
+                if (ProgramController.to.current == Program.elc) {
+                  return const IeltsDashboardScreen();
+                }
+                return const CourseListScreen();
+              },
             ),
+            const GamesScreen(),
+            const CollectiblesScreen(),
+            const ProfileScreen(),
+            const ForumScreen(),
+            const LeaderboardScreen(),
           ],
         ),
+      ),
+      bottomNavigationBar: Container(
+        decoration: const BoxDecoration(
+          color: _navBgColor,
+          border: Border(
+            top: BorderSide(
+              color: Color(0xFF334155),
+              width: 1,
+            ),
+          ),
+        ),
         child: SafeArea(
+          top: false,
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+            padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: List.generate(_tabs.length, (i) {
                 final tab = _tabs[i];
                 final selected = _currentIndex == i;
-                return GestureDetector(
-                  onTap: () => setState(() => _currentIndex = i),
-                  behavior: HitTestBehavior.opaque,
-                  child: AnimatedContainer(
-                    duration: const Duration(milliseconds: 200),
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 12, vertical: 10),
-                    decoration: BoxDecoration(
-                      color: selected
-                          ? _selectedColor.withValues(alpha: 0.25)
-                          : Colors.transparent,
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(
-                          tab.icon,
-                          size: 24,
-                          color: selected ? _selectedColor : _unselectedColor,
+                return Expanded(
+                  child: GestureDetector(
+                    onTap: () => setState(() => _currentIndex = i),
+                    behavior: HitTestBehavior.opaque,
+                    child: AnimatedContainer(
+                      duration: const Duration(milliseconds: 180),
+                      margin: const EdgeInsets.symmetric(horizontal: 2),
+                      padding: const EdgeInsets.symmetric(vertical: 6),
+                      decoration: BoxDecoration(
+                        color: selected
+                            ? _selectedColor.withValues(alpha: 0.18)
+                            : Colors.transparent,
+                        borderRadius: BorderRadius.circular(14),
+                        border: Border.all(
+                          color: selected
+                              ? _selectedColor.withValues(alpha: 0.55)
+                              : Colors.transparent,
+                          width: 1.4,
                         ),
-                        const SizedBox(height: 4),
-                        Text(
-                          tab.labelKey.tr,
-                          style: TextStyle(
-                            fontSize: 11,
-                            fontWeight:
-                                selected ? FontWeight.w700 : FontWeight.w500,
-                            color: selected ? _selectedColor : _unselectedColor,
+                      ),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(
+                            tab.icon,
+                            size: 22,
+                            color: selected
+                                ? _selectedColor
+                                : _unselectedColor,
                           ),
-                        ),
-                      ],
+                          const SizedBox(height: 2),
+                          FittedBox(
+                            fit: BoxFit.scaleDown,
+                            child: Text(
+                              tab.labelKey.tr,
+                              maxLines: 1,
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontSize: 9,
+                                height: 1.1,
+                                fontWeight: selected
+                                    ? FontWeight.w700
+                                    : FontWeight.w500,
+                                color: selected
+                                    ? _selectedColor
+                                    : _unselectedColor,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 );
@@ -122,6 +148,8 @@ class _MainShellScreenState extends State<MainShellScreen> {
           ),
         ),
       ),
+    );
+      },
     );
   }
 }
@@ -138,10 +166,11 @@ class _ProgramPickerView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xFF4DA6E8),
-      body: SafeArea(
-        child: SingleChildScrollView(
+    return Material(
+      color: const Color(0xFF0F172A),
+      child: SafeArea(
+        child: SizedBox.expand(
+          child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(horizontal: 24),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -179,8 +208,8 @@ class _ProgramPickerView extends StatelessWidget {
               const SizedBox(height: 28),
               Text(
                 'choose_language_program'.tr,
-                style: TextStyle(
-                  color: Colors.white.withValues(alpha: 0.9),
+                style: const TextStyle(
+                  color: Colors.white,
                   fontSize: 20,
                   fontWeight: FontWeight.w700,
                   height: 1.2,
@@ -189,8 +218,8 @@ class _ProgramPickerView extends StatelessWidget {
               const SizedBox(height: 6),
               Text(
                 'select_one_subtitle'.tr,
-                style: TextStyle(
-                  color: Colors.white.withValues(alpha: 0.75),
+                style: const TextStyle(
+                  color: Color(0xFF94A3B8),
                   fontSize: 14,
                   fontWeight: FontWeight.w400,
                 ),
@@ -224,6 +253,7 @@ class _ProgramPickerView extends StatelessWidget {
               const SizedBox(height: 32),
             ],
           ),
+        ),
         ),
       ),
     );
@@ -409,7 +439,7 @@ class _ProgramCard extends StatelessWidget {
                 color: Colors.white.withValues(alpha: 0.2),
                 shape: BoxShape.circle,
               ),
-              child: const Icon(Icons.arrow_forward_rounded, color: Colors.white, size: 18),
+              child: const Icon(Icons.arrow_forward_rounded, color: const Color(0xFF1E293B), size: 18),
             ),
           ],
         ),

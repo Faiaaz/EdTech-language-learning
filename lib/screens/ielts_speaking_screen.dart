@@ -33,14 +33,14 @@ class IeltsSpeakingScreen extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                       decoration: BoxDecoration(color: Colors.white.withValues(alpha: 0.2), borderRadius: BorderRadius.circular(20), border: Border.all(color: Colors.white38)),
                       child: Row(mainAxisSize: MainAxisSize.min, children: [
-                        const Icon(Icons.arrow_back_ios_rounded, color: Colors.white, size: 14),
+                        const Icon(Icons.arrow_back_ios_rounded, color: const Color(0xFF1E293B), size: 14),
                         const SizedBox(width: 4),
-                        Text('back'.tr, style: const TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w600)),
+                        Text('back'.tr, style: const TextStyle(color: const Color(0xFF1E293B), fontSize: 13, fontWeight: FontWeight.w600)),
                       ]),
                     ),
                   ),
                   const SizedBox(height: 16),
-                  Text('speaking_practice'.tr, style: const TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.w900)),
+                  Text('speaking_practice'.tr, style: const TextStyle(color: const Color(0xFF1E293B), fontSize: 24, fontWeight: FontWeight.w900)),
                   const SizedBox(height: 4),
                   Text('speaking_practice_desc'.tr, style: TextStyle(color: Colors.white.withValues(alpha: 0.8), fontSize: 14)),
                 ],
@@ -66,7 +66,7 @@ class IeltsSpeakingScreen extends StatelessWidget {
                           child: Container(
                             padding: const EdgeInsets.all(18),
                             decoration: BoxDecoration(
-                              color: Colors.white,
+                              color: const Color(0xFF1E293B),
                               borderRadius: BorderRadius.circular(16),
                               boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.06), blurRadius: 10, offset: const Offset(0, 4))],
                             ),
@@ -188,9 +188,9 @@ class _SpeakingPracticeState extends State<_SpeakingPractice> {
               padding: const EdgeInsets.fromLTRB(20, 12, 20, 16),
               color: const Color(0xFF9C27B0),
               child: Row(children: [
-                GestureDetector(onTap: () { _stopTimer(); Get.back(); }, child: const Icon(Icons.arrow_back_ios_rounded, color: Colors.white, size: 20)),
+                GestureDetector(onTap: () { _stopTimer(); Get.back(); }, child: const Icon(Icons.arrow_back_ios_rounded, color: const Color(0xFF1E293B), size: 20)),
                 const SizedBox(width: 12),
-                Expanded(child: Text('Part ${topic.part}: ${topic.topic}', style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w700), maxLines: 1, overflow: TextOverflow.ellipsis)),
+                Expanded(child: Text('Part ${topic.part}: ${topic.topic}', style: const TextStyle(color: const Color(0xFF1E293B), fontSize: 16, fontWeight: FontWeight.w700), maxLines: 1, overflow: TextOverflow.ellipsis)),
               ]),
             ),
             Expanded(
@@ -204,7 +204,7 @@ class _SpeakingPracticeState extends State<_SpeakingPractice> {
                       Container(
                         padding: const EdgeInsets.all(16),
                         decoration: BoxDecoration(
-                          color: Colors.white,
+                          color: const Color(0xFF1E293B),
                           borderRadius: BorderRadius.circular(14),
                           border: Border.all(color: const Color(0xFFCE93D8), width: 2),
                         ),
@@ -275,7 +275,7 @@ class _SpeakingPracticeState extends State<_SpeakingPractice> {
                       margin: const EdgeInsets.only(bottom: 10),
                       padding: const EdgeInsets.all(14),
                       decoration: BoxDecoration(
-                        color: Colors.white,
+                        color: const Color(0xFF1E293B),
                         borderRadius: BorderRadius.circular(12),
                         boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.04), blurRadius: 6)],
                       ),
@@ -328,7 +328,7 @@ class _SpeakingPracticeState extends State<_SpeakingPractice> {
                           const SizedBox(height: 10),
                           Wrap(spacing: 8, runSpacing: 8, children: topic.vocabularyTips.map((v) => Container(
                             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                            decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(20), border: Border.all(color: const Color(0xFF90CAF9))),
+                            decoration: BoxDecoration(color: const Color(0xFF1E293B), borderRadius: BorderRadius.circular(20), border: Border.all(color: const Color(0xFF90CAF9))),
                             child: Text(v, style: const TextStyle(color: Color(0xFF1565C0), fontSize: 12, fontWeight: FontWeight.w600)),
                           )).toList()),
                         ]),
@@ -377,7 +377,7 @@ class _SpeakingPracticeState extends State<_SpeakingPractice> {
                           gradient: const LinearGradient(colors: [Color(0xFF9C27B0), Color(0xFF6A1B9A)]),
                           borderRadius: BorderRadius.circular(14),
                         ),
-                        child: Center(child: Text('complete_session'.tr, style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w800))),
+                        child: Center(child: Text('complete_session'.tr, style: const TextStyle(color: const Color(0xFF1E293B), fontSize: 16, fontWeight: FontWeight.w800))),
                       ),
                     ),
                     const SizedBox(height: 20),

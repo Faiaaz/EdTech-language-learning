@@ -35,14 +35,14 @@ class IeltsMiniGamesScreen extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                       decoration: BoxDecoration(color: Colors.white.withValues(alpha: 0.2), borderRadius: BorderRadius.circular(20), border: Border.all(color: Colors.white38)),
                       child: Row(mainAxisSize: MainAxisSize.min, children: [
-                        const Icon(Icons.arrow_back_ios_rounded, color: Colors.white, size: 14),
+                        const Icon(Icons.arrow_back_ios_rounded, color: const Color(0xFF1E293B), size: 14),
                         const SizedBox(width: 4),
-                        Text('back'.tr, style: const TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w600)),
+                        Text('back'.tr, style: const TextStyle(color: const Color(0xFF1E293B), fontSize: 13, fontWeight: FontWeight.w600)),
                       ]),
                     ),
                   ),
                   const SizedBox(height: 16),
-                  Text('ielts_mini_games'.tr, style: const TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.w900)),
+                  Text('ielts_mini_games'.tr, style: const TextStyle(color: const Color(0xFF1E293B), fontSize: 24, fontWeight: FontWeight.w900)),
                   const SizedBox(height: 4),
                   Text('learn_having_fun'.tr, style: TextStyle(color: Colors.white.withValues(alpha: 0.8), fontSize: 14)),
                 ],
@@ -118,7 +118,7 @@ class IeltsMiniGamesScreen extends StatelessWidget {
                     Obx(() => Container(
                       padding: const EdgeInsets.all(16),
                       decoration: BoxDecoration(
-                        color: Colors.white,
+                        color: const Color(0xFF1E293B),
                         borderRadius: BorderRadius.circular(16),
                         boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.06), blurRadius: 10)],
                       ),
@@ -161,7 +161,7 @@ class _GameCard extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(18),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: const Color(0xFF1E293B),
           borderRadius: BorderRadius.circular(16),
           boxShadow: [BoxShadow(color: color.withValues(alpha: 0.12), blurRadius: 12, offset: const Offset(0, 4))],
         ),
@@ -285,10 +285,10 @@ class _SynonymGameScreenState extends State<_SynonymGameScreen> {
             padding: const EdgeInsets.fromLTRB(20, 12, 20, 16),
             color: const Color(0xFF2196F3),
             child: Row(children: [
-              GestureDetector(onTap: () { widget.ctrl.endGame(); Get.back(); }, child: const Icon(Icons.close_rounded, color: Colors.white, size: 24)),
+              GestureDetector(onTap: () { widget.ctrl.endGame(); Get.back(); }, child: const Icon(Icons.close_rounded, color: const Color(0xFF1E293B), size: 24)),
               const SizedBox(width: 12),
-              const Expanded(child: Text('Synonym Sprint', style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w700))),
-              Text('$_score ${'pts'.tr}', style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w900)),
+              const Expanded(child: Text('Synonym Sprint', style: TextStyle(color: const Color(0xFF1E293B), fontSize: 16, fontWeight: FontWeight.w700))),
+              Text('$_score ${'pts'.tr}', style: const TextStyle(color: const Color(0xFF1E293B), fontSize: 16, fontWeight: FontWeight.w900)),
             ]),
           ),
           // Progress bar
@@ -397,10 +397,10 @@ class _ErrorSpottingGameScreenState extends State<_ErrorSpottingGameScreen> {
             padding: const EdgeInsets.fromLTRB(20, 12, 20, 16),
             color: const Color(0xFFF44336),
             child: Row(children: [
-              GestureDetector(onTap: () { widget.ctrl.endGame(); Get.back(); }, child: const Icon(Icons.close_rounded, color: Colors.white, size: 24)),
+              GestureDetector(onTap: () { widget.ctrl.endGame(); Get.back(); }, child: const Icon(Icons.close_rounded, color: const Color(0xFF1E293B), size: 24)),
               const SizedBox(width: 12),
-              const Expanded(child: Text('Error Detective', style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w700))),
-              Text('$_score ${'pts'.tr}', style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w900)),
+              const Expanded(child: Text('Error Detective', style: TextStyle(color: const Color(0xFF1E293B), fontSize: 16, fontWeight: FontWeight.w700))),
+              Text('$_score ${'pts'.tr}', style: const TextStyle(color: const Color(0xFF1E293B), fontSize: 16, fontWeight: FontWeight.w900)),
             ]),
           ),
           LinearProgressIndicator(value: (_currentIndex + 1) / _items.length, backgroundColor: const Color(0xFFFFCDD2), valueColor: const AlwaysStoppedAnimation(Color(0xFFF44336)), minHeight: 4),
@@ -414,7 +414,7 @@ class _ErrorSpottingGameScreenState extends State<_ErrorSpottingGameScreen> {
                 const SizedBox(height: 20),
                 Container(
                   padding: const EdgeInsets.all(20),
-                  decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(16), boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.06), blurRadius: 12)]),
+                  decoration: BoxDecoration(color: const Color(0xFF1E293B), borderRadius: BorderRadius.circular(16), boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.06), blurRadius: 12)]),
                   child: Text(item['sentence'] as String, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color: Color(0xFF1A1A2E), height: 1.5), textAlign: TextAlign.center),
                 ),
                 const SizedBox(height: 24),
@@ -426,7 +426,7 @@ class _ErrorSpottingGameScreenState extends State<_ErrorSpottingGameScreen> {
                       width: double.infinity,
                       padding: const EdgeInsets.symmetric(vertical: 16),
                       decoration: BoxDecoration(gradient: const LinearGradient(colors: [Color(0xFFF44336), Color(0xFFC62828)]), borderRadius: BorderRadius.circular(14)),
-                      child: Center(child: Text('reveal_answer'.tr, style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w800))),
+                      child: Center(child: Text('reveal_answer'.tr, style: const TextStyle(color: const Color(0xFF1E293B), fontSize: 16, fontWeight: FontWeight.w800))),
                     ),
                   ),
 
@@ -452,7 +452,7 @@ class _ErrorSpottingGameScreenState extends State<_ErrorSpottingGameScreen> {
                       child: Container(
                         padding: const EdgeInsets.symmetric(vertical: 14),
                         decoration: BoxDecoration(color: const Color(0xFFF44336), borderRadius: BorderRadius.circular(12)),
-                        child: Center(child: Text('missed_it'.tr, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w700))),
+                        child: Center(child: Text('missed_it'.tr, style: const TextStyle(color: const Color(0xFF1E293B), fontWeight: FontWeight.w700))),
                       ),
                     )),
                     const SizedBox(width: 12),
@@ -461,7 +461,7 @@ class _ErrorSpottingGameScreenState extends State<_ErrorSpottingGameScreen> {
                       child: Container(
                         padding: const EdgeInsets.symmetric(vertical: 14),
                         decoration: BoxDecoration(color: const Color(0xFF4CAF50), borderRadius: BorderRadius.circular(12)),
-                        child: Center(child: Text('got_it'.tr, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w700))),
+                        child: Center(child: Text('got_it'.tr, style: const TextStyle(color: const Color(0xFF1E293B), fontWeight: FontWeight.w700))),
                       ),
                     )),
                   ]),
@@ -566,10 +566,10 @@ class _SentenceBuilderGameScreenState extends State<_SentenceBuilderGameScreen> 
             padding: const EdgeInsets.fromLTRB(20, 12, 20, 16),
             color: const Color(0xFF9C27B0),
             child: Row(children: [
-              GestureDetector(onTap: () { widget.ctrl.endGame(); Get.back(); }, child: const Icon(Icons.close_rounded, color: Colors.white, size: 24)),
+              GestureDetector(onTap: () { widget.ctrl.endGame(); Get.back(); }, child: const Icon(Icons.close_rounded, color: const Color(0xFF1E293B), size: 24)),
               const SizedBox(width: 12),
-              const Expanded(child: Text('Sentence Architect', style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w700))),
-              Text('$_score ${'pts'.tr}', style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w900)),
+              const Expanded(child: Text('Sentence Architect', style: TextStyle(color: const Color(0xFF1E293B), fontSize: 16, fontWeight: FontWeight.w700))),
+              Text('$_score ${'pts'.tr}', style: const TextStyle(color: const Color(0xFF1E293B), fontSize: 16, fontWeight: FontWeight.w900)),
             ]),
           ),
           LinearProgressIndicator(value: (_currentIndex + 1) / _items.length, backgroundColor: const Color(0xFFE1BEE7), valueColor: const AlwaysStoppedAnimation(Color(0xFF9C27B0)), minHeight: 4),
@@ -588,7 +588,7 @@ class _SentenceBuilderGameScreenState extends State<_SentenceBuilderGameScreen> 
                   constraints: const BoxConstraints(minHeight: 80),
                   padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: const Color(0xFF1E293B),
                     borderRadius: BorderRadius.circular(14),
                     border: Border.all(color: _checked ? (_isCorrect ? const Color(0xFF4CAF50) : const Color(0xFFF44336)) : const Color(0xFFCE93D8), width: 2),
                   ),
@@ -609,7 +609,7 @@ class _SentenceBuilderGameScreenState extends State<_SentenceBuilderGameScreen> 
                   onTap: () => _tapWord(w),
                   child: Container(
                     padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-                    decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(10), border: Border.all(color: const Color(0xFFE0E0E0))),
+                    decoration: BoxDecoration(color: const Color(0xFF1E293B), borderRadius: BorderRadius.circular(10), border: Border.all(color: const Color(0xFFE0E0E0))),
                     child: Text(w, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: Color(0xFF333333))),
                   ),
                 )).toList()),
@@ -623,7 +623,7 @@ class _SentenceBuilderGameScreenState extends State<_SentenceBuilderGameScreen> 
                       width: double.infinity,
                       padding: const EdgeInsets.symmetric(vertical: 16),
                       decoration: BoxDecoration(gradient: const LinearGradient(colors: [Color(0xFF9C27B0), Color(0xFF6A1B9A)]), borderRadius: BorderRadius.circular(14)),
-                      child: Center(child: Text('check'.tr, style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w800))),
+                      child: Center(child: Text('check'.tr, style: const TextStyle(color: const Color(0xFF1E293B), fontSize: 16, fontWeight: FontWeight.w800))),
                     ),
                   ),
 
@@ -649,7 +649,7 @@ class _SentenceBuilderGameScreenState extends State<_SentenceBuilderGameScreen> 
                       width: double.infinity,
                       padding: const EdgeInsets.symmetric(vertical: 16),
                       decoration: BoxDecoration(gradient: const LinearGradient(colors: [Color(0xFF9C27B0), Color(0xFF6A1B9A)]), borderRadius: BorderRadius.circular(14)),
-                      child: Center(child: Text('next'.tr, style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w800))),
+                      child: Center(child: Text('next'.tr, style: const TextStyle(color: const Color(0xFF1E293B), fontSize: 16, fontWeight: FontWeight.w800))),
                     ),
                   ),
                 ],
@@ -742,10 +742,10 @@ class _CollocationGameScreenState extends State<_CollocationGameScreen> {
             padding: const EdgeInsets.fromLTRB(20, 12, 20, 16),
             color: const Color(0xFFFF9800),
             child: Row(children: [
-              GestureDetector(onTap: () { widget.ctrl.endGame(); Get.back(); }, child: const Icon(Icons.close_rounded, color: Colors.white, size: 24)),
+              GestureDetector(onTap: () { widget.ctrl.endGame(); Get.back(); }, child: const Icon(Icons.close_rounded, color: const Color(0xFF1E293B), size: 24)),
               const SizedBox(width: 12),
-              const Expanded(child: Text('Collocation Connect', style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w700))),
-              Text('$_score ${'pts'.tr}', style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w900)),
+              const Expanded(child: Text('Collocation Connect', style: TextStyle(color: const Color(0xFF1E293B), fontSize: 16, fontWeight: FontWeight.w700))),
+              Text('$_score ${'pts'.tr}', style: const TextStyle(color: const Color(0xFF1E293B), fontSize: 16, fontWeight: FontWeight.w900)),
             ]),
           ),
           LinearProgressIndicator(value: (_currentIndex + 1) / _items.length, backgroundColor: const Color(0xFFFFE0B2), valueColor: const AlwaysStoppedAnimation(Color(0xFFFF9800)), minHeight: 4),
