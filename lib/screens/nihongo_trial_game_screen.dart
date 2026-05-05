@@ -43,7 +43,7 @@ class _NihongoTrialGameScreenState extends State<NihongoTrialGameScreen>
       image: 'assets/images/vocab_asa.png',
     ),
     _Vocab(
-      jp: 'さよなら',
+      jp: 'さようなら',
       romaji: 'sayonara',
       en: 'goodbye',
       bn: 'বিদায়',
