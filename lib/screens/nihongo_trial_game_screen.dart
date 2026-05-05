@@ -38,18 +38,24 @@ class _NihongoTrialGameScreenState extends State<NihongoTrialGameScreen>
       jp: 'あさ',
       romaji: 'asa',
       en: 'morning',
+      bn: 'সকাল',
+      bnPronunciation: 'আসা',
       image: 'assets/images/vocab_asa.png',
     ),
     _Vocab(
       jp: 'すし',
       romaji: 'sushi',
       en: 'sushi',
+      bn: 'সুশি',
+      bnPronunciation: 'সুশি',
       image: 'assets/images/vocab_sushi.png',
     ),
     _Vocab(
       jp: 'いえ',
       romaji: 'ie',
       en: 'house',
+      bn: 'বাসা',
+      bnPronunciation: 'ইয়ে',
       image: 'assets/images/vocab_ie.png',
     ),
   ];
@@ -155,7 +161,7 @@ class _NihongoTrialGameScreenState extends State<NihongoTrialGameScreen>
                       ),
                       Expanded(
                         child: Text(
-                          _quizMode ? 'QUIZ' : 'NIHONGO TRIAL',
+                          _quizMode ? 'trial_quiz_label'.tr : 'trial_label'.tr,
                           textAlign: TextAlign.center,
                           style: const TextStyle(
                             color: _gold,
@@ -227,10 +233,10 @@ class _NihongoTrialGameScreenState extends State<NihongoTrialGameScreen>
 
   String get _primaryLabel {
     if (!_quizMode) {
-      return _page == _vocab.length - 1 ? 'Start Quiz' : 'Next';
+      return _page == _vocab.length - 1 ? 'trial_start_quiz'.tr : 'next'.tr;
     }
-    if (!_checked) return 'Check';
-    return _quizIndex == _vocab.length - 1 ? 'Finish' : 'Continue';
+    if (!_checked) return 'check'.tr;
+    return _quizIndex == _vocab.length - 1 ? 'trial_finish'.tr : 'trial_continue'.tr;
   }
 
   void _onPrimary() {
@@ -377,7 +383,7 @@ class _NihongoTrialGameScreenState extends State<NihongoTrialGameScreen>
                   const SizedBox(width: 12),
                   Expanded(
                     child: Text(
-                      'Which word matches this?',
+                      'trial_which_matches'.tr,
                       style: TextStyle(
                         color: Colors.white.withValues(alpha: 0.9),
                         fontSize: 16,
@@ -451,6 +457,8 @@ class _NihongoTrialGameScreenState extends State<NihongoTrialGameScreen>
                   jp: q.jp,
                   romaji: q.romaji,
                   en: q.en,
+                  bn: q.bn,
+                  bnPronunciation: q.bnPronunciation,
                 ),
               ],
             ],
@@ -466,11 +474,15 @@ class _Vocab {
     required this.jp,
     required this.romaji,
     required this.en,
+    required this.bn,
+    required this.bnPronunciation,
     required this.image,
   });
   final String jp;
   final String romaji;
   final String en;
+  final String bn;
+  final String bnPronunciation;
   final String image;
 }
 
@@ -485,7 +497,7 @@ class _LessonHeader extends StatelessWidget {
       children: [
         Expanded(
           child: Text(
-            'Learn 3 words',
+            'trial_learn_words'.tr,
             style: TextStyle(
               color: Colors.white.withValues(alpha: 0.9),
               fontSize: 16,
@@ -521,7 +533,7 @@ class _QuizHeader extends StatelessWidget {
       children: [
         Expanded(
           child: Text(
-            'Quick quiz',
+            'trial_quick_quiz'.tr,
             style: TextStyle(
               color: Colors.white.withValues(alpha: 0.9),
               fontSize: 16,
@@ -647,6 +659,26 @@ class _VocabSlide extends StatelessWidget {
                   letterSpacing: 0.2,
                 ),
               ),
+              const SizedBox(height: 8),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                decoration: BoxDecoration(
+                  color: _gold.withValues(alpha: 0.12),
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(color: _gold.withValues(alpha: 0.30)),
+                ),
+                child: Text(
+                  Get.locale?.languageCode == 'bn'
+                      ? '${vocab.bnPronunciation} এর অর্থ হল ${vocab.bn}'
+                      : '${vocab.romaji} ${'trial_means'.tr} ${vocab.en}',
+                  style: TextStyle(
+                    color: _gold.withValues(alpha: 0.95),
+                    fontSize: 14,
+                    fontWeight: FontWeight.w800,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ),
             ],
           ),
         ),
@@ -668,9 +700,9 @@ class _VocabSlide extends StatelessWidget {
                   ),
                 ),
                 icon: const Icon(Icons.volume_up_rounded, size: 18),
-                label: const Text(
-                  'Slow + loud',
-                  style: TextStyle(fontWeight: FontWeight.w900),
+                label: Text(
+                  'trial_slow_loud'.tr,
+                  style: const TextStyle(fontWeight: FontWeight.w900),
                 ),
               ),
             ),
@@ -763,12 +795,16 @@ class _ResultPill extends StatelessWidget {
     required this.jp,
     required this.romaji,
     required this.en,
+    required this.bn,
+    required this.bnPronunciation,
   });
 
   final bool correct;
   final String jp;
   final String romaji;
   final String en;
+  final String bn;
+  final String bnPronunciation;
 
   @override
   Widget build(BuildContext context) {
@@ -789,7 +825,9 @@ class _ResultPill extends StatelessWidget {
           const SizedBox(width: 10),
           Expanded(
             child: Text(
-              '$jp · $romaji · $en',
+              Get.locale?.languageCode == 'bn'
+                  ? '$jp · $romaji · $bnPronunciation এর অর্থ হল $bn'
+                  : '$jp · $romaji · $en',
               style: TextStyle(
                 color: Colors.white.withValues(alpha: 0.85),
                 fontWeight: FontWeight.w800,

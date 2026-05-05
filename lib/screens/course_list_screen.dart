@@ -90,6 +90,7 @@ class _CourseListScreenState extends State<CourseListScreen> {
                                     child: GestureDetector(
                                       onTap: () {
                                         ProgramController.to.clearProgram();
+                                        Get.back();
                                       },
                                       child: Container(
                                         padding: const EdgeInsets.symmetric(

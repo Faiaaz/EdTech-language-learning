@@ -506,6 +506,18 @@ const _en = <String, String>{
   'correct_feedback': 'Correct!',
   'wrong_feedback': 'Not quite. Correct answer:',
 
+  // ── Trial Game ──────────────────────────────────────────────────
+  'trial_label': 'NIHONGO TRIAL',
+  'trial_quiz_label': 'QUIZ',
+  'trial_learn_words': 'Learn 3 words',
+  'trial_quick_quiz': 'Quick quiz',
+  'trial_which_matches': 'Which word matches this?',
+  'trial_slow_loud': 'Slow + loud',
+  'trial_start_quiz': 'Start Quiz',
+  'trial_finish': 'Finish',
+  'trial_continue': 'Continue',
+  'trial_means': 'means',
+
   // ── IELTS Band Calculator ───────────────────────────────────────
   'overall_band': 'Overall Band Score',
   'band_reference': 'Band Scale Reference',
@@ -1016,6 +1028,18 @@ const _bn = <String, String>{
   'next': 'পরবর্তী',
   'correct_feedback': 'সঠিক!',
   'wrong_feedback': 'সঠিক নয়। সঠিক উত্তর:',
+
+  // ── Trial Game ──────────────────────────────────────────────────
+  'trial_label': 'নিহোঙ্গো ট্রায়াল',
+  'trial_quiz_label': 'কুইজ',
+  'trial_learn_words': '৩টি শব্দ শিখুন',
+  'trial_quick_quiz': 'দ্রুত কুইজ',
+  'trial_which_matches': 'কোন শব্দটি এটির সাথে মেলে?',
+  'trial_slow_loud': 'ধীরে + জোরে',
+  'trial_start_quiz': 'কুইজ শুরু করুন',
+  'trial_finish': 'সম্পন্ন',
+  'trial_continue': 'চালিয়ে যান',
+  'trial_means': 'এর অর্থ হল',
 
   // ── IELTS Band Calculator ───────────────────────────────────────
   'overall_band': 'সামগ্রিক ব্যান্ড স্কোর',
