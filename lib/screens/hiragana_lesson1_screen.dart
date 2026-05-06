@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:video_player/video_player.dart';
 import 'package:confetti/confetti.dart';
 
@@ -557,48 +558,54 @@ class _HiraganaLesson1ScreenState extends State<HiraganaLesson1Screen> {
             ),
           ),
           const SizedBox(height: 12),
-          _rainbowBorderCard(
-            child: Row(
-              children: [
-                Container(
-                  width: 44,
-                  height: 44,
-                  decoration: BoxDecoration(
-                    gradient: const LinearGradient(
-                      colors: [Color(0xFF6366F1), Color(0xFFEC4899)],
+          GestureDetector(
+            onTap: () {
+              HapticFeedback.selectionClick();
+              _openCalendly();
+            },
+            child: _rainbowBorderCard(
+              child: Row(
+                children: [
+                  Container(
+                    width: 44,
+                    height: 44,
+                    decoration: BoxDecoration(
+                      gradient: const LinearGradient(
+                        colors: [Color(0xFF6366F1), Color(0xFFEC4899)],
+                      ),
+                      borderRadius: BorderRadius.circular(12),
                     ),
-                    borderRadius: BorderRadius.circular(12),
+                    child: const Icon(Icons.video_call_rounded,
+                        color: Colors.white, size: 24),
                   ),
-                  child: const Icon(Icons.video_call_rounded,
-                      color: Colors.white, size: 24),
-                ),
-                const SizedBox(width: 14),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'hiragana_l1_live_lesson'.tr,
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 15,
-                          fontWeight: FontWeight.w800,
+                  const SizedBox(width: 14),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'hiragana_l1_live_lesson'.tr,
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 15,
+                            fontWeight: FontWeight.w800,
+                          ),
                         ),
-                      ),
-                      Text(
-                        'hiragana_l1_live_lesson_sub'.tr,
-                        style: const TextStyle(
-                          color: _textMuted,
-                          fontSize: 12,
-                          fontWeight: FontWeight.w500,
+                        Text(
+                          'hiragana_l1_live_lesson_sub'.tr,
+                          style: const TextStyle(
+                            color: _textMuted,
+                            fontSize: 12,
+                            fontWeight: FontWeight.w500,
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-                const Icon(Icons.arrow_forward_ios_rounded,
-                    color: _textMuted, size: 16),
-              ],
+                  const Icon(Icons.arrow_forward_ios_rounded,
+                      color: _textMuted, size: 16),
+                ],
+              ),
             ),
           ),
           const SizedBox(height: 20),
@@ -714,6 +721,22 @@ class _HiraganaLesson1ScreenState extends State<HiraganaLesson1Screen> {
         ),
       ),
     );
+  }
+
+  Future<void> _openCalendly() async {
+    const url = 'https://calendly.com/eztrainz/live-lesson';
+    final uri = Uri.parse(url);
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri, mode: LaunchMode.externalApplication);
+    } else {
+      Get.snackbar(
+        'Unable to Open',
+        'Could not open the booking page. Please try again later.',
+        backgroundColor: const Color(0xFF1E293B),
+        colorText: Colors.white,
+        snackPosition: SnackPosition.BOTTOM,
+      );
+    }
   }
 
   Widget _rainbowBorderCard({required Widget child}) {

@@ -24,6 +24,7 @@ dependencies:
   image_picker: ^1.1.2
   image: ^4.2.0
   confetti: ^0.7.0
+  url_launcher: ^6.3.0
 
 dependency_overrides:
   # Fix iOS build: ensure federated implementations match the platform interface.
