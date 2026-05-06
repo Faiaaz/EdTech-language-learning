@@ -83,6 +83,7 @@ const _en = <String, String>{
   'memory_hint': 'Memory Hint',
   'audio_coming_soon': 'Audio for "@romaji" coming soon!',
   'listen_to': 'Listen to "@romaji"',
+  'bangla_pronunciation': 'Bangla pronunciation',
 
   // ── Profile ─────────────────────────────────────────────────────
   'profile': 'Profile',
@@ -603,6 +604,7 @@ const _bn = <String, String>{
   'memory_hint': 'মনে রাখার কৌশল',
   'audio_coming_soon': '"@romaji"-এর অডিও শীঘ্রই আসছে!',
   'listen_to': '"@romaji" শুনুন',
+  'bangla_pronunciation': 'বাংলা উচ্চারণ',
 
   // ── Profile ─────────────────────────────────────────────────────
   'profile': 'প্রোফাইল',
@@ -1035,7 +1037,7 @@ const _bn = <String, String>{
   'trial_learn_words': '৩টি শব্দ শিখুন',
   'trial_quick_quiz': 'দ্রুত কুইজ',
   'trial_which_matches': 'কোন শব্দটি এটির সাথে মেলে?',
-  'trial_slow_loud': 'ধীরে + জোরে',
+  'trial_slow_loud': 'ধীরে + উচ্চস্বরে',
   'trial_start_quiz': 'কুইজ শুরু করুন',
   'trial_finish': 'সম্পন্ন',
   'trial_continue': 'চালিয়ে যান',

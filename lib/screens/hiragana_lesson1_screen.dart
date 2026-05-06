@@ -11,6 +11,7 @@ import 'package:confetti/confetti.dart';
 import 'package:ez_trainz/controllers/course_controller.dart';
 import 'package:ez_trainz/controllers/collectibles_controller.dart';
 import 'package:ez_trainz/screens/hat_preview_interstitial_screen.dart';
+import 'package:ez_trainz/screens/hiragana_games.dart';
 
 class HiraganaLesson1Screen extends StatefulWidget {
   const HiraganaLesson1Screen({super.key});
@@ -526,24 +527,30 @@ class _HiraganaLesson1ScreenState extends State<HiraganaLesson1Screen> {
                 Row(
                   children: [
                     Expanded(
-                        child: _quizCard('hiragana_l1_quiz_speaking'.tr,
-                            Icons.mic_rounded, const Color(0xFFEC4899))),
+                      child: _quizCard(
+                        'flashcard_drill'.tr,
+                        Icons.style_rounded,
+                        const Color(0xFF10B981),
+                        onTap: () => Get.to(
+                          () => const FlashcardDrillScreen(),
+                          transition: Transition.rightToLeftWithFade,
+                          duration: const Duration(milliseconds: 300),
+                        ),
+                      ),
+                    ),
                     const SizedBox(width: 10),
                     Expanded(
-                        child: _quizCard('hiragana_l1_quiz_listening'.tr,
-                            Icons.headphones_rounded, _accentBlue)),
-                  ],
-                ),
-                const SizedBox(height: 10),
-                Row(
-                  children: [
-                    Expanded(
-                        child: _quizCard('hiragana_l1_quiz_writing'.tr,
-                            Icons.edit_rounded, const Color(0xFF10B981))),
-                    const SizedBox(width: 10),
-                    Expanded(
-                        child: _quizCard('hiragana_l1_quiz_reading'.tr,
-                            Icons.menu_book_rounded, const Color(0xFFFFE000))),
+                      child: _quizCard(
+                        'match_pairs'.tr,
+                        Icons.extension_rounded,
+                        const Color(0xFFFFE000),
+                        onTap: () => Get.to(
+                          () => const KanaMatchScreen(),
+                          transition: Transition.rightToLeftWithFade,
+                          duration: const Duration(milliseconds: 300),
+                        ),
+                      ),
+                    ),
                   ],
                 ),
               ],
@@ -669,28 +676,42 @@ class _HiraganaLesson1ScreenState extends State<HiraganaLesson1Screen> {
     );
   }
 
-  Widget _quizCard(String label, IconData icon, Color color) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
-      decoration: BoxDecoration(
-        color: color.withValues(alpha: 0.10),
+  Widget _quizCard(
+    String label,
+    IconData icon,
+    Color color, {
+    VoidCallback? onTap,
+  }) {
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: onTap,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: color.withValues(alpha: 0.25), width: 1),
-      ),
-      child: Row(
-        children: [
-          Icon(icon, color: color, size: 22),
-          const SizedBox(width: 10),
-          Text(
-            label,
-            style: const TextStyle(
-              color: Colors.white,
-              fontSize: 13,
-              fontWeight: FontWeight.w700,
-              height: 1.3,
-            ),
+        child: Ink(
+          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+          decoration: BoxDecoration(
+            color: color.withValues(alpha: 0.10),
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(color: color.withValues(alpha: 0.25), width: 1),
           ),
-        ],
+          child: Row(
+            children: [
+              Icon(icon, color: color, size: 22),
+              const SizedBox(width: 10),
+              Expanded(
+                child: Text(
+                  label,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 13,
+                    fontWeight: FontWeight.w700,
+                    height: 1.3,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
