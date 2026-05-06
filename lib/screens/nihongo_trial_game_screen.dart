@@ -24,7 +24,6 @@ class _NihongoTrialGameScreenState extends State<NihongoTrialGameScreen>
   late final PageController _pages;
 
   late final ConfettiController _confetti;
-  late final AnimationController _pulse;
 
   int _page = 0;
   bool _quizMode = false;
@@ -65,10 +64,6 @@ class _NihongoTrialGameScreenState extends State<NihongoTrialGameScreen>
     super.initState();
     _pages = PageController();
     _confetti = ConfettiController(duration: const Duration(seconds: 2));
-    _pulse = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 1200),
-    )..repeat(reverse: true);
     _setupTts();
     WidgetsBinding.instance.addPostFrameCallback((_) => _speakCurrent());
   }
@@ -116,7 +111,6 @@ class _NihongoTrialGameScreenState extends State<NihongoTrialGameScreen>
     _pages.dispose();
     _tts.stop();
     _confetti.dispose();
-    _pulse.dispose();
     super.dispose();
   }
 
@@ -330,7 +324,6 @@ class _NihongoTrialGameScreenState extends State<NihongoTrialGameScreen>
               padding: const EdgeInsets.fromLTRB(18, 18, 18, 12),
               child: _VocabSlide(
                 vocab: item,
-                pulse: _pulse,
                 onSpeak: _speakCurrent,
                 onSpeakEmphasize: () => _speakCurrent(emphasize: true),
               ),
@@ -550,13 +543,11 @@ class _QuizHeader extends StatelessWidget {
 class _VocabSlide extends StatelessWidget {
   const _VocabSlide({
     required this.vocab,
-    required this.pulse,
     required this.onSpeak,
     required this.onSpeakEmphasize,
   });
 
   final _Vocab vocab;
-  final Animation<double> pulse;
   final VoidCallback onSpeak;
   final VoidCallback onSpeakEmphasize;
 
