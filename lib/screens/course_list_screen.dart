@@ -1,5 +1,3 @@
-import 'dart:math' as math;
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -347,6 +345,32 @@ class _ExpandableCourseCard extends StatelessWidget {
     required this.levelColors,
   });
 
+  bool get _isBn => (Get.locale?.languageCode ?? '').toLowerCase() == 'bn';
+
+  String get _displayTitle {
+    if (_isBn) {
+      switch (course.level) {
+        case 'N5':
+          return 'N5 শিক্ষানবিশ';
+        case 'N4':
+          return 'N4 প্রাথমিক';
+      }
+    }
+    return course.title;
+  }
+
+  String get _displayDescription {
+    if (_isBn) {
+      switch (course.level) {
+        case 'N5':
+          return 'একদম নতুনদের জন্য জাপানি ভাষার পরিচিতি কোর্স';
+        case 'N4':
+          return 'সহজ ব্যাকরণ ও কাঞ্জি দিয়ে শেখা চালিয়ে যান';
+      }
+    }
+    return course.description;
+  }
+
   @override
   Widget build(BuildContext context) {
     final badgeColor =
@@ -428,10 +452,10 @@ class _ExpandableCourseCard extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(course.title, style: titleStyle),
+                          Text(_displayTitle, style: titleStyle),
                           const SizedBox(height: 4),
                           Text(
-                            course.description,
+                            _displayDescription,
                             style: descStyle,
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
@@ -503,12 +527,18 @@ class _ExpandableCourseCard extends StatelessWidget {
                           ),
                         ),
                         const SizedBox(height: 8),
-                        _LessonPathView(
-                          course: course,
-                          accentColor: badgeColor,
-                          showJapanMap: isJlcProgram,
-                          lightBackdrop: false,
-                        ),
+                        for (var i = 0; i < course.lessons.length; i++) ...[
+                          if (i != 0) const SizedBox(height: 10),
+                          _LessonListTile(
+                            index: i + 1,
+                            lesson: course.lessons[i],
+                            courseLevel: course.level,
+                            accentColor: badgeColor,
+                            jlcLayout: jlcLayout,
+                            onTap: () =>
+                                _openLessonFromPath(course, course.lessons[i]),
+                          ),
+                        ],
                       ],
                     ),
                   )
@@ -639,7 +669,7 @@ class _N5KanaSection extends StatelessWidget {
   }
 }
 
-// ── S-curve path + lesson nodes (tap node → lesson / video) ───────────
+// ── Lesson routing (tap → lesson / video) ────────────────────────────
 void _openLessonFromPath(Course course, Lesson lesson) {
   CourseController.to.selectCourse(course);
   CourseController.to.selectLesson(lesson);
@@ -658,315 +688,140 @@ void _openLessonFromPath(Course course, Lesson lesson) {
   }
 }
 
-class _LessonPathView extends StatelessWidget {
-  const _LessonPathView({
-    required this.course,
-    required this.accentColor,
-    this.showJapanMap = false,
-    this.lightBackdrop = true,
-  });
-
-  final Course course;
-  final Color accentColor;
-  final bool showJapanMap;
-  final bool lightBackdrop;
-
-  static const _nodeSize = 52.0;
-  static const _nodeRadius = 26.0;
-  static const _vStep = 56.0;
-
-  /// One full sine period along the trail → smooth “S” flow top to bottom.
-  List<Offset> _computeCenters(double width, int n) {
-    final cx = width * 0.5;
-    final amp = (width * 0.30).clamp(48.0, width * 0.36);
-    final centers = <Offset>[];
-    if (n == 1) {
-      centers.add(Offset(cx, _nodeRadius));
-      return centers;
-    }
-    for (var i = 0; i < n; i++) {
-      final t = i / (n - 1);
-      final x = cx + amp * math.sin(2 * math.pi * t);
-      final y = _nodeRadius + i * _vStep;
-      centers.add(Offset(x, y));
-    }
-    return centers;
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final lessons = course.lessons;
-    final n = lessons.length;
-    if (n == 0) {
-      return const SizedBox.shrink();
-    }
-
-    final pathStroke = Color.lerp(accentColor, const Color(0xFF0F172A), 0.22)!;
-    final pathHighlight =
-        Color.lerp(accentColor, Colors.white, 0.35)!.withValues(alpha: 0.95);
-
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        final w = constraints.maxWidth;
-        final centers = _computeCenters(w, n);
-        final h = _nodeRadius + (n - 1) * _vStep + _nodeRadius + 16;
-
-        return ClipRRect(
-          borderRadius: BorderRadius.circular(12),
-          child: SizedBox(
-            width: w,
-            height: h,
-            child: Stack(
-              clipBehavior: Clip.hardEdge,
-              children: [
-                if (showJapanMap)
-                  CustomPaint(
-                    size: Size(w, h),
-                    painter: _JapanMapBackdropPainter(
-                      lightTheme: lightBackdrop,
-                    ),
-                  ),
-                CustomPaint(
-                  size: Size(w, h),
-                  painter: _LessonTrailPainter(
-                    centers: centers,
-                    strokeColor: pathStroke,
-                    highlightColor: pathHighlight,
-                  ),
-                ),
-                for (var i = 0; i < n; i++)
-                  Positioned(
-                    left: centers[i].dx - _nodeRadius,
-                    top: centers[i].dy - _nodeRadius,
-                    width: _nodeSize,
-                    height: _nodeSize,
-                    child: _LessonPathNode(
-                      index: i + 1,
-                      accentColor: accentColor,
-                      nodeSize: _nodeSize,
-                      onTap: () =>
-                          _openLessonFromPath(course, lessons[i]),
-                    ),
-                  ),
-              ],
-            ),
-          ),
-        );
-      },
-    );
-  }
-}
-
-/// Soft ocean + stylized Japan archipelago (decorative, low contrast).
-class _JapanMapBackdropPainter extends CustomPainter {
-  _JapanMapBackdropPainter({required this.lightTheme});
-
-  final bool lightTheme;
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final rect = Offset.zero & size;
-    final ocean = Paint()
-      ..shader = LinearGradient(
-        begin: Alignment.topCenter,
-        end: Alignment.bottomCenter,
-        colors: lightTheme
-            ? const [
-                Color(0xFFE5F2FA),
-                Color(0xFFD2E9F6),
-                Color(0xFFC2E0F1),
-              ]
-            : const [
-                Color(0xFF1E3A4C),
-                Color(0xFF152A38),
-                Color(0xFF0F1F2C),
-              ],
-      ).createShader(rect);
-    canvas.drawRect(rect, ocean);
-
-    final mist = Paint()
-      ..shader = RadialGradient(
-        center: const Alignment(0.15, -0.35),
-        radius: 1.15,
-        colors: [
-          Colors.white.withValues(alpha: lightTheme ? 0.45 : 0.08),
-          Colors.transparent,
-        ],
-      ).createShader(rect);
-    canvas.drawRect(rect, mist);
-
-    final landFill = Paint()
-      ..color = lightTheme
-          ? const Color(0xFF6FA68D).withValues(alpha: 0.20)
-          : const Color(0xFF5EB89A).withValues(alpha: 0.14)
-      ..style = PaintingStyle.fill;
-    final landEdge = Paint()
-      ..color = lightTheme
-          ? const Color(0xFF4F8F72).withValues(alpha: 0.14)
-          : const Color(0xFF7CB89F).withValues(alpha: 0.10)
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 1.2;
-
-    final land = _stylizedJapanPath(size);
-    canvas.drawPath(land, landFill);
-    canvas.drawPath(land, landEdge);
-  }
-
-  /// Normalized island blobs → reads as Japan at a glance, not GIS-accurate.
-  Path _stylizedJapanPath(Size size) {
-    final w = size.width;
-    final h = size.height;
-    void oval(Path p, double cx, double cy, double rw, double rh) {
-      p.addOval(
-        Rect.fromCenter(
-          center: Offset(cx * w, cy * h),
-          width: rw * w,
-          height: rh * h,
-        ),
-      );
-    }
-
-    final p = Path();
-    oval(p, 0.62, 0.14, 0.16, 0.11);
-    oval(p, 0.58, 0.38, 0.14, 0.42);
-    oval(p, 0.52, 0.72, 0.12, 0.14);
-    oval(p, 0.46, 0.84, 0.10, 0.09);
-    oval(p, 0.38, 0.58, 0.08, 0.12);
-    return p;
-  }
-
-  @override
-  bool shouldRepaint(covariant _JapanMapBackdropPainter oldDelegate) {
-    return oldDelegate.lightTheme != lightTheme;
-  }
-}
-
-/// Catmull–Rom → cubic Beziers: smooth curve through every node (no kinks).
-class _LessonTrailPainter extends CustomPainter {
-  _LessonTrailPainter({
-    required this.centers,
-    required this.strokeColor,
-    required this.highlightColor,
-  });
-
-  final List<Offset> centers;
-  final Color strokeColor;
-  final Color highlightColor;
-
-  static Offset _pointAt(List<Offset> p, int i) {
-    if (i < 0) {
-      return p[0] - (p[1] - p[0]);
-    }
-    if (i >= p.length) {
-      return p[p.length - 1] + (p[p.length - 1] - p[p.length - 2]);
-    }
-    return p[i];
-  }
-
-  static Path _catmullRomPath(List<Offset> p) {
-    final path = Path();
-    if (p.isEmpty) return path;
-    path.moveTo(p[0].dx, p[0].dy);
-    if (p.length == 1) return path;
-
-    for (var i = 0; i < p.length - 1; i++) {
-      final p0 = p[i];
-      final p1 = p[i + 1];
-      final prev = _pointAt(p, i - 1);
-      final next = _pointAt(p, i + 2);
-      final c1 = p0 + (p1 - prev) / 6;
-      final c2 = p1 - (next - p0) / 6;
-      path.cubicTo(c1.dx, c1.dy, c2.dx, c2.dy, p1.dx, p1.dy);
-    }
-    return path;
-  }
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    if (centers.length < 2) return;
-
-    final path = _catmullRomPath(centers);
-
-    final outer = Paint()
-      ..color = strokeColor.withValues(alpha: 0.40)
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 10
-      ..strokeCap = StrokeCap.round
-      ..strokeJoin = StrokeJoin.round
-      ..isAntiAlias = true;
-    canvas.drawPath(path, outer);
-
-    final inner = Paint()
-      ..color = highlightColor
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 5
-      ..strokeCap = StrokeCap.round
-      ..strokeJoin = StrokeJoin.round
-      ..isAntiAlias = true;
-    canvas.drawPath(path, inner);
-  }
-
-  @override
-  bool shouldRepaint(covariant _LessonTrailPainter oldDelegate) {
-    return oldDelegate.centers != centers ||
-        oldDelegate.strokeColor != strokeColor;
-  }
-}
-
-class _LessonPathNode extends StatelessWidget {
-  const _LessonPathNode({
+class _LessonListTile extends StatelessWidget {
+  const _LessonListTile({
     required this.index,
+    required this.lesson,
+    required this.courseLevel,
     required this.accentColor,
-    required this.nodeSize,
+    required this.jlcLayout,
     required this.onTap,
   });
 
   final int index;
+  final Lesson lesson;
+  final String courseLevel;
   final Color accentColor;
-  final double nodeSize;
+  final bool jlcLayout;
   final VoidCallback onTap;
+
+  bool get _isBn => (Get.locale?.languageCode ?? '').toLowerCase() == 'bn';
+
+  String get _title {
+    if (_isBn && courseLevel == 'N5') {
+      switch (lesson.id) {
+        case 1:
+          return 'পাঠ ১: হিরাগানা (প্রথম ভাগ)';
+        case 2:
+          return 'পাঠ ২: সংখ্যা';
+        case 3:
+          return 'পাঠ ৩: মৌলিক ব্যাকরণ';
+        case 13:
+          return 'পাঠ ৪: হিরাগানা (দ্বিতীয় ভাগ)';
+        case 14:
+          return 'পাঠ ৫: হিরাগানা (তৃতীয় ভাগ)';
+      }
+    }
+    return lesson.title;
+  }
+
+  String get _description {
+    if (_isBn && courseLevel == 'N5') {
+      switch (lesson.id) {
+        case 1:
+          return 'হিরাগানা পরিচয় — জাপানি ভাষার এই মৌলিক ও কণ্ঠস্থ অক্ষরলিপি।';
+        case 2:
+          return 'জাপানিতে ১ থেকে ১০ পর্যন্ত গোনা শিখুন।';
+        case 3:
+          return 'জাপানি বাক্যের মৌলিক গঠন শিখুন।';
+        case 13:
+          return 'হিরাগানা শেখা চালিয়ে যান — স, ত, ন ও হ সারি।';
+        case 14:
+          return 'হিরাগানা সম্পূর্ণ করুন — ম, য, র, ও সারি এবং “ん” অক্ষর।';
+      }
+    }
+    return lesson.description;
+  }
 
   @override
   Widget build(BuildContext context) {
+    final titleColor =
+        jlcLayout ? const Color(0xFF0F172A) : Colors.white.withValues(alpha: 0.9);
+    final subColor = jlcLayout
+        ? const Color(0xFF334155)
+        : Colors.white.withValues(alpha: 0.55);
+    final tileBg = jlcLayout ? Colors.white : const Color(0xFF0B1220);
+    final tileBorder = jlcLayout
+        ? const Color(0xFFE2E8F0)
+        : Colors.white.withValues(alpha: 0.10);
+
     return Material(
       color: Colors.transparent,
       child: InkWell(
         onTap: onTap,
-        customBorder: const CircleBorder(),
+        borderRadius: BorderRadius.circular(14),
         child: Ink(
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
           decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            gradient: LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-              colors: [
-                accentColor,
-                Color.lerp(accentColor, const Color(0xFF0F172A), 0.25)!,
-              ],
-            ),
-            boxShadow: [
-              BoxShadow(
-                color: accentColor.withValues(alpha: 0.45),
-                blurRadius: 12,
-                offset: const Offset(0, 4),
-              ),
-            ],
-            border: Border.all(color: Colors.white, width: 3),
+            color: tileBg,
+            borderRadius: BorderRadius.circular(14),
+            border: Border.all(color: tileBorder),
           ),
-          child: SizedBox(
-            width: nodeSize,
-            height: nodeSize,
-            child: Center(
-              child: Text(
-                '$index',
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 18,
-                  fontWeight: FontWeight.w900,
-                  height: 1,
+          child: Row(
+            children: [
+              Container(
+                width: 34,
+                height: 34,
+                decoration: BoxDecoration(
+                  color: accentColor.withValues(alpha: 0.14),
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(color: accentColor.withValues(alpha: 0.35)),
+                ),
+                child: Center(
+                  child: Text(
+                    '$index',
+                    style: TextStyle(
+                      color: accentColor,
+                      fontWeight: FontWeight.w900,
+                    ),
+                  ),
                 ),
               ),
-            ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      _title,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        color: titleColor,
+                        fontWeight: FontWeight.w800,
+                      ),
+                    ),
+                    const SizedBox(height: 3),
+                    Text(
+                      _description,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        color: subColor,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(width: 8),
+              Icon(
+                Icons.play_circle_fill_rounded,
+                color: accentColor.withValues(alpha: 0.9),
+                size: 22,
+              ),
+            ],
           ),
         ),
       ),

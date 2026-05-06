@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
@@ -33,10 +34,50 @@ class _FlashcardDrillState extends State<FlashcardDrillScreen>
   static const _kana = HiraganaLesson1Data.kanaList;
   final _page = PageController(viewportFraction: 0.85);
   final _tts = FlutterTts();
+  late final Future<void> _ttsReady;
   int _current = 0;
   final _flipped = <int, bool>{};
   late AnimationController _bounceCtrl;
   late Animation<double> _bounce;
+
+  bool get _isBn => (Get.locale?.languageCode ?? '').toLowerCase() == 'bn';
+
+  String _bnPronunciation(String romaji) {
+    switch (romaji) {
+      case 'a':
+        return 'আ';
+      case 'i':
+        return 'ই';
+      case 'u':
+        return 'উ';
+      case 'e':
+        return 'এ';
+      case 'o':
+        return 'ও';
+      case 'ka':
+        return 'কা';
+      case 'ki':
+        return 'কি';
+      case 'ku':
+        return 'কু';
+      case 'ke':
+        return 'কে';
+      case 'ko':
+        return 'কো';
+      case 'sa':
+        return 'সা';
+      case 'shi':
+        return 'শি';
+      case 'su':
+        return 'সু';
+      case 'se':
+        return 'সে';
+      case 'so':
+        return 'সো';
+      default:
+        return romaji;
+    }
+  }
 
   @override
   void initState() {
@@ -48,10 +89,70 @@ class _FlashcardDrillState extends State<FlashcardDrillScreen>
     _bounce = Tween<double>(begin: 1.0, end: 1.07).animate(
       CurvedAnimation(parent: _bounceCtrl, curve: Curves.easeOutCubic),
     );
-    _tts.setLanguage('ja-JP');
-    _tts.setSpeechRate(0.2);
-    _tts.setVolume(1.0);
-    _tts.setPitch(1.0);
+    _ttsReady = _initTts();
+  }
+
+  Future<void> _initTts() async {
+    // Best free quality: use the device's installed Japanese voice (offline).
+    await _tts.awaitSpeakCompletion(true);
+
+    // On Android, prefer the Google TTS engine when available (free, typically clearer).
+    if (Platform.isAndroid) {
+      try {
+        await _tts.setEngine('com.google.android.tts');
+      } catch (_) {
+        // Ignore if the engine isn't available on the device.
+      }
+    }
+
+    await _tts.setLanguage('ja-JP');
+    // Duolingo-like: slightly slower + a touch brighter for clarity.
+    await _tts.setSpeechRate(0.52);
+    await _tts.setPitch(1.05);
+    await _tts.setVolume(1.0);
+
+    // Prefer a higher-quality installed ja-JP voice when available.
+    try {
+      final voices = await _tts.getVoices;
+      if (voices is List) {
+        Map? best;
+        for (final v in voices) {
+          if (v is! Map) continue;
+          final locale = (v['locale'] ?? v['language'] ?? '').toString();
+          if (!locale.toLowerCase().startsWith('ja')) continue;
+
+          best ??= v;
+          final name = (v['name'] ?? '').toString().toLowerCase();
+          final id = (v['identifier'] ?? '').toString().toLowerCase();
+
+          // Heuristics: "enhanced/neural/premium" voices usually sound better.
+          final score = (name.contains('enhanced') || id.contains('enhanced'))
+              ? 3
+              : (name.contains('neural') || id.contains('neural'))
+                  ? 2
+                  : (name.contains('premium') || id.contains('premium'))
+                      ? 1
+                      : 0;
+          final bestName = (best['name'] ?? '').toString().toLowerCase();
+          final bestId = (best['identifier'] ?? '').toString().toLowerCase();
+          final bestScore =
+              (bestName.contains('enhanced') || bestId.contains('enhanced'))
+                  ? 3
+                  : (bestName.contains('neural') || bestId.contains('neural'))
+                      ? 2
+                      : (bestName.contains('premium') || bestId.contains('premium'))
+                          ? 1
+                          : 0;
+          if (score > bestScore) best = v;
+        }
+
+        if (best != null) {
+          await _tts.setVoice(Map<String, String>.from(best));
+        }
+      }
+    } catch (_) {
+      // If voice discovery fails, language-based voice selection still applies.
+    }
   }
 
   @override
@@ -66,9 +167,15 @@ class _FlashcardDrillState extends State<FlashcardDrillScreen>
     _bounceCtrl.forward(from: 0).then((_) => _bounceCtrl.reverse());
   }
 
-  void _speak(String text) {
-    _tts.stop();
-    _tts.speak(text);
+  Future<void> _speakKana(String kana) async {
+    // Ensure ja-JP init finished before first speak.
+    await _ttsReady;
+    await _tts.stop();
+
+    // Single kana characters can be misread in some engines.
+    // Adding Japanese punctuation provides context without changing meaning.
+    final toSpeak = '$kana。';
+    await _tts.speak(toSpeak);
   }
 
   Color _accentFor(String row) {
@@ -125,7 +232,7 @@ class _FlashcardDrillState extends State<FlashcardDrillScreen>
                       _hapticLight();
                       _playCardBounce();
                       setState(() => _flipped[i] = !flipped);
-                      if (!flipped) _speak(c.kana);
+                      if (!flipped) _speakKana(c.kana);
                     },
                     child: Center(
                       child: i == _current
@@ -170,7 +277,7 @@ class _FlashcardDrillState extends State<FlashcardDrillScreen>
                     child: IconButton(
                       onPressed: () {
                         _hapticTap();
-                        _speak(_kana[_current].kana);
+                        _speakKana(_kana[_current].kana);
                       },
                       icon: const Icon(Icons.volume_up_rounded,
                           color: _dark, size: 28),
@@ -195,6 +302,8 @@ class _FlashcardDrillState extends State<FlashcardDrillScreen>
   Widget _cardFront(HiraganaChar c, int key, Color accent) {
     return Container(
       key: ValueKey('front_$key'),
+      width: double.infinity,
+      height: double.infinity,
       decoration: BoxDecoration(
         color: const Color(0xFF1E293B),
         borderRadius: BorderRadius.circular(24),
@@ -229,17 +338,20 @@ class _FlashcardDrillState extends State<FlashcardDrillScreen>
           const SizedBox(height: 12),
           Text(c.kana,
               style: const TextStyle(
-                  fontSize: 100, fontWeight: FontWeight.w700, color: _dark)),
+                  fontSize: 100,
+                  fontWeight: FontWeight.w700,
+                  color: Colors.white)),
           const SizedBox(height: 16),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Icon(Icons.touch_app_rounded,
-                  color: _dark.withValues(alpha: 0.2), size: 16),
+                  color: Colors.white.withValues(alpha: 0.55), size: 16),
               const SizedBox(width: 4),
               Text('tap_to_reveal'.tr,
                   style: TextStyle(
-                      color: _dark.withValues(alpha: 0.3), fontSize: 13)),
+                      color: Colors.white.withValues(alpha: 0.65),
+                      fontSize: 13)),
             ],
           ),
         ],
@@ -250,6 +362,8 @@ class _FlashcardDrillState extends State<FlashcardDrillScreen>
   Widget _cardBack(HiraganaChar c, int key, Color accent) {
     return Container(
       key: ValueKey('back_$key'),
+      width: double.infinity,
+      height: double.infinity,
       decoration: BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.topLeft,
@@ -278,11 +392,34 @@ class _FlashcardDrillState extends State<FlashcardDrillScreen>
                   fontWeight: FontWeight.w700,
                   color: Colors.white.withValues(alpha: 0.4))),
           const SizedBox(height: 4),
-          Text(c.romaji,
+          if (_isBn) ...[
+            Text(
+              _bnPronunciation(c.romaji),
               style: const TextStyle(
-                  fontSize: 48,
-                  fontWeight: FontWeight.w900,
-                  color: Colors.white)),
+                fontSize: 48,
+                fontWeight: FontWeight.w900,
+                color: Colors.white,
+              ),
+            ),
+            const SizedBox(height: 6),
+            Text(
+              c.romaji,
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w800,
+                color: Colors.white.withValues(alpha: 0.75),
+                letterSpacing: 0.4,
+              ),
+            ),
+          ] else
+            Text(
+              c.romaji,
+              style: const TextStyle(
+                fontSize: 48,
+                fontWeight: FontWeight.w900,
+                color: Colors.white,
+              ),
+            ),
           const SizedBox(height: 16),
           Text('tap_to_flip'.tr,
               style: TextStyle(
@@ -595,6 +732,48 @@ class _KanaMatchState extends State<KanaMatchScreen> {
   late List<HiraganaChar> _kanaColumn;
   late List<HiraganaChar> _romajiColumn;
 
+  bool get _isBn => (Get.locale?.languageCode ?? '').toLowerCase() == 'bn';
+
+  String _bnPronunciation(String romaji) {
+    switch (romaji) {
+      case 'a':
+        return 'আ';
+      case 'i':
+        return 'ই';
+      case 'u':
+        return 'উ';
+      case 'e':
+        return 'এ';
+      case 'o':
+        return 'ও';
+      case 'ka':
+        return 'কা';
+      case 'ki':
+        return 'কি';
+      case 'ku':
+        return 'কু';
+      case 'ke':
+        return 'কে';
+      case 'ko':
+        return 'কো';
+      case 'sa':
+        return 'সা';
+      case 'shi':
+        return 'শি';
+      case 'su':
+        return 'সু';
+      case 'se':
+        return 'সে';
+      case 'so':
+        return 'সো';
+      default:
+        return romaji;
+    }
+  }
+
+  String _rightColumnLabel(HiraganaChar c) =>
+      _isBn ? _bnPronunciation(c.romaji) : c.romaji;
+
   @override
   void initState() {
     super.initState();
@@ -717,7 +896,7 @@ class _KanaMatchState extends State<KanaMatchScreen> {
                 children: [
                   _colLabel('hiragana_label'.tr),
                   const SizedBox(width: 14),
-                  _colLabel('romaji_label'.tr),
+                  _colLabel(_isBn ? 'bangla_pronunciation'.tr : 'romaji_label'.tr),
                 ],
               ),
             ),
@@ -849,7 +1028,7 @@ class _KanaMatchState extends State<KanaMatchScreen> {
                           color: _green, size: 18),
                     ),
                   Text(
-                    isKana ? c.kana : c.romaji,
+                    isKana ? c.kana : _rightColumnLabel(c),
                     style: TextStyle(
                       fontSize: isKana ? 26 : 16,
                       fontWeight: FontWeight.w800,

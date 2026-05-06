@@ -336,7 +336,7 @@ class _NihongoTrialGameScreenState extends State<NihongoTrialGameScreen>
 
   Widget _buildQuiz() {
     final q = _vocab[_quizIndex];
-    final options = _vocab.map((e) => e.jp).toList();
+    final options = _vocab.toList();
     options.shuffle(math.Random(1000 + _quizIndex));
 
     return ClipRRect(
@@ -389,27 +389,24 @@ class _NihongoTrialGameScreenState extends State<NihongoTrialGameScreen>
               const SizedBox(height: 14),
               Expanded(
                 child: Container(
-                  child: ClipRRect(
+                  decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(18),
-                    child: Image.asset(
-                      q.image,
-                      fit: BoxFit.cover,
-                      width: double.infinity,
-                      height: double.infinity,
-                    ),
                   ),
+                  clipBehavior: Clip.antiAlias,
+                  child: Image.asset(q.image, fit: BoxFit.cover),
                 ),
               ),
               const SizedBox(height: 14),
               for (final opt in options) ...[
                 const SizedBox(height: 10),
                 _OptionTile(
-                  text: opt,
-                  selected: _selected == opt,
+                  jp: opt.jp,
+                  bnPronunciation: opt.bnPronunciation,
+                  selected: _selected == opt.jp,
                   state: _checked
-                      ? (opt == q.jp
+                      ? (opt.jp == q.jp
                           ? _OptionState.correct
-                          : (_selected == opt
+                          : (_selected == opt.jp
                               ? _OptionState.wrong
                               : _OptionState.neutral))
                       : _OptionState.neutral,
@@ -417,7 +414,7 @@ class _NihongoTrialGameScreenState extends State<NihongoTrialGameScreen>
                       ? null
                       : () {
                           HapticFeedback.selectionClick();
-                          setState(() => _selected = opt);
+                          setState(() => _selected = opt.jp);
                         },
                 ),
               ],
@@ -561,14 +558,13 @@ class _VocabSlide extends StatelessWidget {
     return Column(
       children: [
         Expanded(
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(18),
-            child: Image.asset(
-              vocab.image,
-              fit: BoxFit.cover,
-              width: double.infinity,
-              height: double.infinity,
+          child: Container(
+            width: double.infinity,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(18),
             ),
+            clipBehavior: Clip.antiAlias,
+            child: Image.asset(vocab.image, fit: BoxFit.cover),
           ),
         ),
         const SizedBox(height: 14),
@@ -660,13 +656,15 @@ enum _OptionState { neutral, correct, wrong }
 
 class _OptionTile extends StatelessWidget {
   const _OptionTile({
-    required this.text,
+    required this.jp,
+    required this.bnPronunciation,
     required this.selected,
     required this.state,
     required this.onTap,
   });
 
-  final String text;
+  final String jp;
+  final String bnPronunciation;
   final bool selected;
   final _OptionState state;
   final VoidCallback? onTap;
@@ -710,14 +708,31 @@ class _OptionTile extends StatelessWidget {
         child: Row(
           children: [
             Expanded(
-              child: Text(
-                text,
-                style: TextStyle(
-                  color: fg,
-                  fontSize: 18,
-                  fontWeight: FontWeight.w900,
-                  letterSpacing: 0.5,
-                ),
+              child: Row(
+                children: [
+                  Text(
+                    jp,
+                    style: TextStyle(
+                      color: fg,
+                      fontSize: 18,
+                      fontWeight: FontWeight.w900,
+                      letterSpacing: 0.5,
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  Flexible(
+                    child: Text(
+                      bnPronunciation,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        color: fg.withValues(alpha: 0.78),
+                        fontSize: 14,
+                        fontWeight: FontWeight.w800,
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
             Icon(
