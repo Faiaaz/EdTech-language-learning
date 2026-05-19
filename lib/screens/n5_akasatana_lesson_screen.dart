@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
+import 'package:ez_trainz/screens/hiragana_draw_game_screen.dart';
+
 class N5AkasatanaLessonScreen extends StatefulWidget {
   const N5AkasatanaLessonScreen({super.key});
 
@@ -13,10 +15,10 @@ class N5AkasatanaLessonScreen extends StatefulWidget {
   State<N5AkasatanaLessonScreen> createState() => _N5AkasatanaLessonScreenState();
 }
 
-enum _AkaTab { flashcard, quiz, match }
+enum _AkaTab { draw, flashcard, quiz, match }
 
 class _N5AkasatanaLessonScreenState extends State<N5AkasatanaLessonScreen> {
-  static const _tabs = [_AkaTab.flashcard, _AkaTab.quiz, _AkaTab.match];
+  static const _tabs = [_AkaTab.draw, _AkaTab.flashcard, _AkaTab.quiz, _AkaTab.match];
   int _tab = 0;
 
   @override
@@ -70,6 +72,7 @@ class _N5AkasatanaLessonScreenState extends State<N5AkasatanaLessonScreen> {
               child: AnimatedSwitcher(
                 duration: const Duration(milliseconds: 220),
                 child: switch (_tabs[_tab]) {
+                  _AkaTab.draw => const _AkaDrawPicker(key: ValueKey('akaDraw')),
                   _AkaTab.flashcard => const _AkaFlashGame(key: ValueKey('akaFlash')),
                   _AkaTab.quiz => const _AkaQuizGame(key: ValueKey('akaQuiz')),
                   _AkaTab.match => const _AkaMatchGame(key: ValueKey('akaMatch')),
@@ -90,7 +93,7 @@ class _AkaTabPills extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const labels = ['ফ্ল্যাশকার্ড', 'কুইজ রান', 'কানা ম্যাচ'];
+    const labels = ['আঁকা', 'ফ্ল্যাশকার্ড', 'কুইজ রান', 'কানা ম্যাচ'];
     return Container(
       padding: const EdgeInsets.all(6),
       decoration: BoxDecoration(
@@ -121,6 +124,123 @@ class _AkaTabPills extends StatelessWidget {
             ]
           ],
         ),
+      ),
+    );
+  }
+}
+
+// ── Draw picker ───────────────────────────────────────────────────────────────
+
+class _AkaDrawPicker extends StatelessWidget {
+  const _AkaDrawPicker({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(16, 4, 16, 16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.all(14),
+            decoration: BoxDecoration(
+              gradient: const LinearGradient(
+                colors: [Color(0xFF10B981), Color(0xFF059669)],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ),
+              borderRadius: BorderRadius.circular(14),
+            ),
+            child: Row(
+              children: [
+                Container(
+                  width: 42,
+                  height: 42,
+                  decoration: BoxDecoration(
+                    color: Colors.white.withValues(alpha: 0.22),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: const Icon(Icons.edit_rounded, color: Colors.white, size: 22),
+                ),
+                const SizedBox(width: 12),
+                const Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('হিরাগানা আঁকা',
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.w900,
+                              fontSize: 15)),
+                      SizedBox(height: 2),
+                      Text('স্ট্রোক অর্ডার অনুযায়ী ছায়া অনুসরণ করো',
+                          style: TextStyle(
+                              color: Colors.white70,
+                              fontWeight: FontWeight.w600,
+                              fontSize: 11)),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 14),
+          Expanded(
+            child: GridView.builder(
+              physics: const BouncingScrollPhysics(),
+              padding: EdgeInsets.zero,
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 5,
+                mainAxisSpacing: 10,
+                crossAxisSpacing: 10,
+                childAspectRatio: 1.0,
+              ),
+              itemCount: kHiraganaSet.length,
+              itemBuilder: (ctx, i) {
+                final c = kHiraganaSet[i];
+                return GestureDetector(
+                  onTap: () => Get.to(
+                    () => HiraganaDrawGameScreen(initialIndex: i),
+                    transition: Transition.rightToLeftWithFade,
+                    duration: const Duration(milliseconds: 280),
+                  ),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: const Color(0xFF1E293B),
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(
+                          color: Colors.white.withValues(alpha: 0.08)),
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          c.kana,
+                          style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 28,
+                              fontWeight: FontWeight.w900,
+                              height: 1),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          c.romaji,
+                          style: TextStyle(
+                            color: const Color(0xFF10B981).withValues(alpha: 0.9),
+                            fontSize: 11,
+                            fontWeight: FontWeight.w800,
+                            letterSpacing: 0.5,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+        ],
       ),
     );
   }
