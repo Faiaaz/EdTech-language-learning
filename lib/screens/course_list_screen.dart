@@ -14,6 +14,7 @@ import 'package:ez_trainz/screens/login_screen.dart';
 import 'package:ez_trainz/screens/n5_hero_number1_lesson_screen.dart';
 import 'package:ez_trainz/screens/n5_hi_hello_lesson_screen.dart';
 import 'package:ez_trainz/screens/n5_kana_modules_screen.dart';
+import 'package:ez_trainz/screens/n5_akasatana_lesson_screen.dart';
 import 'package:ez_trainz/screens/n5_weekdays_lesson_screen.dart';
 
 class CourseListScreen extends StatefulWidget {
@@ -1007,6 +1008,19 @@ class _AnushilanCardState extends State<_AnushilanCard> {
                           glow: const Color(0xFF8B5CF6),
                           onTap: () => Get.to(
                             () => const N5WeekdaysLessonScreen(),
+                            transition: Transition.rightToLeftWithFade,
+                            duration: const Duration(milliseconds: 300),
+                          ),
+                        ),
+                        const SizedBox(height: 10),
+                        _PracticeLessonCard(
+                          number: '４',
+                          title: 'পাঠ ৪ঃ আকাসাতানা',
+                          subtitle: 'হিরাগানা ৫ সারি • কানা চর্চা • ম্যাচ',
+                          gradient: const [Color(0xFF10B981), Color(0xFF059669)],
+                          glow: const Color(0xFF10B981),
+                          onTap: () => Get.to(
+                            () => const N5AkasatanaLessonScreen(),
                             transition: Transition.rightToLeftWithFade,
                             duration: const Duration(milliseconds: 300),
                           ),
