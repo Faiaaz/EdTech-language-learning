@@ -12,6 +12,7 @@ import 'package:ez_trainz/screens/ielts_dashboard_screen.dart';
 import 'package:ez_trainz/screens/leaderboard_screen.dart';
 import 'package:ez_trainz/screens/profile_screen.dart';
 import 'package:ez_trainz/screens/trial_game_language_picker_screen.dart';
+import 'package:ez_trainz/widgets/ez_trainz_logo_text.dart';
 import 'package:ez_trainz/widgets/language_switcher.dart';
 import 'package:ez_trainz/widgets/streak_pill.dart';
 
@@ -179,27 +180,9 @@ class _ProgramPickerView extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Row(
-                    crossAxisAlignment: CrossAxisAlignment.baseline,
-                    textBaseline: TextBaseline.alphabetic,
-                    children: [
-                      Text('EZ',
-                          style: TextStyle(
-                            color: Color(0xFFFFE000),
-                            fontSize: 22,
-                            fontWeight: FontWeight.w900,
-                            height: 1,
-                          )),
-                      SizedBox(width: 3),
-                      Text('TRAINZ',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 20,
-                            fontWeight: FontWeight.w800,
-                            letterSpacing: 1.5,
-                            height: 1,
-                          )),
-                    ],
+                  const EzTrainzLogoText(
+                    height: 30,
+                    alignment: Alignment.centerLeft,
                   ),
                   const StreakPill(),
                   const LanguageSwitcher(),

@@ -16,6 +16,7 @@ import 'package:ez_trainz/screens/n5_hi_hello_lesson_screen.dart';
 import 'package:ez_trainz/screens/n5_kana_modules_screen.dart';
 import 'package:ez_trainz/screens/n5_akasatana_lesson_screen.dart';
 import 'package:ez_trainz/screens/n5_weekdays_lesson_screen.dart';
+import 'package:ez_trainz/widgets/ez_trainz_logo_text.dart';
 
 class CourseListScreen extends StatefulWidget {
   const CourseListScreen({super.key});
@@ -138,36 +139,8 @@ class _CourseListScreenState extends State<CourseListScreen> {
                                 padding: EdgeInsets.symmetric(
                                   horizontal: logoSideInset,
                                 ),
-                                child: FittedBox(
-                                  fit: BoxFit.scaleDown,
-                                  child: const Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.baseline,
-                                    textBaseline: TextBaseline.alphabetic,
-                                    children: [
-                                      Text(
-                                        'EZ',
-                                        style: TextStyle(
-                                          color: Color(0xFFFFE000),
-                                          fontSize: 21,
-                                          fontWeight: FontWeight.w900,
-                                          height: 1,
-                                        ),
-                                      ),
-                                      SizedBox(width: 3),
-                                      Text(
-                                        'TRAINZ',
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 19,
-                                          fontWeight: FontWeight.w800,
-                                          letterSpacing: 1.4,
-                                          height: 1,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
+                                child: const Center(
+                                  child: EzTrainzLogoText(height: 28),
                                 ),
                               ),
                               Align(
