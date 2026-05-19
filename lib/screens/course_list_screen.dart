@@ -11,7 +11,10 @@ import 'package:ez_trainz/models/program.dart';
 import 'package:ez_trainz/screens/hiragana_lesson1_screen.dart';
 import 'package:ez_trainz/screens/lesson_screen.dart';
 import 'package:ez_trainz/screens/login_screen.dart';
+import 'package:ez_trainz/screens/n5_hero_number1_lesson_screen.dart';
+import 'package:ez_trainz/screens/n5_hi_hello_lesson_screen.dart';
 import 'package:ez_trainz/screens/n5_kana_modules_screen.dart';
+import 'package:ez_trainz/screens/n5_weekdays_lesson_screen.dart';
 
 class CourseListScreen extends StatefulWidget {
   const CourseListScreen({super.key});
@@ -304,8 +307,11 @@ class _CourseListScreenState extends State<CourseListScreen> {
                       24,
                       isJlc ? 20 : 16,
                     ),
-                    itemCount: ctrl.courses.length,
+                    itemCount: ctrl.courses.length + (isJlc ? 1 : 0),
                     itemBuilder: (_, i) {
+                      if (isJlc && i == ctrl.courses.length) {
+                        return const _AnushilanCard();
+                      }
                       final course = ctrl.courses[i];
                       return _ExpandableCourseCard(
                         course: course,
@@ -823,6 +829,298 @@ class _LessonListTile extends StatelessWidget {
               ),
             ],
           ),
+        ),
+      ),
+    );
+  }
+}
+
+// ── অনুশীলন card (JLC-only static card with lessons) ───────────────
+class _AnushilanCard extends StatefulWidget {
+  const _AnushilanCard();
+
+  @override
+  State<_AnushilanCard> createState() => _AnushilanCardState();
+}
+
+class _AnushilanCardState extends State<_AnushilanCard> {
+  bool _expanded = false;
+
+  static const _badgeColor = Color(0xFFFF8C00);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 16),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: const Color(0xFFE2E8F0)),
+        boxShadow: [
+          BoxShadow(
+            color: const Color(0xFF0F172A).withValues(alpha: 0.08),
+            blurRadius: 16,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Material(
+            color: Colors.transparent,
+            child: InkWell(
+              onTap: () => setState(() => _expanded = !_expanded),
+              borderRadius: BorderRadius.vertical(
+                top: const Radius.circular(15),
+                bottom: _expanded ? Radius.zero : const Radius.circular(15),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(20),
+                child: Row(
+                  children: [
+                    Container(
+                      width: 52,
+                      height: 52,
+                      decoration: BoxDecoration(
+                        color: _badgeColor.withValues(alpha: 0.15),
+                        borderRadius: BorderRadius.circular(14),
+                      ),
+                      child: const Center(
+                        child: Text(
+                          '✏️',
+                          style: TextStyle(fontSize: 22),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 16),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text(
+                            'অনুশীলন',
+                            style: TextStyle(
+                              color: Color(0xFF0F172A),
+                              fontSize: 17,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                          const SizedBox(height: 4),
+                          const Text(
+                            'অনুশীলন করুন ও দক্ষতা বাড়ান',
+                            style: TextStyle(
+                              color: Color(0xFF64748B),
+                              fontSize: 13,
+                            ),
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          const SizedBox(height: 8),
+                          const Text(
+                            '৩টি পাঠ',
+                            style: TextStyle(
+                              color: _badgeColor,
+                              fontSize: 12,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    AnimatedRotation(
+                      turns: _expanded ? 0.5 : 0,
+                      duration: const Duration(milliseconds: 220),
+                      curve: Curves.easeInOut,
+                      child: const Icon(
+                        Icons.expand_more_rounded,
+                        color: Color(0xFF64748B),
+                        size: 28,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          AnimatedSize(
+            duration: const Duration(milliseconds: 260),
+            curve: Curves.easeInOut,
+            alignment: Alignment.topCenter,
+            child: _expanded
+                ? Container(
+                    width: double.infinity,
+                    decoration: const BoxDecoration(
+                      color: Color(0xFFF1F5F9),
+                      border: Border(
+                        top: BorderSide(color: Color(0xFFE2E8F0)),
+                      ),
+                      borderRadius: BorderRadius.vertical(
+                        bottom: Radius.circular(15),
+                      ),
+                    ),
+                    padding: const EdgeInsets.fromLTRB(12, 14, 12, 14),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
+                          'পাঠসমূহ',
+                          style: TextStyle(
+                            color: Color(0xFF64748B),
+                            fontSize: 12,
+                            fontWeight: FontWeight.w700,
+                            letterSpacing: 1.1,
+                          ),
+                        ),
+                        const SizedBox(height: 10),
+                        _PracticeLessonCard(
+                          number: '１',
+                          title: 'পাঠ ১ঃ হিরো নাম্বার ১',
+                          subtitle: 'জাপানি সংখ্যা • হিরাগানা • গেম',
+                          gradient: const [Color(0xFFFF8C00), Color(0xFFFF5722)],
+                          glow: const Color(0xFFFF8C00),
+                          onTap: () => Get.to(
+                            () => const N5HeroNumber1LessonScreen(),
+                            transition: Transition.rightToLeftWithFade,
+                            duration: const Duration(milliseconds: 300),
+                          ),
+                        ),
+                        const SizedBox(height: 10),
+                        _PracticeLessonCard(
+                          number: '２',
+                          title: 'পাঠ ২ঃ জাপানিজে হাই-হ্যালো',
+                          subtitle: 'অভিবাদন • শুভেচ্ছা • কথোপকথন',
+                          gradient: const [Color(0xFF06B6D4), Color(0xFF0891B2)],
+                          glow: const Color(0xFF06B6D4),
+                          onTap: () => Get.to(
+                            () => const N5HiHelloLessonScreen(),
+                            transition: Transition.rightToLeftWithFade,
+                            duration: const Duration(milliseconds: 300),
+                          ),
+                        ),
+                        const SizedBox(height: 10),
+                        _PracticeLessonCard(
+                          number: '３',
+                          title: 'পাঠ ৩ঃ শুক্র-শনি বাকিটা জানি',
+                          subtitle: 'সপ্তাহের দিন • ক্যালেন্ডার • অভ্যাস',
+                          gradient: const [Color(0xFF8B5CF6), Color(0xFF6D28D9)],
+                          glow: const Color(0xFF8B5CF6),
+                          onTap: () => Get.to(
+                            () => const N5WeekdaysLessonScreen(),
+                            transition: Transition.rightToLeftWithFade,
+                            duration: const Duration(milliseconds: 300),
+                          ),
+                        ),
+                      ],
+                    ),
+                  )
+                : const SizedBox(width: double.infinity),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+// ── Reusable lesson card used inside অনুশীলন ─────────────────────────
+class _PracticeLessonCard extends StatelessWidget {
+  const _PracticeLessonCard({
+    required this.number,
+    required this.title,
+    required this.subtitle,
+    required this.gradient,
+    required this.glow,
+    required this.onTap,
+  });
+
+  final String number;
+  final String title;
+  final String subtitle;
+  final List<Color> gradient;
+  final Color glow;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        width: double.infinity,
+        padding: const EdgeInsets.all(14),
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: gradient,
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+          borderRadius: BorderRadius.circular(14),
+          boxShadow: [
+            BoxShadow(
+              color: glow.withValues(alpha: 0.28),
+              blurRadius: 10,
+              offset: const Offset(0, 3),
+            ),
+          ],
+        ),
+        child: Row(
+          children: [
+            Container(
+              width: 44,
+              height: 44,
+              decoration: BoxDecoration(
+                color: Colors.white.withValues(alpha: 0.2),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Center(
+                child: Text(
+                  number,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 22,
+                    fontWeight: FontWeight.w900,
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 15,
+                      fontWeight: FontWeight.w800,
+                    ),
+                  ),
+                  const SizedBox(height: 2),
+                  Text(
+                    subtitle,
+                    style: const TextStyle(
+                      color: Colors.white70,
+                      fontSize: 11,
+                      height: 1.25,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Container(
+              width: 30,
+              height: 30,
+              decoration: BoxDecoration(
+                color: Colors.white.withValues(alpha: 0.2),
+                shape: BoxShape.circle,
+              ),
+              child: const Icon(
+                Icons.arrow_forward_rounded,
+                color: Colors.white,
+                size: 16,
+              ),
+            ),
+          ],
         ),
       ),
     );
