@@ -875,7 +875,7 @@ class _CharPainter extends CustomPainter {
   final double completeProgress;
   final bool showError;
 
-  static const _strokeWidth = 12.0;
+  static const _strokeWidth = 15.0;
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -886,20 +886,20 @@ class _CharPainter extends CustomPainter {
     // Shadow template (faded full character) — only on tracing mode.
     if (showShadow) {
       for (int i = strokeIdx; i < character.strokes.length; i++) {
-        _drawIdealStroke(canvas, character.strokes[i], s,
-            color: Colors.white.withValues(alpha: 0.14),
-            strokeWidth: _strokeWidth);
+        _drawCalligraphicStroke(canvas, character.strokes[i], s,
+            color: Colors.white.withValues(alpha: 0.16),
+            baseWidth: _strokeWidth);
       }
     }
 
-    // Completed strokes — snapped to ideal path for crisp look.
+    // Completed strokes — rendered with a brush-like variable width.
     for (int i = 0; i < strokeIdx; i++) {
       final color = completed
           ? Color.lerp(Colors.white, const Color(0xFF10B981),
               completeProgress.clamp(0.0, 1.0))!
           : Colors.white;
-      _drawIdealStroke(canvas, character.strokes[i], s,
-          color: color, strokeWidth: _strokeWidth);
+      _drawCalligraphicStroke(canvas, character.strokes[i], s,
+          color: color, baseWidth: _strokeWidth);
     }
 
     // User's in-progress path.
@@ -1016,15 +1016,55 @@ class _CharPainter extends CustomPainter {
     }
   }
 
-  void _drawIdealStroke(Canvas canvas, _Stroke stroke, double s,
-      {required Color color, required double strokeWidth}) {
+  // Variable-width "brush" stroke: stamps filled circles along the path with
+  // radius driven by [_calligraphicWidthProfile] to mimic the natural
+  // pen-down → body → harai (taper) rhythm of real hiragana strokes.
+  void _drawCalligraphicStroke(
+    Canvas canvas,
+    _Stroke stroke,
+    double s, {
+    required Color color,
+    required double baseWidth,
+  }) {
+    final path = _buildPath(stroke, s);
+    final metrics = path.computeMetrics().toList();
+    if (metrics.isEmpty) return;
+    final m = metrics.first;
+    final length = m.length;
+    if (length < 1) return;
+
     final paint = Paint()
       ..color = color
-      ..strokeWidth = strokeWidth
-      ..strokeCap = StrokeCap.round
-      ..strokeJoin = StrokeJoin.round
-      ..style = PaintingStyle.stroke;
-    canvas.drawPath(_buildPath(stroke, s), paint);
+      ..isAntiAlias = true
+      ..style = PaintingStyle.fill;
+
+    // ~1 stamp per ~1.5 px of path length; bounded for perf.
+    final samples =
+        math.min(140, math.max(40, (length / 1.5).round()));
+
+    for (int i = 0; i <= samples; i++) {
+      final t = i / samples;
+      final tan = m.getTangentForOffset(length * t);
+      if (tan == null) continue;
+      final widthMul = _calligraphicWidthProfile(t);
+      final radius = (baseWidth * widthMul) / 2;
+      if (radius < 0.4) continue;
+      canvas.drawCircle(tan.position, radius, paint);
+    }
+  }
+
+  // Width multiplier along the stroke (t in 0..1).
+  //   pen-down ramp → full body → gradual taper → sweep-off.
+  double _calligraphicWidthProfile(double t) {
+    if (t < 0.10) {
+      return 0.65 + 0.35 * (t / 0.10);
+    } else if (t < 0.55) {
+      return 1.0;
+    } else if (t < 0.90) {
+      return 1.0 - 0.55 * ((t - 0.55) / 0.35);
+    } else {
+      return 0.45 - 0.35 * ((t - 0.90) / 0.10);
+    }
   }
 
   Path _buildPath(_Stroke stroke, double s) {
