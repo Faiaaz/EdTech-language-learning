@@ -624,7 +624,7 @@ const _bn = <String, String>{
 
   // ── Nav (bottom bar) ───────────────────────────────────────────
   'nav_learn': 'শিখুন',
-  'nav_practice': 'অনুশীলন',
+  'nav_practice': 'প্র্যাকটিস',
   'nav_collectibles': 'Collect',
   'nav_profile': 'প্রোফাইল',
   'nav_community': 'সম্প্রদায়',

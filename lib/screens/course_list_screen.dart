@@ -873,7 +873,7 @@ class _AnushilanCardState extends State<_AnushilanCard> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           const Text(
-                            'অনুশীলন',
+                            'প্র্যাকটিস',
                             style: TextStyle(
                               color: Color(0xFF0F172A),
                               fontSize: 17,

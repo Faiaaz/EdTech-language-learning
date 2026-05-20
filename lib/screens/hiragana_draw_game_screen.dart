@@ -233,8 +233,21 @@ const List<HiraganaChar> kHiraganaSet = [
 // ── Drawing game screen ─────────────────────────────────────────────────────
 
 class HiraganaDrawGameScreen extends StatefulWidget {
-  const HiraganaDrawGameScreen({super.key, this.initialIndex = 0});
+  const HiraganaDrawGameScreen({
+    super.key,
+    this.initialIndex = 0,
+    this.embedded = false,
+    this.autoAdvance = false,
+  });
   final int initialIndex;
+
+  /// When true, omit the surrounding Scaffold/SafeArea and the back button so
+  /// the widget can be dropped inside another screen (e.g. as a tab body).
+  final bool embedded;
+
+  /// When true, completion automatically advances to the next character
+  /// after a short pause — skips the freehand-from-memory phase.
+  final bool autoAdvance;
 
   @override
   State<HiraganaDrawGameScreen> createState() => _HiraganaDrawGameScreenState();
@@ -456,6 +469,15 @@ class _HiraganaDrawGameScreenState extends State<HiraganaDrawGameScreen>
       });
       if (_mode == _GameMode.completed) {
         Future.delayed(const Duration(milliseconds: 200), _speak);
+        if (widget.autoAdvance &&
+            _charIdx < kHiraganaSet.length - 1) {
+          Future.delayed(const Duration(milliseconds: 1400), () {
+            if (!mounted) return;
+            if (_mode != _GameMode.completed) return;
+            setState(() => _charIdx++);
+            _resetForChar();
+          });
+        }
       }
     } else {
       HapticFeedback.heavyImpact();
@@ -474,84 +496,97 @@ class _HiraganaDrawGameScreenState extends State<HiraganaDrawGameScreen>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xFF0B1220),
-      body: SafeArea(
-        child: Column(
-          children: [
-            _Header(
-              charIdx: _charIdx,
-              total: kHiraganaSet.length,
-              onBack: Get.back,
-              onPrev: _charIdx > 0 ? _prevChar : null,
-              onNext: _charIdx < kHiraganaSet.length - 1 ? _nextChar : null,
-            ),
-            const SizedBox(height: 4),
-            _CharacterLabel(char: _char),
-            const SizedBox(height: 14),
-            Expanded(
-              child: Center(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: LayoutBuilder(
-                    builder: (context, c) {
-                      final size =
-                          math.min(c.maxWidth, c.maxHeight).clamp(220.0, 380.0);
-                      return SizedBox(
-                        width: size,
-                        height: size,
-                        child: GestureDetector(
-                          onPanStart: (d) => _onPanStart(d, size),
-                          onPanUpdate: (d) => _onPanUpdate(d, size),
-                          onPanEnd: (d) => _onPanEnd(d, size),
-                          child: AnimatedBuilder(
-                            animation:
-                                Listenable.merge([_tracerCtrl, _completeCtrl]),
-                            builder: (ctx, _) {
-                              return CustomPaint(
-                                size: Size(size, size),
-                                painter: _CharPainter(
-                                  character: _char,
-                                  strokeIdx: _strokeIdx,
-                                  currentPath: _currentPath,
-                                  completedStrokes: _completedStrokes,
-                                  showShadow: _showShadow &&
-                                      _mode != _GameMode.freehand,
-                                  showStrokeHints:
-                                      _mode == _GameMode.tracing,
-                                  completed: _mode == _GameMode.completed,
-                                  tracerProgress: _tracerCtrl.value,
-                                  completeProgress: _completeCtrl.value,
-                                  showError: _showError,
-                                ),
-                              );
-                            },
-                          ),
-                        ),
-                      );
-                    },
-                  ),
-                ),
+    final isLast = _charIdx >= kHiraganaSet.length - 1;
+    final content = Column(
+      children: [
+        _Header(
+          charIdx: _charIdx,
+          total: kHiraganaSet.length,
+          showBack: !widget.embedded,
+          onBack: Get.back,
+          onPrev: _charIdx > 0 ? _prevChar : null,
+          onNext: _charIdx < kHiraganaSet.length - 1 ? _nextChar : null,
+        ),
+        const SizedBox(height: 4),
+        _CharacterLabel(char: _char),
+        const SizedBox(height: 14),
+        Expanded(
+          child: Center(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: LayoutBuilder(
+                builder: (context, c) {
+                  final size =
+                      math.min(c.maxWidth, c.maxHeight).clamp(220.0, 380.0);
+                  return SizedBox(
+                    width: size,
+                    height: size,
+                    child: GestureDetector(
+                      onPanStart: (d) => _onPanStart(d, size),
+                      onPanUpdate: (d) => _onPanUpdate(d, size),
+                      onPanEnd: (d) => _onPanEnd(d, size),
+                      child: AnimatedBuilder(
+                        animation:
+                            Listenable.merge([_tracerCtrl, _completeCtrl]),
+                        builder: (ctx, _) {
+                          return CustomPaint(
+                            size: Size(size, size),
+                            painter: _CharPainter(
+                              character: _char,
+                              strokeIdx: _strokeIdx,
+                              currentPath: _currentPath,
+                              completedStrokes: _completedStrokes,
+                              showShadow: _showShadow &&
+                                  _mode != _GameMode.freehand,
+                              showStrokeHints:
+                                  _mode == _GameMode.tracing,
+                              completed: _mode == _GameMode.completed,
+                              tracerProgress: _tracerCtrl.value,
+                              completeProgress: _completeCtrl.value,
+                              showError: _showError,
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                  );
+                },
               ),
             ),
-            const SizedBox(height: 16),
-            _ButtonsRow(
-              onClear: _clear,
-              onAudio: _speak,
-              onToggle: _toggleShadow,
-              shadowOn: _showShadow,
-            ),
-            const SizedBox(height: 12),
-            _Footer(
-              mode: _mode,
-              strokeIdx: _strokeIdx,
-              totalStrokes: _char.strokes.length,
-              onAdvance: _mode == _GameMode.completed ? _advance : null,
-            ),
-            const SizedBox(height: 14),
-          ],
+          ),
         ),
-      ),
+        const SizedBox(height: 16),
+        _ButtonsRow(
+          onClear: _clear,
+          onAudio: _speak,
+          onToggle: _toggleShadow,
+          shadowOn: _showShadow,
+        ),
+        const SizedBox(height: 12),
+        _Footer(
+          mode: _mode,
+          strokeIdx: _strokeIdx,
+          totalStrokes: _char.strokes.length,
+          autoAdvance: widget.autoAdvance,
+          isLast: isLast,
+          onAdvance: (widget.autoAdvance || _mode != _GameMode.completed)
+              ? null
+              : _advance,
+        ),
+        const SizedBox(height: 14),
+      ],
+    );
+
+    if (widget.embedded) {
+      return Container(
+        color: const Color(0xFF0B1220),
+        child: content,
+      );
+    }
+
+    return Scaffold(
+      backgroundColor: const Color(0xFF0B1220),
+      body: SafeArea(child: content),
     );
   }
 }
@@ -562,12 +597,14 @@ class _Header extends StatelessWidget {
   const _Header({
     required this.charIdx,
     required this.total,
+    required this.showBack,
     required this.onBack,
     required this.onPrev,
     required this.onNext,
   });
   final int charIdx;
   final int total;
+  final bool showBack;
   final VoidCallback onBack;
   final VoidCallback? onPrev;
   final VoidCallback? onNext;
@@ -578,19 +615,20 @@ class _Header extends StatelessWidget {
       padding: const EdgeInsets.fromLTRB(16, 10, 16, 6),
       child: Row(
         children: [
-          GestureDetector(
-            onTap: onBack,
-            child: Container(
-              width: 40,
-              height: 40,
-              decoration: BoxDecoration(
-                color: Colors.white.withValues(alpha: 0.12),
-                shape: BoxShape.circle,
+          if (showBack)
+            GestureDetector(
+              onTap: onBack,
+              child: Container(
+                width: 40,
+                height: 40,
+                decoration: BoxDecoration(
+                  color: Colors.white.withValues(alpha: 0.12),
+                  shape: BoxShape.circle,
+                ),
+                child: const Icon(Icons.arrow_back_rounded,
+                    color: Colors.white, size: 20),
               ),
-              child: const Icon(Icons.arrow_back_rounded,
-                  color: Colors.white, size: 20),
             ),
-          ),
           const Spacer(),
           _IconBtn(
             icon: Icons.chevron_left_rounded,
@@ -622,7 +660,7 @@ class _Header extends StatelessWidget {
             enabled: onNext != null,
           ),
           const Spacer(),
-          const SizedBox(width: 40),
+          if (showBack) const SizedBox(width: 40),
         ],
       ),
     );
@@ -780,11 +818,15 @@ class _Footer extends StatelessWidget {
     required this.strokeIdx,
     required this.totalStrokes,
     required this.onAdvance,
+    this.autoAdvance = false,
+    this.isLast = false,
   });
   final _GameMode mode;
   final int strokeIdx;
   final int totalStrokes;
   final VoidCallback? onAdvance;
+  final bool autoAdvance;
+  final bool isLast;
 
   @override
   Widget build(BuildContext context) {
@@ -800,8 +842,14 @@ class _Footer extends StatelessWidget {
         color = const Color(0xFFFFE000);
         break;
       case _GameMode.completed:
-        text = 'দারুণ! পরের ধাপে যেতে এখানে ট্যাপ করো';
-        color = const Color(0xFF10B981);
+        if (autoAdvance) {
+          text = isLast
+              ? 'দারুণ! তুমি সব ৪৬টি হিরাগানা শেষ করেছ!'
+              : 'দারুণ! পরের অক্ষর আসছে...';
+        } else {
+          text = 'দারুণ! পরের ধাপে যেতে এখানে ট্যাপ করো';
+        }
+        color = const Color(0xFF3B82F6);
         break;
     }
 
@@ -835,7 +883,7 @@ class _Footer extends StatelessWidget {
           if (mode == _GameMode.completed) ...[
             const SizedBox(width: 8),
             const Icon(Icons.arrow_forward_rounded,
-                color: Color(0xFF10B981), size: 18),
+                color: Color(0xFF3B82F6), size: 18),
           ],
         ],
       ),
@@ -876,6 +924,8 @@ class _CharPainter extends CustomPainter {
   final bool showError;
 
   static const _strokeWidth = 15.0;
+  static const _strokeCorrectColor = Color(0xFF3B82F6);
+  static const _strokeErrorColor = Color(0xFFFFE000);
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -895,7 +945,7 @@ class _CharPainter extends CustomPainter {
     // Completed strokes — rendered with a brush-like variable width.
     for (int i = 0; i < strokeIdx; i++) {
       final color = completed
-          ? Color.lerp(Colors.white, const Color(0xFF10B981),
+          ? Color.lerp(Colors.white, _strokeCorrectColor,
               completeProgress.clamp(0.0, 1.0))!
           : Colors.white;
       _drawCalligraphicStroke(canvas, character.strokes[i], s,
@@ -905,9 +955,7 @@ class _CharPainter extends CustomPainter {
     // User's in-progress path.
     if (currentPath.isNotEmpty) {
       final paint = Paint()
-        ..color = showError
-            ? const Color(0xFFEF4444)
-            : const Color(0xFFFFE000)
+        ..color = showError ? _strokeErrorColor : const Color(0xFFFFE000)
         ..strokeWidth = _strokeWidth
         ..strokeCap = StrokeCap.round
         ..strokeJoin = StrokeJoin.round
@@ -922,7 +970,7 @@ class _CharPainter extends CustomPainter {
     // Error overlay.
     if (showError) {
       final paint = Paint()
-        ..color = const Color(0xFFEF4444).withValues(alpha: 0.08)
+        ..color = _strokeErrorColor.withValues(alpha: 0.12)
         ..style = PaintingStyle.fill;
       canvas.drawRRect(
         RRect.fromRectAndRadius(
@@ -943,7 +991,7 @@ class _CharPainter extends CustomPainter {
     // Completion glow.
     if (completed && completeProgress > 0) {
       final glow = Paint()
-        ..color = const Color(0xFF10B981)
+        ..color = _strokeCorrectColor
             .withValues(alpha: 0.25 * completeProgress)
         ..maskFilter =
             const MaskFilter.blur(BlurStyle.normal, 20);
