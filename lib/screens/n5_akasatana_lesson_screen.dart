@@ -15,10 +15,16 @@ class N5AkasatanaLessonScreen extends StatefulWidget {
   State<N5AkasatanaLessonScreen> createState() => _N5AkasatanaLessonScreenState();
 }
 
-enum _AkaTab { draw, flashcard, quiz, match }
+enum _AkaTab { draw, notepadDraw, flashcard, quiz, match }
 
 class _N5AkasatanaLessonScreenState extends State<N5AkasatanaLessonScreen> {
-  static const _tabs = [_AkaTab.draw, _AkaTab.flashcard, _AkaTab.quiz, _AkaTab.match];
+  static const _tabs = [
+    _AkaTab.draw,
+    _AkaTab.notepadDraw,
+    _AkaTab.flashcard,
+    _AkaTab.quiz,
+    _AkaTab.match,
+  ];
   int _tab = 0;
 
   @override
@@ -73,6 +79,8 @@ class _N5AkasatanaLessonScreenState extends State<N5AkasatanaLessonScreen> {
                 duration: const Duration(milliseconds: 220),
                 child: switch (_tabs[_tab]) {
                   _AkaTab.draw => const _AkaDrawPicker(key: ValueKey('akaDraw')),
+                  _AkaTab.notepadDraw =>
+                    const _AkaNotepadDrawPicker(key: ValueKey('akaNotepadDraw')),
                   _AkaTab.flashcard => const _AkaFlashGame(key: ValueKey('akaFlash')),
                   _AkaTab.quiz => const _AkaQuizGame(key: ValueKey('akaQuiz')),
                   _AkaTab.match => const _AkaMatchGame(key: ValueKey('akaMatch')),
@@ -93,7 +101,7 @@ class _AkaTabPills extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const labels = ['আঁকা', 'ফ্ল্যাশকার্ড', 'কুইজ রান', 'কানা ম্যাচ'];
+    const labels = ['আঁকা', 'নোটবুক', 'ফ্ল্যাশকার্ড', 'কুইজ রান', 'কানা ম্যাচ'];
     return Container(
       padding: const EdgeInsets.all(6),
       decoration: BoxDecoration(
@@ -142,6 +150,21 @@ class _AkaDrawPicker extends StatelessWidget {
       initialIndex: 0,
       embedded: true,
       autoAdvance: true,
+    );
+  }
+}
+
+/// Same stroke-order drawing game on a spiral-bound notepad surface.
+class _AkaNotepadDrawPicker extends StatelessWidget {
+  const _AkaNotepadDrawPicker({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const HiraganaDrawGameScreen(
+      initialIndex: 0,
+      embedded: true,
+      autoAdvance: true,
+      surface: HiraganaDrawSurface.spiralNotepad,
     );
   }
 }

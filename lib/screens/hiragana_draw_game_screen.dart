@@ -8,6 +8,11 @@ import 'package:flutter/services.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:get/get.dart';
 
+import 'package:ez_trainz/widgets/spiral_notepad_frame.dart';
+
+/// Visual shell for the hiragana stroke drawing game.
+enum HiraganaDrawSurface { dark, spiralNotepad }
+
 // ── Data ─────────────────────────────────────────────────────────────────────
 
 class _Stroke {
@@ -238,6 +243,7 @@ class HiraganaDrawGameScreen extends StatefulWidget {
     this.initialIndex = 0,
     this.embedded = false,
     this.autoAdvance = false,
+    this.surface = HiraganaDrawSurface.dark,
   });
   final int initialIndex;
 
@@ -248,6 +254,9 @@ class HiraganaDrawGameScreen extends StatefulWidget {
   /// When true, completion automatically advances to the next character
   /// after a short pause — skips the freehand-from-memory phase.
   final bool autoAdvance;
+
+  /// [HiraganaDrawSurface.spiralNotepad] wraps the canvas in a spiral notebook.
+  final HiraganaDrawSurface surface;
 
   @override
   State<HiraganaDrawGameScreen> createState() => _HiraganaDrawGameScreenState();
@@ -497,6 +506,7 @@ class _HiraganaDrawGameScreenState extends State<HiraganaDrawGameScreen>
   @override
   Widget build(BuildContext context) {
     final isLast = _charIdx >= kHiraganaSet.length - 1;
+    final isNotepad = widget.surface == HiraganaDrawSurface.spiralNotepad;
     final content = Column(
       children: [
         _Header(
@@ -506,19 +516,73 @@ class _HiraganaDrawGameScreenState extends State<HiraganaDrawGameScreen>
           onBack: Get.back,
           onPrev: _charIdx > 0 ? _prevChar : null,
           onNext: _charIdx < kHiraganaSet.length - 1 ? _nextChar : null,
+          lightText: !isNotepad || widget.embedded,
         ),
-        const SizedBox(height: 4),
-        _CharacterLabel(char: _char),
-        const SizedBox(height: 14),
+        SizedBox(height: isNotepad ? 2 : 4),
+        _CharacterLabel(char: _char, lightText: !isNotepad || widget.embedded),
+        SizedBox(height: isNotepad ? 6 : 14),
         Expanded(
-          child: Center(
+          child: Align(
+            alignment: isNotepad ? Alignment.topCenter : Alignment.center,
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
+              padding: EdgeInsets.symmetric(horizontal: isNotepad ? 4 : 20),
               child: LayoutBuilder(
                 builder: (context, c) {
+                  const notepadBindingReserve = 54.0;
+                  if (isNotepad) {
+                    final pageWidth = math
+                        .min(c.maxWidth - notepadBindingReserve, 400.0)
+                        .clamp(260.0, 400.0);
+                    // Portrait pad — use available height for extra ruled length below.
+                    final pageHeight = c.maxHeight.clamp(
+                      pageWidth * 1.32,
+                      680.0,
+                    );
+
+                    final canvas = SizedBox(
+                      width: pageWidth,
+                      height: pageHeight,
+                      child: GestureDetector(
+                        onPanStart: (d) => _onPanStart(d, pageWidth),
+                        onPanUpdate: (d) => _onPanUpdate(d, pageWidth),
+                        onPanEnd: (d) => _onPanEnd(d, pageWidth),
+                        child: AnimatedBuilder(
+                          animation:
+                              Listenable.merge([_tracerCtrl, _completeCtrl]),
+                          builder: (ctx, _) {
+                            return CustomPaint(
+                              size: Size(pageWidth, pageHeight),
+                              painter: _CharPainter(
+                                character: _char,
+                                strokeIdx: _strokeIdx,
+                                currentPath: _currentPath,
+                                completedStrokes: _completedStrokes,
+                                showShadow: _showShadow &&
+                                    _mode != _GameMode.freehand,
+                                showStrokeHints:
+                                    _mode == _GameMode.tracing,
+                                completed: _mode == _GameMode.completed,
+                                tracerProgress: _tracerCtrl.value,
+                                completeProgress: _completeCtrl.value,
+                                showError: _showError,
+                                surface: widget.surface,
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                    );
+
+                    return SpiralNotepadFrame(
+                      pageWidth: pageWidth,
+                      pageHeight: pageHeight,
+                      child: canvas,
+                    );
+                  }
+
                   final size =
                       math.min(c.maxWidth, c.maxHeight).clamp(220.0, 380.0);
-                  return SizedBox(
+                  final canvas = SizedBox(
                     width: size,
                     height: size,
                     child: GestureDetector(
@@ -544,25 +608,28 @@ class _HiraganaDrawGameScreenState extends State<HiraganaDrawGameScreen>
                               tracerProgress: _tracerCtrl.value,
                               completeProgress: _completeCtrl.value,
                               showError: _showError,
+                              surface: widget.surface,
                             ),
                           );
                         },
                       ),
                     ),
                   );
+
+                  return canvas;
                 },
               ),
             ),
           ),
         ),
-        const SizedBox(height: 16),
+        SizedBox(height: isNotepad ? 8 : 16),
         _ButtonsRow(
           onClear: _clear,
           onAudio: _speak,
           onToggle: _toggleShadow,
           shadowOn: _showShadow,
         ),
-        const SizedBox(height: 12),
+        SizedBox(height: isNotepad ? 6 : 12),
         _Footer(
           mode: _mode,
           strokeIdx: _strokeIdx,
@@ -573,19 +640,23 @@ class _HiraganaDrawGameScreenState extends State<HiraganaDrawGameScreen>
               ? null
               : _advance,
         ),
-        const SizedBox(height: 14),
+        SizedBox(height: isNotepad ? 6 : 14),
       ],
     );
 
     if (widget.embedded) {
       return Container(
-        color: const Color(0xFF0B1220),
+        color: isNotepad
+            ? const Color(0xFF0F172A)
+            : const Color(0xFF0B1220),
         child: content,
       );
     }
 
     return Scaffold(
-      backgroundColor: const Color(0xFF0B1220),
+      backgroundColor: isNotepad
+          ? const Color(0xFF5C4A32)
+          : const Color(0xFF0B1220),
       body: SafeArea(child: content),
     );
   }
@@ -601,6 +672,7 @@ class _Header extends StatelessWidget {
     required this.onBack,
     required this.onPrev,
     required this.onNext,
+    this.lightText = true,
   });
   final int charIdx;
   final int total;
@@ -608,9 +680,18 @@ class _Header extends StatelessWidget {
   final VoidCallback onBack;
   final VoidCallback? onPrev;
   final VoidCallback? onNext;
+  final bool lightText;
 
   @override
   Widget build(BuildContext context) {
+    final fg = lightText ? Colors.white : const Color(0xFF334155);
+    final chipBg = lightText
+        ? Colors.white.withValues(alpha: 0.08)
+        : const Color(0xFF334155).withValues(alpha: 0.08);
+    final chipBorder = lightText
+        ? Colors.white.withValues(alpha: 0.12)
+        : const Color(0xFF334155).withValues(alpha: 0.16);
+
     return Padding(
       padding: const EdgeInsets.fromLTRB(16, 10, 16, 6),
       child: Row(
@@ -634,20 +715,20 @@ class _Header extends StatelessWidget {
             icon: Icons.chevron_left_rounded,
             onTap: onPrev,
             enabled: onPrev != null,
+            lightText: lightText,
           ),
           const SizedBox(width: 10),
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 7),
             decoration: BoxDecoration(
-              color: Colors.white.withValues(alpha: 0.08),
+              color: chipBg,
               borderRadius: BorderRadius.circular(999),
-              border:
-                  Border.all(color: Colors.white.withValues(alpha: 0.12)),
+              border: Border.all(color: chipBorder),
             ),
             child: Text(
               '${charIdx + 1} / $total',
-              style: const TextStyle(
-                color: Colors.white,
+              style: TextStyle(
+                color: fg,
                 fontWeight: FontWeight.w900,
                 fontSize: 13,
               ),
@@ -658,6 +739,7 @@ class _Header extends StatelessWidget {
             icon: Icons.chevron_right_rounded,
             onTap: onNext,
             enabled: onNext != null,
+            lightText: lightText,
           ),
           const Spacer(),
           if (showBack) const SizedBox(width: 40),
@@ -668,26 +750,31 @@ class _Header extends StatelessWidget {
 }
 
 class _IconBtn extends StatelessWidget {
-  const _IconBtn(
-      {required this.icon, required this.onTap, required this.enabled});
+  const _IconBtn({
+    required this.icon,
+    required this.onTap,
+    required this.enabled,
+    this.lightText = true,
+  });
   final IconData icon;
   final VoidCallback? onTap;
   final bool enabled;
+  final bool lightText;
 
   @override
   Widget build(BuildContext context) {
+    final fg = lightText ? Colors.white : const Color(0xFF334155);
     return GestureDetector(
       onTap: enabled ? onTap : null,
       child: Container(
         width: 36,
         height: 36,
         decoration: BoxDecoration(
-          color: Colors.white
-              .withValues(alpha: enabled ? 0.12 : 0.04),
+          color: fg.withValues(alpha: enabled ? 0.12 : 0.04),
           shape: BoxShape.circle,
         ),
         child: Icon(icon,
-            color: Colors.white.withValues(alpha: enabled ? 1.0 : 0.3),
+            color: fg.withValues(alpha: enabled ? 1.0 : 0.3),
             size: 22),
       ),
     );
@@ -697,17 +784,26 @@ class _IconBtn extends StatelessWidget {
 // ── Character label ──────────────────────────────────────────────────────────
 
 class _CharacterLabel extends StatelessWidget {
-  const _CharacterLabel({required this.char});
+  const _CharacterLabel({
+    required this.char,
+    this.lightText = true,
+  });
   final HiraganaChar char;
+  final bool lightText;
 
   @override
   Widget build(BuildContext context) {
+    final fg = lightText ? Colors.white : const Color(0xFF334155);
+    final sub = lightText
+        ? Colors.white.withValues(alpha: 0.55)
+        : const Color(0xFF64748B);
+
     return Column(
       children: [
         Text(
-          char.romaji,
-          style: const TextStyle(
-            color: Colors.white,
+          char.bn,
+          style: TextStyle(
+            color: fg,
             fontWeight: FontWeight.w900,
             fontSize: 32,
             letterSpacing: 1.5,
@@ -716,9 +812,9 @@ class _CharacterLabel extends StatelessWidget {
         ),
         const SizedBox(height: 4),
         Text(
-          'হিরাগানা · ${char.bn}',
+          'হিরাগানা · ${char.romaji}',
           style: TextStyle(
-            color: Colors.white.withValues(alpha: 0.55),
+            color: sub,
             fontWeight: FontWeight.w700,
             fontSize: 12,
             letterSpacing: 0.8,
@@ -910,6 +1006,7 @@ class _CharPainter extends CustomPainter {
     required this.tracerProgress,
     required this.completeProgress,
     required this.showError,
+    required this.surface,
   });
 
   final HiraganaChar character;
@@ -922,10 +1019,14 @@ class _CharPainter extends CustomPainter {
   final double tracerProgress;
   final double completeProgress;
   final bool showError;
+  final HiraganaDrawSurface surface;
 
   static const _strokeWidth = 15.0;
   static const _strokeCorrectColor = Color(0xFF3B82F6);
   static const _strokeErrorColor = Color(0xFFFFE000);
+  static const _notepadInk = Color(0xFF1E293B);
+
+  bool get _isNotepad => surface == HiraganaDrawSurface.spiralNotepad;
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -937,25 +1038,29 @@ class _CharPainter extends CustomPainter {
     if (showShadow) {
       for (int i = strokeIdx; i < character.strokes.length; i++) {
         _drawCalligraphicStroke(canvas, character.strokes[i], s,
-            color: Colors.white.withValues(alpha: 0.16),
+            color: _isNotepad
+                ? const Color(0xFF94A3B8).withValues(alpha: 0.35)
+                : Colors.white.withValues(alpha: 0.16),
             baseWidth: _strokeWidth);
       }
     }
 
     // Completed strokes — rendered with a brush-like variable width.
     for (int i = 0; i < strokeIdx; i++) {
+      final baseInk = _isNotepad ? _notepadInk : Colors.white;
       final color = completed
-          ? Color.lerp(Colors.white, _strokeCorrectColor,
+          ? Color.lerp(baseInk, _strokeCorrectColor,
               completeProgress.clamp(0.0, 1.0))!
-          : Colors.white;
+          : baseInk;
       _drawCalligraphicStroke(canvas, character.strokes[i], s,
           color: color, baseWidth: _strokeWidth);
     }
 
     // User's in-progress path.
     if (currentPath.isNotEmpty) {
+      final ink = _isNotepad ? _notepadInk : Colors.white;
       final paint = Paint()
-        ..color = showError ? _strokeErrorColor : const Color(0xFFFFE000)
+        ..color = showError ? _strokeErrorColor : ink
         ..strokeWidth = _strokeWidth
         ..strokeCap = StrokeCap.round
         ..strokeJoin = StrokeJoin.round
@@ -974,7 +1079,8 @@ class _CharPainter extends CustomPainter {
         ..style = PaintingStyle.fill;
       canvas.drawRRect(
         RRect.fromRectAndRadius(
-            Rect.fromLTWH(0, 0, s, s), const Radius.circular(18)),
+            Rect.fromLTWH(0, 0, s, _isNotepad ? size.height : s),
+            Radius.circular(_isNotepad ? 0 : 18)),
         paint,
       );
     }
@@ -1005,6 +1111,12 @@ class _CharPainter extends CustomPainter {
   }
 
   void _drawBackground(Canvas canvas, Size size) {
+    if (_isNotepad) {
+      final paint = Paint()..color = const Color(0xFFFFFBEB);
+      canvas.drawRect(Rect.fromLTWH(0, 0, size.width, size.height), paint);
+      return;
+    }
+
     final paint = Paint()
       ..shader = const LinearGradient(
         begin: Alignment.topLeft,
@@ -1020,6 +1132,37 @@ class _CharPainter extends CustomPainter {
   }
 
   void _drawGrid(Canvas canvas, Size size) {
+    if (_isNotepad) {
+      final linePaint = Paint()
+        ..color = const Color(0xFFBFDBFE).withValues(alpha: 0.55)
+        ..strokeWidth = 1;
+
+      const lineGap = 14.0;
+      for (var y = lineGap; y < size.height; y += lineGap) {
+        canvas.drawLine(Offset(0, y), Offset(size.width, y), linePaint);
+      }
+
+      final marginPaint = Paint()
+        ..color = const Color(0xFFF87171).withValues(alpha: 0.45)
+        ..strokeWidth = 1.2;
+      final marginX = size.width * 0.14;
+      canvas.drawLine(
+        Offset(marginX, 0),
+        Offset(marginX, size.height),
+        marginPaint,
+      );
+
+      final border = Paint()
+        ..color = const Color(0xFFE7DCC8)
+        ..strokeWidth = 1
+        ..style = PaintingStyle.stroke;
+      canvas.drawRect(
+        Rect.fromLTWH(0.5, 0.5, size.width - 1, size.height - 1),
+        border,
+      );
+      return;
+    }
+
     final border = Paint()
       ..color = Colors.white.withValues(alpha: 0.12)
       ..strokeWidth = 1.2
@@ -1144,10 +1287,15 @@ class _CharPainter extends CustomPainter {
     final pos = m.getTangentForOffset(m.length * t)?.position;
     if (pos == null) return;
 
-    final outer = Paint()
+    final halo = Paint()
       ..color = const Color(0xFFFFE000).withValues(alpha: 0.35)
+      ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 14);
+    canvas.drawCircle(pos, 20, halo);
+
+    final outer = Paint()
+      ..color = const Color(0xFFFFE000).withValues(alpha: 0.6)
       ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 6);
-    canvas.drawCircle(pos, 14, outer);
+    canvas.drawCircle(pos, 12, outer);
 
     final core = Paint()..color = const Color(0xFFFFE000);
     canvas.drawCircle(pos, 6, core);
@@ -1160,7 +1308,7 @@ class _CharPainter extends CustomPainter {
     final start = Offset(stroke.points.first.dx * s / 100,
         stroke.points.first.dy * s / 100);
     final ringPaint = Paint()
-      ..color = const Color(0xFFFFE000).withValues(alpha: 0.6)
+      ..color = const Color(0xFF3B82F6).withValues(alpha: 0.6)
       ..style = PaintingStyle.stroke
       ..strokeWidth = 2;
     canvas.drawCircle(start, 14, ringPaint);
@@ -1176,6 +1324,7 @@ class _CharPainter extends CustomPainter {
         old.tracerProgress != tracerProgress ||
         old.completeProgress != completeProgress ||
         old.showError != showError ||
+        old.surface != surface ||
         old.character.kana != character.kana;
   }
 }
