@@ -7,6 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
 import 'package:ez_trainz/screens/hiragana_draw_game_screen.dart';
+import 'package:ez_trainz/widgets/spiral_notepad_frame.dart';
 
 class N5AkasatanaLessonScreen extends StatefulWidget {
   const N5AkasatanaLessonScreen({super.key});
@@ -80,7 +81,7 @@ class _N5AkasatanaLessonScreenState extends State<N5AkasatanaLessonScreen> {
                 child: switch (_tabs[_tab]) {
                   _AkaTab.draw => const _AkaDrawPicker(key: ValueKey('akaDraw')),
                   _AkaTab.notepadDraw =>
-                    const _AkaNotepadDrawPicker(key: ValueKey('akaNotepadDraw')),
+                    const _NotebookRowPicker(key: ValueKey('akaNotepadDraw')),
                   _AkaTab.flashcard => const _AkaFlashGame(key: ValueKey('akaFlash')),
                   _AkaTab.quiz => const _AkaQuizGame(key: ValueKey('akaQuiz')),
                   _AkaTab.match => const _AkaMatchGame(key: ValueKey('akaMatch')),
@@ -154,19 +155,377 @@ class _AkaDrawPicker extends StatelessWidget {
   }
 }
 
-/// Same stroke-order drawing game on a spiral-bound notepad surface.
-class _AkaNotepadDrawPicker extends StatelessWidget {
-  const _AkaNotepadDrawPicker({super.key});
+class _RowInfo {
+  const _RowInfo({
+    required this.leader,
+    required this.members,
+    required this.bn,
+    required this.startIdx,
+    required this.endIdx,
+    required this.accent,
+  });
+  final String leader;
+  final List<String> members;
+  final String bn;
+  final int startIdx;
+  final int endIdx;
+  final Color accent;
+}
+
+class _NotebookRowPicker extends StatefulWidget {
+  const _NotebookRowPicker({super.key});
+  @override
+  State<_NotebookRowPicker> createState() => _NotebookRowPickerState();
+}
+
+class _NotebookRowPickerState extends State<_NotebookRowPicker> {
+  static const _rows = <_RowInfo>[
+    _RowInfo(leader: 'あ', members: ['あ', 'い', 'う', 'え', 'お'], bn: 'আ-সারি', startIdx: 0, endIdx: 5, accent: Color(0xFF10B981)),
+    _RowInfo(leader: 'か', members: ['か', 'き', 'く', 'け', 'こ'], bn: 'কা-সারি', startIdx: 5, endIdx: 10, accent: Color(0xFF3B82F6)),
+    _RowInfo(leader: 'さ', members: ['さ', 'し', 'す', 'せ', 'そ'], bn: 'সা-সারি', startIdx: 10, endIdx: 15, accent: Color(0xFF8B5CF6)),
+    _RowInfo(leader: 'た', members: ['た', 'ち', 'つ', 'て', 'と'], bn: 'তা-সারি', startIdx: 15, endIdx: 20, accent: Color(0xFFF59E0B)),
+    _RowInfo(leader: 'な', members: ['な', 'に', 'ぬ', 'ね', 'の'], bn: 'না-সারি', startIdx: 20, endIdx: 25, accent: Color(0xFFF43F5E)),
+  ];
+
+  int? _activeRow;
+  int _sessionId = 0;
+  final Set<int> _completedRows = {};
+
+  void _selectRow(int index) {
+    setState(() {
+      _activeRow = index;
+      _sessionId++;
+    });
+  }
+
+  void _onRowComplete() {
+    if (_activeRow != null) {
+      HapticFeedback.mediumImpact();
+      setState(() {
+        _completedRows.add(_activeRow!);
+        _activeRow = null;
+      });
+    }
+  }
+
+  void _goBack() {
+    setState(() => _activeRow = null);
+  }
 
   @override
   Widget build(BuildContext context) {
-    return const HiraganaDrawGameScreen(
-      initialIndex: 0,
-      embedded: true,
-      autoAdvance: true,
-      surface: HiraganaDrawSurface.spiralNotepad,
+    return AnimatedSwitcher(
+      duration: const Duration(milliseconds: 300),
+      switchInCurve: Curves.easeOut,
+      switchOutCurve: Curves.easeIn,
+      child: _activeRow != null
+          ? _buildDrawingMode(key: ValueKey('draw_$_sessionId'))
+          : _buildRowSelection(key: const ValueKey('selection')),
     );
   }
+
+  Widget _buildDrawingMode({Key? key}) {
+    final row = _rows[_activeRow!];
+    return Column(
+      key: key,
+      children: [
+        Padding(
+          padding: const EdgeInsets.fromLTRB(16, 6, 16, 2),
+          child: Row(
+            children: [
+              GestureDetector(
+                onTap: _goBack,
+                child: Container(
+                  width: 34,
+                  height: 34,
+                  decoration: BoxDecoration(
+                    color: row.accent.withValues(alpha: 0.18),
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(color: row.accent.withValues(alpha: 0.3)),
+                  ),
+                  child: Icon(Icons.arrow_back_rounded, color: row.accent, size: 17),
+                ),
+              ),
+              const SizedBox(width: 8),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 4),
+                decoration: BoxDecoration(
+                  color: row.accent.withValues(alpha: 0.12),
+                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(color: row.accent.withValues(alpha: 0.2)),
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(row.leader,
+                        style: TextStyle(color: row.accent, fontSize: 16, fontWeight: FontWeight.w900)),
+                    const SizedBox(width: 6),
+                    Text(row.bn,
+                        style: TextStyle(
+                            color: row.accent.withValues(alpha: 0.8),
+                            fontSize: 11,
+                            fontWeight: FontWeight.w800)),
+                  ],
+                ),
+              ),
+              const Spacer(),
+              for (var i = 0; i < _rows.length; i++) ...[
+                GestureDetector(
+                  onTap: () => _selectRow(i),
+                  child: Container(
+                    width: 28,
+                    height: 28,
+                    decoration: BoxDecoration(
+                      color: i == _activeRow
+                          ? _rows[i].accent.withValues(alpha: 0.2)
+                          : _completedRows.contains(i)
+                              ? const Color(0xFF10B981).withValues(alpha: 0.12)
+                              : Colors.white.withValues(alpha: 0.06),
+                      borderRadius: BorderRadius.circular(7),
+                      border: Border.all(
+                        color: i == _activeRow
+                            ? _rows[i].accent.withValues(alpha: 0.5)
+                            : _completedRows.contains(i)
+                                ? const Color(0xFF10B981).withValues(alpha: 0.3)
+                                : Colors.white.withValues(alpha: 0.1),
+                      ),
+                    ),
+                    child: Center(
+                      child: _completedRows.contains(i) && i != _activeRow
+                          ? const Icon(Icons.check_rounded, color: Color(0xFF10B981), size: 14)
+                          : Text(_rows[i].leader,
+                              style: TextStyle(
+                                color: i == _activeRow
+                                    ? _rows[i].accent
+                                    : Colors.white.withValues(alpha: 0.5),
+                                fontSize: 13,
+                                fontWeight: FontWeight.w800,
+                              )),
+                    ),
+                  ),
+                ),
+                if (i < _rows.length - 1) const SizedBox(width: 3),
+              ],
+            ],
+          ),
+        ),
+        Expanded(
+          child: HiraganaDrawGameScreen(
+            key: ValueKey('notepadRow_$_sessionId'),
+            initialIndex: row.startIdx,
+            endIndex: row.endIdx,
+            embedded: true,
+            autoAdvance: true,
+            surface: HiraganaDrawSurface.spiralNotepad,
+            onAllComplete: _onRowComplete,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildRowSelection({Key? key}) {
+    final doneCount = _completedRows.length;
+    return SizedBox.expand(
+      key: key,
+      child: LayoutBuilder(
+        builder: (context, c) {
+          const bindingReserve = 54.0;
+          final pageWidth =
+              math.min(c.maxWidth - bindingReserve, 400.0).clamp(260.0, 400.0);
+          final pageHeight = (c.maxHeight - 8).clamp(400.0, 680.0);
+
+          return SpiralNotepadFrame(
+            pageWidth: pageWidth,
+            pageHeight: pageHeight,
+            child: SizedBox(
+              width: pageWidth,
+              height: pageHeight,
+              child: Stack(
+                children: [
+                  CustomPaint(
+                    size: Size(pageWidth, pageHeight),
+                    painter: const _RuledLinesPainter(),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(18, 14, 14, 8),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            const Text('সারি বেছে নাও',
+                                style: TextStyle(
+                                    color: Color(0xFF334155),
+                                    fontWeight: FontWeight.w900,
+                                    fontSize: 14)),
+                            const Spacer(),
+                            if (doneCount > 0)
+                              Container(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 8, vertical: 3),
+                                decoration: BoxDecoration(
+                                  color: const Color(0xFF10B981)
+                                      .withValues(alpha: 0.12),
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                child: Text(
+                                    '$doneCount / ${_rows.length} সম্পন্ন',
+                                    style: const TextStyle(
+                                        color: Color(0xFF10B981),
+                                        fontWeight: FontWeight.w800,
+                                        fontSize: 11)),
+                              ),
+                          ],
+                        ),
+                        const SizedBox(height: 10),
+                        Expanded(
+                          child: ListView.separated(
+                            padding: const EdgeInsets.only(bottom: 8),
+                            itemCount: _rows.length,
+                            separatorBuilder: (_, __) =>
+                                const SizedBox(height: 8),
+                            itemBuilder: (context, index) {
+                              final row = _rows[index];
+                              final done = _completedRows.contains(index);
+                              return _RowCard(
+                                  row: row,
+                                  done: done,
+                                  onTap: () => _selectRow(index));
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+}
+
+class _RowCard extends StatelessWidget {
+  const _RowCard({required this.row, required this.done, required this.onTap});
+  final _RowInfo row;
+  final bool done;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final accent = row.accent;
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.all(10),
+        decoration: BoxDecoration(
+          color: done ? accent.withValues(alpha: 0.08) : Colors.white.withValues(alpha: 0.8),
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(
+            color: done ? accent.withValues(alpha: 0.45) : accent.withValues(alpha: 0.18),
+            width: done ? 1.5 : 1,
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: done
+                  ? accent.withValues(alpha: 0.08)
+                  : Colors.black.withValues(alpha: 0.05),
+              blurRadius: 6,
+              offset: const Offset(0, 2),
+            ),
+          ],
+        ),
+        child: Row(
+          children: [
+            Container(
+              width: 44,
+              height: 44,
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [accent.withValues(alpha: 0.22), accent.withValues(alpha: 0.10)],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(color: accent.withValues(alpha: 0.3)),
+              ),
+              child: Center(
+                child: Text(row.leader,
+                    style: TextStyle(
+                        color: accent, fontSize: 24, fontWeight: FontWeight.w900, height: 1)),
+              ),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(row.bn,
+                      style: TextStyle(
+                          color: done ? accent : const Color(0xFF1E293B),
+                          fontWeight: FontWeight.w900,
+                          fontSize: 13)),
+                  const SizedBox(height: 3),
+                  Row(
+                    children: [
+                      for (var i = 0; i < row.members.length; i++) ...[
+                        Text(row.members[i],
+                            style: TextStyle(
+                                color: done
+                                    ? accent.withValues(alpha: 0.65)
+                                    : const Color(0xFF64748B),
+                                fontSize: 16,
+                                fontWeight: FontWeight.w700)),
+                        if (i < row.members.length - 1) const SizedBox(width: 6),
+                      ],
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            Container(
+              width: 30,
+              height: 30,
+              decoration: BoxDecoration(
+                color: done ? accent.withValues(alpha: 0.14) : const Color(0xFFF1F5F9),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Icon(
+                done ? Icons.check_rounded : Icons.brush_rounded,
+                color: done ? accent : const Color(0xFF94A3B8),
+                size: 16,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _RuledLinesPainter extends CustomPainter {
+  const _RuledLinesPainter();
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final rulePaint = Paint()
+      ..color = const Color(0xFFD4C9B5).withValues(alpha: 0.4)
+      ..strokeWidth = 0.7;
+    const spacing = 26.0;
+    for (double y = 42; y < size.height - 8; y += spacing) {
+      canvas.drawLine(Offset(12, y), Offset(size.width - 6, y), rulePaint);
+    }
+    final marginPaint = Paint()
+      ..color = const Color(0xFFEF9A9A).withValues(alpha: 0.22)
+      ..strokeWidth = 1.0;
+    canvas.drawLine(const Offset(10, 0), Offset(10, size.height), marginPaint);
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }
 
 // ── Kana data ─────────────────────────────────────────────────────────────────
