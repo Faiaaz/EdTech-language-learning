@@ -241,11 +241,14 @@ class HiraganaDrawGameScreen extends StatefulWidget {
   const HiraganaDrawGameScreen({
     super.key,
     this.initialIndex = 0,
+    this.endIndex,
     this.embedded = false,
     this.autoAdvance = false,
     this.surface = HiraganaDrawSurface.dark,
+    this.onAllComplete,
   });
   final int initialIndex;
+  final int? endIndex;
 
   /// When true, omit the surrounding Scaffold/SafeArea and the back button so
   /// the widget can be dropped inside another screen (e.g. as a tab body).
@@ -257,6 +260,8 @@ class HiraganaDrawGameScreen extends StatefulWidget {
 
   /// [HiraganaDrawSurface.spiralNotepad] wraps the canvas in a spiral notebook.
   final HiraganaDrawSurface surface;
+
+  final VoidCallback? onAllComplete;
 
   @override
   State<HiraganaDrawGameScreen> createState() => _HiraganaDrawGameScreenState();
@@ -282,11 +287,13 @@ class _HiraganaDrawGameScreenState extends State<HiraganaDrawGameScreen>
   final FlutterTts _tts = FlutterTts();
 
   HiraganaChar get _char => kHiraganaSet[_charIdx];
+  int get _endIndex => widget.endIndex ?? kHiraganaSet.length;
+  int get _lastIndex => _endIndex - 1;
 
   @override
   void initState() {
     super.initState();
-    _charIdx = widget.initialIndex.clamp(0, kHiraganaSet.length - 1);
+    _charIdx = widget.initialIndex.clamp(0, _lastIndex);
     _tracerCtrl = AnimationController(
       duration: const Duration(milliseconds: 1800),
       vsync: this,
@@ -360,9 +367,11 @@ class _HiraganaDrawGameScreenState extends State<HiraganaDrawGameScreen>
         _showShadow = false;
       });
     } else if (_mode == _GameMode.freehand) {
-      if (_charIdx < kHiraganaSet.length - 1) {
+      if (_charIdx < _lastIndex) {
         setState(() => _charIdx++);
         _resetForChar();
+      } else if (widget.onAllComplete != null) {
+        widget.onAllComplete!();
       } else {
         Get.back();
       }
@@ -370,14 +379,14 @@ class _HiraganaDrawGameScreenState extends State<HiraganaDrawGameScreen>
   }
 
   void _prevChar() {
-    if (_charIdx > 0) {
+    if (_charIdx > widget.initialIndex) {
       setState(() => _charIdx--);
       _resetForChar();
     }
   }
 
   void _nextChar() {
-    if (_charIdx < kHiraganaSet.length - 1) {
+    if (_charIdx < _lastIndex) {
       setState(() => _charIdx++);
       _resetForChar();
     }
@@ -478,13 +487,17 @@ class _HiraganaDrawGameScreenState extends State<HiraganaDrawGameScreen>
       });
       if (_mode == _GameMode.completed) {
         Future.delayed(const Duration(milliseconds: 200), _speak);
-        if (widget.autoAdvance &&
-            _charIdx < kHiraganaSet.length - 1) {
+        if (widget.autoAdvance && _charIdx < _lastIndex) {
           Future.delayed(const Duration(milliseconds: 1400), () {
             if (!mounted) return;
             if (_mode != _GameMode.completed) return;
             setState(() => _charIdx++);
             _resetForChar();
+          });
+        } else if (widget.autoAdvance && _charIdx >= _lastIndex) {
+          Future.delayed(const Duration(milliseconds: 1400), () {
+            if (!mounted) return;
+            widget.onAllComplete?.call();
           });
         }
       }
@@ -505,17 +518,17 @@ class _HiraganaDrawGameScreenState extends State<HiraganaDrawGameScreen>
 
   @override
   Widget build(BuildContext context) {
-    final isLast = _charIdx >= kHiraganaSet.length - 1;
+    final isLast = _charIdx >= _lastIndex;
     final isNotepad = widget.surface == HiraganaDrawSurface.spiralNotepad;
     final content = Column(
       children: [
         _Header(
-          charIdx: _charIdx,
-          total: kHiraganaSet.length,
+          charIdx: _charIdx - widget.initialIndex,
+          total: _endIndex - widget.initialIndex,
           showBack: !widget.embedded,
           onBack: Get.back,
-          onPrev: _charIdx > 0 ? _prevChar : null,
-          onNext: _charIdx < kHiraganaSet.length - 1 ? _nextChar : null,
+          onPrev: _charIdx > widget.initialIndex ? _prevChar : null,
+          onNext: _charIdx < _lastIndex ? _nextChar : null,
           lightText: !isNotepad || widget.embedded,
         ),
         SizedBox(height: isNotepad ? 2 : 4),
