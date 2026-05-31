@@ -206,7 +206,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                       ],
                     ),
 
-                    const SizedBox(height: 36),
+                    const SizedBox(height: 16),
 
                     // ── GREETING ───────────────────────────────────
                     Text(
@@ -230,7 +230,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                       ),
                     ),
 
-                    const SizedBox(height: 32),
+                    const SizedBox(height: 18),
 
                     // ── TRIAL GAME CARD ─────────────────────────────
                     AnimatedBuilder(
@@ -320,7 +320,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                       },
                     ),
 
-                    const SizedBox(height: 28),
+                    const SizedBox(height: 14),
 
                     // ── WAVING PENGUIN ─────────────────────────────
                     Center(
