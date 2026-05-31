@@ -388,7 +388,9 @@ class _AirplaneTransitionScreenState extends State<_AirplaneTransitionScreen>
       vsync: this,
       duration: const Duration(milliseconds: 700),
     );
-    Future.delayed(const Duration(milliseconds: 3000), _navigateToDashboard);
+    // GIF is a single ~2520ms loop. Begin the fade just before it completes so
+    // the airplane only makes one pass instead of restarting a second time.
+    Future.delayed(const Duration(milliseconds: 2300), _navigateToDashboard);
   }
 
   Future<void> _navigateToDashboard() async {
