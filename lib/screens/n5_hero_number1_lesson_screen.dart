@@ -2532,36 +2532,17 @@ class _HeroTapWhatYouHearGameState extends State<_HeroTapWhatYouHearGame>
                   ),
                   child: Column(
                     children: [
-                      Text(
-                        _target.kanji,
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 76,
-                          fontWeight: FontWeight.w900,
-                          height: 1.0,
-                        ),
-                      ),
-                      const SizedBox(height: 6),
-                      Text(
-                        _target.kana,
-                        style: TextStyle(
-                          color: Colors.white.withValues(alpha: 0.88),
-                          fontSize: 28,
-                          fontWeight: FontWeight.w800,
-                        ),
-                      ),
-                      const SizedBox(height: 8),
                       Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+                        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
                         decoration: BoxDecoration(
                           color: orange.withValues(alpha: 0.15),
-                          borderRadius: BorderRadius.circular(20),
+                          borderRadius: BorderRadius.circular(24),
                         ),
                         child: Text(
                           _target.bnPronunciation,
                           style: const TextStyle(
                             color: Color(0xFFFFE000),
-                            fontSize: 18,
+                            fontSize: 44,
                             fontWeight: FontWeight.w900,
                           ),
                         ),

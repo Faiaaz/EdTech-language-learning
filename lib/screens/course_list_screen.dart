@@ -206,22 +206,28 @@ class _CourseListScreenState extends State<CourseListScreen> {
                     ),
                     const SizedBox(height: 22),
                     if (isJlc) ...[
-                      Text(
-                        'hello'.tr,
-                        style: TextStyle(
-                          color: Colors.white.withValues(alpha: 0.9),
-                          fontSize: 26,
-                          fontWeight: FontWeight.w400,
-                          height: 1.2,
-                        ),
-                      ),
-                      Text(
-                        '${AuthController.to.firstName}!',
-                        style: const TextStyle(
-                          color: Color(0xFFFFE000),
-                          fontSize: 36,
-                          fontWeight: FontWeight.w900,
-                          height: 1.1,
+                      RichText(
+                        text: TextSpan(
+                          children: [
+                            TextSpan(
+                              text: 'হ্যালো, ',
+                              style: TextStyle(
+                                color: Colors.white.withValues(alpha: 0.9),
+                                fontSize: 26,
+                                fontWeight: FontWeight.w400,
+                                height: 1.2,
+                              ),
+                            ),
+                            const TextSpan(
+                              text: 'হিরো !',
+                              style: TextStyle(
+                                color: Color(0xFFFFE000),
+                                fontSize: 26,
+                                fontWeight: FontWeight.w900,
+                                height: 1.2,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     ] else ...[
@@ -994,6 +1000,32 @@ class _AnushilanCardState extends State<_AnushilanCard> {
                           glow: const Color(0xFF10B981),
                           onTap: () => Get.to(
                             () => const N5AkasatanaLessonScreen(),
+                            transition: Transition.rightToLeftWithFade,
+                            duration: const Duration(milliseconds: 300),
+                          ),
+                        ),
+                        const SizedBox(height: 10),
+                        _PracticeLessonCard(
+                          number: '５',
+                          title: 'পাঠ ৫ঃ বর্ণে বর্ণে বর্ণমালা',
+                          subtitle: 'ま-や-ら-わ সারি • নোটবুক আঁকা • ম্যাচ',
+                          gradient: const [Color(0xFF3B82F6), Color(0xFF2563EB)],
+                          glow: const Color(0xFF3B82F6),
+                          onTap: () => Get.to(
+                            () => const N5BorneBorneBornomalaLessonScreen(),
+                            transition: Transition.rightToLeftWithFade,
+                            duration: const Duration(milliseconds: 300),
+                          ),
+                        ),
+                        const SizedBox(height: 10),
+                        _PracticeLessonCard(
+                          number: '６',
+                          title: 'পাঠ ৬ঃ জাপানের চন্দ্রবিন্দু',
+                          subtitle: 'てんてん ゛ ও まる ゜ • がざだばぱ সারি',
+                          gradient: const [Color(0xFFEF4444), Color(0xFFDC2626)],
+                          glow: const Color(0xFFEF4444),
+                          onTap: () => Get.to(
+                            () => const N5DakutenLessonScreen(),
                             transition: Transition.rightToLeftWithFade,
                             duration: const Duration(milliseconds: 300),
                           ),
