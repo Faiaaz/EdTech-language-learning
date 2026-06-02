@@ -6,10 +6,9 @@ import 'dart:math' as math;
 import 'package:confetti/confetti.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_tts/flutter_tts.dart';
+import 'package:ez_trainz/services/jlc_tts.dart';
 import 'package:get/get.dart';
-import 'package:speech_to_text/speech_recognition_result.dart';
-import 'package:speech_to_text/speech_to_text.dart';
+import 'package:ez_trainz/services/jlc_stt.dart';
 
 class N5WeekdaysLessonScreen extends StatefulWidget {
   const N5WeekdaysLessonScreen({super.key});
@@ -249,7 +248,7 @@ class _WeekFlashGame extends StatefulWidget {
 
 class _WeekFlashGameState extends State<_WeekFlashGame>
     with TickerProviderStateMixin {
-  final _tts = FlutterTts();
+  final _tts = JlcTts();
   late ConfettiController _confetti;
   bool _ttsReady = false;
   bool _slowMode = false;
@@ -574,7 +573,7 @@ class _WeekQuizGame extends StatefulWidget {
 class _WeekQuizGameState extends State<_WeekQuizGame>
     with TickerProviderStateMixin {
   final _rng = math.Random();
-  final _tts = FlutterTts();
+  final _tts = JlcTts();
   late ConfettiController _confetti;
   late AnimationController _shakeCtrl;
   bool _ttsReady = false;
@@ -959,7 +958,7 @@ class _WeekMatchGame extends StatefulWidget {
 class _WeekMatchGameState extends State<_WeekMatchGame>
     with TickerProviderStateMixin {
   final _rng = math.Random();
-  final _tts = FlutterTts();
+  final _tts = JlcTts();
   late ConfettiController _confetti;
   late AnimationController _shakeCtrl;
   bool _ttsReady = false;
@@ -1372,7 +1371,7 @@ class _WeekSequenceGame extends StatefulWidget {
 class _WeekSequenceGameState extends State<_WeekSequenceGame>
     with TickerProviderStateMixin {
   final _rng = math.Random();
-  final _tts = FlutterTts();
+  final _tts = JlcTts();
   late ConfettiController _confetti;
   late AnimationController _shakeCtrl;
   Timer? _timer;
@@ -1825,7 +1824,7 @@ class _WeekListenGameState extends State<_WeekListenGame>
   static const _sessionXpBonus = 50;
 
   final _rng = math.Random();
-  final _tts = FlutterTts();
+  final _tts = JlcTts();
   late final Future<void> _ttsReady;
   late ConfettiController _confetti;
   late AnimationController _shakeCtrl;
@@ -2581,8 +2580,8 @@ class _WeekSpeakGameState extends State<_WeekSpeakGame>
   static const _sessionXpBonus = 50;
 
   final _rng = math.Random();
-  final _tts = FlutterTts();
-  final _stt = SpeechToText();
+  final _tts = JlcTts();
+  final _stt = JlcStt();
   bool _sttReady = false;
   bool _ttsReady = false;
   String? _locale;
@@ -2782,7 +2781,7 @@ class _WeekSpeakGameState extends State<_WeekSpeakGame>
         cancelOnError: true,
         listenFor: const Duration(seconds: _maxSeconds),
         pauseFor: const Duration(seconds: 3),
-        onResult: (SpeechRecognitionResult r) {
+        onResult: (JlcSttResult r) {
           if (!mounted) return;
           setState(() => _heard = r.recognizedWords);
         },
@@ -3242,8 +3241,8 @@ class _WeekSeqSpeakGameState extends State<_WeekSeqSpeakGame>
   static const _amber = Color(0xFFF59E0B);
   static const _maxSeconds = 20;
 
-  final _stt = SpeechToText();
-  final _tts = FlutterTts();
+  final _stt = JlcStt();
+  final _tts = JlcTts();
   bool _sttReady = false;
   bool _ttsReady = false;
   String? _locale;
@@ -3478,7 +3477,7 @@ class _WeekSeqSpeakGameState extends State<_WeekSeqSpeakGame>
         cancelOnError: true,
         listenFor: const Duration(seconds: _maxSeconds),
         pauseFor: const Duration(seconds: 4),
-        onResult: (SpeechRecognitionResult r) {
+        onResult: (JlcSttResult r) {
           if (!mounted) return;
           setState(() => _heard = r.recognizedWords);
         },

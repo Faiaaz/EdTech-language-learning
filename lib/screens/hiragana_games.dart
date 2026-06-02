@@ -3,7 +3,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_tts/flutter_tts.dart';
+import 'package:ez_trainz/services/jlc_tts.dart';
 import 'package:get/get.dart';
 
 import 'package:ez_trainz/models/hiragana_lesson_data.dart';
@@ -33,7 +33,7 @@ class _FlashcardDrillState extends State<FlashcardDrillScreen>
     with SingleTickerProviderStateMixin {
   static const _kana = HiraganaLesson1Data.kanaList;
   final _page = PageController(viewportFraction: 0.85);
-  final _tts = FlutterTts();
+  final _tts = JlcTts();
   late final Future<void> _ttsReady;
   int _current = 0;
   final _flipped = <int, bool>{};

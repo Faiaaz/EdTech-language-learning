@@ -1,0 +1,195 @@
+import 'dart:convert';
+import 'dart:io';
+
+import 'package:audioplayers/audioplayers.dart';
+import 'package:flutter/foundation.dart';
+import 'package:http/http.dart' as http;
+import 'package:path_provider/path_provider.dart';
+
+import 'package:ez_trainz/config/elevenlabs_config.dart';
+
+/// Calls [ElevenLabs text-to-speech](https://elevenlabs.io/docs/api-reference/text-to-speech/convert)
+/// for natural Japanese audio in JLC lessons and games.
+class ElevenLabsTtsService {
+  ElevenLabsTtsService._();
+  static final ElevenLabsTtsService instance = ElevenLabsTtsService._();
+
+  final AudioPlayer _player = AudioPlayer();
+  final http.Client _client = http.Client();
+  final Map<String, Uint8List> _webCache = {};
+  final Map<String, Future<Uint8List>> _inFlight = {};
+  final Map<String, Future<String>> _inFlightFiles = {};
+  bool _prewarmed = false;
+
+  VoidCallback? _onStart;
+  VoidCallback? _onComplete;
+
+  bool get isAvailable => ElevenLabsConfig.isConfigured;
+
+  void setStartHandler(VoidCallback? handler) => _onStart = handler;
+  void setCompletionHandler(VoidCallback? handler) => _onComplete = handler;
+
+  Future<void> prefetchTexts(Iterable<String> texts) async {
+    if (!isAvailable) return;
+    for (final raw in texts) {
+      final text = raw.trim();
+      if (text.isEmpty) continue;
+      try {
+        if (kIsWeb) {
+          await _fetchAudio(text);
+        } else {
+          await _ensureLocalFile(text);
+        }
+      } catch (_) {
+        // Ignore per-item failures during background prefetch.
+      }
+    }
+  }
+
+  /// Best-effort warmup to reduce "first tap" latency.
+  Future<void> prewarm() async {
+    if (!isAvailable || _prewarmed) return;
+    _prewarmed = true;
+    try {
+      await getTemporaryDirectory();
+      final uri = Uri.parse(
+        'https://api.elevenlabs.io/v1/voices/${ElevenLabsConfig.voiceId}',
+      );
+      await _client.get(
+        uri,
+        headers: {'xi-api-key': ElevenLabsConfig.apiKey},
+      ).timeout(const Duration(seconds: 4));
+    } catch (_) {
+      // Warmup is optional; failures should never affect gameplay.
+    }
+  }
+
+  Future<void> stop() async {
+    await _player.stop();
+  }
+
+  Future<void> speak(
+    String text, {
+    double playbackRate = 1.0,
+  }) async {
+    final trimmed = text.trim();
+    if (trimmed.isEmpty || !isAvailable) {
+      throw StateError('ElevenLabs TTS unavailable or empty text');
+    }
+
+    await _player.stop();
+    await _player.setPlaybackRate(playbackRate.clamp(0.5, 1.25));
+    _onStart?.call();
+    await _player.play(await _sourceForText(trimmed));
+    await _player.onPlayerComplete.first;
+    _onComplete?.call();
+  }
+
+  /// iOS AVPlayer needs a real `.mp3` file; in-memory bytes fail on device.
+  Future<Source> _sourceForText(String text) async {
+    if (kIsWeb) return BytesSource(await _fetchAudio(text));
+
+    final path = await _ensureLocalFile(text);
+    return DeviceFileSource(path, mimeType: 'audio/mpeg');
+  }
+
+  Future<String> _ensureLocalFile(String text) async {
+    final path = await _cachedPath(text);
+    if (File(path).existsSync()) return path;
+
+    final inFlight = _inFlightFiles[text];
+    if (inFlight != null) return inFlight;
+
+    final future = () async {
+      final bytes = await _fetchAudio(text);
+      await File(path).writeAsBytes(bytes, flush: true);
+      return path;
+    }();
+    _inFlightFiles[text] = future;
+    try {
+      return await future;
+    } finally {
+      _inFlightFiles.remove(text);
+    }
+  }
+
+  Future<String> _cachedPath(String text) async {
+    final dir = await getTemporaryDirectory();
+    final key = _stableHash(
+      '$text|${ElevenLabsConfig.voiceId}|${ElevenLabsConfig.modelId}|${ElevenLabsConfig.outputFormat}',
+    );
+    return '${dir.path}/el_$key.mp3';
+  }
+
+  String _stableHash(String input) {
+    var hash = 0xcbf29ce484222325;
+    for (final b in utf8.encode(input)) {
+      hash ^= b;
+      hash = (hash * 0x100000001b3) & 0x7fffffffffffffff;
+    }
+    return hash.toRadixString(16);
+  }
+
+  Future<Uint8List> _fetchAudio(String text) async {
+    final cached = _webCache[text];
+    if (cached != null) return cached;
+    final inFlight = _inFlight[text];
+    if (inFlight != null) return inFlight;
+
+    final future = _fetchAudioRemote(text);
+    _inFlight[text] = future;
+    try {
+      return await future;
+    } finally {
+      _inFlight.remove(text);
+    }
+  }
+
+  Future<Uint8List> _fetchAudioRemote(String text) async {
+    final uri = Uri.parse(
+      'https://api.elevenlabs.io/v1/text-to-speech/${ElevenLabsConfig.voiceId}',
+    ).replace(queryParameters: {
+      'output_format': ElevenLabsConfig.outputFormat,
+      // Higher values optimize for lower latency.
+      'optimize_streaming_latency': '4',
+    });
+
+    final response = await _client
+        .post(
+      uri,
+      headers: {
+        'xi-api-key': ElevenLabsConfig.apiKey,
+        'Content-Type': 'application/json',
+        'Accept': 'audio/mpeg',
+      },
+      body: jsonEncode({
+        'text': text,
+        'model_id': ElevenLabsConfig.modelId,
+        'language_code': 'ja',
+        'apply_language_text_normalization': true,
+        'voice_settings': {
+          'stability': 0.42,
+          'similarity_boost': 0.78,
+          'style': 0.15,
+          'use_speaker_boost': true,
+        },
+      }),
+    )
+        .timeout(const Duration(seconds: 20));
+
+    if (response.statusCode != 200) {
+      throw Exception(
+        'ElevenLabs TTS failed (${response.statusCode}): ${response.body}',
+      );
+    }
+
+    final bytes = response.bodyBytes;
+    _webCache[text] = bytes;
+    return bytes;
+  }
+
+  void dispose() {
+    _player.dispose();
+    _client.close();
+  }
+}

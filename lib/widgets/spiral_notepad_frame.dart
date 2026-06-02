@@ -3,7 +3,11 @@ import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
 
-/// Decorative spiral-bound notepad shell for drawing surfaces.
+/// Spiral-bound notepad shell for drawing surfaces.
+///
+/// The binding coils run down the page's left edge and are distributed so the
+/// first and last coils sit a margin inside the page — they never overflow the
+/// top or bottom. There is no stacked "extra page" strip.
 class SpiralNotepadFrame extends StatelessWidget {
   const SpiralNotepadFrame({
     super.key,
@@ -19,17 +23,19 @@ class SpiralNotepadFrame extends StatelessWidget {
   static const _paper = Color(0xFFFFFBEB);
   static const _paperEdge = Color(0xFFE7DCC8);
 
-  static const _bindingWidth = 46.0;
-  static const _pageInsetLeft = 24.0;
-  static const _pageTopInset = 8.0;
+  /// Left edge x of the paper page; coils wrap over this line.
+  static const _pageLeft = 28.0;
+
+  /// Vertical inset for the first/last coil so they stay inside the page.
+  static const _coilMargin = 24.0;
 
   int get _ringCount =>
-      ((pageHeight - _pageTopInset - 24) / 34).round().clamp(12, 18);
+      ((pageHeight - 2 * _coilMargin) / 34).round().clamp(12, 18);
 
   @override
   Widget build(BuildContext context) {
-    final totalW = pageWidth + _pageInsetLeft + 12;
-    final totalH = pageHeight + _pageTopInset + 6;
+    final totalW = _pageLeft + pageWidth + 4;
+    final totalH = pageHeight;
     final rings = _ringCount;
 
     return Center(
@@ -39,18 +45,20 @@ class SpiralNotepadFrame extends StatelessWidget {
         child: Stack(
           clipBehavior: Clip.none,
           children: [
+            // ── Paper page ───────────────────────────────────────────
             Positioned(
-              left: _pageInsetLeft,
-              top: _pageTopInset,
-              right: 0,
-              bottom: 0,
+              left: _pageLeft,
+              top: 0,
+              width: pageWidth,
+              height: pageHeight,
               child: DecoratedBox(
                 decoration: BoxDecoration(
                   color: _paper,
                   borderRadius: const BorderRadius.only(
-                    topRight: Radius.circular(8),
-                    bottomRight: Radius.circular(8),
-                    bottomLeft: Radius.circular(3),
+                    topRight: Radius.circular(10),
+                    bottomRight: Radius.circular(10),
+                    topLeft: Radius.circular(2),
+                    bottomLeft: Radius.circular(2),
                   ),
                   border: Border.all(color: _paperEdge, width: 1.4),
                   boxShadow: [
@@ -60,63 +68,36 @@ class SpiralNotepadFrame extends StatelessWidget {
                       offset: const Offset(0, 12),
                     ),
                     BoxShadow(
-                      color: Colors.black.withValues(alpha: 0.12),
+                      color: Colors.black.withValues(alpha: 0.10),
                       blurRadius: 6,
-                      offset: const Offset(3, 3),
+                      offset: const Offset(2, 3),
                     ),
                   ],
                 ),
                 child: ClipRRect(
                   borderRadius: const BorderRadius.only(
-                    topRight: Radius.circular(7),
-                    bottomRight: Radius.circular(7),
-                    bottomLeft: Radius.circular(2),
+                    topRight: Radius.circular(9),
+                    bottomRight: Radius.circular(9),
+                    topLeft: Radius.circular(1),
+                    bottomLeft: Radius.circular(1),
                   ),
                   child: child,
                 ),
               ),
             ),
+
+            // ── Spiral binding (coils over the left edge) ────────────
             Positioned(
               left: 0,
               top: 0,
-              bottom: 0,
-              width: _bindingWidth,
+              width: _pageLeft + 18,
+              height: pageHeight,
               child: CustomPaint(
                 painter: _SpiralBindingPainter(
-                  pageHeight: totalH,
-                  pageTop: _pageTopInset,
+                  pageHeight: pageHeight,
+                  edgeX: _pageLeft,
+                  coilMargin: _coilMargin,
                   ringCount: rings,
-                ),
-              ),
-            ),
-            Positioned(
-              left: _pageInsetLeft - 2,
-              top: _pageTopInset - 2,
-              child: CustomPaint(
-                size: Size(14, totalH - _pageTopInset + 2),
-                painter: _PunchHolesPainter(
-                  ringCount: rings,
-                  pageTop: _pageTopInset,
-                  pageHeight: totalH,
-                ),
-              ),
-            ),
-            Positioned(
-              left: _pageInsetLeft + 4,
-              top: 2,
-              child: Container(
-                width: pageWidth - 4,
-                height: 10,
-                decoration: BoxDecoration(
-                  color: _paper.withValues(alpha: 0.94),
-                  borderRadius: BorderRadius.circular(2),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withValues(alpha: 0.10),
-                      blurRadius: 4,
-                      offset: const Offset(0, 1),
-                    ),
-                  ],
                 ),
               ),
             ),
@@ -127,73 +108,41 @@ class SpiralNotepadFrame extends StatelessWidget {
   }
 }
 
-/// Perforation holes where coils pass through the paper edge.
-class _PunchHolesPainter extends CustomPainter {
-  const _PunchHolesPainter({
-    required this.ringCount,
-    required this.pageTop,
-    required this.pageHeight,
-  });
-
-  final int ringCount;
-  final double pageTop;
-  final double pageHeight;
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final spacing = (pageHeight - pageTop - 36) / (ringCount - 1);
-    final holePaint = Paint()..color = const Color(0xFFCBD5E1).withValues(alpha: 0.55);
-    final innerPaint = Paint()..color = const Color(0xFF94A3B8).withValues(alpha: 0.35);
-
-    for (var i = 0; i < ringCount; i++) {
-      final cy = pageTop + 18 + spacing * i;
-      canvas.drawArc(
-        Rect.fromCenter(center: Offset(10, cy), width: 10, height: 10),
-        -math.pi / 2,
-        math.pi,
-        false,
-        holePaint..strokeWidth = 2.2..style = PaintingStyle.stroke,
-      );
-      canvas.drawCircle(Offset(10, cy), 2.2, innerPaint);
-    }
-  }
-
-  @override
-  bool shouldRepaint(covariant _PunchHolesPainter oldDelegate) => false;
-}
-
 class _SpiralBindingPainter extends CustomPainter {
   const _SpiralBindingPainter({
     required this.pageHeight,
-    required this.pageTop,
+    required this.edgeX,
+    required this.coilMargin,
     required this.ringCount,
   });
 
   final double pageHeight;
-  final double pageTop;
+  final double edgeX;
+  final double coilMargin;
   final int ringCount;
+
+  double get _spacing =>
+      (pageHeight - 2 * coilMargin) / (ringCount - 1);
 
   @override
   void paint(Canvas canvas, Size size) {
-    _drawBindingStrip(canvas, size);
-
-    final spacing = (pageHeight - pageTop - 36) / (ringCount - 1);
+    _drawSpine(canvas);
     for (var i = 0; i < ringCount; i++) {
-      final cy = pageTop + 18 + spacing * i;
-      _drawCoil(canvas, Offset(22, cy), i);
+      final cy = coilMargin + _spacing * i;
+      _drawCoil(canvas, Offset(edgeX - 4, cy), i);
     }
   }
 
-  void _drawBindingStrip(Canvas canvas, Size size) {
+  /// Subtle dark spine strip running just left of the page edge.
+  void _drawSpine(Canvas canvas) {
     final rect = RRect.fromRectAndRadius(
-      Rect.fromLTWH(6, pageTop - 2, 28, pageHeight - pageTop + 4),
+      Rect.fromLTWH(4, 2, edgeX - 6, pageHeight - 4),
       const Radius.circular(5),
     );
-
     final stripPaint = Paint()
       ..shader = ui.Gradient.linear(
-        const Offset(6, 0),
-        Offset(34, 0),
+        const Offset(4, 0),
+        Offset(edgeX - 2, 0),
         [
           const Color(0xFF1E293B),
           const Color(0xFF334155),
@@ -278,36 +227,37 @@ class _SpiralBindingPainter extends CustomPainter {
       ..strokeWidth = 1.4
       ..strokeCap = StrokeCap.round;
     canvas.drawArc(
-      Rect.fromCenter(center: center + const Offset(4, -1.2), width: coilW, height: coilH * 0.7),
+      Rect.fromCenter(
+          center: center + const Offset(4, -1.2), width: coilW, height: coilH * 0.7),
       math.pi * 0.25,
       math.pi * 0.85,
       false,
       highlight,
     );
 
-    // Inner hole ring.
+    // Inner hole ring where the coil threads through the paper.
     final hole = Paint()
       ..color = const Color(0xFF64748B).withValues(alpha: 0.5)
       ..style = PaintingStyle.stroke
       ..strokeWidth = 1.2;
     canvas.drawCircle(center + const Offset(6, 0), 2.6, hole);
 
-    // Subtle wire connector to next coil (every other for visual rhythm).
+    // Wire connector down to the next coil.
     if (index < ringCount - 1) {
-      final nextY = center.dy +
-          (pageHeight - pageTop - 36) / (ringCount - 1);
       final wire = Paint()
         ..color = const Color(0xFF94A3B8).withValues(alpha: 0.45)
         ..strokeWidth = 2.2
         ..strokeCap = StrokeCap.round;
       canvas.drawLine(
         center + const Offset(-4, coilH * 0.35),
-        Offset(center.dx - 4, nextY - coilH * 0.35),
+        Offset(center.dx - 4, center.dy + _spacing - coilH * 0.35),
         wire,
       );
     }
   }
 
   @override
-  bool shouldRepaint(covariant _SpiralBindingPainter oldDelegate) => false;
+  bool shouldRepaint(covariant _SpiralBindingPainter oldDelegate) =>
+      oldDelegate.pageHeight != pageHeight ||
+      oldDelegate.ringCount != ringCount;
 }

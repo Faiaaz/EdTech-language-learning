@@ -1,7 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_tts/flutter_tts.dart';
+import 'package:ez_trainz/services/jlc_tts.dart';
 import 'package:get/get.dart';
 
 import 'package:ez_trainz/models/kana.dart';
@@ -52,7 +52,7 @@ class _KanaReviewScreenState extends State<KanaReviewScreen>
   late Animation<Offset> _slideAnim;
 
   // ── TTS ───────────────────────────────────────────────────────
-  final FlutterTts _tts = FlutterTts();
+  final JlcTts _tts = JlcTts();
 
   @override
   void initState() {

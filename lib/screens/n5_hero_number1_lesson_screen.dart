@@ -6,10 +6,9 @@ import 'dart:math' as math;
 import 'package:confetti/confetti.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_tts/flutter_tts.dart';
+import 'package:ez_trainz/services/jlc_tts.dart';
 import 'package:get/get.dart';
-import 'package:speech_to_text/speech_recognition_result.dart';
-import 'package:speech_to_text/speech_to_text.dart';
+import 'package:ez_trainz/services/jlc_stt.dart';
 
 class N5HeroNumber1LessonScreen extends StatefulWidget {
   const N5HeroNumber1LessonScreen({super.key});
@@ -258,8 +257,8 @@ class _HeroSpeakGame extends StatefulWidget {
 class _HeroSpeakGameState extends State<_HeroSpeakGame>
     with TickerProviderStateMixin {
   final _rng = math.Random();
-  final _tts = FlutterTts();
-  final _stt = SpeechToText();
+  final _tts = JlcTts();
+  final _stt = JlcStt();
   bool _ttsReady = false;
   bool _sttReady = false;
   String? _locale;
@@ -310,6 +309,9 @@ class _HeroSpeakGameState extends State<_HeroSpeakGame>
     try {
       await _tts.setLanguage('ja-JP');
       await _tts.setSpeechRate(_slowMode ? 0.30 : 0.50);
+      await _tts.prefetchTexts(
+        _heroNumbers.expand((h) => <String>[h.kana, '${h.kana}。']),
+      );
       if (!mounted) return;
       setState(() => _ttsReady = true);
     } catch (_) {}
@@ -460,7 +462,7 @@ class _HeroSpeakGameState extends State<_HeroSpeakGame>
         listenMode: ListenMode.confirmation,
         partialResults: true,
         cancelOnError: true,
-        onResult: (SpeechRecognitionResult r) {
+        onResult: (JlcSttResult r) {
           if (!mounted) return;
           setState(() => _heard = r.recognizedWords);
         },
@@ -502,6 +504,10 @@ class _HeroSpeakGameState extends State<_HeroSpeakGame>
     if (!_listening) return;
     _recordTimer?.cancel();
     HapticFeedback.selectionClick();
+    setState(() {
+      _soundLevel = 0;
+      _status = 'যাচাই হচ্ছে...';
+    });
     await _stt.stop();
     final heardNorm = _norm(_heard);
     if (!mounted) return;
@@ -1200,7 +1206,7 @@ class _HeroMatchGame extends StatefulWidget {
 class _HeroMatchGameState extends State<_HeroMatchGame>
     with TickerProviderStateMixin {
   final _rng = math.Random();
-  final _tts = FlutterTts();
+  final _tts = JlcTts();
   late ConfettiController _confetti;
   late AnimationController _shakeCtrl;
   bool _ttsReady = false;
@@ -1234,6 +1240,9 @@ class _HeroMatchGameState extends State<_HeroMatchGame>
       await _tts.setLanguage('ja-JP');
       await _tts.setSpeechRate(0.50);
       await _tts.setPitch(1.05);
+      await _tts.prefetchTexts(
+        _heroNumbers.expand((h) => <String>[h.kana, '${h.kana}。']),
+      );
       if (!mounted) return;
       setState(() => _ttsReady = true);
     } catch (_) {}
@@ -1628,7 +1637,7 @@ class _HeroBlitzGame extends StatefulWidget {
 class _HeroBlitzGameState extends State<_HeroBlitzGame>
     with TickerProviderStateMixin {
   final _rng = math.Random();
-  final _tts = FlutterTts();
+  final _tts = JlcTts();
   late ConfettiController _confetti;
   late AnimationController _shakeCtrl;
   static const _totalSeconds = 25;
@@ -1667,6 +1676,9 @@ class _HeroBlitzGameState extends State<_HeroBlitzGame>
       await _tts.setLanguage('ja-JP');
       await _tts.setSpeechRate(_slowMode ? 0.32 : 0.50);
       await _tts.setPitch(1.05);
+      await _tts.prefetchTexts(
+        _heroNumbers.expand((h) => <String>[h.kana, '${h.kana}。']),
+      );
       if (!mounted) return;
       setState(() => _ttsReady = true);
       WidgetsBinding.instance.addPostFrameCallback((_) => _speak());
@@ -2150,7 +2162,7 @@ class _HeroTapWhatYouHearGameState extends State<_HeroTapWhatYouHearGame>
   static const _sessionXpBonus = 50;
 
   final _rng = math.Random();
-  final _tts = FlutterTts();
+  final _tts = JlcTts();
   late final Future<void> _ttsReady;
   late ConfettiController _confetti;
   late AnimationController _shakeCtrl;
@@ -2189,6 +2201,9 @@ class _HeroTapWhatYouHearGameState extends State<_HeroTapWhatYouHearGame>
     await _tts.setSpeechRate(0.52);
     await _tts.setPitch(1.05);
     await _tts.setVolume(1.0);
+    await _tts.prefetchTexts(
+      _heroNumbers.expand((h) => <String>[h.kana, '${h.kana}。']),
+    );
   }
 
   Future<void> _applySpeechRate() async {
@@ -2727,7 +2742,7 @@ class _HeroReadGameState extends State<_HeroReadGame>
   static const _violetDark = Color(0xFF6D28D9);
 
   final _rng = math.Random();
-  final _tts = FlutterTts();
+  final _tts = JlcTts();
   late final Future<void> _ttsReady;
   late ConfettiController _confetti;
   late AnimationController _shakeCtrl;
@@ -2771,6 +2786,9 @@ class _HeroReadGameState extends State<_HeroReadGame>
     await _tts.setSpeechRate(0.48);
     await _tts.setPitch(1.05);
     await _tts.setVolume(1.0);
+    await _tts.prefetchTexts(
+      _heroNumbers.expand((h) => <String>[h.kana, '${h.kana}。']),
+    );
   }
 
   Future<void> _speakTarget() async {
@@ -3885,8 +3903,8 @@ class _HeroSpeakSequenceGameState extends State<_HeroSpeakSequenceGame>
   static const _rose = Color(0xFFE11D48);
   static const _roseDark = Color(0xFFBE123C);
 
-  final _stt = SpeechToText();
-  final _tts = FlutterTts();
+  final _stt = JlcStt();
+  final _tts = JlcTts();
   bool _sttReady = false;
   bool _ttsReady = false;
   String? _locale;
@@ -3947,6 +3965,9 @@ class _HeroSpeakSequenceGameState extends State<_HeroSpeakSequenceGame>
       await _tts.setLanguage('ja-JP');
       await _tts.setSpeechRate(0.45);
       await _tts.setPitch(1.05);
+      await _tts.prefetchTexts(
+        _heroNumbers.expand((h) => <String>[h.kana, '${h.kana}。']),
+      );
       if (mounted) setState(() => _ttsReady = true);
     } catch (_) {}
   }
@@ -4229,7 +4250,7 @@ class _HeroSpeakSequenceGameState extends State<_HeroSpeakSequenceGame>
         cancelOnError: true,
         listenFor: const Duration(seconds: _maxSeconds),
         pauseFor: const Duration(seconds: 4),
-        onResult: (SpeechRecognitionResult r) {
+        onResult: (JlcSttResult r) {
           if (!mounted) return;
           setState(() => _heard = r.recognizedWords);
         },

@@ -5,7 +5,7 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_tts/flutter_tts.dart';
+import 'package:ez_trainz/services/jlc_tts.dart';
 import 'package:get/get.dart';
 
 import 'package:ez_trainz/widgets/spiral_notepad_frame.dart';
@@ -235,6 +235,73 @@ const List<HiraganaChar> kHiraganaSet = [
 ];
 
 
+// ── Dakuten / Handakuten generated set ──────────────────────────────────────
+
+const _dakutenMark1 = _Stroke([
+  Offset(78, 5), Offset(78.5, 7.5), Offset(79, 10), Offset(79.5, 12.5), Offset(80, 15),
+]);
+const _dakutenMark2 = _Stroke([
+  Offset(85, 5), Offset(85.5, 7.5), Offset(86, 10), Offset(86.5, 12.5), Offset(87, 15),
+]);
+const _handakutenMark = _Stroke([
+  Offset(86, 10), Offset(85, 6.5), Offset(82, 5), Offset(79, 6), Offset(77, 9),
+  Offset(77.5, 13), Offset(81, 15), Offset(85, 14), Offset(86, 10),
+]);
+
+HiraganaChar _dk(int baseIdx, String kana, String romaji, String bn) {
+  final base = kHiraganaSet[baseIdx];
+  return HiraganaChar(
+    kana: kana,
+    romaji: romaji,
+    bn: bn,
+    strokes: [...base.strokes, _dakutenMark1, _dakutenMark2],
+  );
+}
+
+HiraganaChar _hdk(int baseIdx, String kana, String romaji, String bn) {
+  final base = kHiraganaSet[baseIdx];
+  return HiraganaChar(
+    kana: kana,
+    romaji: romaji,
+    bn: bn,
+    strokes: [...base.strokes, _handakutenMark],
+  );
+}
+
+/// 25 dakuten + handakuten hiragana, built from base stroke data at runtime.
+final List<HiraganaChar> kDakutenHiraganaSet = [
+  // が行
+  _dk(5, 'が', 'ga', 'গা'),
+  _dk(6, 'ぎ', 'gi', 'গি'),
+  _dk(7, 'ぐ', 'gu', 'গু'),
+  _dk(8, 'げ', 'ge', 'গে'),
+  _dk(9, 'ご', 'go', 'গো'),
+  // ざ行
+  _dk(10, 'ざ', 'za', 'জা'),
+  _dk(11, 'じ', 'ji', 'জি'),
+  _dk(12, 'ず', 'zu', 'জু'),
+  _dk(13, 'ぜ', 'ze', 'জে'),
+  _dk(14, 'ぞ', 'zo', 'জো'),
+  // だ行
+  _dk(15, 'だ', 'da', 'দা'),
+  _dk(16, 'ぢ', 'di', 'দি'),
+  _dk(17, 'づ', 'dzu', 'দ্জু'),
+  _dk(18, 'で', 'de', 'দে'),
+  _dk(19, 'ど', 'do', 'দো'),
+  // ば行
+  _dk(25, 'ば', 'ba', 'বা'),
+  _dk(26, 'び', 'bi', 'বি'),
+  _dk(27, 'ぶ', 'bu', 'বু'),
+  _dk(28, 'べ', 'be', 'বে'),
+  _dk(29, 'ぼ', 'bo', 'বো'),
+  // ぱ行
+  _hdk(25, 'ぱ', 'pa', 'পা'),
+  _hdk(26, 'ぴ', 'pi', 'পি'),
+  _hdk(27, 'ぷ', 'pu', 'পু'),
+  _hdk(28, 'ぺ', 'pe', 'পে'),
+  _hdk(29, 'ぽ', 'po', 'পো'),
+];
+
 // ── Drawing game screen ─────────────────────────────────────────────────────
 
 class HiraganaDrawGameScreen extends StatefulWidget {
@@ -246,6 +313,7 @@ class HiraganaDrawGameScreen extends StatefulWidget {
     this.autoAdvance = false,
     this.surface = HiraganaDrawSurface.dark,
     this.onAllComplete,
+    this.charSet,
   });
   final int initialIndex;
   final int? endIndex;
@@ -262,6 +330,9 @@ class HiraganaDrawGameScreen extends StatefulWidget {
   final HiraganaDrawSurface surface;
 
   final VoidCallback? onAllComplete;
+
+  /// Optional custom character set. Defaults to [kHiraganaSet].
+  final List<HiraganaChar>? charSet;
 
   @override
   State<HiraganaDrawGameScreen> createState() => _HiraganaDrawGameScreenState();
@@ -284,10 +355,11 @@ class _HiraganaDrawGameScreenState extends State<HiraganaDrawGameScreen>
   late AnimationController _tracerCtrl;
   late AnimationController _completeCtrl;
 
-  final FlutterTts _tts = FlutterTts();
+  final JlcTts _tts = JlcTts();
 
-  HiraganaChar get _char => kHiraganaSet[_charIdx];
-  int get _endIndex => widget.endIndex ?? kHiraganaSet.length;
+  List<HiraganaChar> get _charSet => widget.charSet ?? kHiraganaSet;
+  HiraganaChar get _char => _charSet[_charIdx];
+  int get _endIndex => widget.endIndex ?? _charSet.length;
   int get _lastIndex => _endIndex - 1;
 
   @override
@@ -546,11 +618,10 @@ class _HiraganaDrawGameScreenState extends State<HiraganaDrawGameScreen>
                     final pageWidth = math
                         .min(c.maxWidth - notepadBindingReserve, 400.0)
                         .clamp(260.0, 400.0);
-                    // Portrait pad — use available height for extra ruled length below.
-                    final pageHeight = c.maxHeight.clamp(
-                      pageWidth * 1.32,
-                      680.0,
-                    );
+                    // Portrait pad — fill available height (never exceed it,
+                    // so the page can't overflow onto the buttons below).
+                    final pageHeight =
+                        math.min(c.maxHeight - 8, 680.0).clamp(240.0, 680.0);
 
                     final canvas = SizedBox(
                       width: pageWidth,

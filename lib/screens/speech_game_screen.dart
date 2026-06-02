@@ -3,10 +3,9 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_tts/flutter_tts.dart';
+import 'package:ez_trainz/services/jlc_tts.dart';
 import 'package:get/get.dart';
-import 'package:speech_to_text/speech_to_text.dart';
-import 'package:speech_to_text/speech_recognition_result.dart';
+import 'package:ez_trainz/services/jlc_stt.dart';
 
 class SpeechGameScreen extends StatefulWidget {
   const SpeechGameScreen({super.key});
@@ -57,10 +56,11 @@ class _SpeechGameScreenState extends State<SpeechGameScreen> {
   late List<_SpeechPrompt> _deck;
   int _i = 0;
 
-  final _stt = SpeechToText();
+  final _stt = JlcStt();
   bool _sttReady = false;
   String? _sttLocaleId;
   bool _listening = false;
+  bool _checking = false;
   Duration _recorded = Duration.zero;
   Timer? _recTimer;
   static const _maxLen = Duration(seconds: 10);
@@ -68,7 +68,7 @@ class _SpeechGameScreenState extends State<SpeechGameScreen> {
   double _confidence = 0.0;
   _Judge? _judge;
 
-  final _tts = FlutterTts();
+  final _tts = JlcTts();
   bool _ttsReady = false;
   String? _error;
 
@@ -186,7 +186,7 @@ class _SpeechGameScreenState extends State<SpeechGameScreen> {
     }
   }
 
-  void _onSttResult(SpeechRecognitionResult r) {
+  void _onSttResult(JlcSttResult r) {
     if (!mounted) return;
     setState(() {
       _recognized = r.recognizedWords;
@@ -200,17 +200,22 @@ class _SpeechGameScreenState extends State<SpeechGameScreen> {
     _recTimer?.cancel();
     setState(() {
       _listening = false;
+      _checking = true;
       _error = null;
     });
     try {
       await _stt.stop();
       HapticFeedback.mediumImpact();
       if (!mounted) return;
-      setState(() => _judge = _evaluate(_recognized));
+      setState(() {
+        _checking = false;
+        _judge = _evaluate(_recognized);
+      });
     } catch (e) {
       if (!mounted) return;
       HapticFeedback.lightImpact();
       setState(() {
+        _checking = false;
         _error = e.toString();
       });
     }
@@ -372,13 +377,15 @@ class _SpeechGameScreenState extends State<SpeechGameScreen> {
                         const SizedBox(width: 10),
                         Expanded(
                           child: ElevatedButton.icon(
-                            onPressed: () async {
-                              if (_listening) {
-                                await _stopListening();
-                              } else {
-                                await _startListening();
-                              }
-                            },
+                            onPressed: _checking
+                                ? null
+                                : () async {
+                                    if (_listening) {
+                                      await _stopListening();
+                                    } else {
+                                      await _startListening();
+                                    }
+                                  },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: _listening
                                   ? const Color(0xFFEF4444)
@@ -423,7 +430,9 @@ class _SpeechGameScreenState extends State<SpeechGameScreen> {
                 Text(
                   _listening
                       ? 'Recording… (${_fmt(_recorded)}/${_fmt(_maxLen)})'
-                      : 'Hear → Record → Next',
+                      : _checking
+                          ? 'Checking…'
+                          : 'Hear → Record → Next',
                   style: TextStyle(
                     color: Colors.white.withValues(alpha: 0.75),
                     fontWeight: FontWeight.w700,

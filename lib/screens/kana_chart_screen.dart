@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_tts/flutter_tts.dart';
+import 'package:ez_trainz/services/jlc_tts.dart';
 import 'package:get/get.dart';
 
 import 'package:ez_trainz/models/kana.dart';
@@ -245,7 +245,7 @@ class _KanaDetailSheetState extends State<_KanaDetailSheet>
     with SingleTickerProviderStateMixin {
   late AnimationController _strokeCtrl;
   late Animation<double> _strokeProgress;
-  final FlutterTts _tts = FlutterTts();
+  final JlcTts _tts = JlcTts();
 
   static const _sakura = Color(KanaData.sakuraPink);
   static const _sakuraDark = Color(KanaData.sakuraPinkDark);
