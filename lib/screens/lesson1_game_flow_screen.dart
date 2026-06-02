@@ -2,7 +2,7 @@ import 'dart:math' as math;
 import 'dart:ui' show ImageFilter;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_tts/flutter_tts.dart';
+import 'package:ez_trainz/services/jlc_tts.dart';
 import 'package:get/get.dart';
 
 import 'package:ez_trainz/controllers/lightning_streak_controller.dart';
@@ -63,7 +63,7 @@ class _Lesson1GameFlowScreenState extends State<Lesson1GameFlowScreen>
   static const _green = Color(0xFF9AE11B);
 
   final _rng = math.Random();
-  final _tts = FlutterTts();
+  final _tts = JlcTts();
 
   late final List<_LessonStep> _steps;
   int _i = 0;

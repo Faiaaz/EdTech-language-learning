@@ -6,10 +6,9 @@ import 'dart:math' as math;
 import 'package:confetti/confetti.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_tts/flutter_tts.dart';
+import 'package:ez_trainz/services/jlc_tts.dart';
 import 'package:get/get.dart';
-import 'package:speech_to_text/speech_recognition_result.dart';
-import 'package:speech_to_text/speech_to_text.dart';
+import 'package:ez_trainz/services/jlc_stt.dart';
 
 class N5HiHelloLessonScreen extends StatefulWidget {
   const N5HiHelloLessonScreen({super.key});
@@ -302,7 +301,7 @@ class _HiFlashGame extends StatefulWidget {
 
 class _HiFlashGameState extends State<_HiFlashGame>
     with TickerProviderStateMixin {
-  final _tts = FlutterTts();
+  final _tts = JlcTts();
   late ConfettiController _confetti;
   bool _ttsReady = false;
   bool _slowMode = false;
@@ -630,7 +629,7 @@ class _HiQuizGame extends StatefulWidget {
 class _HiQuizGameState extends State<_HiQuizGame>
     with TickerProviderStateMixin {
   final _rng = math.Random();
-  final _tts = FlutterTts();
+  final _tts = JlcTts();
   late ConfettiController _confetti;
   late AnimationController _shakeCtrl;
   bool _ttsReady = false;
@@ -1014,7 +1013,7 @@ class _HiMatchGame extends StatefulWidget {
 class _HiMatchGameState extends State<_HiMatchGame>
     with TickerProviderStateMixin {
   final _rng = math.Random();
-  final _tts = FlutterTts();
+  final _tts = JlcTts();
   late ConfettiController _confetti;
   late AnimationController _shakeCtrl;
   bool _ttsReady = false;
@@ -1427,7 +1426,7 @@ class _HiRushGame extends StatefulWidget {
 class _HiRushGameState extends State<_HiRushGame>
     with TickerProviderStateMixin {
   final _rng = math.Random();
-  final _tts = FlutterTts();
+  final _tts = JlcTts();
   late ConfettiController _confetti;
   late AnimationController _shakeCtrl;
   Timer? _timer;
@@ -1868,7 +1867,7 @@ class _HiListenGameState extends State<_HiListenGame>
   static const _sessionXpBonus = 50;
 
   final _rng = math.Random();
-  final _tts = FlutterTts();
+  final _tts = JlcTts();
   late final Future<void> _ttsReady;
   late ConfettiController _confetti;
   late AnimationController _shakeCtrl;
@@ -2617,8 +2616,8 @@ class _HiSpeakGameState extends State<_HiSpeakGame> with TickerProviderStateMixi
   static const _sessionXpBonus = 50;
 
   final _rng = math.Random();
-  final _tts = FlutterTts();
-  final _stt = SpeechToText();
+  final _tts = JlcTts();
+  final _stt = JlcStt();
   bool _sttReady = false;
   bool _ttsReady = false;
   String? _locale;
@@ -2831,7 +2830,7 @@ class _HiSpeakGameState extends State<_HiSpeakGame> with TickerProviderStateMixi
         cancelOnError: true,
         listenFor: const Duration(seconds: _maxSeconds),
         pauseFor: const Duration(seconds: 3),
-        onResult: (SpeechRecognitionResult r) {
+        onResult: (JlcSttResult r) {
           if (!mounted) return;
           setState(() => _heard = r.recognizedWords);
         },

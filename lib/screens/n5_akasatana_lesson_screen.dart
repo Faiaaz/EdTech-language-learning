@@ -9,11 +9,41 @@ import 'package:get/get.dart';
 import 'package:ez_trainz/screens/hiragana_draw_game_screen.dart';
 import 'package:ez_trainz/widgets/spiral_notepad_frame.dart';
 
+enum _LessonKind { akasatana, bornomala, dakuten }
+
 class N5AkasatanaLessonScreen extends StatefulWidget {
-  const N5AkasatanaLessonScreen({super.key});
+  const N5AkasatanaLessonScreen({super.key})
+      : _lessonKind = _LessonKind.akasatana;
+  const N5AkasatanaLessonScreen._forKind({
+    required _LessonKind lessonKind,
+  }) : _lessonKind = lessonKind;
+
+  final _LessonKind _lessonKind;
 
   @override
   State<N5AkasatanaLessonScreen> createState() => _N5AkasatanaLessonScreenState();
+}
+
+class N5BorneBorneBornomalaLessonScreen extends StatelessWidget {
+  const N5BorneBorneBornomalaLessonScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const N5AkasatanaLessonScreen._forKind(
+      lessonKind: _LessonKind.bornomala,
+    );
+  }
+}
+
+class N5DakutenLessonScreen extends StatelessWidget {
+  const N5DakutenLessonScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const N5AkasatanaLessonScreen._forKind(
+      lessonKind: _LessonKind.dakuten,
+    );
+  }
 }
 
 enum _AkaTab { draw, notepadDraw, flashcard, quiz, match }
@@ -27,6 +57,33 @@ class _N5AkasatanaLessonScreenState extends State<N5AkasatanaLessonScreen> {
     _AkaTab.match,
   ];
   int _tab = 0;
+
+  _LessonKind get _kind => widget._lessonKind;
+  bool get _isDakuten => _kind == _LessonKind.dakuten;
+
+  String get _title => switch (_kind) {
+    _LessonKind.akasatana => 'আকাসাতানা',
+    _LessonKind.bornomala => 'বর্ণে বর্ণে বর্ণমালা',
+    _LessonKind.dakuten  => 'জাপানের চন্দ্রবিন্দু',
+  };
+  String get _subtitle => switch (_kind) {
+    _LessonKind.akasatana => 'হিরাগানা ৫ সারি: あかさたな → বাংলা উচ্চারণ',
+    _LessonKind.bornomala => 'ま・や・ら・わ সারি: まみむめも・やゆよ・らりるれろ・わをん',
+    _LessonKind.dakuten  => 'てんてん ゛ ও まる ゜: がざだばぱ → ধ্বনি পরিবর্তন',
+  };
+  List<_RowInfo> get _rows => switch (_kind) {
+    _LessonKind.akasatana => _akasatanaRows,
+    _LessonKind.bornomala => _bornomalaRows,
+    _LessonKind.dakuten  => _dakutenRows,
+  };
+  List<_Kana> get _kanaList => switch (_kind) {
+    _LessonKind.akasatana => _akasatanaKanaList,
+    _LessonKind.bornomala => _bornomalaKanaList,
+    _LessonKind.dakuten  => _dakutenKanaList,
+  };
+  List<HiraganaChar>? get _charSet => _isDakuten ? kDakutenHiraganaSet : null;
+  int get _drawStart => _rows.first.startIdx;
+  int get _drawEnd => _rows.last.endIdx;
 
   @override
   Widget build(BuildContext context) {
@@ -56,10 +113,10 @@ class _N5AkasatanaLessonScreenState extends State<N5AkasatanaLessonScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text('আকাসাতানা',
-                            style: TextStyle(
+                        Text(_title,
+                            style: const TextStyle(
                                 color: Colors.white, fontWeight: FontWeight.w900, fontSize: 18)),
-                        Text('হিরাগানা ৫ সারি: あかさたな → বাংলা উচ্চারণ',
+                        Text(_subtitle,
                             style: TextStyle(
                                 color: Colors.white.withValues(alpha: 0.74),
                                 fontWeight: FontWeight.w600,
@@ -79,12 +136,30 @@ class _N5AkasatanaLessonScreenState extends State<N5AkasatanaLessonScreen> {
               child: AnimatedSwitcher(
                 duration: const Duration(milliseconds: 220),
                 child: switch (_tabs[_tab]) {
-                  _AkaTab.draw => const _AkaDrawPicker(key: ValueKey('akaDraw')),
+                  _AkaTab.draw => _AkaDrawPicker(
+                    key: const ValueKey('akaDraw'),
+                    startIdx: _drawStart,
+                    endIdx: _drawEnd,
+                    charSet: _charSet,
+                  ),
                   _AkaTab.notepadDraw =>
-                    const _NotebookRowPicker(key: ValueKey('akaNotepadDraw')),
-                  _AkaTab.flashcard => const _AkaFlashGame(key: ValueKey('akaFlash')),
-                  _AkaTab.quiz => const _AkaQuizGame(key: ValueKey('akaQuiz')),
-                  _AkaTab.match => const _AkaMatchGame(key: ValueKey('akaMatch')),
+                    _NotebookRowPicker(
+                      key: const ValueKey('akaNotepadDraw'),
+                      rows: _rows,
+                      charSet: _charSet,
+                    ),
+                  _AkaTab.flashcard => _AkaFlashGame(
+                    key: const ValueKey('akaFlash'),
+                    kanaList: _kanaList,
+                  ),
+                  _AkaTab.quiz => _AkaQuizGame(
+                    key: const ValueKey('akaQuiz'),
+                    kanaList: _kanaList,
+                  ),
+                  _AkaTab.match => _AkaMatchGame(
+                    key: const ValueKey('akaMatch'),
+                    kanaList: _kanaList,
+                  ),
                 },
               ),
             ),
@@ -143,14 +218,25 @@ class _AkaTabPills extends StatelessWidget {
 /// Embeds the drawing game directly in the আঁকা tab — starts at あ and
 /// auto-advances to the next hiragana after each completion.
 class _AkaDrawPicker extends StatelessWidget {
-  const _AkaDrawPicker({super.key});
+  const _AkaDrawPicker({
+    super.key,
+    required this.startIdx,
+    required this.endIdx,
+    this.charSet,
+  });
+
+  final int startIdx;
+  final int endIdx;
+  final List<HiraganaChar>? charSet;
 
   @override
   Widget build(BuildContext context) {
-    return const HiraganaDrawGameScreen(
-      initialIndex: 0,
+    return HiraganaDrawGameScreen(
+      initialIndex: startIdx,
+      endIndex: endIdx,
       embedded: true,
       autoAdvance: true,
+      charSet: charSet,
     );
   }
 }
@@ -173,19 +259,21 @@ class _RowInfo {
 }
 
 class _NotebookRowPicker extends StatefulWidget {
-  const _NotebookRowPicker({super.key});
+  const _NotebookRowPicker({
+    super.key,
+    required this.rows,
+    this.charSet,
+  });
+
+  final List<_RowInfo> rows;
+  final List<HiraganaChar>? charSet;
+
   @override
   State<_NotebookRowPicker> createState() => _NotebookRowPickerState();
 }
 
 class _NotebookRowPickerState extends State<_NotebookRowPicker> {
-  static const _rows = <_RowInfo>[
-    _RowInfo(leader: 'あ', members: ['あ', 'い', 'う', 'え', 'お'], bn: 'আ-সারি', startIdx: 0, endIdx: 5, accent: Color(0xFF10B981)),
-    _RowInfo(leader: 'か', members: ['か', 'き', 'く', 'け', 'こ'], bn: 'কা-সারি', startIdx: 5, endIdx: 10, accent: Color(0xFF3B82F6)),
-    _RowInfo(leader: 'さ', members: ['さ', 'し', 'す', 'せ', 'そ'], bn: 'সা-সারি', startIdx: 10, endIdx: 15, accent: Color(0xFF8B5CF6)),
-    _RowInfo(leader: 'た', members: ['た', 'ち', 'つ', 'て', 'と'], bn: 'তা-সারি', startIdx: 15, endIdx: 20, accent: Color(0xFFF59E0B)),
-    _RowInfo(leader: 'な', members: ['な', 'に', 'ぬ', 'ね', 'の'], bn: 'না-সারি', startIdx: 20, endIdx: 25, accent: Color(0xFFF43F5E)),
-  ];
+  List<_RowInfo> get _rows => widget.rows;
 
   int? _activeRow;
   int _sessionId = 0;
@@ -318,6 +406,7 @@ class _NotebookRowPickerState extends State<_NotebookRowPicker> {
             autoAdvance: true,
             surface: HiraganaDrawSurface.spiralNotepad,
             onAllComplete: _onRowComplete,
+            charSet: widget.charSet,
           ),
         ),
       ],
@@ -333,7 +422,9 @@ class _NotebookRowPickerState extends State<_NotebookRowPicker> {
           const bindingReserve = 54.0;
           final pageWidth =
               math.min(c.maxWidth - bindingReserve, 400.0).clamp(260.0, 400.0);
-          final pageHeight = (c.maxHeight - 8).clamp(400.0, 680.0);
+          // Never exceed available height, or the page overflows the buttons.
+          final pageHeight =
+              math.min(c.maxHeight - 8, 680.0).clamp(240.0, 680.0);
 
           return SpiralNotepadFrame(
             pageWidth: pageWidth,
@@ -538,7 +629,22 @@ class _Kana {
   final String row;
 }
 
-const _kanaList = <_Kana>[
+const _akasatanaRows = <_RowInfo>[
+  _RowInfo(leader: 'あ', members: ['あ', 'い', 'う', 'え', 'お'], bn: 'আ-সারি', startIdx: 0, endIdx: 5, accent: Color(0xFF10B981)),
+  _RowInfo(leader: 'か', members: ['か', 'き', 'く', 'け', 'こ'], bn: 'কা-সারি', startIdx: 5, endIdx: 10, accent: Color(0xFF3B82F6)),
+  _RowInfo(leader: 'さ', members: ['さ', 'し', 'す', 'せ', 'そ'], bn: 'সা-সারি', startIdx: 10, endIdx: 15, accent: Color(0xFF8B5CF6)),
+  _RowInfo(leader: 'た', members: ['た', 'ち', 'つ', 'て', 'と'], bn: 'তা-সারি', startIdx: 15, endIdx: 20, accent: Color(0xFFF59E0B)),
+  _RowInfo(leader: 'な', members: ['な', 'に', 'ぬ', 'ね', 'の'], bn: 'না-সারি', startIdx: 20, endIdx: 25, accent: Color(0xFFF43F5E)),
+];
+
+const _bornomalaRows = <_RowInfo>[
+  _RowInfo(leader: 'ま', members: ['ま', 'み', 'む', 'め', 'も'], bn: 'মা-সারি', startIdx: 30, endIdx: 35, accent: Color(0xFF10B981)),
+  _RowInfo(leader: 'や', members: ['や', 'ゆ', 'よ'], bn: 'ইয়া-সারি', startIdx: 35, endIdx: 38, accent: Color(0xFF3B82F6)),
+  _RowInfo(leader: 'ら', members: ['ら', 'り', 'る', 'れ', 'ろ'], bn: 'রা-সারি', startIdx: 38, endIdx: 43, accent: Color(0xFF8B5CF6)),
+  _RowInfo(leader: 'わ', members: ['わ', 'を', 'ん'], bn: 'ওয়া-সারি', startIdx: 43, endIdx: 46, accent: Color(0xFFF59E0B)),
+];
+
+const _akasatanaKanaList = <_Kana>[
   // あ row
   _Kana(kana: 'あ', romaji: 'a', bn: 'আ', row: 'আ-সারি'),
   _Kana(kana: 'い', romaji: 'i', bn: 'ই', row: 'আ-সারি'),
@@ -571,10 +677,82 @@ const _kanaList = <_Kana>[
   _Kana(kana: 'の', romaji: 'no', bn: 'নো', row: 'না-সারি'),
 ];
 
+const _bornomalaKanaList = <_Kana>[
+  // ま row
+  _Kana(kana: 'ま', romaji: 'ma', bn: 'মা', row: 'মা-সারি'),
+  _Kana(kana: 'み', romaji: 'mi', bn: 'মি', row: 'মা-সারি'),
+  _Kana(kana: 'む', romaji: 'mu', bn: 'মু', row: 'মা-সারি'),
+  _Kana(kana: 'め', romaji: 'me', bn: 'মে', row: 'মা-সারি'),
+  _Kana(kana: 'も', romaji: 'mo', bn: 'মো', row: 'মা-সারি'),
+  // や row
+  _Kana(kana: 'や', romaji: 'ya', bn: 'ইয়া', row: 'ইয়া-সারি'),
+  _Kana(kana: 'ゆ', romaji: 'yu', bn: 'ইউ', row: 'ইয়া-সারি'),
+  _Kana(kana: 'よ', romaji: 'yo', bn: 'ইও', row: 'ইয়া-সারি'),
+  // ら row
+  _Kana(kana: 'ら', romaji: 'ra', bn: 'রা', row: 'রা-সারি'),
+  _Kana(kana: 'り', romaji: 'ri', bn: 'রি', row: 'রা-সারি'),
+  _Kana(kana: 'る', romaji: 'ru', bn: 'রু', row: 'রা-সারি'),
+  _Kana(kana: 'れ', romaji: 're', bn: 'রে', row: 'রা-সারি'),
+  _Kana(kana: 'ろ', romaji: 'ro', bn: 'রো', row: 'রা-সারি'),
+  // わ row
+  _Kana(kana: 'わ', romaji: 'wa', bn: 'ওয়া', row: 'ওয়া-সারি'),
+  _Kana(kana: 'を', romaji: 'wo', bn: 'ও', row: 'ওয়া-সারি'),
+  _Kana(kana: 'ん', romaji: 'n', bn: 'ন', row: 'ওয়া-সারি'),
+];
+
+// ── Dakuten data ─────────────────────────────────────────────────────────────
+
+const _dakutenRows = <_RowInfo>[
+  _RowInfo(leader: 'が', members: ['が', 'ぎ', 'ぐ', 'げ', 'ご'], bn: 'গা-সারি', startIdx: 0, endIdx: 5, accent: Color(0xFF10B981)),
+  _RowInfo(leader: 'ざ', members: ['ざ', 'じ', 'ず', 'ぜ', 'ぞ'], bn: 'জা-সারি', startIdx: 5, endIdx: 10, accent: Color(0xFF3B82F6)),
+  _RowInfo(leader: 'だ', members: ['だ', 'ぢ', 'づ', 'で', 'ど'], bn: 'দা-সারি', startIdx: 10, endIdx: 15, accent: Color(0xFF8B5CF6)),
+  _RowInfo(leader: 'ば', members: ['ば', 'び', 'ぶ', 'べ', 'ぼ'], bn: 'বা-সারি', startIdx: 15, endIdx: 20, accent: Color(0xFFF59E0B)),
+  _RowInfo(leader: 'ぱ', members: ['ぱ', 'ぴ', 'ぷ', 'ぺ', 'ぽ'], bn: 'পা-সারি', startIdx: 20, endIdx: 25, accent: Color(0xFFF43F5E)),
+];
+
+const _dakutenKanaList = <_Kana>[
+  // が row
+  _Kana(kana: 'が', romaji: 'ga', bn: 'গা', row: 'গা-সারি'),
+  _Kana(kana: 'ぎ', romaji: 'gi', bn: 'গি', row: 'গা-সারি'),
+  _Kana(kana: 'ぐ', romaji: 'gu', bn: 'গু', row: 'গা-সারি'),
+  _Kana(kana: 'げ', romaji: 'ge', bn: 'গে', row: 'গা-সারি'),
+  _Kana(kana: 'ご', romaji: 'go', bn: 'গো', row: 'গা-সারি'),
+  // ざ row
+  _Kana(kana: 'ざ', romaji: 'za', bn: 'জা', row: 'জা-সারি'),
+  _Kana(kana: 'じ', romaji: 'ji', bn: 'জি', row: 'জা-সারি'),
+  _Kana(kana: 'ず', romaji: 'zu', bn: 'জু', row: 'জা-সারি'),
+  _Kana(kana: 'ぜ', romaji: 'ze', bn: 'জে', row: 'জা-সারি'),
+  _Kana(kana: 'ぞ', romaji: 'zo', bn: 'জো', row: 'জা-সারি'),
+  // だ row
+  _Kana(kana: 'だ', romaji: 'da', bn: 'দা', row: 'দা-সারি'),
+  _Kana(kana: 'ぢ', romaji: 'di', bn: 'দি', row: 'দা-সারি'),
+  _Kana(kana: 'づ', romaji: 'dzu', bn: 'দ্জু', row: 'দা-সারি'),
+  _Kana(kana: 'で', romaji: 'de', bn: 'দে', row: 'দা-সারি'),
+  _Kana(kana: 'ど', romaji: 'do', bn: 'দো', row: 'দা-সারি'),
+  // ば row
+  _Kana(kana: 'ば', romaji: 'ba', bn: 'বা', row: 'বা-সারি'),
+  _Kana(kana: 'び', romaji: 'bi', bn: 'বি', row: 'বা-সারি'),
+  _Kana(kana: 'ぶ', romaji: 'bu', bn: 'বু', row: 'বা-সারি'),
+  _Kana(kana: 'べ', romaji: 'be', bn: 'বে', row: 'বা-সারি'),
+  _Kana(kana: 'ぼ', romaji: 'bo', bn: 'বো', row: 'বা-সারি'),
+  // ぱ row
+  _Kana(kana: 'ぱ', romaji: 'pa', bn: 'পা', row: 'পা-সারি'),
+  _Kana(kana: 'ぴ', romaji: 'pi', bn: 'পি', row: 'পা-সারি'),
+  _Kana(kana: 'ぷ', romaji: 'pu', bn: 'পু', row: 'পা-সারি'),
+  _Kana(kana: 'ぺ', romaji: 'pe', bn: 'পে', row: 'পা-সারি'),
+  _Kana(kana: 'ぽ', romaji: 'po', bn: 'পো', row: 'পা-সারি'),
+];
+
 // ── Flashcard game ────────────────────────────────────────────────────────────
 
 class _AkaFlashGame extends StatefulWidget {
-  const _AkaFlashGame({super.key});
+  const _AkaFlashGame({
+    super.key,
+    required this.kanaList,
+  });
+
+  final List<_Kana> kanaList;
+
   @override
   State<_AkaFlashGame> createState() => _AkaFlashGameState();
 }
@@ -588,7 +766,7 @@ class _AkaFlashGameState extends State<_AkaFlashGame> {
   @override
   void initState() {
     super.initState();
-    _deck = List.of(_kanaList)..shuffle(_rng);
+    _deck = List.of(widget.kanaList)..shuffle(_rng);
   }
 
   void _next() {
@@ -790,7 +968,13 @@ class _FlipCard extends StatelessWidget {
 // ── Quiz game ─────────────────────────────────────────────────────────────────
 
 class _AkaQuizGame extends StatefulWidget {
-  const _AkaQuizGame({super.key});
+  const _AkaQuizGame({
+    super.key,
+    required this.kanaList,
+  });
+
+  final List<_Kana> kanaList;
+
   @override
   State<_AkaQuizGame> createState() => _AkaQuizGameState();
 }
@@ -809,12 +993,12 @@ class _AkaQuizGameState extends State<_AkaQuizGame> {
   @override
   void initState() {
     super.initState();
-    _deck = List.of(_kanaList)..shuffle(_rng);
+    _deck = List.of(widget.kanaList)..shuffle(_rng);
     _opts = _optionsFor(_deck[_i]);
   }
 
   List<String> _optionsFor(_Kana q) {
-    final distractors = List.of(_kanaList)
+    final distractors = List.of(widget.kanaList)
       ..removeWhere((k) => k.romaji == q.romaji)
       ..shuffle(_rng);
     final opts = <String>{q.romaji};
@@ -1050,7 +1234,13 @@ class _QuizChoice extends StatelessWidget {
 // ── Match game ────────────────────────────────────────────────────────────────
 
 class _AkaMatchGame extends StatefulWidget {
-  const _AkaMatchGame({super.key});
+  const _AkaMatchGame({
+    super.key,
+    required this.kanaList,
+  });
+
+  final List<_Kana> kanaList;
+
   @override
   State<_AkaMatchGame> createState() => _AkaMatchGameState();
 }
@@ -1071,7 +1261,7 @@ class _AkaMatchGameState extends State<_AkaMatchGame> {
   }
 
   void _buildBoard() {
-    final sample = (List.of(_kanaList)..shuffle(_rng)).take(6).toList();
+    final sample = (List.of(widget.kanaList)..shuffle(_rng)).take(6).toList();
     final tiles = <_MatchTile>[];
     for (final k in sample) {
       tiles.add(_MatchTile(id: k.romaji, label: k.kana, pairId: k.romaji, isKana: true));

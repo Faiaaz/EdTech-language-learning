@@ -3,7 +3,7 @@ import 'dart:math' as math;
 import 'package:confetti/confetti.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_tts/flutter_tts.dart';
+import 'package:ez_trainz/services/jlc_tts.dart';
 import 'package:get/get.dart';
 
 import 'package:ez_trainz/screens/sign_up_screen.dart';
@@ -20,7 +20,7 @@ class _NihongoTrialGameScreenState extends State<NihongoTrialGameScreen>
   static const _bg = Color(0xFF0B1326);
   static const _gold = Color(0xFFFFE000);
 
-  final _tts = FlutterTts();
+  final _tts = JlcTts();
   late final PageController _pages;
 
   late final ConfettiController _confetti;
