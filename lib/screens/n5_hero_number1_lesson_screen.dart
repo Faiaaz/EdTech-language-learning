@@ -5,6 +5,7 @@ import 'dart:math' as math;
 
 import 'package:confetti/confetti.dart';
 import 'package:flutter/material.dart';
+import 'package:ez_trainz/utils/app_theme.dart';
 import 'package:flutter/services.dart';
 import 'package:ez_trainz/services/jlc_tts.dart';
 import 'package:get/get.dart';
@@ -34,7 +35,7 @@ class _N5HeroNumber1LessonScreenState extends State<N5HeroNumber1LessonScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF0F172A),
+      backgroundColor: Colors.transparent,
       body: SafeArea(
         child: Column(
           children: [
@@ -48,10 +49,10 @@ class _N5HeroNumber1LessonScreenState extends State<N5HeroNumber1LessonScreen> {
                       width: 40,
                       height: 40,
                       decoration: BoxDecoration(
-                        color: Colors.white.withValues(alpha: 0.18),
+                        color: AppColors.border,
                         shape: BoxShape.circle,
                       ),
-                      child: const Icon(Icons.arrow_back_rounded, color: Colors.white),
+                      child: const Icon(Icons.arrow_back_rounded, color: AppColors.textPrimary),
                     ),
                   ),
                   const SizedBox(width: 10),
@@ -61,10 +62,10 @@ class _N5HeroNumber1LessonScreenState extends State<N5HeroNumber1LessonScreen> {
                       children: [
                         const Text('হিরো নাম্বার ১',
                             style: TextStyle(
-                                color: Colors.white, fontWeight: FontWeight.w900, fontSize: 18)),
+                                color: AppColors.textPrimary, fontWeight: FontWeight.w900, fontSize: 18)),
                         Text('১-১০ সংখ্যা: কানজি + হিরাগানা -> বাংলা',
                             style: TextStyle(
-                                color: Colors.white.withValues(alpha: 0.75),
+                                color: AppColors.textMuted,
                                 fontWeight: FontWeight.w600,
                                 fontSize: 12)),
                       ],
@@ -215,9 +216,9 @@ class _HeroTabPills extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(6),
       decoration: BoxDecoration(
-        color: const Color(0xFF1E293B),
+        color: AppColors.card,
         borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: Colors.white.withValues(alpha: 0.08)),
+        border: Border.all(color: AppColors.bg),
       ),
       child: SingleChildScrollView(
         scrollDirection: Axis.horizontal,
@@ -234,8 +235,9 @@ class _HeroTabPills extends StatelessWidget {
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: Text(labels[i],
-                      style: const TextStyle(
-                          color: Colors.white, fontWeight: FontWeight.w900, fontSize: 12)),
+                      style: TextStyle(
+                          color: i == index ? Colors.white : AppColors.textPrimary,
+                          fontWeight: FontWeight.w900, fontSize: 12)),
                 ),
               ),
               if (i != labels.length - 1) const SizedBox(width: 6),
@@ -632,7 +634,7 @@ class _HeroSpeakGameState extends State<_HeroSpeakGame>
           Text(
             'শোনা: $_heard',
             style: TextStyle(
-              color: Colors.white.withValues(alpha: 0.7),
+              color: AppColors.textMuted,
               fontWeight: FontWeight.w600,
             ),
           ),
@@ -676,8 +678,8 @@ class _HeroSpeakGameState extends State<_HeroSpeakGame>
                         },
                       ),
               style: OutlinedButton.styleFrom(
-                side: BorderSide(color: Colors.white.withValues(alpha: 0.2)),
-                foregroundColor: Colors.white,
+                side: BorderSide(color: AppColors.border),
+                foregroundColor: AppColors.textPrimary,
                 padding: const EdgeInsets.symmetric(vertical: 14),
               ),
               icon: const Icon(Icons.insights_rounded),
@@ -690,7 +692,7 @@ class _HeroSpeakGameState extends State<_HeroSpeakGame>
               onPressed: _grading ? null : _next,
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xFFFFE000),
-                foregroundColor: const Color(0xFF1E293B),
+                foregroundColor: AppColors.textPrimary,
                 padding: const EdgeInsets.symmetric(vertical: 14),
               ),
               icon: const Icon(Icons.navigate_next_rounded),
@@ -739,7 +741,7 @@ class _SpeechCard extends StatelessWidget {
                     end: Alignment.bottomRight,
                   ),
                   border: Border.all(
-                      color: Colors.white.withValues(alpha: 0.25), width: 2),
+                      color: AppColors.border, width: 2),
                 ),
                 alignment: Alignment.center,
                 child: const Text('先生',
@@ -764,7 +766,7 @@ class _SpeechCard extends StatelessWidget {
                     Container(
                       padding: const EdgeInsets.fromLTRB(14, 12, 14, 14),
                       decoration: BoxDecoration(
-                        color: Colors.white,
+                        color: AppColors.card,
                         borderRadius: BorderRadius.circular(16),
                       ),
                       child: Column(
@@ -890,7 +892,7 @@ class _ScoreBadge extends StatelessWidget {
       decoration: BoxDecoration(
         shape: BoxShape.circle,
         color: color,
-        border: Border.all(color: Colors.white, width: 3),
+        border: Border.all(color: AppColors.textPrimary, width: 3),
         boxShadow: [
           BoxShadow(
             color: color.withValues(alpha: 0.45),
@@ -903,7 +905,7 @@ class _ScoreBadge extends StatelessWidget {
       child: Text(
         '$score',
         style: const TextStyle(
-          color: Colors.white,
+          color: AppColors.textPrimary,
           fontSize: 20,
           fontWeight: FontWeight.w900,
         ),
@@ -970,8 +972,8 @@ class _UtilityButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final bg = active
         ? const Color(0xFFFFE000)
-        : Colors.white.withValues(alpha: 0.10);
-    final fg = active ? const Color(0xFF1E293B) : Colors.white;
+        : AppColors.border;
+    final fg = active ? AppColors.textPrimary : AppColors.textMuted;
     return GestureDetector(
       onTap: onTap,
       child: Container(
@@ -980,7 +982,7 @@ class _UtilityButton extends StatelessWidget {
         decoration: BoxDecoration(
           color: bg,
           shape: BoxShape.circle,
-          border: Border.all(color: Colors.white.withValues(alpha: 0.18)),
+          border: Border.all(color: AppColors.border),
         ),
         child: Icon(icon, color: fg, size: 24),
       ),
@@ -1024,11 +1026,11 @@ class _MicButton extends StatelessWidget {
                     spreadRadius: listening ? 4 : 0,
                   ),
                 ],
-                border: Border.all(color: Colors.white, width: 4),
+                border: Border.all(color: AppColors.textPrimary, width: 4),
               ),
               child: Icon(
                 listening ? Icons.stop_rounded : Icons.mic_rounded,
-                color: Colors.white,
+                color: AppColors.textPrimary,
                 size: 42,
               ),
             ),
@@ -1109,7 +1111,7 @@ class _GradingDotsState extends State<_GradingDots>
             const Text(
               'Grading your recording now',
               style: TextStyle(
-                color: Colors.white,
+                color: AppColors.textPrimary,
                 fontWeight: FontWeight.w900,
                 fontSize: 15,
               ),
@@ -1121,7 +1123,7 @@ class _GradingDotsState extends State<_GradingDots>
                   opacity: ((_c.value * 3 + i / 3) % 1.0 > 0.5) ? 1.0 : 0.3,
                   child: const Text('.',
                       style: TextStyle(
-                          color: Colors.white,
+                          color: AppColors.textPrimary,
                           fontWeight: FontWeight.w900,
                           fontSize: 22)),
                 ),
@@ -1159,7 +1161,7 @@ class _StatusLine extends StatelessWidget {
             Text(
               status,
               style: const TextStyle(
-                color: Colors.white,
+                color: AppColors.textPrimary,
                 fontWeight: FontWeight.w900,
                 fontSize: 15,
               ),
@@ -1430,7 +1432,7 @@ class _HeroMatchGameState extends State<_HeroMatchGame>
                       const Expanded(
                         child: Text('জাপানি ↔ বাংলা মিলাও',
                             style: TextStyle(
-                                color: Colors.white,
+                                color: AppColors.textPrimary,
                                 fontWeight: FontWeight.w900)),
                       ),
                       _MatchStatChip(label: 'XP', value: '$_xp'),
@@ -1442,17 +1444,17 @@ class _HeroMatchGameState extends State<_HeroMatchGame>
                   Row(
                     children: [
                       Icon(Icons.timer_rounded,
-                          size: 14, color: Colors.white.withValues(alpha: 0.7)),
+                          size: 14, color: AppColors.textMuted),
                       const SizedBox(width: 4),
                       Text(elapsed,
                           style: TextStyle(
-                              color: Colors.white.withValues(alpha: 0.85),
+                              color: AppColors.textMuted,
                               fontWeight: FontWeight.w800,
                               fontSize: 12)),
                       const SizedBox(width: 14),
                       Text('মুভ: $_moves',
                           style: TextStyle(
-                              color: Colors.white.withValues(alpha: 0.85),
+                              color: AppColors.textMuted,
                               fontWeight: FontWeight.w800,
                               fontSize: 12)),
                       const Spacer(),
@@ -1468,7 +1470,7 @@ class _HeroMatchGameState extends State<_HeroMatchGame>
                     minHeight: 7,
                     borderRadius: BorderRadius.circular(99),
                     value: progress.clamp(0, 1),
-                    backgroundColor: Colors.white.withValues(alpha: 0.12),
+                    backgroundColor: AppColors.border,
                     valueColor:
                         const AlwaysStoppedAnimation(Color(0xFFFFE000)),
                   ),
@@ -1497,14 +1499,14 @@ class _HeroMatchGameState extends State<_HeroMatchGame>
                           ? const Color(0xFFEF4444)
                           : (selected
                               ? const Color(0xFFFFE000)
-                              : Colors.white.withValues(alpha: 0.14));
+                              : AppColors.border);
                   final bg = matched
                       ? const Color(0xFF10B981).withValues(alpha: 0.18)
                       : wrong
                           ? const Color(0xFFEF4444).withValues(alpha: 0.18)
                           : (selected
                               ? const Color(0xFFFFE000).withValues(alpha: 0.14)
-                              : Colors.white.withValues(alpha: 0.06));
+                              : AppColors.bg);
                   return AnimatedBuilder(
                     animation: _shakeCtrl,
                     builder: (_, child) {
@@ -1536,7 +1538,7 @@ class _HeroMatchGameState extends State<_HeroMatchGame>
                                     c.label,
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
-                                      color: Colors.white,
+                                      color: AppColors.textPrimary,
                                       fontWeight: FontWeight.w900,
                                       fontSize: c.jp ? 18 : 14,
                                     ),
@@ -1550,12 +1552,11 @@ class _HeroMatchGameState extends State<_HeroMatchGame>
                                   child: Container(
                                     padding: const EdgeInsets.all(4),
                                     decoration: BoxDecoration(
-                                      color: Colors.white
-                                          .withValues(alpha: 0.18),
+                                      color: AppColors.border,
                                       shape: BoxShape.circle,
                                     ),
                                     child: const Icon(Icons.volume_up_rounded,
-                                        size: 12, color: Colors.white),
+                                        size: 12, color: AppColors.textPrimary),
                                   ),
                                 ),
                               if (matched)
@@ -1580,8 +1581,8 @@ class _HeroMatchGameState extends State<_HeroMatchGame>
                 onPressed: _reset,
                 style: OutlinedButton.styleFrom(
                     side:
-                        BorderSide(color: Colors.white.withValues(alpha: 0.2)),
-                    foregroundColor: Colors.white),
+                        BorderSide(color: AppColors.border),
+                    foregroundColor: AppColors.textPrimary),
                 icon: const Icon(Icons.refresh_rounded),
                 label: const Text('রি-স্টার্ট',
                     style: TextStyle(fontWeight: FontWeight.w900)),
@@ -1603,16 +1604,16 @@ class _MatchStatChip extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.08),
+        color: AppColors.bg,
         borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: Colors.white.withValues(alpha: 0.14)),
+        border: Border.all(color: AppColors.border),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
           Text(label,
               style: TextStyle(
-                  color: Colors.white.withValues(alpha: 0.7),
+                  color: AppColors.textMuted,
                   fontSize: 10,
                   fontWeight: FontWeight.w800)),
           const SizedBox(width: 4),
@@ -1845,12 +1846,12 @@ class _HeroBlitzGameState extends State<_HeroBlitzGame>
                         const SizedBox(width: 8),
                         Text('রাউন্ড: $_round/$_maxRounds',
                             style: const TextStyle(
-                                color: Colors.white,
+                                color: AppColors.textPrimary,
                                 fontWeight: FontWeight.w900)),
                         const Spacer(),
                         Text('স্কোর: $_score',
                             style: const TextStyle(
-                                color: Colors.white,
+                                color: AppColors.textPrimary,
                                 fontWeight: FontWeight.w900)),
                       ],
                     ),
@@ -1859,7 +1860,7 @@ class _HeroBlitzGameState extends State<_HeroBlitzGame>
                       minHeight: 8,
                       borderRadius: BorderRadius.circular(99),
                       value: progress.clamp(0, 1),
-                      backgroundColor: Colors.white.withValues(alpha: 0.12),
+                      backgroundColor: AppColors.border,
                       valueColor:
                           const AlwaysStoppedAnimation(Color(0xFFFFE000)),
                     ),
@@ -1898,7 +1899,7 @@ class _HeroBlitzGameState extends State<_HeroBlitzGame>
                                             ? const Color(0xFFEF4444)
                                             : const Color(0xFFFFE000))
                                         .withValues(alpha: 0.22),
-                                    Colors.white.withValues(alpha: 0.06),
+                                    AppColors.bg,
                                   ],
                                 ),
                                 borderRadius: BorderRadius.circular(16),
@@ -1928,8 +1929,7 @@ class _HeroBlitzGameState extends State<_HeroBlitzGame>
                                     children: [
                                       Text('মোট সময়',
                                           style: TextStyle(
-                                              color: Colors.white
-                                                  .withValues(alpha: 0.78),
+                                              color: AppColors.border,
                                               fontWeight: FontWeight.w800,
                                               fontSize: 11)),
                                       Text('$_timeLeft',
@@ -1942,8 +1942,7 @@ class _HeroBlitzGameState extends State<_HeroBlitzGame>
                                               height: 1)),
                                       Text('সেকেন্ড বাকি',
                                           style: TextStyle(
-                                              color: Colors.white
-                                                  .withValues(alpha: 0.82),
+                                              color: AppColors.border,
                                               fontWeight: FontWeight.w700,
                                               fontSize: 12)),
                                     ],
@@ -1968,12 +1967,12 @@ class _HeroBlitzGameState extends State<_HeroBlitzGame>
                       const SizedBox(height: 14),
                       Text(_target.kanji,
                           style: const TextStyle(
-                              color: Colors.white,
+                              color: AppColors.textPrimary,
                               fontSize: 58,
                               fontWeight: FontWeight.w900)),
                       Text('${_target.kana} (${_target.bnPronunciation})',
                           style: TextStyle(
-                              color: Colors.white.withValues(alpha: 0.86),
+                              color: AppColors.textMuted,
                               fontWeight: FontWeight.w700)),
                       const SizedBox(height: 10),
                       Row(
@@ -2018,26 +2017,26 @@ class _HeroBlitzGameState extends State<_HeroBlitzGame>
                               decoration: BoxDecoration(
                                 color: _slowMode
                                     ? const Color(0xFFFFE000)
-                                    : Colors.white.withValues(alpha: 0.10),
+                                    : AppColors.border,
                                 borderRadius: BorderRadius.circular(99),
                                 border: Border.all(
                                     color:
-                                        Colors.white.withValues(alpha: 0.2)),
+                                        AppColors.border),
                               ),
                               child: Row(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
                                   Icon(Icons.pets_rounded,
                                       color: _slowMode
-                                          ? const Color(0xFF1E293B)
-                                          : Colors.white,
+                                          ? AppColors.textPrimary
+                                          : AppColors.textMuted,
                                       size: 18),
                                   const SizedBox(width: 6),
                                   Text('ধীরে',
                                       style: TextStyle(
                                           color: _slowMode
-                                              ? const Color(0xFF1E293B)
-                                              : Colors.white,
+                                              ? AppColors.textPrimary
+                                              : AppColors.textMuted,
                                           fontWeight: FontWeight.w900)),
                                 ],
                               ),
@@ -2069,20 +2068,20 @@ class _HeroBlitzGameState extends State<_HeroBlitzGame>
                     final picked = _picked == o.n;
                     final correct = o.n == _target.n;
                     final bg = _picked == null
-                        ? Colors.white.withValues(alpha: 0.06)
+                        ? AppColors.bg
                         : (correct
                             ? const Color(0xFF10B981).withValues(alpha: 0.22)
                             : (picked
                                 ? const Color(0xFFEF4444)
                                     .withValues(alpha: 0.22)
-                                : Colors.white.withValues(alpha: 0.05)));
+                                : AppColors.bg));
                     final border = _picked == null
-                        ? Colors.white.withValues(alpha: 0.2)
+                        ? AppColors.border
                         : (correct
                             ? const Color(0xFF10B981)
                             : (picked
                                 ? const Color(0xFFEF4444)
-                                : Colors.white.withValues(alpha: 0.18)));
+                                : AppColors.border));
                     return GestureDetector(
                       onTap: () => _pick(o),
                       child: AnimatedScale(
@@ -2099,7 +2098,7 @@ class _HeroBlitzGameState extends State<_HeroBlitzGame>
                           child: Center(
                             child: Text('${o.bnDigit} ${o.bnWord}',
                                 style: const TextStyle(
-                                    color: Colors.white,
+                                    color: AppColors.textPrimary,
                                     fontWeight: FontWeight.w900,
                                     fontSize: 20)),
                           ),
@@ -2126,15 +2125,15 @@ class _BlitzStatChip extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
       decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.08),
+        color: AppColors.bg,
         borderRadius: BorderRadius.circular(10),
-        border: Border.all(color: Colors.white.withValues(alpha: 0.14)),
+        border: Border.all(color: AppColors.border),
       ),
       child: Column(
         children: [
           Text(label,
               style: TextStyle(
-                  color: Colors.white.withValues(alpha: 0.7),
+                  color: AppColors.textMuted,
                   fontWeight: FontWeight.w800,
                   fontSize: 10)),
           Text(value,
@@ -2344,10 +2343,10 @@ class _HeroTapWhatYouHearGameState extends State<_HeroTapWhatYouHearGame>
 
     Color border;
     Color bg;
-    Color textColor = Colors.white;
+    Color textColor = AppColors.textPrimary;
     if (!revealed) {
-      border = Colors.white.withValues(alpha: 0.18);
-      bg = Colors.white.withValues(alpha: 0.07);
+      border = AppColors.border;
+      bg = AppColors.bg;
     } else if (isCorrect) {
       border = const Color(0xFF10B981);
       bg = const Color(0xFF10B981).withValues(alpha: 0.22);
@@ -2357,8 +2356,8 @@ class _HeroTapWhatYouHearGameState extends State<_HeroTapWhatYouHearGame>
       bg = const Color(0xFFEF4444).withValues(alpha: 0.18);
       textColor = const Color(0xFFEF4444);
     } else {
-      border = Colors.white.withValues(alpha: 0.10);
-      bg = Colors.white.withValues(alpha: 0.04);
+      border = AppColors.border;
+      bg = AppColors.bg;
     }
 
     return Expanded(
@@ -2453,7 +2452,7 @@ class _HeroTapWhatYouHearGameState extends State<_HeroTapWhatYouHearGame>
               Container(
                 padding: const EdgeInsets.all(14),
                 decoration: BoxDecoration(
-                  color: const Color(0xFF1E293B),
+                  color: AppColors.card,
                   borderRadius: BorderRadius.circular(16),
                   border: Border.all(color: orange.withValues(alpha: 0.45)),
                   boxShadow: [
@@ -2475,13 +2474,13 @@ class _HeroTapWhatYouHearGameState extends State<_HeroTapWhatYouHearGame>
                           child: Text(
                             'শুনে ট্যাপ — জাপানি বলা শুনে বাংলা বেছে নিন',
                             style: TextStyle(
-                                color: Colors.white, fontWeight: FontWeight.w900, fontSize: 13),
+                                color: AppColors.textPrimary, fontWeight: FontWeight.w900, fontSize: 13),
                           ),
                         ),
                         Text(
                           _formatDuration(_sessionTimer.elapsed),
                           style: TextStyle(
-                            color: Colors.white.withValues(alpha: 0.85),
+                            color: AppColors.textMuted,
                             fontWeight: FontWeight.w900,
                           ),
                         ),
@@ -2492,7 +2491,7 @@ class _HeroTapWhatYouHearGameState extends State<_HeroTapWhatYouHearGame>
                       minHeight: 8,
                       borderRadius: BorderRadius.circular(99),
                       value: progress.clamp(0, 1),
-                      backgroundColor: Colors.white.withValues(alpha: 0.12),
+                      backgroundColor: AppColors.border,
                       valueColor: const AlwaysStoppedAnimation(orange),
                     ),
                     const SizedBox(height: 8),
@@ -2501,7 +2500,7 @@ class _HeroTapWhatYouHearGameState extends State<_HeroTapWhatYouHearGame>
                         Text(
                           'রাউন্ড ${_roundIdx + 1}/$_totalRounds',
                           style: TextStyle(
-                              color: Colors.white.withValues(alpha: 0.82), fontWeight: FontWeight.w800),
+                              color: AppColors.textMuted, fontWeight: FontWeight.w800),
                         ),
                         const Spacer(),
                         Text('XP: $_xp',
@@ -2509,14 +2508,14 @@ class _HeroTapWhatYouHearGameState extends State<_HeroTapWhatYouHearGame>
                         const SizedBox(width: 10),
                         Text('স্ট্রিক: $_streak',
                             style: TextStyle(
-                                color: Colors.white.withValues(alpha: 0.82), fontWeight: FontWeight.w800)),
+                                color: AppColors.textMuted, fontWeight: FontWeight.w800)),
                       ],
                     ),
                     const SizedBox(height: 6),
                     Text(
                       'নির্ভুলতা: ${_totalAttempts == 0 ? 0 : ((_correct * 100) / _totalAttempts).round()}%',
                       style: TextStyle(
-                          color: Colors.white.withValues(alpha: 0.75), fontWeight: FontWeight.w700, fontSize: 12),
+                          color: AppColors.textMuted, fontWeight: FontWeight.w700, fontSize: 12),
                     ),
                   ],
                 ),
@@ -2534,7 +2533,7 @@ class _HeroTapWhatYouHearGameState extends State<_HeroTapWhatYouHearGame>
                   width: double.infinity,
                   padding: const EdgeInsets.fromLTRB(20, 22, 20, 18),
                   decoration: BoxDecoration(
-                    color: const Color(0xFF1E293B),
+                    color: AppColors.card,
                     borderRadius: BorderRadius.circular(20),
                     border: Border.all(color: orange.withValues(alpha: 0.55), width: 2),
                     boxShadow: [
@@ -2592,11 +2591,11 @@ class _HeroTapWhatYouHearGameState extends State<_HeroTapWhatYouHearGame>
                                       await _speakPrompt();
                                     },
                               style: OutlinedButton.styleFrom(
-                                foregroundColor: _slowMode ? orange : Colors.white,
+                                foregroundColor: _slowMode ? orange : AppColors.textPrimary,
                                 side: BorderSide(
                                     color: _slowMode
                                         ? orange
-                                        : Colors.white.withValues(alpha: 0.28)),
+                                        : AppColors.border),
                                 padding: const EdgeInsets.symmetric(vertical: 12),
                                 shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(12)),
@@ -2619,7 +2618,7 @@ class _HeroTapWhatYouHearGameState extends State<_HeroTapWhatYouHearGame>
               const Text(
                 'এইবার আপনি বলেন সঠিক উত্তর কোনটি?',
                 style: TextStyle(
-                  color: Colors.white,
+                  color: AppColors.textPrimary,
                   fontSize: 14,
                   fontWeight: FontWeight.w900,
                 ),
@@ -2670,12 +2669,12 @@ class _HeroTapWhatYouHearGameState extends State<_HeroTapWhatYouHearGame>
                       children: [
                         Row(
                           children: [
-                            const Icon(Icons.thumb_up_alt_rounded, color: Colors.white, size: 26),
+                            const Icon(Icons.thumb_up_alt_rounded, color: AppColors.textPrimary, size: 26),
                             const SizedBox(width: 10),
                             const Text(
                               'সঠিক!',
                               style: TextStyle(
-                                  color: Colors.white, fontWeight: FontWeight.w900, fontSize: 22),
+                                  color: AppColors.textPrimary, fontWeight: FontWeight.w900, fontSize: 22),
                             ),
                             const Spacer(),
                             Row(
@@ -2687,7 +2686,7 @@ class _HeroTapWhatYouHearGameState extends State<_HeroTapWhatYouHearGame>
                                     Icons.star_rounded,
                                     color: i < math.min(5, _streak)
                                         ? const Color(0xFFFFE000)
-                                        : Colors.white.withValues(alpha: 0.22),
+                                        : AppColors.border,
                                     size: 22,
                                   ),
                                 ),
@@ -2700,7 +2699,7 @@ class _HeroTapWhatYouHearGameState extends State<_HeroTapWhatYouHearGame>
                           '${_target.kana} (${_target.kanji}) → ${_target.bnDigit} ${_target.bnWord}',
                           textAlign: TextAlign.center,
                           style: const TextStyle(
-                            color: Colors.white,
+                            color: AppColors.textPrimary,
                             fontWeight: FontWeight.w800,
                             fontSize: 16,
                           ),
@@ -2988,7 +2987,7 @@ class _HeroReadGameState extends State<_HeroReadGame>
               Container(
                 padding: const EdgeInsets.all(14),
                 decoration: BoxDecoration(
-                  color: const Color(0xFF1E293B),
+                  color: AppColors.card,
                   borderRadius: BorderRadius.circular(16),
                   border: Border.all(color: _violet.withValues(alpha: 0.45)),
                   boxShadow: [
@@ -3011,7 +3010,7 @@ class _HeroReadGameState extends State<_HeroReadGame>
                           child: Text(
                             'পড়া মাস্টার — পড়ে বুঝে সঠিক উত্তর বাছুন',
                             style: TextStyle(
-                                color: Colors.white,
+                                color: AppColors.textPrimary,
                                 fontWeight: FontWeight.w900,
                                 fontSize: 13),
                           ),
@@ -3019,7 +3018,7 @@ class _HeroReadGameState extends State<_HeroReadGame>
                         Text(
                           _formatDuration(_sessionTimer.elapsed),
                           style: TextStyle(
-                            color: Colors.white.withValues(alpha: 0.85),
+                            color: AppColors.textMuted,
                             fontWeight: FontWeight.w900,
                           ),
                         ),
@@ -3030,7 +3029,7 @@ class _HeroReadGameState extends State<_HeroReadGame>
                       minHeight: 8,
                       borderRadius: BorderRadius.circular(99),
                       value: progress.clamp(0, 1),
-                      backgroundColor: Colors.white.withValues(alpha: 0.12),
+                      backgroundColor: AppColors.border,
                       valueColor: const AlwaysStoppedAnimation(_violet),
                     ),
                     const SizedBox(height: 8),
@@ -3039,7 +3038,7 @@ class _HeroReadGameState extends State<_HeroReadGame>
                         Text(
                           'রাউন্ড ${_roundIdx + 1}/$_totalRounds',
                           style: TextStyle(
-                              color: Colors.white.withValues(alpha: 0.82),
+                              color: AppColors.textMuted,
                               fontWeight: FontWeight.w800),
                         ),
                         const Spacer(),
@@ -3050,7 +3049,7 @@ class _HeroReadGameState extends State<_HeroReadGame>
                         const SizedBox(width: 10),
                         Text('স্ট্রিক: $_streak',
                             style: TextStyle(
-                                color: Colors.white.withValues(alpha: 0.82),
+                                color: AppColors.textMuted,
                                 fontWeight: FontWeight.w800)),
                       ],
                     ),
@@ -3076,7 +3075,7 @@ class _HeroReadGameState extends State<_HeroReadGame>
                     padding: const EdgeInsets.fromLTRB(20, 18, 20, 20),
                     decoration: BoxDecoration(
                       gradient: const LinearGradient(
-                        colors: [Color(0xFF1E293B), Color(0xFF111827)],
+                        colors: [AppColors.card, AppColors.card],
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
                       ),
@@ -3106,7 +3105,7 @@ class _HeroReadGameState extends State<_HeroReadGame>
                           child: Text(
                             _modeBadge,
                             style: const TextStyle(
-                              color: Colors.white,
+                              color: AppColors.textPrimary,
                               fontSize: 11,
                               fontWeight: FontWeight.w900,
                               letterSpacing: 1.2,
@@ -3117,7 +3116,7 @@ class _HeroReadGameState extends State<_HeroReadGame>
                         Text(
                           _isJpToBn ? 'জাপানি উচ্চারণ পড়ুন' : 'বাংলা পড়ুন',
                           style: TextStyle(
-                            color: Colors.white.withValues(alpha: 0.6),
+                            color: AppColors.textMuted,
                             fontSize: 12,
                             fontWeight: FontWeight.w700,
                           ),
@@ -3139,7 +3138,7 @@ class _HeroReadGameState extends State<_HeroReadGame>
               Text(
                 _questionText,
                 style: const TextStyle(
-                  color: Colors.white,
+                  color: AppColors.textPrimary,
                   fontSize: 14,
                   fontWeight: FontWeight.w900,
                 ),
@@ -3196,12 +3195,12 @@ class _HeroReadGameState extends State<_HeroReadGame>
                         Row(
                           children: [
                             const Icon(Icons.thumb_up_alt_rounded,
-                                color: Colors.white, size: 26),
+                                color: AppColors.textPrimary, size: 26),
                             const SizedBox(width: 10),
                             const Text(
                               'সঠিক!',
                               style: TextStyle(
-                                  color: Colors.white,
+                                  color: AppColors.textPrimary,
                                   fontWeight: FontWeight.w900,
                                   fontSize: 22),
                             ),
@@ -3215,7 +3214,7 @@ class _HeroReadGameState extends State<_HeroReadGame>
                                     Icons.star_rounded,
                                     color: i < math.min(5, _streak)
                                         ? const Color(0xFFFFE000)
-                                        : Colors.white.withValues(alpha: 0.22),
+                                        : AppColors.border,
                                     size: 22,
                                   ),
                                 ),
@@ -3228,7 +3227,7 @@ class _HeroReadGameState extends State<_HeroReadGame>
                           '${_target.kanji} ${_target.kana} (${_target.bnPronunciation}) → ${_target.bnDigit} ${_target.bnWord}',
                           textAlign: TextAlign.center,
                           style: const TextStyle(
-                            color: Colors.white,
+                            color: AppColors.textPrimary,
                             fontWeight: FontWeight.w800,
                             fontSize: 15,
                           ),
@@ -3251,7 +3250,7 @@ class _HeroReadGameState extends State<_HeroReadGame>
         return Text(
           _target.bnDigit,
           style: const TextStyle(
-            color: Colors.white,
+            color: AppColors.textPrimary,
             fontSize: 84,
             fontWeight: FontWeight.w900,
             height: 1.0,
@@ -3261,7 +3260,7 @@ class _HeroReadGameState extends State<_HeroReadGame>
         return Text(
           _target.bnWord,
           style: const TextStyle(
-            color: Colors.white,
+            color: AppColors.textPrimary,
             fontSize: 56,
             fontWeight: FontWeight.w900,
             height: 1.05,
@@ -3284,9 +3283,9 @@ class _HeroReadGameState extends State<_HeroReadGame>
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
       decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.06),
+        color: AppColors.bg,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: Colors.white.withValues(alpha: 0.12)),
+        border: Border.all(color: AppColors.border),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -3294,7 +3293,7 @@ class _HeroReadGameState extends State<_HeroReadGame>
           Text(
             _target.kanji,
             style: const TextStyle(
-              color: Colors.white,
+              color: AppColors.textPrimary,
               fontSize: 24,
               fontWeight: FontWeight.w900,
             ),
@@ -3303,7 +3302,7 @@ class _HeroReadGameState extends State<_HeroReadGame>
           Text(
             _target.kana,
             style: TextStyle(
-              color: Colors.white.withValues(alpha: 0.85),
+              color: AppColors.textMuted,
               fontSize: 18,
               fontWeight: FontWeight.w800,
             ),
@@ -3329,10 +3328,10 @@ class _HeroReadGameState extends State<_HeroReadGame>
 
     Color border;
     Color bg;
-    Color textColor = Colors.white;
+    Color textColor = AppColors.textPrimary;
     if (!revealed) {
-      border = Colors.white.withValues(alpha: 0.18);
-      bg = Colors.white.withValues(alpha: 0.07);
+      border = AppColors.border;
+      bg = AppColors.bg;
     } else if (isCorrect) {
       border = const Color(0xFF10B981);
       bg = const Color(0xFF10B981).withValues(alpha: 0.22);
@@ -3342,8 +3341,8 @@ class _HeroReadGameState extends State<_HeroReadGame>
       bg = const Color(0xFFEF4444).withValues(alpha: 0.18);
       textColor = const Color(0xFFEF4444);
     } else {
-      border = Colors.white.withValues(alpha: 0.10);
-      bg = Colors.white.withValues(alpha: 0.04);
+      border = AppColors.border;
+      bg = AppColors.bg;
     }
 
     // Option label depends on mode
@@ -3569,7 +3568,7 @@ class _HeroOrderGameState extends State<_HeroOrderGame>
               Container(
                 padding: const EdgeInsets.all(14),
                 decoration: BoxDecoration(
-                  color: const Color(0xFF1E293B),
+                  color: AppColors.card,
                   borderRadius: BorderRadius.circular(16),
                   border: Border.all(color: _teal.withValues(alpha: 0.45)),
                   boxShadow: [
@@ -3592,7 +3591,7 @@ class _HeroOrderGameState extends State<_HeroOrderGame>
                           child: Text(
                             'সাজাও — ক্রম অনুযায়ী টেনে বসান',
                             style: TextStyle(
-                                color: Colors.white,
+                                color: AppColors.textPrimary,
                                 fontWeight: FontWeight.w900,
                                 fontSize: 13),
                           ),
@@ -3600,7 +3599,7 @@ class _HeroOrderGameState extends State<_HeroOrderGame>
                         Text(
                           _formatDuration(_sessionTimer.elapsed),
                           style: TextStyle(
-                            color: Colors.white.withValues(alpha: 0.85),
+                            color: AppColors.textMuted,
                             fontWeight: FontWeight.w900,
                           ),
                         ),
@@ -3611,7 +3610,7 @@ class _HeroOrderGameState extends State<_HeroOrderGame>
                       minHeight: 8,
                       borderRadius: BorderRadius.circular(99),
                       value: progress.clamp(0, 1),
-                      backgroundColor: Colors.white.withValues(alpha: 0.12),
+                      backgroundColor: AppColors.border,
                       valueColor: const AlwaysStoppedAnimation(_teal),
                     ),
                     const SizedBox(height: 8),
@@ -3620,7 +3619,7 @@ class _HeroOrderGameState extends State<_HeroOrderGame>
                         Text(
                           'স্থাপন: $placedCount/${_heroNumbers.length}',
                           style: TextStyle(
-                              color: Colors.white.withValues(alpha: 0.82),
+                              color: AppColors.textMuted,
                               fontWeight: FontWeight.w800),
                         ),
                         const Spacer(),
@@ -3631,7 +3630,7 @@ class _HeroOrderGameState extends State<_HeroOrderGame>
                         const SizedBox(width: 10),
                         Text('স্ট্রিক: $_streak',
                             style: TextStyle(
-                                color: Colors.white.withValues(alpha: 0.82),
+                                color: AppColors.textMuted,
                                 fontWeight: FontWeight.w800)),
                       ],
                     ),
@@ -3670,7 +3669,7 @@ class _HeroOrderGameState extends State<_HeroOrderGame>
                   color: const Color(0xFF111827),
                   borderRadius: BorderRadius.circular(16),
                   border:
-                      Border.all(color: Colors.white.withValues(alpha: 0.08)),
+                      Border.all(color: AppColors.bg),
                 ),
                 child: _pool.isEmpty
                     ? const Center(
@@ -3729,8 +3728,8 @@ class _HeroOrderGameState extends State<_HeroOrderGame>
             border = _teal;
             bg = _teal.withValues(alpha: 0.18);
           } else {
-            border = Colors.white.withValues(alpha: 0.18);
-            bg = Colors.white.withValues(alpha: 0.05);
+            border = AppColors.border;
+            bg = AppColors.bg;
           }
           return AnimatedContainer(
             duration: const Duration(milliseconds: 160),
@@ -3760,7 +3759,7 @@ class _HeroOrderGameState extends State<_HeroOrderGame>
                   child: Text(
                     h.bnDigit,
                     style: const TextStyle(
-                      color: Colors.white,
+                      color: AppColors.textPrimary,
                       fontSize: 18,
                       fontWeight: FontWeight.w900,
                     ),
@@ -3792,8 +3791,7 @@ class _HeroOrderGameState extends State<_HeroOrderGame>
                                   Text(
                                     '${placed.kanji}  ${placed.kana}',
                                     style: TextStyle(
-                                      color: Colors.white
-                                          .withValues(alpha: 0.65),
+                                      color: AppColors.border,
                                       fontSize: 11,
                                       fontWeight: FontWeight.w700,
                                       height: 1.0,
@@ -3813,7 +3811,7 @@ class _HeroOrderGameState extends State<_HeroOrderGame>
                           style: TextStyle(
                             color: hovering
                                 ? _teal
-                                : Colors.white.withValues(alpha: 0.5),
+                                : AppColors.textMuted,
                             fontSize: 12,
                             fontWeight: FontWeight.w700,
                           ),
@@ -3851,7 +3849,7 @@ class _HeroOrderGameState extends State<_HeroOrderGame>
       child: Text(
         h.bnPronunciation,
         style: const TextStyle(
-          color: Colors.white,
+          color: AppColors.textPrimary,
           fontSize: 16,
           fontWeight: FontWeight.w900,
         ),
@@ -4386,7 +4384,7 @@ class _HeroSpeakSequenceGameState extends State<_HeroSpeakSequenceGame>
     return Container(
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
-        color: const Color(0xFF1E293B),
+        color: AppColors.card,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(color: _rose.withValues(alpha: 0.45)),
         boxShadow: [
@@ -4409,7 +4407,7 @@ class _HeroSpeakSequenceGameState extends State<_HeroSpeakSequenceGame>
                 child: Text(
                   '১-১০ বলো — এক টানে জাপানিতে বলুন',
                   style: TextStyle(
-                      color: Colors.white,
+                      color: AppColors.textPrimary,
                       fontWeight: FontWeight.w900,
                       fontSize: 13),
                 ),
@@ -4429,7 +4427,7 @@ class _HeroSpeakSequenceGameState extends State<_HeroSpeakSequenceGame>
             minHeight: 8,
             borderRadius: BorderRadius.circular(99),
             value: _evaluated ? correctCount / _heroNumbers.length : 0,
-            backgroundColor: Colors.white.withValues(alpha: 0.12),
+            backgroundColor: AppColors.border,
             valueColor: const AlwaysStoppedAnimation(_rose),
           ),
           const SizedBox(height: 8),
@@ -4440,7 +4438,7 @@ class _HeroSpeakSequenceGameState extends State<_HeroSpeakSequenceGame>
                     ? 'সঠিক: $correctCount/${_heroNumbers.length}'
                     : 'মাইক চাপুন',
                 style: TextStyle(
-                    color: Colors.white.withValues(alpha: 0.82),
+                    color: AppColors.textMuted,
                     fontWeight: FontWeight.w800),
               ),
               const Spacer(),
@@ -4452,7 +4450,7 @@ class _HeroSpeakSequenceGameState extends State<_HeroSpeakSequenceGame>
               Text(
                 'সেরা: $_bestCorrect/10',
                 style: TextStyle(
-                    color: Colors.white.withValues(alpha: 0.82),
+                    color: AppColors.textMuted,
                     fontWeight: FontWeight.w800),
               ),
             ],
@@ -4463,7 +4461,7 @@ class _HeroSpeakSequenceGameState extends State<_HeroSpeakSequenceGame>
               child: Text(
                 'নির্ভুলতা: $accuracy%',
                 style: TextStyle(
-                  color: Colors.white.withValues(alpha: 0.75),
+                  color: AppColors.textMuted,
                   fontWeight: FontWeight.w700,
                   fontSize: 12,
                 ),
@@ -4480,7 +4478,7 @@ class _HeroSpeakSequenceGameState extends State<_HeroSpeakSequenceGame>
       padding: const EdgeInsets.fromLTRB(16, 14, 16, 16),
       decoration: BoxDecoration(
         gradient: const LinearGradient(
-          colors: [Color(0xFF1E293B), Color(0xFF111827)],
+          colors: [AppColors.card, AppColors.card],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
@@ -4501,7 +4499,7 @@ class _HeroSpeakSequenceGameState extends State<_HeroSpeakSequenceGame>
               'ইচি, নি, সান, ইয়োন … জু — সব এক সাথে বলুন',
               textAlign: TextAlign.center,
               style: TextStyle(
-                color: Colors.white.withValues(alpha: 0.78),
+                color: AppColors.textMuted,
                 fontSize: 12,
                 fontWeight: FontWeight.w700,
               ),
@@ -4542,7 +4540,7 @@ class _HeroSpeakSequenceGameState extends State<_HeroSpeakSequenceGame>
                       _listening
                           ? Icons.stop_rounded
                           : Icons.mic_rounded,
-                      color: Colors.white,
+                      color: AppColors.textPrimary,
                       size: 38,
                     ),
                   ),
@@ -4554,7 +4552,7 @@ class _HeroSpeakSequenceGameState extends State<_HeroSpeakSequenceGame>
           Text(
             _listening ? 'শুনছি — বলতে থাকুন…' : (_evaluated ? 'আবার চেষ্টা করতে মাইক চাপুন' : 'মাইক চাপুন'),
             style: const TextStyle(
-              color: Colors.white,
+              color: AppColors.textPrimary,
               fontWeight: FontWeight.w900,
               fontSize: 13,
             ),
@@ -4565,10 +4563,10 @@ class _HeroSpeakSequenceGameState extends State<_HeroSpeakSequenceGame>
               width: double.infinity,
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
               decoration: BoxDecoration(
-                color: Colors.white.withValues(alpha: 0.06),
+                color: AppColors.bg,
                 borderRadius: BorderRadius.circular(10),
                 border:
-                    Border.all(color: Colors.white.withValues(alpha: 0.12)),
+                    Border.all(color: AppColors.border),
               ),
               child: Text(
                 _heard,
@@ -4687,7 +4685,7 @@ class _HeroSpeakSequenceGameState extends State<_HeroSpeakSequenceGame>
         detail = 'বাদ পড়েছে';
         break;
       case _SeqStatus.pending:
-        color = Colors.white.withValues(alpha: 0.3);
+        color = AppColors.border;
         icon = Icons.radio_button_unchecked_rounded;
         detail = 'অপেক্ষমাণ';
         break;
@@ -4734,7 +4732,7 @@ class _HeroSpeakSequenceGameState extends State<_HeroSpeakSequenceGame>
                 Text(
                   r.expected.bnPronunciation,
                   style: const TextStyle(
-                    color: Colors.white,
+                    color: AppColors.textPrimary,
                     fontSize: 14,
                     fontWeight: FontWeight.w900,
                     height: 1.0,
@@ -4770,8 +4768,8 @@ class _HeroSpeakSequenceGameState extends State<_HeroSpeakSequenceGame>
           child: OutlinedButton.icon(
             onPressed: _ttsReady ? _speakSequence : null,
             style: OutlinedButton.styleFrom(
-              foregroundColor: Colors.white,
-              side: BorderSide(color: Colors.white.withValues(alpha: 0.4)),
+              foregroundColor: AppColors.textPrimary,
+              side: BorderSide(color: AppColors.textMuted),
               padding: const EdgeInsets.symmetric(vertical: 12),
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12)),
@@ -4816,7 +4814,7 @@ class _TopBar extends StatelessWidget {
           const Icon(Icons.score_rounded, color: Color(0xFFFFE000), size: 18),
           const SizedBox(width: 6),
           Text('স্কোর: $score',
-              style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w900)),
+              style: const TextStyle(color: AppColors.textPrimary, fontWeight: FontWeight.w900)),
           const Spacer(),
           for (var i = 0; i < 3; i++)
             Padding(
@@ -4900,11 +4898,11 @@ class _AwesomeResultSheet extends StatelessWidget {
                 const SizedBox(width: 10),
                 Expanded(
                   child: Text(title,
-                      style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w900, fontSize: 16)),
+                      style: const TextStyle(color: AppColors.textPrimary, fontWeight: FontWeight.w900, fontSize: 16)),
                 ),
                 IconButton(
                   onPressed: () => Navigator.pop(context),
-                  icon: const Icon(Icons.close_rounded, color: Colors.white),
+                  icon: const Icon(Icons.close_rounded, color: AppColors.textPrimary),
                 ),
               ],
             ),
@@ -4912,9 +4910,9 @@ class _AwesomeResultSheet extends StatelessWidget {
             Container(
               padding: const EdgeInsets.all(14),
               decoration: BoxDecoration(
-                color: Colors.white.withValues(alpha: 0.06),
+                color: AppColors.bg,
                 borderRadius: BorderRadius.circular(16),
-                border: Border.all(color: Colors.white.withValues(alpha: 0.10)),
+                border: Border.all(color: AppColors.border),
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -4930,13 +4928,13 @@ class _AwesomeResultSheet extends StatelessWidget {
                         Container(
                           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                           decoration: BoxDecoration(
-                            color: const Color(0xFF1E293B),
+                            color: AppColors.card,
                             borderRadius: BorderRadius.circular(999),
-                            border: Border.all(color: Colors.white.withValues(alpha: 0.10)),
+                            border: Border.all(color: AppColors.border),
                           ),
                           child: Text(s,
                               style: TextStyle(
-                                  color: Colors.white.withValues(alpha: 0.92),
+                                  color: AppColors.textPrimary,
                                   fontWeight: FontWeight.w800,
                                   fontSize: 12)),
                         ),
@@ -4948,7 +4946,7 @@ class _AwesomeResultSheet extends StatelessWidget {
             if (missed.isNotEmpty) ...[
               const SizedBox(height: 12),
               const Text('যেগুলো মিস হয়েছে',
-                  style: TextStyle(color: Colors.white, fontWeight: FontWeight.w900)),
+                  style: TextStyle(color: AppColors.textPrimary, fontWeight: FontWeight.w900)),
               const SizedBox(height: 8),
               for (final m in missed)
                 Padding(
@@ -4956,12 +4954,12 @@ class _AwesomeResultSheet extends StatelessWidget {
                   child: Container(
                     padding: const EdgeInsets.all(12),
                     decoration: BoxDecoration(
-                      color: Colors.white.withValues(alpha: 0.05),
+                      color: AppColors.bg,
                       borderRadius: BorderRadius.circular(14),
-                      border: Border.all(color: Colors.white.withValues(alpha: 0.10)),
+                      border: Border.all(color: AppColors.border),
                     ),
                     child: Text(m,
-                        style: TextStyle(color: Colors.white.withValues(alpha: 0.92), fontWeight: FontWeight.w800)),
+                        style: TextStyle(color: AppColors.textPrimary, fontWeight: FontWeight.w800)),
                   ),
                 ),
             ],
@@ -4973,7 +4971,7 @@ class _AwesomeResultSheet extends StatelessWidget {
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xFFFFE000),
-                foregroundColor: const Color(0xFF1E293B),
+                foregroundColor: AppColors.textPrimary,
                 padding: const EdgeInsets.symmetric(vertical: 12),
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
               ),
@@ -4988,7 +4986,7 @@ class _AwesomeResultSheet extends StatelessWidget {
 }
 
 BoxDecoration _cardDeco() => BoxDecoration(
-      color: const Color(0xFF1E293B),
+      color: AppColors.card,
       borderRadius: BorderRadius.circular(16),
-      border: Border.all(color: Colors.white.withValues(alpha: 0.10)),
+      border: Border.all(color: AppColors.border),
     );

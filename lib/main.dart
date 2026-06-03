@@ -75,8 +75,11 @@ class MyApp extends StatelessWidget {
       locale: LocaleController.to.locale,
       fallbackLocale: const Locale('en', 'US'),
       builder: (context, child) {
-        if (!kIsWeb || child == null) return child ?? const SizedBox.shrink();
-        return _WebPhonePreview(child: child);
+        // Paint the sky→gold brand gradient once behind the whole app so every
+        // (transparent) scaffold sits on it.
+        final app = SkyGoldBackground(child: child ?? const SizedBox.shrink());
+        if (!kIsWeb) return app;
+        return _WebPhonePreview(child: app);
       },
       getPages: [
         GetPage(name: '/login', page: () => const LoginScreen()),
@@ -155,7 +158,7 @@ class _WebPhonePreview extends StatelessWidget {
     );
 
     return ColoredBox(
-      color: const Color(0xFF0F172A), // dark slate backdrop
+      color: const Color(0xFF1F2933), // neutral charcoal backdrop
       child: Center(
         child: FittedBox(
           fit: BoxFit.contain,

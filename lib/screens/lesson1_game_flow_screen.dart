@@ -1,6 +1,7 @@
 import 'dart:math' as math;
 import 'dart:ui' show ImageFilter;
 import 'package:flutter/material.dart';
+import 'package:ez_trainz/utils/app_theme.dart';
 import 'package:flutter/services.dart';
 import 'package:ez_trainz/services/jlc_tts.dart';
 import 'package:get/get.dart';
@@ -59,7 +60,7 @@ class _Lesson1GameFlowScreenState extends State<Lesson1GameFlowScreen>
   // Lesson 1 cloud-blue background.
   static const _bgTop = Color(0xFFF2FBFF);
   static const _bgMid = Color(0xFFBFEFFF);
-  static const _bgBottom = Color(0xFF0F172A);
+  static const _bgBottom = AppColors.goldBottom;
   static const _green = Color(0xFF9AE11B);
 
   final _rng = math.Random();
@@ -571,7 +572,7 @@ class _Header extends StatelessWidget {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        const Icon(Icons.park_rounded, color: Colors.white70, size: 26),
+        const Icon(Icons.park_rounded, color: AppColors.textMuted, size: 26),
         const SizedBox(width: 10),
         Expanded(
           child: Text(
@@ -715,7 +716,7 @@ class _KanaMcq extends StatelessWidget {
         Text(
           prompt,
           style: TextStyle(
-            color: Colors.white.withValues(alpha: 0.9),
+            color: AppColors.textPrimary,
             fontWeight: FontWeight.w800,
             fontSize: 16,
           ),
@@ -776,7 +777,7 @@ class _ListenKana extends StatelessWidget {
         Text(
           'Tap what you hear',
           style: TextStyle(
-            color: Colors.white.withValues(alpha: 0.9),
+            color: AppColors.textPrimary,
             fontWeight: FontWeight.w800,
             fontSize: 16,
           ),
@@ -793,7 +794,7 @@ class _ListenKana extends StatelessWidget {
                 borderRadius: BorderRadius.circular(22),
               ),
               child: const Icon(Icons.volume_up_rounded,
-                  color: Colors.white, size: 46),
+                  color: AppColors.textPrimary, size: 46),
             ),
           ),
         ),
@@ -863,7 +864,7 @@ class _DrawKana extends StatelessWidget {
         Text(
           'Trace the character',
           style: TextStyle(
-            color: Colors.white.withValues(alpha: 0.9),
+            color: AppColors.textPrimary,
             fontWeight: FontWeight.w800,
             fontSize: 16,
           ),
@@ -881,7 +882,7 @@ class _DrawKana extends StatelessWidget {
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: const Icon(Icons.volume_up_rounded,
-                    color: Colors.white, size: 24),
+                    color: AppColors.textPrimary, size: 24),
               ),
             ),
             const SizedBox(width: 12),
@@ -901,7 +902,7 @@ class _DrawKana extends StatelessWidget {
                 Text(
                   romaji,
                   style: TextStyle(
-                    color: Colors.white.withValues(alpha: 0.6),
+                    color: AppColors.textMuted,
                     fontWeight: FontWeight.w700,
                     fontSize: 12,
                     height: 1,
@@ -1317,7 +1318,7 @@ class _MiniClear extends StatelessWidget {
           child: Text(
             'Clear',
             style: TextStyle(
-              color: Colors.white.withValues(alpha: 0.9),
+              color: AppColors.textPrimary,
               fontWeight: FontWeight.w900,
               fontSize: 12,
             ),
@@ -1539,7 +1540,7 @@ class _VocabPic extends StatelessWidget {
         Text(
           'Which word matches this picture?',
           style: TextStyle(
-            color: Colors.white.withValues(alpha: 0.9),
+            color: AppColors.textPrimary,
             fontWeight: FontWeight.w800,
             fontSize: 16,
           ),
@@ -1614,7 +1615,7 @@ class _WordChip extends StatelessWidget {
             ),
           ),
           Icon(Icons.chevron_right_rounded,
-              color: Colors.white.withValues(alpha: 0.75)),
+              color: AppColors.textMuted),
         ],
       ),
     );

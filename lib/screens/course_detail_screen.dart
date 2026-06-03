@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:ez_trainz/controllers/course_controller.dart';
 import 'package:ez_trainz/models/kana.dart';
 import 'package:ez_trainz/models/lesson.dart';
+import 'package:ez_trainz/utils/app_theme.dart';
 import 'package:ez_trainz/screens/hiragana_lesson1_screen.dart';
 import 'package:ez_trainz/screens/lesson_screen.dart';
 import 'package:ez_trainz/screens/n5_kana_modules_screen.dart';
@@ -17,7 +18,7 @@ class CourseDetailScreen extends StatelessWidget {
     final course = ctrl.selectedCourse!;
 
     return Scaffold(
-      backgroundColor: const Color(0xFF0F172A),
+      backgroundColor: Colors.transparent,
       body: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -35,20 +36,20 @@ class CourseDetailScreen extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(
                           horizontal: 12, vertical: 8),
                       decoration: BoxDecoration(
-                        color: Colors.white.withValues(alpha: 0.2),
+                        color: AppColors.card,
                         borderRadius: BorderRadius.circular(20),
                         border:
-                            Border.all(color: Colors.white38, width: 1),
+                            Border.all(color: AppColors.border, width: 1),
                       ),
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           const Icon(Icons.arrow_back_ios_rounded,
-                              color: const Color(0xFF1E293B), size: 14),
+                              color: AppColors.textPrimary, size: 14),
                           const SizedBox(width: 4),
                           Text('back'.tr,
                               style: const TextStyle(
-                                color: Colors.white,
+                                color: AppColors.textPrimary,
                                 fontSize: 13,
                                 fontWeight: FontWeight.w600,
                               )),
@@ -81,7 +82,7 @@ class CourseDetailScreen extends StatelessWidget {
                   Text(
                     course.title,
                     style: const TextStyle(
-                      color: Colors.white,
+                      color: AppColors.textPrimary,
                       fontSize: 28,
                       fontWeight: FontWeight.w900,
                       height: 1.2,
@@ -90,8 +91,8 @@ class CourseDetailScreen extends StatelessWidget {
                   const SizedBox(height: 8),
                   Text(
                     course.description,
-                    style: TextStyle(
-                      color: Colors.white.withValues(alpha: 0.75),
+                    style: const TextStyle(
+                      color: AppColors.textMuted,
                       fontSize: 15,
                       fontWeight: FontWeight.w400,
                     ),
@@ -103,7 +104,7 @@ class CourseDetailScreen extends StatelessWidget {
                     Text(
                       'writing_systems'.tr,
                       style: TextStyle(
-                        color: Colors.white.withValues(alpha: 0.6),
+                        color: AppColors.textMuted,
                         fontSize: 13,
                         fontWeight: FontWeight.w700,
                         letterSpacing: 1.2,
@@ -202,7 +203,7 @@ class CourseDetailScreen extends StatelessWidget {
                   Text(
                     'lessons_label'.tr,
                     style: TextStyle(
-                      color: Colors.white.withValues(alpha: 0.6),
+                      color: AppColors.textMuted,
                       fontSize: 13,
                       fontWeight: FontWeight.w700,
                       letterSpacing: 1.2,
@@ -218,7 +219,7 @@ class CourseDetailScreen extends StatelessWidget {
               child: Obx(() {
                 if (ctrl.isLoading.value) {
                   return const Center(
-                    child: CircularProgressIndicator(color: Colors.white),
+                    child: CircularProgressIndicator(color: AppColors.accentBlue),
                   );
                 }
 
@@ -227,7 +228,7 @@ class CourseDetailScreen extends StatelessWidget {
                     child: Text(
                       'no_lessons'.tr,
                       style: TextStyle(
-                        color: Colors.white.withValues(alpha: 0.7),
+                        color: AppColors.textMuted,
                         fontSize: 15,
                       ),
                     ),
@@ -277,7 +278,7 @@ class _LessonTile extends StatelessWidget {
         margin: const EdgeInsets.only(bottom: 12),
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: const Color(0xFF1E293B),
+          color: AppColors.card,
           borderRadius: BorderRadius.circular(14),
           boxShadow: [
             BoxShadow(

@@ -2,6 +2,7 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:ez_trainz/utils/app_theme.dart';
 import 'package:get/get.dart';
 
 import 'package:ez_trainz/controllers/hearts_controller.dart';
@@ -31,7 +32,7 @@ class LessonQuizScreen extends StatefulWidget {
 
 class _LessonQuizScreenState extends State<LessonQuizScreen>
     with TickerProviderStateMixin {
-  static const _bg = Color(0xFF0B1326);
+  static const _bg = Colors.transparent;
   static const _gold = Color(0xFFFFE000);
   static const _ok = Color(0xFF10B981);
   static const _bad = Color(0xFFEF4444);
@@ -173,7 +174,7 @@ class _LessonQuizScreenState extends State<LessonQuizScreen>
                       IconButton(
                         onPressed: () => _confirmExit(),
                         icon: const Icon(Icons.close_rounded),
-                        color: Colors.white70,
+                        color: AppColors.textMuted,
                       ),
                       Expanded(child: _ProgressBar(controller: c)),
                       const SizedBox(width: 10),
@@ -260,7 +261,7 @@ class _ProgressBar extends StatelessWidget {
             child: LinearProgressIndicator(
               value: v.clamp(0, 1),
               minHeight: 8,
-              backgroundColor: Colors.white.withValues(alpha: 0.10),
+              backgroundColor: AppColors.border,
               valueColor: const AlwaysStoppedAnimation(Color(0xFFFFE000)),
             ),
           ),
@@ -269,7 +270,7 @@ class _ProgressBar extends StatelessWidget {
             '${i + 1} / $total',
             textAlign: TextAlign.center,
             style: TextStyle(
-              color: Colors.white.withValues(alpha: 0.55),
+              color: AppColors.textMuted,
               fontSize: 11.5,
               fontWeight: FontWeight.w700,
             ),
@@ -288,9 +289,9 @@ class _HeartsPill extends StatelessWidget {
       return Container(
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
         decoration: BoxDecoration(
-          color: const Color(0xFF111827),
+          color: AppColors.card,
           borderRadius: BorderRadius.circular(999),
-          border: Border.all(color: Colors.white.withValues(alpha: 0.10)),
+          border: Border.all(color: AppColors.border),
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
@@ -300,7 +301,7 @@ class _HeartsPill extends StatelessWidget {
             Text(
               '$hearts/${HeartsController.maxHearts}',
               style: const TextStyle(
-                color: Colors.white,
+                color: AppColors.textPrimary,
                 fontWeight: FontWeight.w900,
                 fontSize: 12.5,
               ),
@@ -317,7 +318,7 @@ class _QuizCard extends StatelessWidget {
 
   final LessonQuizController controller;
 
-  static const _card = Color(0xFF111827);
+  static const _card = AppColors.card;
   static const _gold = Color(0xFFFFE000);
 
   @override
@@ -349,7 +350,7 @@ class _QuizCard extends StatelessWidget {
             Text(
               challenge.prompt,
               style: const TextStyle(
-                color: Colors.white,
+                color: AppColors.textPrimary,
                 fontSize: 15,
                 fontWeight: FontWeight.w900,
               ),
@@ -359,9 +360,9 @@ class _QuizCard extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
                 decoration: BoxDecoration(
-                  color: Colors.white.withValues(alpha: 0.06),
+                  color: AppColors.bg,
                   borderRadius: BorderRadius.circular(16),
-                  border: Border.all(color: Colors.white.withValues(alpha: 0.08)),
+                  border: Border.all(color: AppColors.border),
                 ),
                 child: Column(
                   children: [
@@ -369,7 +370,7 @@ class _QuizCard extends StatelessWidget {
                       challenge.jp!,
                       textAlign: TextAlign.center,
                       style: const TextStyle(
-                        color: Colors.white,
+                        color: AppColors.textPrimary,
                         fontSize: 30,
                         fontWeight: FontWeight.w900,
                         height: 1,
@@ -380,7 +381,7 @@ class _QuizCard extends StatelessWidget {
                       Text(
                         challenge.romaji!,
                         style: TextStyle(
-                          color: Colors.white.withValues(alpha: 0.65),
+                          color: AppColors.textMuted,
                           fontWeight: FontWeight.w800,
                         ),
                       ),
@@ -406,13 +407,13 @@ class _QuizCard extends StatelessWidget {
                           ? const Color(0xFFEF4444)
                           : isSelected
                               ? _gold
-                              : Colors.white.withValues(alpha: 0.10);
+                              : AppColors.border;
 
                   final bg = isCorrect
                       ? const Color(0xFF10B981).withValues(alpha: 0.12)
                       : isWrongSelected
                           ? const Color(0xFFEF4444).withValues(alpha: 0.10)
-                          : Colors.white.withValues(alpha: 0.04);
+                          : AppColors.bg;
 
                   return InkWell(
                     onTap: () => controller.select(choice.id),
@@ -433,7 +434,7 @@ class _QuizCard extends StatelessWidget {
                             child: Text(
                               choice.label,
                               style: TextStyle(
-                                color: Colors.white.withValues(alpha: 0.90),
+                                color: AppColors.textPrimary,
                                 fontWeight: FontWeight.w900,
                               ),
                             ),

@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
+import 'package:ez_trainz/utils/app_theme.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:video_player/video_player.dart';
@@ -247,7 +248,7 @@ class _LessonScreenState extends State<LessonScreen> {
 
     // ── NORMAL layout ──────────────────────────────────────────────
     return Scaffold(
-      backgroundColor: const Color(0xFF0F172A),
+      backgroundColor: Colors.transparent,
       body: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -264,20 +265,20 @@ class _LessonScreenState extends State<LessonScreen> {
                   padding:
                       const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                   decoration: BoxDecoration(
-                    color: const Color(0xFF1E293B),
+                    color: AppColors.card,
                     borderRadius: BorderRadius.circular(20),
-                    border: Border.all(color: const Color(0xFF334155), width: 1),
+                    border: Border.all(color: AppColors.border, width: 1),
                   ),
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       const Icon(Icons.arrow_back_ios_rounded,
-                          color: const Color(0xFF1E293B), size: 14),
+                          color: AppColors.textPrimary, size: 14),
                       const SizedBox(width: 4),
                       Text(
                         'back'.tr,
                         style: const TextStyle(
-                          color: Colors.white,
+                          color: AppColors.textPrimary,
                           fontSize: 13,
                           fontWeight: FontWeight.w600,
                         ),
@@ -317,7 +318,7 @@ class _LessonScreenState extends State<LessonScreen> {
                 width: double.infinity,
                 padding: const EdgeInsets.fromLTRB(24, 28, 24, 24),
                 decoration: const BoxDecoration(
-                  color: Color(0xFF1E293B),
+                  color: AppColors.card,
                   borderRadius:
                       BorderRadius.vertical(top: Radius.circular(28)),
                 ),
@@ -365,7 +366,7 @@ class _LessonScreenState extends State<LessonScreen> {
                                     Text(
                                       "Start today's session",
                                       style: TextStyle(
-                                        color: Colors.white,
+                                        color: AppColors.textPrimary,
                                         fontWeight: FontWeight.w900,
                                         fontSize: 14,
                                       ),
@@ -382,7 +383,7 @@ class _LessonScreenState extends State<LessonScreen> {
                                   ],
                                 ),
                               ),
-                              const Icon(Icons.chevron_right_rounded, color: Colors.white),
+                              const Icon(Icons.chevron_right_rounded, color: AppColors.textPrimary),
                             ],
                           ),
                         ),
@@ -391,7 +392,7 @@ class _LessonScreenState extends State<LessonScreen> {
                       Text(
                         lesson.title,
                         style: const TextStyle(
-                          color: Colors.white,
+                          color: AppColors.textPrimary,
                           fontSize: 22,
                           fontWeight: FontWeight.w900,
                           height: 1.2,
@@ -407,12 +408,12 @@ class _LessonScreenState extends State<LessonScreen> {
                         ),
                       ),
                       const SizedBox(height: 20),
-                      Container(height: 1, color: const Color(0xFF334155)),
+                      Container(height: 1, color: AppColors.border),
                       const SizedBox(height: 20),
                       Text(
                         lesson.content.body,
                         style: const TextStyle(
-                          color: Colors.white,
+                          color: AppColors.textPrimary,
                           fontSize: 16,
                           fontWeight: FontWeight.w400,
                           height: 1.6,

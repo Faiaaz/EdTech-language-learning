@@ -2,10 +2,12 @@ import 'dart:async';
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
+import 'package:ez_trainz/utils/app_theme.dart';
 import 'package:flutter/services.dart';
 import 'package:ez_trainz/services/jlc_tts.dart';
 import 'package:get/get.dart';
 import 'package:ez_trainz/services/jlc_stt.dart';
+import 'package:ez_trainz/widgets/game_fx.dart';
 
 class SpeechGameScreen extends StatefulWidget {
   const SpeechGameScreen({super.key});
@@ -69,6 +71,7 @@ class _SpeechGameScreenState extends State<SpeechGameScreen> {
   _Judge? _judge;
 
   final _tts = JlcTts();
+  final _fx = GameFx();
   bool _ttsReady = false;
   String? _error;
 
@@ -136,6 +139,7 @@ class _SpeechGameScreenState extends State<SpeechGameScreen> {
     _stt.stop();
     // ignore: discarded_futures
     _tts.stop();
+    _fx.dispose();
     super.dispose();
   }
 
@@ -151,6 +155,7 @@ class _SpeechGameScreenState extends State<SpeechGameScreen> {
 
   Future<void> _startListening() async {
     if (_listening) return;
+    unawaited(_fx.tap());
     HapticFeedback.mediumImpact();
     setState(() {
       _error = null;
@@ -179,6 +184,7 @@ class _SpeechGameScreenState extends State<SpeechGameScreen> {
     } catch (e) {
       if (!mounted) return;
       HapticFeedback.lightImpact();
+      unawaited(_fx.error());
       setState(() {
         _error = e.toString();
         _listening = false;
@@ -196,6 +202,7 @@ class _SpeechGameScreenState extends State<SpeechGameScreen> {
 
   Future<void> _stopListening() async {
     if (!_listening) return;
+    unawaited(_fx.tap());
     HapticFeedback.selectionClick();
     _recTimer?.cancel();
     setState(() {
@@ -211,9 +218,11 @@ class _SpeechGameScreenState extends State<SpeechGameScreen> {
         _checking = false;
         _judge = _evaluate(_recognized);
       });
+      unawaited(_judge == _Judge.correct ? _fx.success() : _fx.error());
     } catch (e) {
       if (!mounted) return;
       HapticFeedback.lightImpact();
+      unawaited(_fx.error());
       setState(() {
         _checking = false;
         _error = e.toString();
@@ -223,10 +232,12 @@ class _SpeechGameScreenState extends State<SpeechGameScreen> {
 
   Future<void> _playModel() async {
     if (!_ttsReady) {
+      unawaited(_fx.error());
       HapticFeedback.lightImpact();
       setState(() => _error = 'TTS not available on this device.');
       return;
     }
+    unawaited(_fx.tap());
     HapticFeedback.selectionClick();
     try {
       await _tts.stop();
@@ -237,6 +248,7 @@ class _SpeechGameScreenState extends State<SpeechGameScreen> {
   }
 
   void _nextPrompt() {
+    unawaited(_fx.tap());
     HapticFeedback.selectionClick();
     setState(() {
       _error = null;
@@ -253,9 +265,7 @@ class _SpeechGameScreenState extends State<SpeechGameScreen> {
     });
   }
 
-  static const _bgTop = Color(0xFF0B1220);
-  static const _bgBottom = Color(0xFF1C3A8A);
-  static const _card = Color(0xFF0F172A);
+  static const _card = AppColors.card;
   static const _accent = Color(0xFFFFD86B);
 
   _Judge _evaluate(String raw) {
@@ -286,13 +296,7 @@ class _SpeechGameScreenState extends State<SpeechGameScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [_bgTop, _bgBottom],
-          ),
-        ),
+        decoration: const BoxDecoration(gradient: AppColors.pageGradient),
         child: SafeArea(
           child: Padding(
             padding: const EdgeInsets.fromLTRB(16, 12, 16, 16),
@@ -355,7 +359,7 @@ class _SpeechGameScreenState extends State<SpeechGameScreen> {
                       color: _card.withValues(alpha: 0.80),
                       borderRadius: BorderRadius.circular(18),
                       border:
-                          Border.all(color: Colors.white.withValues(alpha: 0.12)),
+                          Border.all(color: AppColors.border),
                     ),
                     child: Row(
                       children: [
@@ -364,7 +368,7 @@ class _SpeechGameScreenState extends State<SpeechGameScreen> {
                             onPressed: _listening ? null : _playModel,
                             style: ElevatedButton.styleFrom(
                               backgroundColor: _accent,
-                              foregroundColor: const Color(0xFF0B1220),
+                              foregroundColor: AppColors.textPrimary,
                               padding: const EdgeInsets.symmetric(vertical: 12),
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(14)),
@@ -410,9 +414,9 @@ class _SpeechGameScreenState extends State<SpeechGameScreen> {
                           child: OutlinedButton.icon(
                             onPressed: _listening ? null : _nextPrompt,
                             style: OutlinedButton.styleFrom(
-                              foregroundColor: Colors.white,
+                              foregroundColor: AppColors.textPrimary,
                               side: BorderSide(
-                                  color: Colors.white.withValues(alpha: 0.20)),
+                                  color: AppColors.accentBlue.withValues(alpha: 0.5)),
                               padding: const EdgeInsets.symmetric(vertical: 12),
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(14)),
@@ -434,7 +438,7 @@ class _SpeechGameScreenState extends State<SpeechGameScreen> {
                           ? 'Checking…'
                           : 'Hear → Record → Next',
                   style: TextStyle(
-                    color: Colors.white.withValues(alpha: 0.75),
+                    color: AppColors.textMuted,
                     fontWeight: FontWeight.w700,
                     fontSize: 12,
                   ),
@@ -481,9 +485,9 @@ class _Pill extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
       decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.10),
+        color: AppColors.card,
         borderRadius: BorderRadius.circular(999),
-        border: Border.all(color: Colors.white.withValues(alpha: 0.12)),
+        border: Border.all(color: AppColors.border),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -515,9 +519,9 @@ class _SimplePromptCard extends StatelessWidget {
       width: double.infinity,
       padding: const EdgeInsets.all(18),
       decoration: BoxDecoration(
-        color: const Color(0xFF0F172A).withValues(alpha: 0.88),
+        color: AppColors.card,
         borderRadius: BorderRadius.circular(22),
-        border: Border.all(color: Colors.white.withValues(alpha: 0.12)),
+        border: Border.all(color: AppColors.border),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.25),
@@ -554,7 +558,7 @@ class _SimplePromptCard extends StatelessWidget {
             '${prompt.romaji} • ${prompt.english}',
             textAlign: TextAlign.center,
             style: TextStyle(
-              color: Colors.white.withValues(alpha: 0.78),
+              color: AppColors.textMuted,
               fontWeight: FontWeight.w700,
             ),
           ),
@@ -605,7 +609,7 @@ class _JudgeBanner extends StatelessWidget {
           Text(
             'Heard: $said',
             style: TextStyle(
-              color: Colors.white.withValues(alpha: 0.88),
+              color: AppColors.textPrimary,
               fontWeight: FontWeight.w700,
             ),
           ),
@@ -613,7 +617,7 @@ class _JudgeBanner extends StatelessWidget {
           Text(
             'Confidence: ${(confidence * 100).round()}%',
             style: TextStyle(
-              color: Colors.white.withValues(alpha: 0.72),
+              color: AppColors.textMuted,
               fontWeight: FontWeight.w700,
               fontSize: 12,
             ),
@@ -636,7 +640,7 @@ class _ErrorCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: const Color(0xFFEF4444).withValues(alpha: 0.18),
         borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: Colors.white.withValues(alpha: 0.12)),
+        border: Border.all(color: AppColors.border),
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,

@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
+import 'package:ez_trainz/utils/app_theme.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
@@ -239,8 +240,6 @@ class _HiraganaHuntScreenState extends State<HiraganaHuntScreen> {
     });
   }
 
-  static const _bgTop = Color(0xFF0F172A);
-  static const _bgBottom = Color(0xFF2A5298);
   static const _accent = Color(0xFFFFD86B);
 
   @override
@@ -249,13 +248,7 @@ class _HiraganaHuntScreenState extends State<HiraganaHuntScreen> {
       body: Container(
         width: double.infinity,
         height: double.infinity,
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [_bgTop, _bgBottom],
-          ),
-        ),
+        decoration: const BoxDecoration(gradient: AppColors.pageGradient),
         child: SafeArea(
           child: _intro
               ? _buildIntro()
@@ -292,7 +285,7 @@ class _HiraganaHuntScreenState extends State<HiraganaHuntScreen> {
           Text('hiragana_hunt_intro'.tr,
               textAlign: TextAlign.center,
               style: TextStyle(
-                  color: Colors.white.withValues(alpha: 0.9), fontSize: 15)),
+                  color: AppColors.textPrimary, fontSize: 15)),
           const SizedBox(height: 16),
           GridView.builder(
             shrinkWrap: true,
@@ -309,7 +302,7 @@ class _HiraganaHuntScreenState extends State<HiraganaHuntScreen> {
               return Container(
                 padding: const EdgeInsets.all(10),
                 decoration: BoxDecoration(
-                  color: Colors.white.withValues(alpha: 0.15),
+                  color: AppColors.card,
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: Column(
@@ -335,7 +328,7 @@ class _HiraganaHuntScreenState extends State<HiraganaHuntScreen> {
               onPressed: _startGame,
               style: ElevatedButton.styleFrom(
                 backgroundColor: _accent,
-                foregroundColor: _bgTop,
+                foregroundColor: AppColors.textPrimary,
                 padding: const EdgeInsets.symmetric(vertical: 16),
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10)),
@@ -364,14 +357,14 @@ class _HiraganaHuntScreenState extends State<HiraganaHuntScreen> {
               style: const TextStyle(color: const Color(0xFF1E293B), fontSize: 22)),
           const SizedBox(height: 12),
           Text('hiragana_hunt_final_rounds'.trParams({'n': '$_roundCount'}),
-              style: TextStyle(color: Colors.white.withValues(alpha: 0.95))),
+              style: TextStyle(color: AppColors.textPrimary)),
           const SizedBox(height: 8),
           Text(
             'hiragana_hunt_final_stats'.trParams({
               'c': '$_correctTotal',
               'w': '$_wrongTotal',
             }),
-            style: TextStyle(color: Colors.white.withValues(alpha: 0.9)),
+            style: TextStyle(color: AppColors.textPrimary),
           ),
           const SizedBox(height: 28),
           Row(
@@ -383,8 +376,8 @@ class _HiraganaHuntScreenState extends State<HiraganaHuntScreen> {
                     Get.back();
                   },
                   style: OutlinedButton.styleFrom(
-                    foregroundColor: Colors.white,
-                    side: BorderSide(color: Colors.white.withValues(alpha: 0.5)),
+                    foregroundColor: AppColors.textPrimary,
+                    side: BorderSide(color: AppColors.accentBlue),
                     padding: const EdgeInsets.symmetric(vertical: 14),
                   ),
                   child: Text('done'.tr),
@@ -396,7 +389,7 @@ class _HiraganaHuntScreenState extends State<HiraganaHuntScreen> {
                   onPressed: _startGame,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: _accent,
-                    foregroundColor: _bgTop,
+                    foregroundColor: AppColors.textPrimary,
                     padding: const EdgeInsets.symmetric(vertical: 14),
                   ),
                   child: Text('play_again'.tr),
@@ -439,7 +432,7 @@ class _HiraganaHuntScreenState extends State<HiraganaHuntScreen> {
           Container(
             padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
             decoration: BoxDecoration(
-              color: Colors.white.withValues(alpha: 0.1),
+              color: AppColors.card,
               borderRadius: BorderRadius.circular(12),
             ),
             child: Wrap(
@@ -466,14 +459,14 @@ class _HiraganaHuntScreenState extends State<HiraganaHuntScreen> {
           Container(
             padding: const EdgeInsets.all(14),
             decoration: BoxDecoration(
-              color: Colors.white.withValues(alpha: 0.15),
+              color: AppColors.card,
               borderRadius: BorderRadius.circular(12),
             ),
             child: Column(
               children: [
                 Text('hiragana_hunt_find_label'.tr,
                     style: TextStyle(
-                        color: Colors.white.withValues(alpha: 0.85),
+                        color: AppColors.textMuted,
                         fontSize: 14)),
                 const SizedBox(height: 8),
                 Text(
@@ -511,7 +504,7 @@ class _HiraganaHuntScreenState extends State<HiraganaHuntScreen> {
             }),
             textAlign: TextAlign.center,
             style: TextStyle(
-                color: Colors.white.withValues(alpha: 0.9), fontSize: 15),
+                color: AppColors.textPrimary, fontSize: 15),
           ),
           const SizedBox(height: 12),
           GridView.builder(
@@ -560,14 +553,14 @@ class _HiraganaHuntScreenState extends State<HiraganaHuntScreen> {
             _message,
             textAlign: TextAlign.center,
             style: TextStyle(
-                color: Colors.white.withValues(alpha: 0.95), fontSize: 15),
+                color: AppColors.textPrimary, fontSize: 15),
           ),
           const SizedBox(height: 12),
           OutlinedButton(
             onPressed: _roundBusy ? null : _skipRound,
             style: OutlinedButton.styleFrom(
-              foregroundColor: Colors.white,
-              side: BorderSide(color: Colors.white.withValues(alpha: 0.4)),
+              foregroundColor: AppColors.textPrimary,
+              side: BorderSide(color: AppColors.accentBlue),
               padding: const EdgeInsets.symmetric(vertical: 12),
             ),
             child: Text('hiragana_draw_skip'.tr),

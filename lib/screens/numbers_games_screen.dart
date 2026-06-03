@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
+import 'package:ez_trainz/utils/app_theme.dart';
 import 'package:flutter/services.dart';
 import 'package:ez_trainz/services/jlc_tts.dart';
 import 'package:get/get.dart';
@@ -42,7 +43,7 @@ class NumbersGameScreen extends StatelessWidget {
 
   final NumbersGameMode mode;
 
-  static const _bg = Color(0xFF0F172A);
+  static const _bg = Colors.transparent;
 
   @override
   Widget build(BuildContext context) {
@@ -61,12 +62,12 @@ class NumbersGameScreen extends StatelessWidget {
                       width: 40,
                       height: 40,
                       decoration: BoxDecoration(
-                        color: Colors.white.withValues(alpha: 0.18),
+                        color: AppColors.card,
                         shape: BoxShape.circle,
                       ),
                       child: const Icon(
                         Icons.arrow_back_rounded,
-                        color: Colors.white,
+                        color: AppColors.textPrimary,
                         size: 22,
                       ),
                     ),
@@ -79,7 +80,7 @@ class NumbersGameScreen extends StatelessWidget {
                         Text(
                           mode.titleBn,
                           style: const TextStyle(
-                            color: Colors.white,
+                            color: AppColors.textPrimary,
                             fontSize: 18,
                             fontWeight: FontWeight.w900,
                           ),
@@ -87,7 +88,7 @@ class NumbersGameScreen extends StatelessWidget {
                         Text(
                           'জাপানি সংখ্যা ১–১০ (Kanji + Hiragana -> বাংলা)',
                           style: TextStyle(
-                            color: Colors.white.withValues(alpha: 0.7),
+                            color: AppColors.textMuted,
                             fontSize: 12,
                             fontWeight: FontWeight.w600,
                           ),
@@ -224,7 +225,7 @@ class _ListeningNumbersGame extends StatefulWidget {
 }
 
 class _ListeningNumbersGameState extends State<_ListeningNumbersGame> {
-  static const _card = Color(0xFF1E293B);
+  static const _card = AppColors.card;
   static const _muted = Color(0xFF94A3B8);
   static const _green = Color(0xFF10B981);
   static const _red = Color(0xFFEF4444);
@@ -348,14 +349,14 @@ class _ListeningNumbersGameState extends State<_ListeningNumbersGame> {
             decoration: BoxDecoration(
               color: _card,
               borderRadius: BorderRadius.circular(16),
-              border: Border.all(color: Colors.white.withValues(alpha: 0.10)),
+              border: Border.all(color: AppColors.border),
             ),
             child: Row(
               children: [
                 const Icon(Icons.score_rounded, color: Color(0xFFFFE000), size: 18),
                 const SizedBox(width: 6),
                 Text('স্কোর: $_score',
-                    style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w900)),
+                    style: const TextStyle(color: AppColors.textPrimary, fontWeight: FontWeight.w900)),
                 const Spacer(),
                 for (var i = 0; i < 3; i++)
                   Padding(
@@ -376,7 +377,7 @@ class _ListeningNumbersGameState extends State<_ListeningNumbersGame> {
             decoration: BoxDecoration(
               color: _card,
               borderRadius: BorderRadius.circular(18),
-              border: Border.all(color: Colors.white.withValues(alpha: 0.10)),
+              border: Border.all(color: AppColors.border),
             ),
             child: Column(
               children: [
@@ -384,13 +385,13 @@ class _ListeningNumbersGameState extends State<_ListeningNumbersGame> {
                 const SizedBox(height: 8),
                 const Text(
                   'শুনে সঠিক বাংলা নির্বাচন করুন',
-                  style: TextStyle(color: Colors.white, fontWeight: FontWeight.w900),
+                  style: TextStyle(color: AppColors.textPrimary, fontWeight: FontWeight.w900),
                 ),
                 const SizedBox(height: 10),
                 Text(
                   'ইঙ্গিত: ${_target.kanji} (${_target.kana})',
                   style: TextStyle(
-                    color: Colors.white.withValues(alpha: 0.74),
+                    color: AppColors.textMuted,
                     fontWeight: FontWeight.w700,
                   ),
                 ),
@@ -399,7 +400,7 @@ class _ListeningNumbersGameState extends State<_ListeningNumbersGame> {
                   onPressed: _speakTarget,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFFFFE000),
-                    foregroundColor: const Color(0xFF1E293B),
+                    foregroundColor: AppColors.textPrimary,
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                   ),
                   icon: const Icon(Icons.volume_up_rounded),
@@ -423,8 +424,8 @@ class _ListeningNumbersGameState extends State<_ListeningNumbersGame> {
                 final option = _options[i];
                 final isCorrect = option.n == _target.n;
                 final isPicked = _pickedN == option.n;
-                var bg = Colors.white.withValues(alpha: 0.06);
-                var border = Colors.white.withValues(alpha: 0.14);
+                var bg = AppColors.bg;
+                var border = AppColors.border;
                 if (_answered && isCorrect) {
                   bg = _green.withValues(alpha: 0.2);
                   border = _green.withValues(alpha: 0.8);
@@ -455,7 +456,7 @@ class _ListeningNumbersGameState extends State<_ListeningNumbersGame> {
                         Text(
                           option.bnWord,
                           style: const TextStyle(
-                            color: Colors.white,
+                            color: AppColors.textPrimary,
                             fontWeight: FontWeight.w900,
                           ),
                         ),
@@ -480,7 +481,7 @@ class _SpeakingNumbersGame extends StatefulWidget {
 }
 
 class _SpeakingNumbersGameState extends State<_SpeakingNumbersGame> {
-  static const _card = Color(0xFF1E293B);
+  static const _card = AppColors.card;
   static const _accent = Color(0xFFFFE000);
   static const _green = Color(0xFF10B981);
   static const _red = Color(0xFFEF4444);
@@ -657,7 +658,7 @@ class _SpeakingNumbersGameState extends State<_SpeakingNumbersGame> {
   @override
   Widget build(BuildContext context) {
     final resultColor = _lastCorrect == null
-        ? Colors.white.withValues(alpha: 0.7)
+        ? AppColors.textMuted
         : (_lastCorrect! ? _green : _red);
     final resultText = _lastCorrect == null
         ? 'মাইক চালু করে জাপানি উচ্চারণ বলুন'
@@ -672,14 +673,14 @@ class _SpeakingNumbersGameState extends State<_SpeakingNumbersGame> {
             decoration: BoxDecoration(
               color: _card,
               borderRadius: BorderRadius.circular(18),
-              border: Border.all(color: Colors.white.withValues(alpha: 0.10)),
+              border: Border.all(color: AppColors.border),
             ),
             child: Column(
               children: [
                 Text(
                   _current.kanji,
                   style: const TextStyle(
-                    color: Colors.white,
+                    color: AppColors.textPrimary,
                     fontSize: 68,
                     fontWeight: FontWeight.w900,
                     height: 1,
@@ -689,7 +690,7 @@ class _SpeakingNumbersGameState extends State<_SpeakingNumbersGame> {
                 Text(
                   _current.kana,
                   style: TextStyle(
-                    color: Colors.white.withValues(alpha: 0.9),
+                    color: AppColors.textPrimary,
                     fontSize: 24,
                     fontWeight: FontWeight.w900,
                   ),
@@ -711,7 +712,7 @@ class _SpeakingNumbersGameState extends State<_SpeakingNumbersGame> {
                         onPressed: _playModel,
                         style: ElevatedButton.styleFrom(
                           backgroundColor: _accent,
-                          foregroundColor: const Color(0xFF1E293B),
+                          foregroundColor: AppColors.textPrimary,
                           shape:
                               RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                         ),
@@ -749,14 +750,14 @@ class _SpeakingNumbersGameState extends State<_SpeakingNumbersGame> {
             decoration: BoxDecoration(
               color: _card,
               borderRadius: BorderRadius.circular(14),
-              border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
+              border: Border.all(color: AppColors.border),
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   'শোনা ফলাফল: ${_recognized.isEmpty ? '---' : _recognized}',
-                  style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w700),
+                  style: const TextStyle(color: AppColors.textPrimary, fontWeight: FontWeight.w700),
                 ),
                 const SizedBox(height: 8),
                 Text(
@@ -781,14 +782,14 @@ class _SpeakingNumbersGameState extends State<_SpeakingNumbersGame> {
             children: [
               Text(
                 'স্কোর: $_score',
-                style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w900),
+                style: const TextStyle(color: AppColors.textPrimary, fontWeight: FontWeight.w900),
               ),
               const Spacer(),
               OutlinedButton.icon(
                 onPressed: _next,
                 style: OutlinedButton.styleFrom(
-                  side: BorderSide(color: Colors.white.withValues(alpha: 0.24)),
-                  foregroundColor: Colors.white,
+                  side: BorderSide(color: AppColors.accentBlue.withValues(alpha: 0.5)),
+                  foregroundColor: AppColors.textPrimary,
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                 ),
                 icon: const Icon(Icons.navigate_next_rounded),
@@ -810,7 +811,7 @@ class _FlashcardNumbersGame extends StatefulWidget {
 }
 
 class _FlashcardNumbersGameState extends State<_FlashcardNumbersGame> {
-  static const _card = Color(0xFF1E293B);
+  static const _card = AppColors.card;
   static const _muted = Color(0xFF94A3B8);
   int _index = 0;
   bool _isFront = true;
@@ -862,7 +863,7 @@ class _FlashcardNumbersGameState extends State<_FlashcardNumbersGame> {
             decoration: BoxDecoration(
               color: _card,
               borderRadius: BorderRadius.circular(18),
-              border: Border.all(color: Colors.white.withValues(alpha: 0.10)),
+              border: Border.all(color: AppColors.border),
             ),
             child: Row(
               children: [
@@ -870,13 +871,13 @@ class _FlashcardNumbersGameState extends State<_FlashcardNumbersGame> {
                 const SizedBox(width: 8),
                 Text(
                   'ফ্ল্যাশকার্ড ${_index + 1}/${_numbers.length}',
-                  style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w900),
+                  style: const TextStyle(color: AppColors.textPrimary, fontWeight: FontWeight.w900),
                 ),
                 const Spacer(),
                 Text(
                   _isFront ? 'Front' : 'Back',
                   style: TextStyle(
-                    color: Colors.white.withValues(alpha: 0.75),
+                    color: AppColors.textMuted,
                     fontWeight: FontWeight.w700,
                   ),
                 ),
@@ -900,7 +901,7 @@ class _FlashcardNumbersGameState extends State<_FlashcardNumbersGame> {
                             Text(
                               _item.kanji,
                               style: const TextStyle(
-                                color: Colors.white,
+                                color: AppColors.textPrimary,
                                 fontSize: 86,
                                 fontWeight: FontWeight.w900,
                                 height: 1,
@@ -910,7 +911,7 @@ class _FlashcardNumbersGameState extends State<_FlashcardNumbersGame> {
                             Text(
                               _item.kana,
                               style: TextStyle(
-                                color: Colors.white.withValues(alpha: 0.95),
+                                color: AppColors.textPrimary,
                                 fontSize: 30,
                                 fontWeight: FontWeight.w900,
                               ),
@@ -953,7 +954,7 @@ class _FlashcardNumbersGameState extends State<_FlashcardNumbersGame> {
                             Text(
                               _item.bnWord,
                               style: const TextStyle(
-                                color: Colors.white,
+                                color: AppColors.textPrimary,
                                 fontSize: 54,
                                 fontWeight: FontWeight.w900,
                                 height: 1.1,
@@ -973,7 +974,7 @@ class _FlashcardNumbersGameState extends State<_FlashcardNumbersGame> {
                             Text(
                               '${_item.kanji} (${_item.kana})',
                               style: TextStyle(
-                                color: Colors.white.withValues(alpha: 0.85),
+                                color: AppColors.textMuted,
                                 fontSize: 18,
                                 fontWeight: FontWeight.w800,
                               ),
@@ -999,8 +1000,8 @@ class _FlashcardNumbersGameState extends State<_FlashcardNumbersGame> {
                 child: OutlinedButton.icon(
                   onPressed: _index == 0 ? null : _goPrev,
                   style: OutlinedButton.styleFrom(
-                    side: BorderSide(color: Colors.white.withValues(alpha: 0.2)),
-                    foregroundColor: Colors.white,
+                    side: BorderSide(color: AppColors.accentBlue.withValues(alpha: 0.5)),
+                    foregroundColor: AppColors.textPrimary,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
                     ),
@@ -1046,9 +1047,9 @@ class _FlashSideCard extends StatelessWidget {
       margin: const EdgeInsets.symmetric(vertical: 2),
       padding: const EdgeInsets.all(22),
       decoration: BoxDecoration(
-        color: const Color(0xFF1E293B),
+        color: AppColors.card,
         borderRadius: BorderRadius.circular(22),
-        border: Border.all(color: Colors.white.withValues(alpha: 0.12), width: 1.2),
+        border: Border.all(color: AppColors.border, width: 1.2),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.28),
@@ -1084,7 +1085,7 @@ class _MatchingNumbersGame extends StatefulWidget {
 }
 
 class _MatchingNumbersGameState extends State<_MatchingNumbersGame> {
-  static const _card = Color(0xFF1E293B);
+  static const _card = AppColors.card;
   static const _muted = Color(0xFF94A3B8);
   static const _green = Color(0xFF10B981);
 
@@ -1209,7 +1210,7 @@ class _MatchingNumbersGameState extends State<_MatchingNumbersGame> {
             decoration: BoxDecoration(
               color: _card,
               borderRadius: BorderRadius.circular(16),
-              border: Border.all(color: Colors.white.withValues(alpha: 0.10)),
+              border: Border.all(color: AppColors.border),
             ),
             child: Row(
               children: [
@@ -1217,13 +1218,13 @@ class _MatchingNumbersGameState extends State<_MatchingNumbersGame> {
                 const SizedBox(width: 6),
                 const Text(
                   'জাপানি ↔ বাংলা মিলান',
-                  style: TextStyle(color: Colors.white, fontWeight: FontWeight.w900),
+                  style: TextStyle(color: AppColors.textPrimary, fontWeight: FontWeight.w900),
                 ),
                 const Spacer(),
                 Text(
                   'মুভ: $_moves',
                   style: TextStyle(
-                    color: Colors.white.withValues(alpha: 0.86),
+                    color: AppColors.textMuted,
                     fontWeight: FontWeight.w900,
                   ),
                 ),
@@ -1245,8 +1246,8 @@ class _MatchingNumbersGameState extends State<_MatchingNumbersGame> {
                 final c = _cards[i];
                 final matched = _matched.contains(c.id);
                 final selected = _pickedId == c.id;
-                var border = Colors.white.withValues(alpha: 0.12);
-                var bg = Colors.white.withValues(alpha: 0.06);
+                var border = AppColors.border;
+                var bg = AppColors.bg;
                 if (matched) {
                   border = _green.withValues(alpha: 0.75);
                   bg = _green.withValues(alpha: 0.14);
@@ -1271,7 +1272,7 @@ class _MatchingNumbersGameState extends State<_MatchingNumbersGame> {
                           c.label,
                           textAlign: TextAlign.center,
                           style: TextStyle(
-                            color: Colors.white,
+                            color: AppColors.textPrimary,
                             fontSize: c.jpSide ? 20 : 16,
                             fontWeight: FontWeight.w900,
                             height: 1.2,
@@ -1299,8 +1300,8 @@ class _MatchingNumbersGameState extends State<_MatchingNumbersGame> {
             child: OutlinedButton.icon(
               onPressed: _reset,
               style: OutlinedButton.styleFrom(
-                side: BorderSide(color: Colors.white.withValues(alpha: 0.2)),
-                foregroundColor: Colors.white,
+                side: BorderSide(color: AppColors.accentBlue.withValues(alpha: 0.5)),
+                foregroundColor: AppColors.textPrimary,
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                 padding: const EdgeInsets.symmetric(vertical: 12),
               ),

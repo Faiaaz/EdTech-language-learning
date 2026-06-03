@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
+import 'package:ez_trainz/utils/app_theme.dart';
 import 'package:flutter/services.dart';
 import 'package:ez_trainz/services/jlc_tts.dart';
 import 'package:get/get.dart';
@@ -14,8 +15,8 @@ class N5NumbersLesson2Screen extends StatefulWidget {
 }
 
 class _N5NumbersLesson2ScreenState extends State<N5NumbersLesson2Screen> {
-  static const _bg = Color(0xFF0F172A);
-  static const _card = Color(0xFF1E293B);
+  static const _bg = Colors.transparent;
+  static const _card = AppColors.card;
   static const _muted = Color(0xFF94A3B8);
   static const _blue = Color(0xFF3B82F6);
   static const _yellow = Color(0xFFFFE000);
@@ -44,12 +45,12 @@ class _N5NumbersLesson2ScreenState extends State<N5NumbersLesson2Screen> {
                       width: 40,
                       height: 40,
                       decoration: BoxDecoration(
-                        color: Colors.white.withValues(alpha: 0.18),
+                        color: AppColors.border,
                         shape: BoxShape.circle,
                       ),
                       child: const Icon(
                         Icons.arrow_back_rounded,
-                        color: Colors.white,
+                        color: AppColors.textPrimary,
                         size: 22,
                       ),
                     ),
@@ -62,7 +63,7 @@ class _N5NumbersLesson2ScreenState extends State<N5NumbersLesson2Screen> {
                         Text(
                           'পাঠ ২: সংখ্যা',
                           style: const TextStyle(
-                            color: Colors.white,
+                            color: AppColors.textPrimary,
                             fontSize: 18,
                             fontWeight: FontWeight.w900,
                           ),
@@ -70,7 +71,7 @@ class _N5NumbersLesson2ScreenState extends State<N5NumbersLesson2Screen> {
                         Text(
                           '১–১০ জাপানিতে গোনা শিখুন + গেম খেলুন',
                           style: TextStyle(
-                            color: Colors.white.withValues(alpha: 0.7),
+                            color: AppColors.textMuted,
                             fontSize: 12,
                             fontWeight: FontWeight.w600,
                           ),
@@ -137,9 +138,9 @@ class _TabPills extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(6),
       decoration: BoxDecoration(
-        color: const Color(0xFF1E293B),
+        color: AppColors.card,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Colors.white.withValues(alpha: 0.08)),
+        border: Border.all(color: AppColors.bg),
       ),
       child: Row(
         children: [
@@ -160,7 +161,7 @@ class _TabPills extends StatelessWidget {
                     child: Text(
                       tabs[i].label,
                       style: TextStyle(
-                        color: Colors.white,
+                        color: i == index ? Colors.white : AppColors.textPrimary,
                         fontSize: 12,
                         fontWeight: FontWeight.w900,
                       ),
@@ -215,7 +216,7 @@ class _LearnNumbersView extends StatefulWidget {
 }
 
 class _LearnNumbersViewState extends State<_LearnNumbersView> {
-  static const _card = Color(0xFF1E293B);
+  static const _card = AppColors.card;
   static const _muted = Color(0xFF94A3B8);
   static const _yellow = Color(0xFFFFE000);
 
@@ -264,7 +265,7 @@ class _LearnNumbersViewState extends State<_LearnNumbersView> {
               decoration: BoxDecoration(
                 color: _card,
                 borderRadius: BorderRadius.circular(18),
-                border: Border.all(color: Colors.white.withValues(alpha: 0.10)),
+                border: Border.all(color: AppColors.border),
               ),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -272,7 +273,7 @@ class _LearnNumbersViewState extends State<_LearnNumbersView> {
                   Text(
                     it.kanji,
                     style: const TextStyle(
-                      color: Colors.white,
+                      color: AppColors.textPrimary,
                       fontSize: 92,
                       fontWeight: FontWeight.w900,
                       height: 1,
@@ -282,7 +283,7 @@ class _LearnNumbersViewState extends State<_LearnNumbersView> {
                   Text(
                     it.kana,
                     style: TextStyle(
-                      color: Colors.white.withValues(alpha: 0.85),
+                      color: AppColors.textMuted,
                       fontSize: 24,
                       fontWeight: FontWeight.w900,
                       letterSpacing: 1.0,
@@ -293,7 +294,7 @@ class _LearnNumbersViewState extends State<_LearnNumbersView> {
                     padding: const EdgeInsets.symmetric(
                         horizontal: 16, vertical: 12),
                     decoration: BoxDecoration(
-                      color: Colors.white.withValues(alpha: 0.08),
+                      color: AppColors.bg,
                       borderRadius: BorderRadius.circular(14),
                     ),
                     child: Row(
@@ -311,7 +312,7 @@ class _LearnNumbersViewState extends State<_LearnNumbersView> {
                         Text(
                           it.bnWord,
                           style: const TextStyle(
-                            color: Colors.white,
+                            color: AppColors.textPrimary,
                             fontSize: 20,
                             fontWeight: FontWeight.w900,
                           ),
@@ -344,8 +345,8 @@ class _LearnNumbersViewState extends State<_LearnNumbersView> {
                           setState(() => _i--);
                         },
                   style: OutlinedButton.styleFrom(
-                    side: BorderSide(color: Colors.white.withValues(alpha: 0.2)),
-                    foregroundColor: Colors.white,
+                    side: BorderSide(color: AppColors.accentBlue.withValues(alpha: 0.5)),
+                    foregroundColor: AppColors.textPrimary,
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(14)),
                     padding: const EdgeInsets.symmetric(vertical: 12),
@@ -363,7 +364,7 @@ class _LearnNumbersViewState extends State<_LearnNumbersView> {
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: _yellow,
-                    foregroundColor: const Color(0xFF1E293B),
+                    foregroundColor: AppColors.textPrimary,
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(14)),
                     padding: const EdgeInsets.symmetric(vertical: 12),
@@ -414,8 +415,8 @@ class _FallingNumbersGame extends StatefulWidget {
 
 class _FallingNumbersGameState extends State<_FallingNumbersGame>
     with SingleTickerProviderStateMixin {
-  static const _bg = Color(0xFF0F172A);
-  static const _card = Color(0xFF1E293B);
+  static const _bg = Colors.transparent;
+  static const _card = AppColors.card;
   static const _muted = Color(0xFF94A3B8);
   static const _green = Color(0xFF10B981);
   static const _red = Color(0xFFEF4444);
@@ -602,7 +603,7 @@ class _FallingNumbersGameState extends State<_FallingNumbersGame>
               decoration: BoxDecoration(
                 color: _card,
                 borderRadius: BorderRadius.circular(16),
-                border: Border.all(color: Colors.white.withValues(alpha: 0.10)),
+                border: Border.all(color: AppColors.border),
               ),
               child: Row(
                 children: [
@@ -610,7 +611,7 @@ class _FallingNumbersGameState extends State<_FallingNumbersGame>
                   const SizedBox(width: 6),
                   Text('স্কোর: $_score',
                       style: const TextStyle(
-                          color: Colors.white, fontWeight: FontWeight.w900)),
+                          color: AppColors.textPrimary, fontWeight: FontWeight.w900)),
                   const Spacer(),
                   for (var i = 0; i < 3; i++)
                     Padding(
@@ -641,13 +642,13 @@ class _FallingNumbersGameState extends State<_FallingNumbersGame>
                               mainAxisSize: MainAxisSize.min,
                               children: [
                                 const Icon(Icons.sports_esports_rounded,
-                                    color: Colors.white, size: 44),
+                                    color: AppColors.textPrimary, size: 44),
                                 const SizedBox(height: 10),
                                 const Text(
                                   'জাপানি সংখ্যা দেখলে সঠিক বাংলা সংখ্যা ট্যাপ করুন',
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
-                                    color: Colors.white,
+                                    color: AppColors.textPrimary,
                                     fontWeight: FontWeight.w900,
                                     fontSize: 14,
                                   ),
@@ -690,7 +691,7 @@ class _FallingNumbersGameState extends State<_FallingNumbersGame>
                                   width: 140,
                                   height: 140,
                                   decoration: BoxDecoration(
-                                    color: Colors.white,
+                                    color: AppColors.card,
                                     borderRadius: BorderRadius.circular(26),
                                     boxShadow: [
                                       BoxShadow(
@@ -742,10 +743,10 @@ class _FallingNumbersGameState extends State<_FallingNumbersGame>
                     final isCorrect = opt.n == _target.n;
                     final isPicked = _pickedN == opt.n;
 
-                    Color bg = Colors.white.withValues(alpha: 0.08);
-                    Color border = Colors.white.withValues(alpha: 0.10);
+                    Color bg = AppColors.bg;
+                    Color border = AppColors.border;
                     Color digit = const Color(0xFFFFE000);
-                    Color word = Colors.white.withValues(alpha: 0.9);
+                    Color word = AppColors.textPrimary;
 
                     if (_answered) {
                       if (isCorrect) {
@@ -760,8 +761,8 @@ class _FallingNumbersGameState extends State<_FallingNumbersGame>
                         word = Colors.white;
                       }
                     } else if (isPicked) {
-                      bg = Colors.white.withValues(alpha: 0.12);
-                      border = Colors.white.withValues(alpha: 0.25);
+                      bg = AppColors.bg;
+                      border = AppColors.border;
                     }
 
                     return GestureDetector(
@@ -833,7 +834,7 @@ class _FallingNumbersGameState extends State<_FallingNumbersGame>
                 ),
                 IconButton(
                   onPressed: !_started ? null : () => _speak(_target),
-                  icon: const Icon(Icons.volume_up_rounded, color: Colors.white),
+                  icon: const Icon(Icons.volume_up_rounded, color: AppColors.accentBlueDk),
                 ),
               ],
             ),
@@ -869,8 +870,8 @@ class _TwinCard {
 }
 
 class _TapTwinsGameState extends State<_TapTwinsGame> {
-  static const _bg = Color(0xFF0F172A);
-  static const _card = Color(0xFF1E293B);
+  static const _bg = Colors.transparent;
+  static const _card = AppColors.card;
   static const _muted = Color(0xFF94A3B8);
   static const _green = Color(0xFF10B981);
   static const _red = Color(0xFFEF4444);
@@ -1005,7 +1006,7 @@ class _TapTwinsGameState extends State<_TapTwinsGame> {
               decoration: BoxDecoration(
                 color: _card,
                 borderRadius: BorderRadius.circular(16),
-                border: Border.all(color: Colors.white.withValues(alpha: 0.10)),
+                border: Border.all(color: AppColors.border),
               ),
               child: Row(
                 children: [
@@ -1014,11 +1015,11 @@ class _TapTwinsGameState extends State<_TapTwinsGame> {
                   const SizedBox(width: 6),
                   const Text('জাপানি ↔ বাংলা মিলান',
                       style: TextStyle(
-                          color: Colors.white, fontWeight: FontWeight.w900)),
+                          color: AppColors.textPrimary, fontWeight: FontWeight.w900)),
                   const Spacer(),
                   Text('মুভ: $_moves',
                       style: TextStyle(
-                        color: Colors.white.withValues(alpha: 0.85),
+                        color: AppColors.textMuted,
                         fontWeight: FontWeight.w900,
                       )),
                 ],
@@ -1040,8 +1041,8 @@ class _TapTwinsGameState extends State<_TapTwinsGame> {
                   final matched = _matched.contains(c.id);
                   final selected = _pickedId == c.id;
 
-                  Color border = Colors.white.withValues(alpha: 0.10);
-                  Color bg = Colors.white.withValues(alpha: 0.06);
+                  Color border = AppColors.border;
+                  Color bg = AppColors.bg;
                   if (matched) {
                     border = _green.withValues(alpha: 0.7);
                     bg = _green.withValues(alpha: 0.12);
@@ -1067,7 +1068,7 @@ class _TapTwinsGameState extends State<_TapTwinsGame> {
                             c.label,
                             textAlign: TextAlign.center,
                             style: TextStyle(
-                              color: Colors.white,
+                              color: AppColors.textPrimary,
                               fontSize: c.isJp ? 20 : 18,
                               fontWeight: FontWeight.w900,
                             ),
@@ -1094,8 +1095,8 @@ class _TapTwinsGameState extends State<_TapTwinsGame> {
               child: OutlinedButton.icon(
                 onPressed: _reset,
                 style: OutlinedButton.styleFrom(
-                  side: BorderSide(color: Colors.white.withValues(alpha: 0.2)),
-                  foregroundColor: Colors.white,
+                  side: BorderSide(color: AppColors.accentBlue.withValues(alpha: 0.5)),
+                  foregroundColor: AppColors.textPrimary,
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(14)),
                   padding: const EdgeInsets.symmetric(vertical: 12),

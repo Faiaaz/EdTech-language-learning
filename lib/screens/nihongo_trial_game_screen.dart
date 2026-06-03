@@ -2,6 +2,7 @@ import 'dart:math' as math;
 
 import 'package:confetti/confetti.dart';
 import 'package:flutter/material.dart';
+import 'package:ez_trainz/utils/app_theme.dart';
 import 'package:flutter/services.dart';
 import 'package:ez_trainz/services/jlc_tts.dart';
 import 'package:get/get.dart';
@@ -17,7 +18,7 @@ class NihongoTrialGameScreen extends StatefulWidget {
 
 class _NihongoTrialGameScreenState extends State<NihongoTrialGameScreen>
     with TickerProviderStateMixin {
-  static const _bg = Color(0xFF0B1326);
+  static const _bg = Colors.transparent;
   static const _gold = Color(0xFFFFE000);
 
   final _tts = JlcTts();
@@ -151,7 +152,7 @@ class _NihongoTrialGameScreenState extends State<NihongoTrialGameScreen>
                       IconButton(
                         onPressed: () => Get.back(),
                         icon: const Icon(Icons.close_rounded,
-                            color: Colors.white54),
+                            color: AppColors.textMuted),
                       ),
                       Expanded(
                         child: Text(
@@ -296,13 +297,9 @@ class _NihongoTrialGameScreenState extends State<NihongoTrialGameScreen>
       borderRadius: BorderRadius.circular(22),
       child: DecoratedBox(
         decoration: BoxDecoration(
-          gradient: const LinearGradient(
-            colors: [Color(0xFF0F172A), Color(0xFF111827)],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
+          color: AppColors.card,
           borderRadius: BorderRadius.circular(22),
-          border: Border.all(color: _gold.withValues(alpha: 0.18)),
+          border: Border.all(color: _gold.withValues(alpha: 0.35)),
           boxShadow: [
             BoxShadow(
               color: _gold.withValues(alpha: 0.08),
@@ -343,7 +340,7 @@ class _NihongoTrialGameScreenState extends State<NihongoTrialGameScreen>
       borderRadius: BorderRadius.circular(22),
       child: DecoratedBox(
         decoration: BoxDecoration(
-          color: const Color(0xFF111827),
+          color: AppColors.card,
           borderRadius: BorderRadius.circular(22),
           border: Border.all(color: _gold.withValues(alpha: 0.18)),
           boxShadow: [
@@ -378,7 +375,7 @@ class _NihongoTrialGameScreenState extends State<NihongoTrialGameScreen>
                     child: Text(
                       'trial_which_matches'.tr,
                       style: TextStyle(
-                        color: Colors.white.withValues(alpha: 0.9),
+                        color: AppColors.textPrimary,
                         fontSize: 16,
                         fontWeight: FontWeight.w900,
                       ),
@@ -467,7 +464,7 @@ class _LessonHeader extends StatelessWidget {
           child: Text(
             'trial_learn_words'.tr,
             style: TextStyle(
-              color: Colors.white.withValues(alpha: 0.9),
+              color: AppColors.textPrimary,
               fontSize: 16,
               fontWeight: FontWeight.w900,
             ),
@@ -476,7 +473,7 @@ class _LessonHeader extends StatelessWidget {
         Text(
           '$step/$total',
           style: TextStyle(
-            color: Colors.white.withValues(alpha: 0.55),
+            color: AppColors.textMuted,
             fontSize: 12.5,
             fontWeight: FontWeight.w800,
             letterSpacing: 0.4,
@@ -503,7 +500,7 @@ class _QuizHeader extends StatelessWidget {
           child: Text(
             'trial_quick_quiz'.tr,
             style: TextStyle(
-              color: Colors.white.withValues(alpha: 0.9),
+              color: AppColors.textPrimary,
               fontSize: 16,
               fontWeight: FontWeight.w900,
             ),
@@ -529,7 +526,7 @@ class _QuizHeader extends StatelessWidget {
         Text(
           '$index/$total',
           style: TextStyle(
-            color: Colors.white.withValues(alpha: 0.55),
+            color: AppColors.textMuted,
             fontSize: 12.5,
             fontWeight: FontWeight.w800,
             letterSpacing: 0.4,
@@ -581,7 +578,7 @@ class _VocabSlide extends StatelessWidget {
               Text(
                 vocab.jp,
                 style: const TextStyle(
-                  color: Colors.white,
+                  color: AppColors.textPrimary,
                   fontSize: 44,
                   fontWeight: FontWeight.w900,
                   height: 1.0,
@@ -592,7 +589,7 @@ class _VocabSlide extends StatelessWidget {
               Text(
                 '${vocab.romaji} · ${vocab.en}',
                 style: TextStyle(
-                  color: Colors.white.withValues(alpha: 0.70),
+                  color: AppColors.textMuted,
                   fontSize: 14.5,
                   fontWeight: FontWeight.w700,
                   letterSpacing: 0.2,
@@ -689,9 +686,9 @@ class _OptionTile extends StatelessWidget {
         fg = const Color(0xFFEF4444);
         break;
       case _OptionState.neutral:
-        border = selected ? _gold.withValues(alpha: 0.65) : Colors.white.withValues(alpha: 0.14);
-        bg = selected ? _gold.withValues(alpha: 0.12) : Colors.white.withValues(alpha: 0.05);
-        fg = selected ? _gold : Colors.white.withValues(alpha: 0.9);
+        border = selected ? _gold.withValues(alpha: 0.65) : AppColors.border;
+        bg = selected ? _gold.withValues(alpha: 0.12) : AppColors.bg;
+        fg = selected ? _gold : AppColors.textPrimary;
         break;
     }
 
@@ -787,7 +784,7 @@ class _ResultPill extends StatelessWidget {
                   ? '$jp · $romaji · $bnPronunciation এর অর্থ হল $bn'
                   : '$jp · $romaji · $en',
               style: TextStyle(
-                color: Colors.white.withValues(alpha: 0.85),
+                color: AppColors.textMuted,
                 fontWeight: FontWeight.w800,
               ),
             ),
@@ -921,7 +918,7 @@ class _TrialCompleteDialog extends StatelessWidget {
                   child: IconButton(
                     onPressed: () => Get.back(),
                     icon: const Icon(Icons.close_rounded),
-                    color: Colors.white.withValues(alpha: 0.65),
+                    color: AppColors.textMuted,
                     splashRadius: 18,
                   ),
                 ),
@@ -997,7 +994,7 @@ class _SubscribeUpsellDialog extends StatelessWidget {
                   child: IconButton(
                     onPressed: () => Get.back(),
                     icon: const Icon(Icons.close_rounded),
-                    color: Colors.white.withValues(alpha: 0.65),
+                    color: AppColors.textMuted,
                     splashRadius: 18,
                   ),
                 ),
@@ -1064,7 +1061,7 @@ class _SignupFormImageDialog extends StatelessWidget {
                   child: IconButton(
                     onPressed: () => Get.back(),
                     icon: const Icon(Icons.arrow_back_ios_new_rounded),
-                    color: Colors.white.withValues(alpha: 0.70),
+                    color: AppColors.textMuted,
                     splashRadius: 18,
                   ),
                 ),
@@ -1089,8 +1086,8 @@ class _TapZone extends StatelessWidget {
       child: InkWell(
         onTap: onTap,
         borderRadius: BorderRadius.circular(999),
-        splashColor: Colors.white.withValues(alpha: 0.10),
-        highlightColor: Colors.white.withValues(alpha: 0.06),
+        splashColor: AppColors.border,
+        highlightColor: AppColors.bg,
         child: const SizedBox.expand(),
       ),
     );

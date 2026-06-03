@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
@@ -7,6 +8,7 @@ import 'package:get/get.dart';
 import 'package:ez_trainz/models/kana.dart';
 import 'package:ez_trainz/models/kana_progress.dart';
 import 'package:ez_trainz/services/srs_service.dart';
+import 'package:ez_trainz/widgets/game_fx.dart';
 
 /// Spaced Repetition flashcard review screen.
 /// Shows a kana → user taps to reveal romaji → rates difficulty.
@@ -53,6 +55,7 @@ class _KanaReviewScreenState extends State<KanaReviewScreen>
 
   // ── TTS ───────────────────────────────────────────────────────
   final JlcTts _tts = JlcTts();
+  final GameFx _fx = GameFx();
 
   @override
   void initState() {
@@ -113,6 +116,7 @@ class _KanaReviewScreenState extends State<KanaReviewScreen>
   @override
   void dispose() {
     _tts.stop();
+    _fx.dispose();
     _flipCtrl.dispose();
     _slideCtrl.dispose();
     super.dispose();
@@ -128,6 +132,7 @@ class _KanaReviewScreenState extends State<KanaReviewScreen>
 
   void _revealCard() {
     if (_revealed) return;
+    unawaited(_fx.tap());
     setState(() => _revealed = true);
     _flipCtrl.forward();
     final kana = _currentKana;
@@ -136,6 +141,7 @@ class _KanaReviewScreenState extends State<KanaReviewScreen>
 
   Future<void> _rateAndAdvance(int quality) async {
     if (_srs == null) return;
+    unawaited(quality >= 3 ? _fx.success() : _fx.error());
     final progress = _dueCards[_currentIndex];
     await _srs!.rateCard(progress.character, progress.type, quality);
 
@@ -731,7 +737,7 @@ class _RatingButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Expanded(
-      child: GestureDetector(
+      child: TapScale(
         onTap: onTap,
         child: Container(
           padding: const EdgeInsets.symmetric(vertical: 12),

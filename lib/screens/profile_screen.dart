@@ -5,13 +5,14 @@ import 'package:ez_trainz/controllers/auth_controller.dart';
 import 'package:ez_trainz/controllers/locale_controller.dart';
 import 'package:ez_trainz/screens/login_screen.dart';
 import 'package:ez_trainz/screens/user_history_screen.dart';
+import 'package:ez_trainz/utils/app_theme.dart';
 
 /// Basic user information: Name, Email, Bio. Matches JLC/KLC/ELC/GLC theme.
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
 
-  static const _bgColor = Color(0xFF0F172A);
-  static const _accentColor = Color(0xFFFFE000);
+  static const _bgColor = Colors.transparent;
+  static const _accentColor = AppColors.accentYellow;
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +49,7 @@ class ProfileScreen extends StatelessWidget {
                       SizedBox(width: 3),
                       Text('TRAINZ',
                           style: TextStyle(
-                            color: Colors.white,
+                            color: AppColors.textPrimary,
                             fontSize: 20,
                             fontWeight: FontWeight.w800,
                             letterSpacing: 1.5,
@@ -65,19 +66,19 @@ class ProfileScreen extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(
                           horizontal: 14, vertical: 8),
                       decoration: BoxDecoration(
-                        color: const Color(0xFF1E293B),
+                        color: AppColors.card,
                         borderRadius: BorderRadius.circular(20),
                         border: Border.all(
-                            color: const Color(0xFF334155), width: 1),
+                            color: AppColors.border, width: 1),
                       ),
                       child: Row(
                         children: [
                           const Icon(Icons.logout_rounded,
-                              color: const Color(0xFF1E293B), size: 15),
+                              color: AppColors.textPrimary, size: 15),
                           const SizedBox(width: 5),
                           Text('logout'.tr,
                               style: const TextStyle(
-                                color: Colors.white,
+                                color: AppColors.textPrimary,
                                 fontSize: 13,
                                 fontWeight: FontWeight.w600,
                               )),
@@ -99,7 +100,7 @@ class ProfileScreen extends StatelessWidget {
                   Text(
                     'profile'.tr,
                     style: const TextStyle(
-                      color: Color(0xFF94A3B8),
+                      color: AppColors.textMuted,
                       fontSize: 14,
                       fontWeight: FontWeight.w500,
                     ),
@@ -108,7 +109,7 @@ class ProfileScreen extends StatelessWidget {
                   Text(
                     'your_information'.tr,
                     style: const TextStyle(
-                      color: Colors.white,
+                      color: AppColors.textPrimary,
                       fontSize: 26,
                       fontWeight: FontWeight.w800,
                       height: 1.2,
@@ -153,10 +154,10 @@ class ProfileScreen extends StatelessWidget {
                         width: double.infinity,
                         padding: const EdgeInsets.all(20),
                         decoration: BoxDecoration(
-                          color: const Color(0xFF1E293B),
+                          color: AppColors.card,
                           borderRadius: BorderRadius.circular(16),
                           border:
-                              Border.all(color: const Color(0xFF334155)),
+                              Border.all(color: AppColors.border),
                         ),
                         child: Row(
                           children: [
@@ -178,7 +179,7 @@ class ProfileScreen extends StatelessWidget {
                                   Text(
                                     'Journey & Achievements',
                                     style: TextStyle(
-                                      color: Color(0xFF94A3B8),
+                                      color: AppColors.textMuted,
                                       fontSize: 12,
                                       fontWeight: FontWeight.w600,
                                     ),
@@ -187,7 +188,7 @@ class ProfileScreen extends StatelessWidget {
                                   Text(
                                     'Customize your avatar, earn XP, and unlock gear',
                                     style: TextStyle(
-                                      color: Colors.white,
+                                      color: AppColors.textPrimary,
                                       fontSize: 16,
                                       fontWeight: FontWeight.w500,
                                     ),
@@ -196,7 +197,7 @@ class ProfileScreen extends StatelessWidget {
                               ),
                             ),
                             const Icon(Icons.arrow_forward_ios_rounded,
-                                color: Color(0xFF94A3B8), size: 16),
+                                color: AppColors.textMuted, size: 16),
                           ],
                         ),
                       ),
@@ -210,7 +211,7 @@ class ProfileScreen extends StatelessWidget {
                         width: double.infinity,
                         padding: const EdgeInsets.all(20),
                         decoration: BoxDecoration(
-                          color: const Color(0xFF1E293B),
+                          color: AppColors.card,
                           borderRadius: BorderRadius.circular(16),
                           boxShadow: [
                             BoxShadow(
@@ -241,7 +242,7 @@ class ProfileScreen extends StatelessWidget {
                                   Text(
                                     'history_btn_label'.tr,
                                     style: const TextStyle(
-                                      color: Color(0xFF6B7280),
+                                      color: AppColors.textMuted,
                                       fontSize: 12,
                                       fontWeight: FontWeight.w600,
                                     ),
@@ -250,7 +251,7 @@ class ProfileScreen extends StatelessWidget {
                                   Text(
                                     'history_btn'.tr,
                                     style: const TextStyle(
-                                      color: Color(0xFF1A1A2E),
+                                      color: AppColors.textPrimary,
                                       fontSize: 16,
                                       fontWeight: FontWeight.w500,
                                     ),
@@ -259,7 +260,7 @@ class ProfileScreen extends StatelessWidget {
                               ),
                             ),
                             const Icon(Icons.arrow_forward_ios_rounded,
-                                color: Color(0xFF6B7280), size: 16),
+                                color: AppColors.textMuted, size: 16),
                           ],
                         ),
                       ),
@@ -289,7 +290,7 @@ class _LanguagePickerCard extends StatelessWidget {
       width: double.infinity,
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: const Color(0xFF1E293B),
+        color: AppColors.card,
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
@@ -318,7 +319,7 @@ class _LanguagePickerCard extends StatelessWidget {
               Text(
                 'app_language'.tr,
                 style: const TextStyle(
-                  color: Color(0xFF6B7280),
+                  color: AppColors.textMuted,
                   fontSize: 12,
                   fontWeight: FontWeight.w600,
                 ),
@@ -370,10 +371,10 @@ class _LangButton extends StatelessWidget {
         duration: const Duration(milliseconds: 200),
         padding: const EdgeInsets.symmetric(vertical: 12),
         decoration: BoxDecoration(
-          color: selected ? const Color(0xFF3B82F6) : const Color(0xFF1E293B),
+          color: selected ? const Color(0xFF3B82F6) : AppColors.card,
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
-            color: selected ? const Color(0xFF3B82F6) : const Color(0xFF334155),
+            color: selected ? const Color(0xFF3B82F6) : AppColors.border,
             width: 1.5,
           ),
         ),
@@ -381,7 +382,7 @@ class _LangButton extends StatelessWidget {
           child: Text(
             label,
             style: TextStyle(
-              color: selected ? Colors.white : const Color(0xFF6B7280),
+              color: selected ? Colors.white : AppColors.textMuted,
               fontSize: 13,
               fontWeight: FontWeight.w600,
             ),
@@ -411,7 +412,7 @@ class _ProfileRow extends StatelessWidget {
       width: double.infinity,
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: const Color(0xFF1E293B),
+        color: AppColors.card,
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
@@ -441,7 +442,7 @@ class _ProfileRow extends StatelessWidget {
                 Text(
                   label,
                   style: const TextStyle(
-                    color: Color(0xFF6B7280),
+                    color: AppColors.textMuted,
                     fontSize: 12,
                     fontWeight: FontWeight.w600,
                   ),
@@ -450,7 +451,7 @@ class _ProfileRow extends StatelessWidget {
                 Text(
                   value,
                   style: const TextStyle(
-                    color: Color(0xFF1A1A2E),
+                    color: AppColors.textPrimary,
                     fontSize: 16,
                     fontWeight: FontWeight.w500,
                     height: 1.4,

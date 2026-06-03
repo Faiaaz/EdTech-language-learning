@@ -3,6 +3,7 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
+import 'package:ez_trainz/utils/app_theme.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
@@ -88,7 +89,7 @@ class _N5AkasatanaLessonScreenState extends State<N5AkasatanaLessonScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF0F172A),
+      backgroundColor: Colors.transparent,
       body: SafeArea(
         child: Column(
           children: [
@@ -102,7 +103,7 @@ class _N5AkasatanaLessonScreenState extends State<N5AkasatanaLessonScreen> {
                       width: 40,
                       height: 40,
                       decoration: BoxDecoration(
-                        color: Colors.white.withValues(alpha: 0.18),
+                        color: AppColors.border,
                         shape: BoxShape.circle,
                       ),
                       child: const Icon(Icons.arrow_back_rounded, color: Colors.white),
@@ -115,10 +116,10 @@ class _N5AkasatanaLessonScreenState extends State<N5AkasatanaLessonScreen> {
                       children: [
                         Text(_title,
                             style: const TextStyle(
-                                color: Colors.white, fontWeight: FontWeight.w900, fontSize: 18)),
+                                color: AppColors.textPrimary, fontWeight: FontWeight.w900, fontSize: 18)),
                         Text(_subtitle,
                             style: TextStyle(
-                                color: Colors.white.withValues(alpha: 0.74),
+                                color: AppColors.textMuted,
                                 fontWeight: FontWeight.w600,
                                 fontSize: 12)),
                       ],
@@ -181,9 +182,9 @@ class _AkaTabPills extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(6),
       decoration: BoxDecoration(
-        color: const Color(0xFF1E293B),
+        color: AppColors.card,
         borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: Colors.white.withValues(alpha: 0.08)),
+        border: Border.all(color: AppColors.bg),
       ),
       child: SingleChildScrollView(
         scrollDirection: Axis.horizontal,
@@ -200,8 +201,9 @@ class _AkaTabPills extends StatelessWidget {
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: Text(labels[i],
-                      style: const TextStyle(
-                          color: Colors.white, fontWeight: FontWeight.w900, fontSize: 12)),
+                      style: TextStyle(
+                          color: i == index ? Colors.white : AppColors.textPrimary,
+                          fontWeight: FontWeight.w900, fontSize: 12)),
                 ),
               ),
               if (i != labels.length - 1) const SizedBox(width: 6),
@@ -368,14 +370,14 @@ class _NotebookRowPickerState extends State<_NotebookRowPicker> {
                           ? _rows[i].accent.withValues(alpha: 0.2)
                           : _completedRows.contains(i)
                               ? const Color(0xFF10B981).withValues(alpha: 0.12)
-                              : Colors.white.withValues(alpha: 0.06),
+                              : AppColors.bg,
                       borderRadius: BorderRadius.circular(7),
                       border: Border.all(
                         color: i == _activeRow
                             ? _rows[i].accent.withValues(alpha: 0.5)
                             : _completedRows.contains(i)
                                 ? const Color(0xFF10B981).withValues(alpha: 0.3)
-                                : Colors.white.withValues(alpha: 0.1),
+                                : AppColors.border,
                       ),
                     ),
                     child: Center(
@@ -447,7 +449,7 @@ class _NotebookRowPickerState extends State<_NotebookRowPicker> {
                           children: [
                             const Text('সারি বেছে নাও',
                                 style: TextStyle(
-                                    color: Color(0xFF334155),
+                                    color: AppColors.border,
                                     fontWeight: FontWeight.w900,
                                     fontSize: 14)),
                             const Spacer(),
@@ -513,7 +515,7 @@ class _RowCard extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(10),
         decoration: BoxDecoration(
-          color: done ? accent.withValues(alpha: 0.08) : Colors.white.withValues(alpha: 0.8),
+          color: done ? accent.withValues(alpha: 0.08) : AppColors.textMuted,
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
             color: done ? accent.withValues(alpha: 0.45) : accent.withValues(alpha: 0.18),
@@ -797,7 +799,7 @@ class _AkaFlashGameState extends State<_AkaFlashGame> {
               Text(
                 '${_i + 1} / ${_deck.length}',
                 style: TextStyle(
-                  color: Colors.white.withValues(alpha: 0.6),
+                  color: AppColors.textMuted,
                   fontWeight: FontWeight.w700,
                   fontSize: 13,
                 ),
@@ -866,11 +868,11 @@ class _AkaFlashGameState extends State<_AkaFlashGame> {
                       children: [
                         Text('পরের কার্ড',
                             style: TextStyle(
-                                color: Colors.white,
+                                color: AppColors.textPrimary,
                                 fontWeight: FontWeight.w900,
                                 fontSize: 15)),
                         SizedBox(width: 6),
-                        Icon(Icons.arrow_forward_rounded, color: Colors.white, size: 18),
+                        Icon(Icons.arrow_forward_rounded, color: AppColors.textPrimary, size: 18),
                       ],
                     ),
                   ),
@@ -905,10 +907,10 @@ class _FlipCard extends StatelessWidget {
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
-        color: const Color(0xFF1E293B),
+        color: AppColors.card,
         borderRadius: BorderRadius.circular(24),
         border: Border.all(
-          color: flipped ? accent.withValues(alpha: 0.5) : Colors.white.withValues(alpha: 0.08),
+          color: flipped ? accent.withValues(alpha: 0.5) : AppColors.bg,
           width: flipped ? 2 : 1,
         ),
         boxShadow: [
@@ -1043,7 +1045,7 @@ class _AkaQuizGameState extends State<_AkaQuizGame> {
         child: Container(
           padding: const EdgeInsets.all(20),
           decoration: BoxDecoration(
-            color: const Color(0xFF1E293B),
+            color: AppColors.card,
             borderRadius: BorderRadius.circular(22),
           ),
           child: Column(
@@ -1061,7 +1063,7 @@ class _AkaQuizGameState extends State<_AkaQuizGame> {
               const SizedBox(height: 12),
               const Text('কুইজ শেষ!',
                   style: TextStyle(
-                      color: Colors.white, fontSize: 20, fontWeight: FontWeight.w900)),
+                      color: AppColors.textPrimary, fontSize: 20, fontWeight: FontWeight.w900)),
               const SizedBox(height: 6),
               Text(
                 'স্কোর: $_score / ${_deck.length}',
@@ -1111,7 +1113,7 @@ class _AkaQuizGameState extends State<_AkaQuizGame> {
             children: [
               Text('${_i + 1} / ${_deck.length}',
                   style: TextStyle(
-                      color: Colors.white.withValues(alpha: 0.6),
+                      color: AppColors.textMuted,
                       fontWeight: FontWeight.w700,
                       fontSize: 13)),
               Text('স্কোর: $_score',
@@ -1124,21 +1126,21 @@ class _AkaQuizGameState extends State<_AkaQuizGame> {
             width: double.infinity,
             padding: const EdgeInsets.symmetric(vertical: 32),
             decoration: BoxDecoration(
-              color: const Color(0xFF1E293B),
+              color: AppColors.card,
               borderRadius: BorderRadius.circular(22),
-              border: Border.all(color: Colors.white.withValues(alpha: 0.08)),
+              border: Border.all(color: AppColors.bg),
             ),
             child: Column(
               children: [
                 Text('এই কানার রোমাজি কী?',
                     style: TextStyle(
-                        color: Colors.white.withValues(alpha: 0.7),
+                        color: AppColors.textMuted,
                         fontWeight: FontWeight.w700,
                         fontSize: 14)),
                 const SizedBox(height: 12),
                 Text(q.kana,
                     style: const TextStyle(
-                        color: Colors.white, fontSize: 80, fontWeight: FontWeight.w900, height: 1)),
+                        color: AppColors.textPrimary, fontSize: 80, fontWeight: FontWeight.w900, height: 1)),
                 const SizedBox(height: 8),
                 AnimatedSwitcher(
                   duration: const Duration(milliseconds: 160),
@@ -1206,7 +1208,7 @@ class _QuizChoice extends StatelessWidget {
     final bg = switch (state) {
       _ChoiceState.correct => const Color(0xFF14B86A).withValues(alpha: 0.18),
       _ChoiceState.wrong => const Color(0xFFEF4444).withValues(alpha: 0.16),
-      _ => Colors.white.withValues(alpha: 0.08),
+      _ => AppColors.bg,
     };
     final border = switch (state) {
       _ChoiceState.correct => const Color(0xFFB6F6C9),
@@ -1224,7 +1226,7 @@ class _QuizChoice extends StatelessWidget {
         child: Center(
           child: Text(label,
               style: const TextStyle(
-                  color: Colors.white, fontSize: 18, fontWeight: FontWeight.w800)),
+                  color: AppColors.textPrimary, fontSize: 18, fontWeight: FontWeight.w800)),
         ),
       ),
     );
@@ -1314,7 +1316,7 @@ class _AkaMatchGameState extends State<_AkaMatchGame> {
         child: Container(
           padding: const EdgeInsets.all(20),
           decoration: BoxDecoration(
-            color: const Color(0xFF1E293B),
+            color: AppColors.card,
             borderRadius: BorderRadius.circular(22),
           ),
           child: Column(
@@ -1332,7 +1334,7 @@ class _AkaMatchGameState extends State<_AkaMatchGame> {
               const SizedBox(height: 12),
               const Text('সব মিলিয়ে ফেললে!',
                   style: TextStyle(
-                      color: Colors.white, fontSize: 20, fontWeight: FontWeight.w900)),
+                      color: AppColors.textPrimary, fontSize: 20, fontWeight: FontWeight.w900)),
               const SizedBox(height: 6),
               Text('ভুল: $_errors',
                   style: const TextStyle(color: Color(0xFF6B7280), fontWeight: FontWeight.w800)),
@@ -1377,7 +1379,7 @@ class _AkaMatchGameState extends State<_AkaMatchGame> {
               Text(
                 'কানা ও রোমাজি মেলাও',
                 style: TextStyle(
-                    color: Colors.white.withValues(alpha: 0.7),
+                    color: AppColors.textMuted,
                     fontWeight: FontWeight.w700,
                     fontSize: 14),
               ),
@@ -1447,13 +1449,13 @@ class _MatchTileWidget extends StatelessWidget {
     final bg = matched
         ? _accent.withValues(alpha: 0.14)
         : selected
-            ? Colors.white.withValues(alpha: 0.18)
-            : Colors.white.withValues(alpha: 0.07);
+            ? AppColors.border
+            : AppColors.bg;
     final border = matched
         ? _accent.withValues(alpha: 0.5)
         : selected
-            ? Colors.white.withValues(alpha: 0.6)
-            : Colors.white.withValues(alpha: 0.1);
+            ? AppColors.textMuted
+            : AppColors.border;
 
     return GestureDetector(
       onTap: matched ? null : onTap,
