@@ -5,6 +5,7 @@ import 'dart:math' as math;
 
 import 'package:confetti/confetti.dart';
 import 'package:flutter/material.dart';
+import 'package:ez_trainz/config/elevenlabs_config.dart';
 import 'package:ez_trainz/utils/app_theme.dart';
 import 'package:flutter/services.dart';
 import 'package:ez_trainz/services/jlc_tts.dart';
@@ -102,6 +103,10 @@ class _N5HeroNumber1LessonScreenState extends State<N5HeroNumber1LessonScreen> {
     );
   }
 }
+
+JlcTts _buildHeroTts() => JlcTts(
+      elevenLabsVoiceId: ElevenLabsConfig.heroVoiceOrDefault,
+    );
 
 class _HeroNum {
   const _HeroNum({
@@ -213,13 +218,9 @@ class _HeroTabPills extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     const labels = ['শুনে ট্যাপ', 'পড়া মাস্টার', 'সাজাও', '১-১০ বলো', 'বলতে পারো', 'ম্যাচ মাস্টার', 'স্পিড বস'];
-    return Container(
-      padding: const EdgeInsets.all(6),
-      decoration: BoxDecoration(
-        color: AppColors.card,
-        borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: AppColors.bg),
-      ),
+    // Transparent strip so the sky→gold gradient shows behind the pills.
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 2),
       child: SingleChildScrollView(
         scrollDirection: Axis.horizontal,
         child: Row(
@@ -229,18 +230,34 @@ class _HeroTabPills extends StatelessWidget {
                 onTap: () => onChange(i),
                 child: AnimatedContainer(
                   duration: const Duration(milliseconds: 180),
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                  padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
                   decoration: BoxDecoration(
-                    color: i == index ? const Color(0xFF3B82F6) : Colors.transparent,
-                    borderRadius: BorderRadius.circular(10),
+                    color: i == index
+                        ? AppColors.tabActive
+                        : Colors.white.withValues(alpha: 0.6),
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(
+                      color: i == index
+                          ? AppColors.tabActive
+                          : Colors.white.withValues(alpha: 0.75),
+                    ),
+                    boxShadow: i == index
+                        ? [
+                            BoxShadow(
+                              color: AppColors.tabActive.withValues(alpha: 0.35),
+                              blurRadius: 10,
+                              offset: const Offset(0, 4),
+                            ),
+                          ]
+                        : null,
                   ),
                   child: Text(labels[i],
                       style: TextStyle(
-                          color: i == index ? Colors.white : AppColors.textPrimary,
+                          color: i == index ? Colors.white : AppColors.display,
                           fontWeight: FontWeight.w900, fontSize: 12)),
                 ),
               ),
-              if (i != labels.length - 1) const SizedBox(width: 6),
+              if (i != labels.length - 1) const SizedBox(width: 8),
             ]
           ],
         ),
@@ -259,7 +276,7 @@ class _HeroSpeakGame extends StatefulWidget {
 class _HeroSpeakGameState extends State<_HeroSpeakGame>
     with TickerProviderStateMixin {
   final _rng = math.Random();
-  final _tts = JlcTts();
+  final _tts = _buildHeroTts();
   final _stt = JlcStt();
   bool _ttsReady = false;
   bool _sttReady = false;
@@ -1004,7 +1021,7 @@ class _MicButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final base = listening ? const Color(0xFFEF4444) : const Color(0xFFFF6B35);
+    final base = listening ? const Color(0xFFEF4444) : AppColors.audio;
     return GestureDetector(
       onTap: onTap,
       child: AnimatedBuilder(
@@ -1208,7 +1225,7 @@ class _HeroMatchGame extends StatefulWidget {
 class _HeroMatchGameState extends State<_HeroMatchGame>
     with TickerProviderStateMixin {
   final _rng = math.Random();
-  final _tts = JlcTts();
+  final _tts = _buildHeroTts();
   late ConfettiController _confetti;
   late AnimationController _shakeCtrl;
   bool _ttsReady = false;
@@ -1506,7 +1523,7 @@ class _HeroMatchGameState extends State<_HeroMatchGame>
                           ? const Color(0xFFEF4444).withValues(alpha: 0.18)
                           : (selected
                               ? const Color(0xFFFFE000).withValues(alpha: 0.14)
-                              : AppColors.bg);
+                              : AppColors.card);
                   return AnimatedBuilder(
                     animation: _shakeCtrl,
                     builder: (_, child) {
@@ -1528,6 +1545,7 @@ class _HeroMatchGameState extends State<_HeroMatchGame>
                             border: Border.all(
                                 color: border,
                                 width: selected || wrong ? 2.4 : 1.5),
+                            boxShadow: _softShadow,
                           ),
                           child: Stack(
                             children: [
@@ -1638,7 +1656,7 @@ class _HeroBlitzGame extends StatefulWidget {
 class _HeroBlitzGameState extends State<_HeroBlitzGame>
     with TickerProviderStateMixin {
   final _rng = math.Random();
-  final _tts = JlcTts();
+  final _tts = _buildHeroTts();
   late ConfettiController _confetti;
   late AnimationController _shakeCtrl;
   static const _totalSeconds = 25;
@@ -1891,15 +1909,12 @@ class _HeroBlitzGameState extends State<_HeroBlitzGame>
                               padding: const EdgeInsets.symmetric(
                                   horizontal: 14, vertical: 12),
                               decoration: BoxDecoration(
-                                gradient: LinearGradient(
+                                gradient: const LinearGradient(
                                   begin: Alignment.topLeft,
                                   end: Alignment.bottomRight,
                                   colors: [
-                                    (_timeLeft <= 5
-                                            ? const Color(0xFFEF4444)
-                                            : const Color(0xFFFFE000))
-                                        .withValues(alpha: 0.22),
-                                    AppColors.bg,
+                                    AppColors.timerTrack,
+                                    Color(0xFF0F172A),
                                   ],
                                 ),
                                 borderRadius: BorderRadius.circular(16),
@@ -1908,7 +1923,7 @@ class _HeroBlitzGameState extends State<_HeroBlitzGame>
                                       ? const Color(0xFFFF6B6B)
                                           .withValues(alpha: 0.9)
                                       : const Color(0xFFFFE000)
-                                          .withValues(alpha: 0.85),
+                                          .withValues(alpha: 0.55),
                                   width: 2,
                                 ),
                               ),
@@ -1929,7 +1944,7 @@ class _HeroBlitzGameState extends State<_HeroBlitzGame>
                                     children: [
                                       Text('মোট সময়',
                                           style: TextStyle(
-                                              color: AppColors.border,
+                                              color: Color(0xFFCBD5E1),
                                               fontWeight: FontWeight.w800,
                                               fontSize: 11)),
                                       Text('$_timeLeft',
@@ -1942,7 +1957,7 @@ class _HeroBlitzGameState extends State<_HeroBlitzGame>
                                               height: 1)),
                                       Text('সেকেন্ড বাকি',
                                           style: TextStyle(
-                                              color: AppColors.border,
+                                              color: Color(0xFFCBD5E1),
                                               fontWeight: FontWeight.w700,
                                               fontSize: 12)),
                                     ],
@@ -1984,22 +1999,21 @@ class _HeroBlitzGameState extends State<_HeroBlitzGame>
                               padding: const EdgeInsets.symmetric(
                                   horizontal: 14, vertical: 8),
                               decoration: BoxDecoration(
-                                color: const Color(0xFFFFE000)
-                                    .withValues(alpha: 0.18),
+                                color: AppColors.audio.withValues(alpha: 0.12),
                                 borderRadius: BorderRadius.circular(99),
                                 border: Border.all(
-                                    color: const Color(0xFFFFE000)
-                                        .withValues(alpha: 0.6)),
+                                    color: AppColors.audio
+                                        .withValues(alpha: 0.5)),
                               ),
                               child: const Row(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
                                   Icon(Icons.volume_up_rounded,
-                                      color: Color(0xFFFFE000), size: 18),
+                                      color: AppColors.audio, size: 18),
                                   SizedBox(width: 6),
                                   Text('শুনি',
                                       style: TextStyle(
-                                          color: Color(0xFFFFE000),
+                                          color: AppColors.audio,
                                           fontWeight: FontWeight.w900)),
                                 ],
                               ),
@@ -2047,7 +2061,7 @@ class _HeroBlitzGameState extends State<_HeroBlitzGame>
                       const SizedBox(height: 8),
                       const Text('সঠিক বাংলা সংখ্যা বেছে নাও',
                           style: TextStyle(
-                              color: Color(0xFFFFE000),
+                              color: AppColors.instruction,
                               fontWeight: FontWeight.w900)),
                     ],
                   ),
@@ -2068,13 +2082,13 @@ class _HeroBlitzGameState extends State<_HeroBlitzGame>
                     final picked = _picked == o.n;
                     final correct = o.n == _target.n;
                     final bg = _picked == null
-                        ? AppColors.bg
+                        ? AppColors.card
                         : (correct
                             ? const Color(0xFF10B981).withValues(alpha: 0.22)
                             : (picked
                                 ? const Color(0xFFEF4444)
                                     .withValues(alpha: 0.22)
-                                : AppColors.bg));
+                                : AppColors.card));
                     final border = _picked == null
                         ? AppColors.border
                         : (correct
@@ -2094,6 +2108,7 @@ class _HeroBlitzGameState extends State<_HeroBlitzGame>
                             border: Border.all(
                                 color: border,
                                 width: _picked == null ? 1 : 2),
+                            boxShadow: _softShadow,
                           ),
                           child: Center(
                             child: Text('${o.bnDigit} ${o.bnWord}',
@@ -2161,7 +2176,7 @@ class _HeroTapWhatYouHearGameState extends State<_HeroTapWhatYouHearGame>
   static const _sessionXpBonus = 50;
 
   final _rng = math.Random();
-  final _tts = JlcTts();
+  final _tts = _buildHeroTts();
   late final Future<void> _ttsReady;
   late ConfettiController _confetti;
   late AnimationController _shakeCtrl;
@@ -2346,7 +2361,7 @@ class _HeroTapWhatYouHearGameState extends State<_HeroTapWhatYouHearGame>
     Color textColor = AppColors.textPrimary;
     if (!revealed) {
       border = AppColors.border;
-      bg = AppColors.bg;
+      bg = AppColors.card;
     } else if (isCorrect) {
       border = const Color(0xFF10B981);
       bg = const Color(0xFF10B981).withValues(alpha: 0.22);
@@ -2357,7 +2372,7 @@ class _HeroTapWhatYouHearGameState extends State<_HeroTapWhatYouHearGame>
       textColor = const Color(0xFFEF4444);
     } else {
       border = AppColors.border;
-      bg = AppColors.bg;
+      bg = AppColors.card;
     }
 
     return Expanded(
@@ -2374,6 +2389,7 @@ class _HeroTapWhatYouHearGameState extends State<_HeroTapWhatYouHearGame>
                 color: border,
                 width: (picked || (isCorrect && revealed)) ? 2.2 : 1.2,
               ),
+              boxShadow: _softShadow,
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -2414,7 +2430,7 @@ class _HeroTapWhatYouHearGameState extends State<_HeroTapWhatYouHearGame>
 
   @override
   Widget build(BuildContext context) {
-    const orange = Color(0xFFFF8A34);
+    const orange = AppColors.audio;
     final progress = (_roundIdx + 1) / _totalRounds;
 
     return Padding(
@@ -2555,7 +2571,7 @@ class _HeroTapWhatYouHearGameState extends State<_HeroTapWhatYouHearGame>
                         child: Text(
                           _target.bnPronunciation,
                           style: const TextStyle(
-                            color: Color(0xFFFFE000),
+                            color: AppColors.display,
                             fontSize: 44,
                             fontWeight: FontWeight.w900,
                           ),
@@ -2618,7 +2634,7 @@ class _HeroTapWhatYouHearGameState extends State<_HeroTapWhatYouHearGame>
               const Text(
                 'এইবার আপনি বলেন সঠিক উত্তর কোনটি?',
                 style: TextStyle(
-                  color: AppColors.textPrimary,
+                  color: AppColors.instruction,
                   fontSize: 14,
                   fontWeight: FontWeight.w900,
                 ),
@@ -2741,7 +2757,7 @@ class _HeroReadGameState extends State<_HeroReadGame>
   static const _violetDark = Color(0xFF6D28D9);
 
   final _rng = math.Random();
-  final _tts = JlcTts();
+  final _tts = _buildHeroTts();
   late final Future<void> _ttsReady;
   late ConfettiController _confetti;
   late AnimationController _shakeCtrl;
@@ -3138,7 +3154,7 @@ class _HeroReadGameState extends State<_HeroReadGame>
               Text(
                 _questionText,
                 style: const TextStyle(
-                  color: AppColors.textPrimary,
+                  color: AppColors.instruction,
                   fontSize: 14,
                   fontWeight: FontWeight.w900,
                 ),
@@ -3270,7 +3286,7 @@ class _HeroReadGameState extends State<_HeroReadGame>
         return Text(
           _target.bnPronunciation,
           style: const TextStyle(
-            color: Color(0xFFFFE000),
+            color: AppColors.display,
             fontSize: 56,
             fontWeight: FontWeight.w900,
             height: 1.05,
@@ -3331,7 +3347,7 @@ class _HeroReadGameState extends State<_HeroReadGame>
     Color textColor = AppColors.textPrimary;
     if (!revealed) {
       border = AppColors.border;
-      bg = AppColors.bg;
+      bg = AppColors.card;
     } else if (isCorrect) {
       border = const Color(0xFF10B981);
       bg = const Color(0xFF10B981).withValues(alpha: 0.22);
@@ -3342,7 +3358,7 @@ class _HeroReadGameState extends State<_HeroReadGame>
       textColor = const Color(0xFFEF4444);
     } else {
       border = AppColors.border;
-      bg = AppColors.bg;
+      bg = AppColors.card;
     }
 
     // Option label depends on mode
@@ -3367,6 +3383,7 @@ class _HeroReadGameState extends State<_HeroReadGame>
                 color: border,
                 width: (picked || (isCorrect && revealed)) ? 2.4 : 1.2,
               ),
+              boxShadow: _softShadow,
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -3729,7 +3746,7 @@ class _HeroOrderGameState extends State<_HeroOrderGame>
             bg = _teal.withValues(alpha: 0.18);
           } else {
             border = AppColors.border;
-            bg = AppColors.bg;
+            bg = AppColors.card;
           }
           return AnimatedContainer(
             duration: const Duration(milliseconds: 160),
@@ -3741,6 +3758,7 @@ class _HeroOrderGameState extends State<_HeroOrderGame>
                 color: border,
                 width: hovering || isFilled ? 2.2 : 1.2,
               ),
+              boxShadow: _softShadow,
             ),
             child: Row(
               children: [
@@ -3791,7 +3809,7 @@ class _HeroOrderGameState extends State<_HeroOrderGame>
                                   Text(
                                     '${placed.kanji}  ${placed.kana}',
                                     style: TextStyle(
-                                      color: AppColors.border,
+                                      color: AppColors.textMuted,
                                       fontSize: 11,
                                       fontWeight: FontWeight.w700,
                                       height: 1.0,
@@ -3902,7 +3920,7 @@ class _HeroSpeakSequenceGameState extends State<_HeroSpeakSequenceGame>
   static const _roseDark = Color(0xFFBE123C);
 
   final _stt = JlcStt();
-  final _tts = JlcTts();
+  final _tts = _buildHeroTts();
   bool _sttReady = false;
   bool _ttsReady = false;
   String? _locale;
@@ -4572,7 +4590,7 @@ class _HeroSpeakSequenceGameState extends State<_HeroSpeakSequenceGame>
                 _heard,
                 textAlign: TextAlign.center,
                 style: const TextStyle(
-                  color: Color(0xFFFFE000),
+                  color: AppColors.display,
                   fontWeight: FontWeight.w900,
                   fontSize: 14,
                   height: 1.3,
@@ -4877,12 +4895,12 @@ class _AwesomeResultSheet extends StatelessWidget {
         margin: const EdgeInsets.fromLTRB(16, 0, 16, 16),
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: const Color(0xFF0B1326),
+          color: AppColors.card,
           borderRadius: BorderRadius.circular(22),
-          border: Border.all(color: const Color(0xFFFFE000).withValues(alpha: 0.18)),
+          border: Border.all(color: AppColors.border),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withValues(alpha: 0.35),
+              color: Colors.black.withValues(alpha: 0.18),
               blurRadius: 22,
               offset: const Offset(0, 12),
             )
@@ -4918,7 +4936,7 @@ class _AwesomeResultSheet extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(scoreLabel,
-                      style: const TextStyle(color: Color(0xFFFFE000), fontWeight: FontWeight.w900, fontSize: 22)),
+                      style: const TextStyle(color: AppColors.display, fontWeight: FontWeight.w900, fontSize: 22)),
                   const SizedBox(height: 10),
                   Wrap(
                     spacing: 8,
@@ -4985,8 +5003,14 @@ class _AwesomeResultSheet extends StatelessWidget {
   }
 }
 
+/// Subtle drop shadow that lifts white cards/option tiles off the gradient.
+const List<BoxShadow> _softShadow = [
+  BoxShadow(color: Color(0x0D0F172A), blurRadius: 6, offset: Offset(0, 4)),
+];
+
 BoxDecoration _cardDeco() => BoxDecoration(
       color: AppColors.card,
       borderRadius: BorderRadius.circular(16),
       border: Border.all(color: AppColors.border),
+      boxShadow: _softShadow,
     );

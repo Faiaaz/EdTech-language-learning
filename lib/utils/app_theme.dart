@@ -42,6 +42,15 @@ abstract class AppColors {
   static const correct = Color(0xFF14B86A);
   static const wrong   = Color(0xFFE53935);
 
+  // ── Cohesive light-UI tokens ─────────────────────────────────
+  // Used by the gradient game screens so display text stays readable
+  // against the sky-blue → golden-yellow background.
+  static const display     = Color(0xFF0F172A); // deep midnight navy — large display text
+  static const instruction = Color(0xFF334155); // slate charcoal — instructional / prompt text
+  static const tabActive   = Color(0xFF2563EB); // royal blue — active nav tab
+  static const audio       = Color(0xFFEA580C); // deep amber/coral — speaker & mic buttons
+  static const timerTrack  = Color(0xFF1E293B); // dark blue-gray — countdown track
+
   // ── Legacy aliases ───────────────────────────────────────────
   // Old code referenced navy* tokens; keep them pointing at the new light
   // surfaces so everything compiles while screens are migrated.

@@ -8,7 +8,9 @@ import 'package:ez_trainz/services/elevenlabs_tts_service.dart';
 /// Drop-in replacement for [FlutterTts] on JLC screens.
 /// Uses ElevenLabs Japanese voices when configured; falls back to device TTS.
 class JlcTts {
-  JlcTts() : _fallback = FlutterTts() {
+  JlcTts({String? elevenLabsVoiceId})
+      : _fallback = FlutterTts(),
+        _elevenLabsVoiceId = elevenLabsVoiceId?.trim() {
     if (_useElevenLabs) {
       unawaited(ElevenLabsTtsService.instance.prewarm());
       _prefetchCommonPackOnce();
@@ -16,6 +18,7 @@ class JlcTts {
   }
 
   final FlutterTts _fallback;
+  final String? _elevenLabsVoiceId;
   bool _awaitCompletion = false;
   double _speechRate = 0.5;
   VoidCallback? _startHandler;
@@ -107,13 +110,17 @@ class JlcTts {
     unawaited(
       ElevenLabsTtsService.instance.prefetchTexts(
         _commonJapanesePack.expand((t) => <String>[t, '$t。']),
+        voiceId: _elevenLabsVoiceId,
       ),
     );
   }
 
   Future<void> prefetchTexts(Iterable<String> texts) async {
     if (!_useElevenLabs) return;
-    await ElevenLabsTtsService.instance.prefetchTexts(texts);
+    await ElevenLabsTtsService.instance.prefetchTexts(
+      texts,
+      voiceId: _elevenLabsVoiceId,
+    );
   }
 
   Future<void> setLanguage(String language) async {
@@ -185,6 +192,7 @@ class JlcTts {
         await ElevenLabsTtsService.instance.speak(
           text,
           playbackRate: _speechRateToPlayback(_speechRate),
+          voiceId: _elevenLabsVoiceId,
         );
         return;
       } catch (e) {
