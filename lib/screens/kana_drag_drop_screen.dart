@@ -6,6 +6,7 @@ import 'package:ez_trainz/services/jlc_tts.dart';
 import 'package:get/get.dart';
 
 import 'package:ez_trainz/models/kana.dart';
+import 'package:ez_trainz/widgets/game_fx.dart';
 
 /// Kana Drag-and-Drop game.
 /// Users drag romaji tiles onto a shuffled 4x4 grid of kana characters.
@@ -55,6 +56,7 @@ class _KanaDragDropScreenState extends State<KanaDragDropScreen>
 
   // ── TTS for correct matches ─────────────────────────────────
   final JlcTts _tts = JlcTts();
+  final GameFx _fx = GameFx();
 
   @override
   void initState() {
@@ -74,6 +76,7 @@ class _KanaDragDropScreenState extends State<KanaDragDropScreen>
   @override
   void dispose() {
     _tts.stop();
+    _fx.dispose();
     _timer?.cancel();
     for (final c in _shakeControllers.values) {
       c.dispose();
@@ -110,6 +113,7 @@ class _KanaDragDropScreenState extends State<KanaDragDropScreen>
     final kana = _gridKana[gridIndex];
     // Speak the character on correct match (Duolingo-style feedback)
     _tts.speak(kana.character);
+    unawaited(_score > 0 ? _fx.combo() : _fx.success());
 
     setState(() {
       _matched[gridIndex] = true;
@@ -139,6 +143,7 @@ class _KanaDragDropScreenState extends State<KanaDragDropScreen>
   }
 
   void _onIncorrectMatch(int gridIndex) {
+    unawaited(_fx.error());
     setState(() {
       _feedback[gridIndex] = _FeedbackState.incorrect;
       _attempts++;

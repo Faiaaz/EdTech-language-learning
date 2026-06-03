@@ -5,6 +5,7 @@ import 'dart:math' as math;
 
 import 'package:confetti/confetti.dart';
 import 'package:flutter/material.dart';
+import 'package:ez_trainz/utils/app_theme.dart';
 import 'package:flutter/services.dart';
 import 'package:ez_trainz/services/jlc_tts.dart';
 import 'package:get/get.dart';
@@ -35,7 +36,7 @@ class _N5WeekdaysLessonScreenState extends State<N5WeekdaysLessonScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF0F172A),
+      backgroundColor: Colors.transparent,
       body: SafeArea(
         child: Column(
           children: [
@@ -49,10 +50,10 @@ class _N5WeekdaysLessonScreenState extends State<N5WeekdaysLessonScreen> {
                       width: 40,
                       height: 40,
                       decoration: BoxDecoration(
-                        color: Colors.white.withValues(alpha: 0.18),
+                        color: AppColors.border,
                         shape: BoxShape.circle,
                       ),
-                      child: const Icon(Icons.arrow_back_rounded, color: Colors.white),
+                      child: const Icon(Icons.arrow_back_rounded, color: AppColors.textPrimary),
                     ),
                   ),
                   const SizedBox(width: 10),
@@ -62,10 +63,10 @@ class _N5WeekdaysLessonScreenState extends State<N5WeekdaysLessonScreen> {
                       children: [
                         const Text('শুক্র-শনি বাকিটা জানি',
                             style: TextStyle(
-                                color: Colors.white, fontWeight: FontWeight.w900, fontSize: 18)),
+                                color: AppColors.textPrimary, fontWeight: FontWeight.w900, fontSize: 18)),
                         Text('সপ্তাহের দিন: Japanese -> বাংলা',
                             style: TextStyle(
-                                color: Colors.white.withValues(alpha: 0.75),
+                                color: AppColors.textMuted,
                                 fontWeight: FontWeight.w600,
                                 fontSize: 12)),
                       ],
@@ -208,9 +209,9 @@ class _WeekTabPills extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(6),
       decoration: BoxDecoration(
-        color: const Color(0xFF1E293B),
+        color: AppColors.card,
         borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: Colors.white.withValues(alpha: 0.08)),
+        border: Border.all(color: AppColors.bg),
       ),
       child: SingleChildScrollView(
         scrollDirection: Axis.horizontal,
@@ -227,8 +228,9 @@ class _WeekTabPills extends StatelessWidget {
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: Text(labels[i],
-                      style: const TextStyle(
-                          color: Colors.white, fontWeight: FontWeight.w900, fontSize: 12)),
+                      style: TextStyle(
+                          color: i == index ? Colors.white : AppColors.textPrimary,
+                          fontWeight: FontWeight.w900, fontSize: 12)),
                 ),
               ),
               if (i != labels.length - 1) const SizedBox(width: 6),
@@ -374,7 +376,7 @@ class _WeekFlashGameState extends State<_WeekFlashGame>
                       const SizedBox(width: 8),
                       Text('দিন ${_i + 1}/${_weekdays.length}',
                           style: const TextStyle(
-                              color: Colors.white, fontWeight: FontWeight.w900)),
+                              color: AppColors.textPrimary, fontWeight: FontWeight.w900)),
                       const SizedBox(width: 10),
                       _WeekStatChip(label: 'XP', value: '$_xp'),
                       const Spacer(),
@@ -404,9 +406,9 @@ class _WeekFlashGameState extends State<_WeekFlashGame>
                                   },
                                 ),
                         style: OutlinedButton.styleFrom(
-                          foregroundColor: Colors.white,
+                          foregroundColor: AppColors.textPrimary,
                           side: BorderSide(
-                              color: Colors.white.withValues(alpha: 0.22)),
+                              color: AppColors.border),
                         ),
                         child: const Text('রিভিউ',
                             style: TextStyle(fontWeight: FontWeight.w900)),
@@ -418,7 +420,7 @@ class _WeekFlashGameState extends State<_WeekFlashGame>
                     minHeight: 7,
                     borderRadius: BorderRadius.circular(99),
                     value: progress.clamp(0, 1),
-                    backgroundColor: Colors.white.withValues(alpha: 0.12),
+                    backgroundColor: AppColors.border,
                     valueColor:
                         const AlwaysStoppedAnimation(Color(0xFFFFE000)),
                   ),
@@ -473,17 +475,16 @@ class _WeekFlashGameState extends State<_WeekFlashGame>
                                 decoration: BoxDecoration(
                                   color: _slowMode
                                       ? const Color(0xFFFFE000)
-                                      : Colors.white.withValues(alpha: 0.12),
+                                      : AppColors.border,
                                   shape: BoxShape.circle,
                                   border: Border.all(
-                                      color: Colors.white
-                                          .withValues(alpha: 0.2)),
+                                      color: AppColors.border),
                                 ),
                                 child: Icon(Icons.pets_rounded,
                                     size: 18,
                                     color: _slowMode
-                                        ? const Color(0xFF1E293B)
-                                        : Colors.white),
+                                        ? AppColors.textPrimary
+                                        : AppColors.textMuted),
                               ),
                             ),
                             const SizedBox(width: 8),
@@ -516,7 +517,7 @@ class _WeekFlashGameState extends State<_WeekFlashGame>
                                 ? 'কার্ডে ট্যাপ করে অর্থ দেখো'
                                 : 'কার্ডে ট্যাপ করে আবার ঘোরাও',
                             style: TextStyle(
-                                color: Colors.white.withValues(alpha: 0.55),
+                                color: AppColors.border,
                                 fontWeight: FontWeight.w700,
                                 fontSize: 11),
                           ),
@@ -535,8 +536,8 @@ class _WeekFlashGameState extends State<_WeekFlashGame>
                     onPressed: _i == 0 ? null : () => _go(-1),
                     style: OutlinedButton.styleFrom(
                         side: BorderSide(
-                            color: Colors.white.withValues(alpha: 0.2)),
-                        foregroundColor: Colors.white),
+                            color: AppColors.border),
+                        foregroundColor: AppColors.textPrimary),
                     icon: const Icon(Icons.navigate_before_rounded),
                     label: const Text('আগেরটি',
                         style: TextStyle(fontWeight: FontWeight.w900)),
@@ -716,7 +717,7 @@ class _WeekQuizGameState extends State<_WeekQuizGame>
                   const SizedBox(width: 8),
                   Text('স্কোর: $_score',
                       style: const TextStyle(
-                          color: Colors.white, fontWeight: FontWeight.w900)),
+                          color: AppColors.textPrimary, fontWeight: FontWeight.w900)),
                   const SizedBox(width: 10),
                   _WeekStatChip(label: 'স্ট্রিক', value: '$_streak'),
                   const SizedBox(width: 6),
@@ -750,9 +751,9 @@ class _WeekQuizGameState extends State<_WeekQuizGame>
                               },
                             ),
                     style: OutlinedButton.styleFrom(
-                      foregroundColor: Colors.white,
+                      foregroundColor: AppColors.textPrimary,
                       side: BorderSide(
-                          color: Colors.white.withValues(alpha: 0.22)),
+                          color: AppColors.border),
                     ),
                     child: const Text('রিভিউ',
                         style: TextStyle(fontWeight: FontWeight.w900)),
@@ -780,7 +781,7 @@ class _WeekQuizGameState extends State<_WeekQuizGame>
                     const Text('এই জাপানি দিনটির বাংলা কোনটি?',
                         textAlign: TextAlign.center,
                         style: TextStyle(
-                            color: Colors.white, fontWeight: FontWeight.w900)),
+                            color: AppColors.textPrimary, fontWeight: FontWeight.w900)),
                     const SizedBox(height: 10),
                     Text(_target.jp,
                         style: const TextStyle(
@@ -790,12 +791,12 @@ class _WeekQuizGameState extends State<_WeekQuizGame>
                     const SizedBox(height: 4),
                     Text(_target.kana,
                         style: TextStyle(
-                            color: Colors.white.withValues(alpha: 0.82),
+                            color: AppColors.textMuted,
                             fontWeight: FontWeight.w700,
                             fontSize: 20)),
                     Text('উচ্চারণ: ${_target.bnPronunciation}',
                         style: TextStyle(
-                            color: Colors.white.withValues(alpha: 0.85),
+                            color: AppColors.textMuted,
                             fontWeight: FontWeight.w700)),
                     const SizedBox(height: 10),
                     Row(
@@ -840,25 +841,25 @@ class _WeekQuizGameState extends State<_WeekQuizGame>
                             decoration: BoxDecoration(
                               color: _slowMode
                                   ? const Color(0xFFFFE000)
-                                  : Colors.white.withValues(alpha: 0.10),
+                                  : AppColors.border,
                               borderRadius: BorderRadius.circular(99),
                               border: Border.all(
-                                  color: Colors.white.withValues(alpha: 0.2)),
+                                  color: AppColors.border),
                             ),
                             child: Row(
                               mainAxisSize: MainAxisSize.min,
                               children: [
                                 Icon(Icons.pets_rounded,
                                     color: _slowMode
-                                        ? const Color(0xFF1E293B)
-                                        : Colors.white,
+                                        ? AppColors.textPrimary
+                                        : AppColors.textMuted,
                                     size: 18),
                                 const SizedBox(width: 6),
                                 Text('ধীরে',
                                     style: TextStyle(
                                         color: _slowMode
-                                            ? const Color(0xFF1E293B)
-                                            : Colors.white,
+                                            ? AppColors.textPrimary
+                                            : AppColors.textMuted,
                                         fontWeight: FontWeight.w900)),
                               ],
                             ),
@@ -880,19 +881,19 @@ class _WeekQuizGameState extends State<_WeekQuizGame>
                   final picked = _picked == o.jp;
                   final correct = o.jp == _target.jp;
                   final bg = _picked == null
-                      ? Colors.white.withValues(alpha: 0.06)
+                      ? AppColors.bg
                       : (correct
                           ? const Color(0xFF10B981).withValues(alpha: 0.22)
                           : (picked
                               ? const Color(0xFFEF4444).withValues(alpha: 0.22)
-                              : Colors.white.withValues(alpha: 0.05)));
+                              : AppColors.bg));
                   final border = _picked == null
-                      ? Colors.white.withValues(alpha: 0.16)
+                      ? AppColors.border
                       : (correct
                           ? const Color(0xFF10B981)
                           : (picked
                               ? const Color(0xFFEF4444)
-                              : Colors.white.withValues(alpha: 0.16)));
+                              : AppColors.border));
                   return GestureDetector(
                     onTap: () => _pick(o),
                     child: AnimatedScale(
@@ -924,7 +925,7 @@ class _WeekQuizGameState extends State<_WeekQuizGame>
                             Expanded(
                               child: Text(o.bn,
                                   style: const TextStyle(
-                                      color: Colors.white,
+                                      color: AppColors.textPrimary,
                                       fontWeight: FontWeight.w900,
                                       fontSize: 18)),
                             ),
@@ -1154,14 +1155,14 @@ class _WeekMatchGameState extends State<_WeekMatchGame>
             ? const Color(0xFFEF4444)
             : (selected
                 ? const Color(0xFFFFE000)
-                : Colors.white.withValues(alpha: 0.14)));
+                : AppColors.border));
     final bg = matched
         ? const Color(0xFF10B981).withValues(alpha: 0.17)
         : (wrong
             ? const Color(0xFFEF4444).withValues(alpha: 0.14)
             : (selected
                 ? const Color(0xFFFFE000).withValues(alpha: 0.13)
-                : Colors.white.withValues(alpha: 0.06)));
+                : AppColors.bg));
     return AnimatedBuilder(
       animation: _shakeCtrl,
       builder: (_, child) {
@@ -1184,7 +1185,7 @@ class _WeekMatchGameState extends State<_WeekMatchGame>
                   c.label,
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    color: Colors.white,
+                    color: AppColors.textPrimary,
                     fontWeight: FontWeight.w900,
                     fontSize: isJp ? 18 : 18,
                     height: 1.2,
@@ -1198,11 +1199,11 @@ class _WeekMatchGameState extends State<_WeekMatchGame>
                   child: Container(
                     padding: const EdgeInsets.all(4),
                     decoration: BoxDecoration(
-                      color: Colors.white.withValues(alpha: 0.18),
+                      color: AppColors.border,
                       shape: BoxShape.circle,
                     ),
                     child: const Icon(Icons.volume_up_rounded,
-                        size: 12, color: Colors.white),
+                        size: 12, color: AppColors.textPrimary),
                   ),
                 ),
               if (matched)
@@ -1268,7 +1269,7 @@ class _WeekMatchGameState extends State<_WeekMatchGame>
                       const Expanded(
                         child: Text('জাপানি ↔ বাংলা দিন মিলাও',
                             style: TextStyle(
-                                color: Colors.white,
+                                color: AppColors.textPrimary,
                                 fontWeight: FontWeight.w900)),
                       ),
                       _WeekStatChip(label: 'XP', value: '$_xp'),
@@ -1281,17 +1282,17 @@ class _WeekMatchGameState extends State<_WeekMatchGame>
                     children: [
                       Icon(Icons.timer_rounded,
                           size: 14,
-                          color: Colors.white.withValues(alpha: 0.7)),
+                          color: AppColors.textMuted),
                       const SizedBox(width: 4),
                       Text(elapsed,
                           style: TextStyle(
-                              color: Colors.white.withValues(alpha: 0.85),
+                              color: AppColors.textMuted,
                               fontWeight: FontWeight.w800,
                               fontSize: 12)),
                       const SizedBox(width: 14),
                       Text('মুভ: $_moves',
                           style: TextStyle(
-                              color: Colors.white.withValues(alpha: 0.85),
+                              color: AppColors.textMuted,
                               fontWeight: FontWeight.w800,
                               fontSize: 12)),
                       const Spacer(),
@@ -1308,7 +1309,7 @@ class _WeekMatchGameState extends State<_WeekMatchGame>
                     minHeight: 7,
                     borderRadius: BorderRadius.circular(99),
                     value: progress.clamp(0, 1),
-                    backgroundColor: Colors.white.withValues(alpha: 0.12),
+                    backgroundColor: AppColors.border,
                     valueColor:
                         const AlwaysStoppedAnimation(Color(0xFFFFE000)),
                   ),
@@ -1347,8 +1348,8 @@ class _WeekMatchGameState extends State<_WeekMatchGame>
                 onPressed: _reset,
                 style: OutlinedButton.styleFrom(
                     side: BorderSide(
-                        color: Colors.white.withValues(alpha: 0.2)),
-                    foregroundColor: Colors.white),
+                        color: AppColors.border),
+                    foregroundColor: AppColors.textPrimary),
                 icon: const Icon(Icons.refresh_rounded),
                 label: const Text('রি-স্টার্ট',
                     style: TextStyle(fontWeight: FontWeight.w900)),
@@ -1580,7 +1581,7 @@ class _WeekSequenceGameState extends State<_WeekSequenceGame>
                         const SizedBox(width: 8),
                         Text('রাউন্ড: $_round/$_totalRounds',
                             style: const TextStyle(
-                                color: Colors.white,
+                                color: AppColors.textPrimary,
                                 fontWeight: FontWeight.w900)),
                         const SizedBox(width: 10),
                         _WeekStatChip(label: 'স্কোর', value: '$_score'),
@@ -1606,7 +1607,7 @@ class _WeekSequenceGameState extends State<_WeekSequenceGame>
                       minHeight: 6,
                       borderRadius: BorderRadius.circular(99),
                       value: roundProgress.clamp(0, 1),
-                      backgroundColor: Colors.white.withValues(alpha: 0.12),
+                      backgroundColor: AppColors.border,
                       valueColor:
                           const AlwaysStoppedAnimation(Color(0xFFFFE000)),
                     ),
@@ -1615,7 +1616,7 @@ class _WeekSequenceGameState extends State<_WeekSequenceGame>
                       minHeight: 5,
                       borderRadius: BorderRadius.circular(99),
                       value: timeProgress.clamp(0, 1),
-                      backgroundColor: Colors.white.withValues(alpha: 0.10),
+                      backgroundColor: AppColors.border,
                       valueColor: AlwaysStoppedAnimation(_timeLeft <= 5
                           ? const Color(0xFFFF6B6B)
                           : const Color(0xFF3B82F6)),
@@ -1642,7 +1643,7 @@ class _WeekSequenceGameState extends State<_WeekSequenceGame>
                     children: [
                       const Text('এই দিনের পরের দিন কোনটি?',
                           style: TextStyle(
-                              color: Colors.white,
+                              color: AppColors.textPrimary,
                               fontWeight: FontWeight.w900)),
                       const SizedBox(height: 10),
                       Text(_current.jp,
@@ -1652,7 +1653,7 @@ class _WeekSequenceGameState extends State<_WeekSequenceGame>
                               fontSize: 44)),
                       Text('${_current.kana} • ${_current.bnPronunciation}',
                           style: TextStyle(
-                              color: Colors.white.withValues(alpha: 0.84),
+                              color: AppColors.textMuted,
                               fontWeight: FontWeight.w700)),
                       const SizedBox(height: 10),
                       Row(
@@ -1698,26 +1699,26 @@ class _WeekSequenceGameState extends State<_WeekSequenceGame>
                               decoration: BoxDecoration(
                                 color: _slowMode
                                     ? const Color(0xFFFFE000)
-                                    : Colors.white.withValues(alpha: 0.10),
+                                    : AppColors.border,
                                 borderRadius: BorderRadius.circular(99),
                                 border: Border.all(
                                     color:
-                                        Colors.white.withValues(alpha: 0.2)),
+                                        AppColors.border),
                               ),
                               child: Row(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
                                   Icon(Icons.pets_rounded,
                                       color: _slowMode
-                                          ? const Color(0xFF1E293B)
-                                          : Colors.white,
+                                          ? AppColors.textPrimary
+                                          : AppColors.textMuted,
                                       size: 16),
                                   const SizedBox(width: 4),
                                   Text('ধীরে',
                                       style: TextStyle(
                                           color: _slowMode
-                                              ? const Color(0xFF1E293B)
-                                              : Colors.white,
+                                              ? AppColors.textPrimary
+                                              : AppColors.textMuted,
                                           fontWeight: FontWeight.w900,
                                           fontSize: 12)),
                                 ],
@@ -1740,20 +1741,20 @@ class _WeekSequenceGameState extends State<_WeekSequenceGame>
                     final picked = _picked == o.jp;
                     final correct = o.jp == _correctNext.jp;
                     final bg = _picked == null
-                        ? Colors.white.withValues(alpha: 0.06)
+                        ? AppColors.bg
                         : (correct
                             ? const Color(0xFF10B981).withValues(alpha: 0.22)
                             : (picked
                                 ? const Color(0xFFEF4444)
                                     .withValues(alpha: 0.22)
-                                : Colors.white.withValues(alpha: 0.05)));
+                                : AppColors.bg));
                     final border = _picked == null
-                        ? Colors.white.withValues(alpha: 0.16)
+                        ? AppColors.border
                         : (correct
                             ? const Color(0xFF10B981)
                             : (picked
                                 ? const Color(0xFFEF4444)
-                                : Colors.white.withValues(alpha: 0.16)));
+                                : AppColors.border));
                     return GestureDetector(
                       onTap: () => _pick(o),
                       child: AnimatedScale(
@@ -1787,7 +1788,7 @@ class _WeekSequenceGameState extends State<_WeekSequenceGame>
                                     '${o.jp}  (${o.bnPronunciation})',
                                     textAlign: TextAlign.center,
                                     style: const TextStyle(
-                                        color: Colors.white,
+                                        color: AppColors.textPrimary,
                                         fontWeight: FontWeight.w900,
                                         fontSize: 22)),
                               ),
@@ -2047,7 +2048,7 @@ class _WeekListenGameState extends State<_WeekListenGame>
                   width: double.infinity,
                   padding: const EdgeInsets.all(18),
                   decoration: BoxDecoration(
-                    color: const Color(0xFF1E293B),
+                    color: AppColors.card,
                     borderRadius: BorderRadius.circular(20),
                     border: Border.all(color: _teal.withValues(alpha: 0.55), width: 2),
                     boxShadow: [
@@ -2112,11 +2113,11 @@ class _WeekListenGameState extends State<_WeekListenGame>
                                       await _speak();
                                     },
                               style: OutlinedButton.styleFrom(
-                                foregroundColor: _slowMode ? _teal : Colors.white,
+                                foregroundColor: _slowMode ? _teal : AppColors.textPrimary,
                                 side: BorderSide(
                                     color: _slowMode
                                         ? _teal
-                                        : Colors.white.withValues(alpha: 0.28)),
+                                        : AppColors.border),
                                 padding: const EdgeInsets.symmetric(vertical: 12),
                                 shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(12)),
@@ -2138,7 +2139,7 @@ class _WeekListenGameState extends State<_WeekListenGame>
               const Text(
                 'এই বারের বাংলা নাম কোনটি?',
                 style: TextStyle(
-                  color: Colors.white,
+                  color: AppColors.textPrimary,
                   fontSize: 14,
                   fontWeight: FontWeight.w900,
                 ),
@@ -2445,7 +2446,7 @@ class _WeekReadGameState extends State<_WeekReadGame>
                     padding: const EdgeInsets.all(20),
                     decoration: BoxDecoration(
                       gradient: const LinearGradient(
-                        colors: [Color(0xFF1E293B), Color(0xFF111827)],
+                        colors: [AppColors.card, AppColors.card],
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
                       ),
@@ -2464,7 +2465,7 @@ class _WeekReadGameState extends State<_WeekReadGame>
                       children: [
                         Icon(
                           _isConcept ? _concept.icon : Icons.calendar_month_rounded,
-                          color: _isConcept ? _concept.color : Colors.white,
+                          color: _isConcept ? _concept.color : AppColors.textPrimary,
                           size: 44,
                         ),
                         const SizedBox(height: 8),
@@ -2490,7 +2491,7 @@ class _WeekReadGameState extends State<_WeekReadGame>
                           _isConcept ? _concept.prompt : '${_target.bn} — জাপানিতে কী?',
                           textAlign: TextAlign.center,
                           style: const TextStyle(
-                            color: Colors.white,
+                            color: AppColors.textPrimary,
                             fontSize: 18,
                             fontWeight: FontWeight.w900,
                             height: 1.3,
@@ -2526,7 +2527,7 @@ class _WeekReadGameState extends State<_WeekReadGame>
               const Text(
                 'সঠিক উত্তর কোনটি?',
                 style: TextStyle(
-                  color: Colors.white,
+                  color: AppColors.textPrimary,
                   fontSize: 14,
                   fontWeight: FontWeight.w900,
                 ),
@@ -2956,7 +2957,7 @@ class _WeekSpeakGameState extends State<_WeekSpeakGame>
                   width: double.infinity,
                   padding: const EdgeInsets.all(18),
                   decoration: BoxDecoration(
-                    color: const Color(0xFF1E293B),
+                    color: AppColors.card,
                     borderRadius: BorderRadius.circular(20),
                     border: Border.all(color: _rose.withValues(alpha: 0.55), width: 2),
                     boxShadow: [
@@ -2975,7 +2976,7 @@ class _WeekSpeakGameState extends State<_WeekSpeakGame>
                       Text(
                         _target.bn,
                         style: const TextStyle(
-                          color: Colors.white,
+                          color: AppColors.textPrimary,
                           fontSize: 28,
                           fontWeight: FontWeight.w900,
                         ),
@@ -2984,7 +2985,7 @@ class _WeekSpeakGameState extends State<_WeekSpeakGame>
                       Text(
                         'জাপানিতে বলুন',
                         style: TextStyle(
-                          color: Colors.white.withValues(alpha: 0.65),
+                          color: AppColors.textMuted,
                           fontSize: 12,
                           fontWeight: FontWeight.w700,
                         ),
@@ -3010,7 +3011,7 @@ class _WeekSpeakGameState extends State<_WeekSpeakGame>
                         Text(
                           '${_target.jp}  •  ${_target.kana}',
                           style: TextStyle(
-                            color: Colors.white.withValues(alpha: 0.78),
+                            color: AppColors.textMuted,
                             fontSize: 13,
                             fontWeight: FontWeight.w700,
                           ),
@@ -3052,7 +3053,7 @@ class _WeekSpeakGameState extends State<_WeekSpeakGame>
                         ),
                         child: Icon(
                           _listening ? Icons.stop_rounded : Icons.mic_rounded,
-                          color: Colors.white,
+                          color: AppColors.textPrimary,
                           size: 36,
                         ),
                       ),
@@ -3066,7 +3067,7 @@ class _WeekSpeakGameState extends State<_WeekSpeakGame>
                     ? 'শুনছি… $_secondsLeft s'
                     : (_evaluated ? 'আবার বলতে মাইক চাপুন' : 'মাইক চাপুন'),
                 style: const TextStyle(
-                  color: Colors.white,
+                  color: AppColors.textPrimary,
                   fontWeight: FontWeight.w900,
                   fontSize: 13,
                 ),
@@ -3077,9 +3078,9 @@ class _WeekSpeakGameState extends State<_WeekSpeakGame>
                   width: double.infinity,
                   padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                   decoration: BoxDecoration(
-                    color: Colors.white.withValues(alpha: 0.06),
+                    color: AppColors.bg,
                     borderRadius: BorderRadius.circular(10),
-                    border: Border.all(color: Colors.white.withValues(alpha: 0.12)),
+                    border: Border.all(color: AppColors.border),
                   ),
                   child: Text(
                     'শোনা গেল: $_heard',
@@ -3159,8 +3160,8 @@ class _WeekSpeakGameState extends State<_WeekSpeakGame>
                     child: OutlinedButton.icon(
                       onPressed: _ttsReady ? _playNative : null,
                       style: OutlinedButton.styleFrom(
-                        foregroundColor: Colors.white,
-                        side: BorderSide(color: Colors.white.withValues(alpha: 0.4)),
+                        foregroundColor: AppColors.textPrimary,
+                        side: BorderSide(color: AppColors.textMuted),
                         padding: const EdgeInsets.symmetric(vertical: 12),
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(12)),
@@ -3175,11 +3176,11 @@ class _WeekSpeakGameState extends State<_WeekSpeakGame>
                     child: OutlinedButton.icon(
                       onPressed: () => setState(() => _showHint = !_showHint),
                       style: OutlinedButton.styleFrom(
-                        foregroundColor: _showHint ? _rose : Colors.white,
+                        foregroundColor: _showHint ? _rose : AppColors.textPrimary,
                         side: BorderSide(
                             color: _showHint
                                 ? _rose
-                                : Colors.white.withValues(alpha: 0.4)),
+                                : AppColors.textMuted),
                         padding: const EdgeInsets.symmetric(vertical: 12),
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(12)),
@@ -3587,7 +3588,7 @@ class _WeekSeqSpeakGameState extends State<_WeekSeqSpeakGame>
                 padding: const EdgeInsets.fromLTRB(16, 14, 16, 16),
                 decoration: BoxDecoration(
                   gradient: const LinearGradient(
-                    colors: [Color(0xFF1E293B), Color(0xFF111827)],
+                    colors: [AppColors.card, AppColors.card],
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                   ),
@@ -3608,7 +3609,7 @@ class _WeekSeqSpeakGameState extends State<_WeekSeqSpeakGame>
                         'গেৎসুওবি → কায়োবি → … → নিচিয়োবি একবারে বলুন',
                         textAlign: TextAlign.center,
                         style: TextStyle(
-                          color: Colors.white.withValues(alpha: 0.78),
+                          color: AppColors.textMuted,
                           fontSize: 12,
                           fontWeight: FontWeight.w700,
                         ),
@@ -3645,7 +3646,7 @@ class _WeekSeqSpeakGameState extends State<_WeekSeqSpeakGame>
                               ),
                               child: Icon(
                                 _listening ? Icons.stop_rounded : Icons.mic_rounded,
-                                color: Colors.white,
+                                color: AppColors.textPrimary,
                                 size: 38,
                               ),
                             ),
@@ -3657,7 +3658,7 @@ class _WeekSeqSpeakGameState extends State<_WeekSeqSpeakGame>
                     Text(
                       _listening ? 'শুনছি — বলতে থাকুন…' : (_evaluated ? 'আবার চেষ্টা' : 'মাইক চাপুন'),
                       style: const TextStyle(
-                        color: Colors.white,
+                        color: AppColors.textPrimary,
                         fontWeight: FontWeight.w900,
                         fontSize: 13,
                       ),
@@ -3668,9 +3669,9 @@ class _WeekSeqSpeakGameState extends State<_WeekSeqSpeakGame>
                         width: double.infinity,
                         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                         decoration: BoxDecoration(
-                          color: Colors.white.withValues(alpha: 0.06),
+                          color: AppColors.bg,
                           borderRadius: BorderRadius.circular(10),
-                          border: Border.all(color: Colors.white.withValues(alpha: 0.12)),
+                          border: Border.all(color: AppColors.border),
                         ),
                         child: Text(
                           _heard,
@@ -3733,7 +3734,7 @@ class _WeekSeqSpeakGameState extends State<_WeekSeqSpeakGame>
                     child: Text(
                       'নির্ভুলতা: $accuracy%',
                       style: TextStyle(
-                        color: Colors.white.withValues(alpha: 0.75),
+                        color: AppColors.textMuted,
                         fontSize: 11,
                         fontWeight: FontWeight.w700,
                       ),
@@ -3750,8 +3751,8 @@ class _WeekSeqSpeakGameState extends State<_WeekSeqSpeakGame>
                       child: OutlinedButton.icon(
                         onPressed: _ttsReady ? _speakAll : null,
                         style: OutlinedButton.styleFrom(
-                          foregroundColor: Colors.white,
-                          side: BorderSide(color: Colors.white.withValues(alpha: 0.4)),
+                          foregroundColor: AppColors.textPrimary,
+                          side: BorderSide(color: AppColors.textMuted),
                           padding: const EdgeInsets.symmetric(vertical: 12),
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(12)),
@@ -3840,7 +3841,7 @@ class _WeekSeqSpeakGameState extends State<_WeekSeqSpeakGame>
             detail = 'বাদ পড়েছে';
             break;
           case _WeekSlotStatus.pending:
-            color = Colors.white.withValues(alpha: 0.3);
+            color = AppColors.border;
             icon = Icons.radio_button_unchecked_rounded;
             detail = 'অপেক্ষমাণ';
             break;
@@ -3881,7 +3882,7 @@ class _WeekSeqSpeakGameState extends State<_WeekSeqSpeakGame>
                       Text(
                         '${r.expected.bn} — ${r.expected.bnPronunciation}',
                         style: const TextStyle(
-                          color: Colors.white,
+                          color: AppColors.textPrimary,
                           fontSize: 14,
                           fontWeight: FontWeight.w900,
                         ),
@@ -3970,7 +3971,7 @@ class _WeekHeaderPanel extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
-        color: const Color(0xFF1E293B),
+        color: AppColors.card,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(color: color.withValues(alpha: 0.45)),
         boxShadow: [
@@ -3989,13 +3990,13 @@ class _WeekHeaderPanel extends StatelessWidget {
               Expanded(
                 child: Text(title,
                     style: const TextStyle(
-                        color: Colors.white,
+                        color: AppColors.textPrimary,
                         fontWeight: FontWeight.w900,
                         fontSize: 13)),
               ),
               Text(timer,
                   style: TextStyle(
-                      color: Colors.white.withValues(alpha: 0.85),
+                      color: AppColors.textMuted,
                       fontWeight: FontWeight.w900)),
             ],
           ),
@@ -4004,7 +4005,7 @@ class _WeekHeaderPanel extends StatelessWidget {
             minHeight: 8,
             borderRadius: BorderRadius.circular(99),
             value: progress.clamp(0, 1),
-            backgroundColor: Colors.white.withValues(alpha: 0.12),
+            backgroundColor: AppColors.border,
             valueColor: AlwaysStoppedAnimation(color),
           ),
           const SizedBox(height: 8),
@@ -4012,7 +4013,7 @@ class _WeekHeaderPanel extends StatelessWidget {
             children: [
               Text(roundText,
                   style: TextStyle(
-                      color: Colors.white.withValues(alpha: 0.82),
+                      color: AppColors.textMuted,
                       fontWeight: FontWeight.w800)),
               const Spacer(),
               Text('XP: $xp',
@@ -4022,7 +4023,7 @@ class _WeekHeaderPanel extends StatelessWidget {
               const SizedBox(width: 10),
               Text('স্ট্রিক: $streak',
                   style: TextStyle(
-                      color: Colors.white.withValues(alpha: 0.82),
+                      color: AppColors.textMuted,
                       fontWeight: FontWeight.w800)),
             ],
           ),
@@ -4053,10 +4054,10 @@ class _WeekOptionTile extends StatelessWidget {
   Widget build(BuildContext context) {
     Color border;
     Color bg;
-    Color textColor = Colors.white;
+    Color textColor = AppColors.textPrimary;
     if (!revealed) {
-      border = Colors.white.withValues(alpha: 0.18);
-      bg = Colors.white.withValues(alpha: 0.07);
+      border = AppColors.border;
+      bg = AppColors.bg;
     } else if (isCorrect) {
       border = const Color(0xFF10B981);
       bg = const Color(0xFF10B981).withValues(alpha: 0.22);
@@ -4066,8 +4067,8 @@ class _WeekOptionTile extends StatelessWidget {
       bg = const Color(0xFFEF4444).withValues(alpha: 0.18);
       textColor = const Color(0xFFEF4444);
     } else {
-      border = Colors.white.withValues(alpha: 0.10);
-      bg = Colors.white.withValues(alpha: 0.04);
+      border = AppColors.border;
+      bg = AppColors.bg;
     }
     return Expanded(
       child: Material(
@@ -4174,11 +4175,11 @@ class _WeekCorrectBanner extends StatelessWidget {
                   Row(
                     children: [
                       const Icon(Icons.thumb_up_alt_rounded,
-                          color: Colors.white, size: 26),
+                          color: AppColors.textPrimary, size: 26),
                       const SizedBox(width: 10),
                       const Text('সঠিক!',
                           style: TextStyle(
-                              color: Colors.white,
+                              color: AppColors.textPrimary,
                               fontWeight: FontWeight.w900,
                               fontSize: 22)),
                       const Spacer(),
@@ -4191,7 +4192,7 @@ class _WeekCorrectBanner extends StatelessWidget {
                               Icons.star_rounded,
                               color: i < math.min(5, streak)
                                   ? const Color(0xFFFFE000)
-                                  : Colors.white.withValues(alpha: 0.22),
+                                  : AppColors.border,
                               size: 22,
                             ),
                           ),
@@ -4204,7 +4205,7 @@ class _WeekCorrectBanner extends StatelessWidget {
                     text,
                     textAlign: TextAlign.center,
                     style: const TextStyle(
-                      color: Colors.white,
+                      color: AppColors.textPrimary,
                       fontWeight: FontWeight.w800,
                       fontSize: 15,
                     ),
@@ -4228,16 +4229,16 @@ class _WeekStatChip extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.08),
+        color: AppColors.bg,
         borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: Colors.white.withValues(alpha: 0.14)),
+        border: Border.all(color: AppColors.border),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
           Text(label,
               style: TextStyle(
-                  color: Colors.white.withValues(alpha: 0.7),
+                  color: AppColors.textMuted,
                   fontSize: 10,
                   fontWeight: FontWeight.w800)),
           const SizedBox(width: 4),
@@ -4273,19 +4274,19 @@ class _WeekFlipFace extends StatelessWidget {
           children: [
             Text(item.jp,
                 style: const TextStyle(
-                    color: Colors.white,
+                    color: AppColors.textPrimary,
                     fontSize: 56,
                     fontWeight: FontWeight.w900)),
             const SizedBox(height: 10),
             Text(item.kana,
                 style: TextStyle(
-                    color: Colors.white.withValues(alpha: 0.82),
+                    color: AppColors.textMuted,
                     fontSize: 24,
                     fontWeight: FontWeight.w700)),
             const SizedBox(height: 6),
             Text('উচ্চারণ: ${item.bnPronunciation}',
                 style: TextStyle(
-                    color: Colors.white.withValues(alpha: 0.85),
+                    color: AppColors.textMuted,
                     fontWeight: FontWeight.w700)),
           ],
         );
@@ -4312,9 +4313,9 @@ class _WeekFlipFace extends StatelessWidget {
 }
 
 BoxDecoration _card({double radius = 16}) => BoxDecoration(
-      color: const Color(0xFF1E293B),
+      color: AppColors.card,
       borderRadius: BorderRadius.circular(radius),
-      border: Border.all(color: Colors.white.withValues(alpha: 0.10)),
+      border: Border.all(color: AppColors.border),
     );
 
 void _showWeekAwesomeResult({
@@ -4387,11 +4388,11 @@ class _WeekAwesomeResultSheet extends StatelessWidget {
                 const SizedBox(width: 10),
                 Expanded(
                   child: Text(title,
-                      style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w900, fontSize: 16)),
+                      style: const TextStyle(color: AppColors.textPrimary, fontWeight: FontWeight.w900, fontSize: 16)),
                 ),
                 IconButton(
                   onPressed: () => Navigator.pop(context),
-                  icon: const Icon(Icons.close_rounded, color: Colors.white),
+                  icon: const Icon(Icons.close_rounded, color: AppColors.textPrimary),
                 ),
               ],
             ),
@@ -4399,9 +4400,9 @@ class _WeekAwesomeResultSheet extends StatelessWidget {
             Container(
               padding: const EdgeInsets.all(14),
               decoration: BoxDecoration(
-                color: Colors.white.withValues(alpha: 0.06),
+                color: AppColors.bg,
                 borderRadius: BorderRadius.circular(16),
-                border: Border.all(color: Colors.white.withValues(alpha: 0.10)),
+                border: Border.all(color: AppColors.border),
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -4417,13 +4418,13 @@ class _WeekAwesomeResultSheet extends StatelessWidget {
                         Container(
                           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                           decoration: BoxDecoration(
-                            color: const Color(0xFF1E293B),
+                            color: AppColors.card,
                             borderRadius: BorderRadius.circular(999),
-                            border: Border.all(color: Colors.white.withValues(alpha: 0.10)),
+                            border: Border.all(color: AppColors.border),
                           ),
                           child: Text(s,
                               style: TextStyle(
-                                  color: Colors.white.withValues(alpha: 0.92),
+                                  color: AppColors.textPrimary,
                                   fontWeight: FontWeight.w800,
                                   fontSize: 12)),
                         ),
@@ -4435,7 +4436,7 @@ class _WeekAwesomeResultSheet extends StatelessWidget {
             if (missed.isNotEmpty) ...[
               const SizedBox(height: 12),
               const Text('যেগুলো মিস হয়েছে',
-                  style: TextStyle(color: Colors.white, fontWeight: FontWeight.w900)),
+                  style: TextStyle(color: AppColors.textPrimary, fontWeight: FontWeight.w900)),
               const SizedBox(height: 8),
               for (final m in missed)
                 Padding(
@@ -4443,12 +4444,12 @@ class _WeekAwesomeResultSheet extends StatelessWidget {
                   child: Container(
                     padding: const EdgeInsets.all(12),
                     decoration: BoxDecoration(
-                      color: Colors.white.withValues(alpha: 0.05),
+                      color: AppColors.bg,
                       borderRadius: BorderRadius.circular(14),
-                      border: Border.all(color: Colors.white.withValues(alpha: 0.10)),
+                      border: Border.all(color: AppColors.border),
                     ),
                     child: Text(m,
-                        style: TextStyle(color: Colors.white.withValues(alpha: 0.92), fontWeight: FontWeight.w800)),
+                        style: TextStyle(color: AppColors.textPrimary, fontWeight: FontWeight.w800)),
                   ),
                 ),
             ],
@@ -4460,7 +4461,7 @@ class _WeekAwesomeResultSheet extends StatelessWidget {
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xFFFFE000),
-                foregroundColor: const Color(0xFF1E293B),
+                foregroundColor: AppColors.textPrimary,
                 padding: const EdgeInsets.symmetric(vertical: 12),
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
               ),

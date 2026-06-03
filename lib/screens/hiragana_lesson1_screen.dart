@@ -3,6 +3,7 @@ import 'dart:async';
 import 'dart:math' as math;
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
+import 'package:ez_trainz/utils/app_theme.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -34,7 +35,7 @@ class _HiraganaLesson1ScreenState extends State<HiraganaLesson1Screen> {
 
   static const _seekStep = Duration(seconds: 10);
   static const _autoHide = Duration(seconds: 3);
-  static const _navyBg = Color(0xFF0F172A);
+  static const _navyBg = Colors.transparent;
   static const _navyCard = Color(0xFF1E293B);
   static const _navyBorder = Color(0xFF334155);
   static const _textMuted = Color(0xFF94A3B8);
@@ -362,7 +363,7 @@ class _HiraganaLesson1ScreenState extends State<HiraganaLesson1Screen> {
                     child: Text(
                       'hiragana_l1_screen_title'.tr,
                       style: const TextStyle(
-                        color: Colors.white,
+                        color: AppColors.textPrimary,
                         fontSize: 16,
                         fontWeight: FontWeight.w800,
                       ),
@@ -437,7 +438,7 @@ class _HiraganaLesson1ScreenState extends State<HiraganaLesson1Screen> {
                 Text(
                   'hiragana_l1_screen_title'.tr,
                   style: const TextStyle(
-                    color: Colors.white,
+                    color: AppColors.textPrimary,
                     fontSize: 18,
                     fontWeight: FontWeight.w800,
                     height: 1.2,
@@ -477,7 +478,7 @@ class _HiraganaLesson1ScreenState extends State<HiraganaLesson1Screen> {
                     Text(
                       'hiragana_l1_checkpoints_heading'.tr,
                       style: const TextStyle(
-                        color: Colors.white,
+                        color: AppColors.textPrimary,
                         fontSize: 15,
                         fontWeight: FontWeight.w800,
                       ),
@@ -517,7 +518,7 @@ class _HiraganaLesson1ScreenState extends State<HiraganaLesson1Screen> {
                     Text(
                       'hiragana_l1_quizzes_heading'.tr,
                       style: const TextStyle(
-                        color: Colors.white,
+                        color: AppColors.textPrimary,
                         fontSize: 15,
                         fontWeight: FontWeight.w800,
                       ),
@@ -576,7 +577,7 @@ class _HiraganaLesson1ScreenState extends State<HiraganaLesson1Screen> {
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: const Icon(Icons.video_call_rounded,
-                        color: Colors.white, size: 24),
+                        color: AppColors.textPrimary, size: 24),
                   ),
                   const SizedBox(width: 14),
                   Expanded(
@@ -586,7 +587,7 @@ class _HiraganaLesson1ScreenState extends State<HiraganaLesson1Screen> {
                         Text(
                           'hiragana_l1_live_lesson'.tr,
                           style: const TextStyle(
-                            color: Colors.white,
+                            color: AppColors.textPrimary,
                             fontSize: 15,
                             fontWeight: FontWeight.w800,
                           ),
@@ -674,7 +675,7 @@ class _HiraganaLesson1ScreenState extends State<HiraganaLesson1Screen> {
         Text(
           label,
           style: const TextStyle(
-            color: Colors.white,
+            color: AppColors.textPrimary,
             fontSize: 14,
             fontWeight: FontWeight.w600,
           ),
@@ -709,7 +710,7 @@ class _HiraganaLesson1ScreenState extends State<HiraganaLesson1Screen> {
                 child: Text(
                   label,
                   style: const TextStyle(
-                    color: Colors.white,
+                    color: AppColors.textPrimary,
                     fontSize: 13,
                     fontWeight: FontWeight.w700,
                     height: 1.3,
@@ -732,8 +733,8 @@ class _HiraganaLesson1ScreenState extends State<HiraganaLesson1Screen> {
       Get.snackbar(
         'Unable to Open',
         'Could not open the booking page. Please try again later.',
-        backgroundColor: const Color(0xFF1E293B),
-        colorText: Colors.white,
+        backgroundColor: AppColors.card,
+        colorText: AppColors.textPrimary,
         snackPosition: SnackPosition.BOTTOM,
       );
     }
@@ -991,8 +992,8 @@ class _HiraganaMcqDialog extends StatefulWidget {
 
 class _HiraganaMcqDialogState extends State<_HiraganaMcqDialog> {
   static const _accent = Color(0xFFFFD86B);
-  static const _bgTop = Color(0xFF1E3C72);
-  static const _bgBottom = Color(0xFF2A5298);
+  static const _bgTop = AppColors.skyTop;
+  static const _bgBottom = AppColors.goldBottom;
 
   List<(String romaji, String kana)> get _pairs => widget.pairs;
 
@@ -1074,7 +1075,7 @@ class _HiraganaMcqDialogState extends State<_HiraganaMcqDialog> {
                         child: Text(
                           widget.title,
                           style: TextStyle(
-                            color: Colors.white.withValues(alpha: 0.95),
+                            color: AppColors.textPrimary,
                             fontSize: headerFont,
                             fontWeight: FontWeight.w900,
                           ),
@@ -1083,14 +1084,14 @@ class _HiraganaMcqDialogState extends State<_HiraganaMcqDialog> {
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                         decoration: BoxDecoration(
-                          color: Colors.white.withValues(alpha: 0.14),
+                          color: AppColors.border,
                           borderRadius: BorderRadius.circular(999),
-                          border: Border.all(color: Colors.white.withValues(alpha: 0.22)),
+                          border: Border.all(color: AppColors.border),
                         ),
                         child: Text(
                           '${_index + 1}/${_pairs.length}',
                           style: const TextStyle(
-                            color: Colors.white,
+                            color: AppColors.textPrimary,
                             fontWeight: FontWeight.w800,
                             fontSize: 12,
                           ),
@@ -1103,9 +1104,9 @@ class _HiraganaMcqDialogState extends State<_HiraganaMcqDialog> {
                     width: double.infinity,
                     padding: EdgeInsets.all(isShort ? 12 : 14),
                     decoration: BoxDecoration(
-                      color: Colors.white.withValues(alpha: 0.12),
+                      color: AppColors.border,
                       borderRadius: BorderRadius.circular(18),
-                      border: Border.all(color: Colors.white.withValues(alpha: 0.18)),
+                      border: Border.all(color: AppColors.border),
                     ),
                     child: Column(
                       children: [
@@ -1113,7 +1114,7 @@ class _HiraganaMcqDialogState extends State<_HiraganaMcqDialog> {
                           'hiragana_l1_mcq_prompt'.tr,
                           textAlign: TextAlign.center,
                           style: TextStyle(
-                            color: Colors.white.withValues(alpha: 0.85),
+                            color: AppColors.textMuted,
                             fontSize: 13,
                             fontWeight: FontWeight.w700,
                           ),
@@ -1137,7 +1138,7 @@ class _HiraganaMcqDialogState extends State<_HiraganaMcqDialog> {
                                   'hiragana_l1_mcq_hint'.tr,
                                   key: const ValueKey('hint'),
                                   style: TextStyle(
-                                    color: Colors.white.withValues(alpha: 0.70),
+                                    color: AppColors.textMuted,
                                     fontSize: 12,
                                   ),
                                 )
@@ -1229,7 +1230,7 @@ class _HiraganaMcqDialogState extends State<_HiraganaMcqDialog> {
                             'total': '${_pairs.length}',
                           }),
                           style: TextStyle(
-                            color: Colors.white.withValues(alpha: 0.85),
+                            color: AppColors.textMuted,
                             fontWeight: FontWeight.w800,
                             fontSize: 12,
                           ),
@@ -1243,11 +1244,11 @@ class _HiraganaMcqDialogState extends State<_HiraganaMcqDialog> {
                           if (!context.mounted) return;
                           Navigator.of(context).pop();
                         },
-                        style: TextButton.styleFrom(foregroundColor: Colors.white),
+                        style: TextButton.styleFrom(foregroundColor: AppColors.accentBlueDk),
                         child: Text(
                           'skip'.tr,
                           style: TextStyle(
-                            color: Colors.white.withValues(alpha: 0.9),
+                            color: AppColors.textPrimary,
                             fontWeight: FontWeight.w800,
                           ),
                         ),
@@ -1289,7 +1290,7 @@ class _HiraganaMcqDialogState extends State<_HiraganaMcqDialog> {
             child: Container(
               padding: const EdgeInsets.all(18),
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: AppColors.card,
                 borderRadius: BorderRadius.circular(22),
                 boxShadow: [
                   BoxShadow(
@@ -1374,8 +1375,8 @@ class _OptionCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final base = Colors.white.withValues(alpha: 0.12);
-    final border = Colors.white.withValues(alpha: 0.18);
+    final base = AppColors.border;
+    final border = AppColors.border;
     final bg = switch (state) {
       _OptionState.correct => const Color(0xFF14B86A).withValues(alpha: 0.18),
       _OptionState.wrong => const Color(0xFFE53935).withValues(alpha: 0.16),
@@ -1398,7 +1399,7 @@ class _OptionCard extends StatelessWidget {
           decoration: BoxDecoration(
             color: bg,
             borderRadius: BorderRadius.circular(18),
-            border: Border.all(color: selected ? Colors.white.withValues(alpha: 0.55) : b, width: selected ? 2 : 1),
+            border: Border.all(color: selected ? AppColors.accentBlue : b, width: selected ? 2 : 1),
             boxShadow: selected
                 ? [
                     BoxShadow(
@@ -1413,7 +1414,7 @@ class _OptionCard extends StatelessWidget {
             child: Text(
               label,
               style: TextStyle(
-                color: Colors.white,
+                color: AppColors.textPrimary,
                 fontSize: 34,
                 fontWeight: FontWeight.w900,
                 height: 1,
@@ -1454,7 +1455,7 @@ class _SpeechGamePrompt extends StatelessWidget {
               colors: [Color(0xFF1E3C72), Color(0xFF2A5298)],
             ),
             borderRadius: BorderRadius.circular(22),
-            border: Border.all(color: Colors.white.withValues(alpha: 0.18)),
+            border: Border.all(color: AppColors.border),
             boxShadow: [
               BoxShadow(
                 color: Colors.black.withValues(alpha: 0.30),
@@ -1480,7 +1481,7 @@ class _SpeechGamePrompt extends StatelessWidget {
                 'hiragana_l1_speech_title'.tr,
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  color: Colors.white.withValues(alpha: 0.95),
+                  color: AppColors.textPrimary,
                   fontWeight: FontWeight.w900,
                   fontSize: 18,
                 ),
@@ -1490,7 +1491,7 @@ class _SpeechGamePrompt extends StatelessWidget {
                 'hiragana_l1_speech_body'.tr,
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  color: Colors.white.withValues(alpha: 0.80),
+                  color: AppColors.textMuted,
                   height: 1.35,
                   fontWeight: FontWeight.w600,
                 ),
@@ -1623,7 +1624,7 @@ class _LeafEarnedDialogState extends State<_LeafEarnedDialog>
                 Text(
                   'hiragana_l1_leaf_title'.tr,
                   style: const TextStyle(
-                    color: Colors.white,
+                    color: AppColors.textPrimary,
                     fontSize: 18,
                     fontWeight: FontWeight.w900,
                   ),
@@ -1633,7 +1634,7 @@ class _LeafEarnedDialogState extends State<_LeafEarnedDialog>
                   'hiragana_l1_leaf_body'.tr,
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    color: Colors.white.withValues(alpha: 0.65),
+                    color: AppColors.textMuted,
                     fontSize: 13.5,
                     height: 1.25,
                   ),

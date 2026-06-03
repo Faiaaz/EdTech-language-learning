@@ -15,7 +15,7 @@ import 'package:ez_trainz/widgets/duo_unit_header.dart';
 class DuoLearnScreen extends StatelessWidget {
   const DuoLearnScreen({super.key});
 
-  static const _bg = Color(0xFF0F172A);
+  static const _bg = Colors.transparent;
 
   @override
   Widget build(BuildContext context) {

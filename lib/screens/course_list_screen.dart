@@ -8,12 +8,14 @@ import 'package:ez_trainz/models/course.dart';
 import 'package:ez_trainz/models/kana.dart';
 import 'package:ez_trainz/models/lesson.dart';
 import 'package:ez_trainz/models/program.dart';
+import 'package:ez_trainz/utils/app_theme.dart';
 import 'package:ez_trainz/screens/hiragana_lesson1_screen.dart';
 import 'package:ez_trainz/screens/lesson_screen.dart';
 import 'package:ez_trainz/screens/login_screen.dart';
 import 'package:ez_trainz/screens/n5_hero_number1_lesson_screen.dart';
 import 'package:ez_trainz/screens/n5_hi_hello_lesson_screen.dart';
 import 'package:ez_trainz/screens/n5_kana_modules_screen.dart';
+import 'package:ez_trainz/screens/n5_kichu_kotha_lesson_screen_v2.dart';
 import 'package:ez_trainz/screens/n5_akasatana_lesson_screen.dart';
 import 'package:ez_trainz/screens/n5_weekdays_lesson_screen.dart';
 import 'package:ez_trainz/widgets/ez_trainz_logo_text.dart';
@@ -47,14 +49,12 @@ class _CourseListScreenState extends State<CourseListScreen> {
   Widget build(BuildContext context) {
     final ctrl = CourseController.to;
     final isJlc = ProgramController.to.current == Program.jlc;
-    const slateBg = Color(0xFF0F172A);
+    const slateBg = Colors.transparent; // global sky→gold gradient shows through
 
-    final chipBg = isJlc
-        ? Colors.white.withValues(alpha: 0.22)
-        : const Color(0xFF1E293B);
+    final chipBg = isJlc ? AppColors.card : const Color(0xFF1E293B);
     final chipBorder =
-        isJlc ? Colors.white.withValues(alpha: 0.35) : const Color(0xFF334155);
-    final iconOnChip = isJlc ? Colors.white : const Color(0xFF1E293B);
+        isJlc ? AppColors.border : const Color(0xFF334155);
+    final iconOnChip = isJlc ? AppColors.textPrimary : Colors.white;
 
     return Material(
       color: slateBg,
@@ -122,8 +122,8 @@ class _CourseListScreenState extends State<CourseListScreen> {
                                               'programs'.tr,
                                               maxLines: 1,
                                               overflow: TextOverflow.ellipsis,
-                                              style: const TextStyle(
-                                                color: Colors.white,
+                                              style: TextStyle(
+                                                color: iconOnChip,
                                                 fontSize: 12,
                                                 fontWeight: FontWeight.w600,
                                               ),
@@ -185,8 +185,8 @@ class _CourseListScreenState extends State<CourseListScreen> {
                                                 maxLines: 1,
                                                 softWrap: false,
                                                 overflow: TextOverflow.ellipsis,
-                                                style: const TextStyle(
-                                                  color: Colors.white,
+                                                style: TextStyle(
+                                                  color: iconOnChip,
                                                   fontSize: 11,
                                                   fontWeight: FontWeight.w600,
                                                 ),
@@ -209,10 +209,10 @@ class _CourseListScreenState extends State<CourseListScreen> {
                       RichText(
                         text: TextSpan(
                           children: [
-                            TextSpan(
+                            const TextSpan(
                               text: 'হ্যালো, ',
                               style: TextStyle(
-                                color: Colors.white.withValues(alpha: 0.9),
+                                color: AppColors.textPrimary,
                                 fontSize: 26,
                                 fontWeight: FontWeight.w400,
                                 height: 1.2,
@@ -221,7 +221,7 @@ class _CourseListScreenState extends State<CourseListScreen> {
                             const TextSpan(
                               text: 'হিরো !',
                               style: TextStyle(
-                                color: Color(0xFFFFE000),
+                                color: AppColors.accentBlueDk,
                                 fontSize: 26,
                                 fontWeight: FontWeight.w900,
                                 height: 1.2,
@@ -248,7 +248,7 @@ class _CourseListScreenState extends State<CourseListScreen> {
                           : 'choose_course'.tr,
                       style: TextStyle(
                         color: isJlc
-                            ? Colors.white.withValues(alpha: 0.92)
+                            ? AppColors.textMuted
                             : const Color(0xFF94A3B8),
                         fontSize: 15,
                         fontWeight: FontWeight.w400,
@@ -262,7 +262,8 @@ class _CourseListScreenState extends State<CourseListScreen> {
                 child: Obx(() {
                   if (ctrl.isLoading.value) {
                     return const Center(
-                      child: CircularProgressIndicator(color: Colors.white),
+                      child: CircularProgressIndicator(
+                          color: AppColors.accentBlue),
                     );
                   }
 
@@ -273,7 +274,7 @@ class _CourseListScreenState extends State<CourseListScreen> {
                         child: Text(
                           ctrl.error.value,
                           style: const TextStyle(
-                              color: Colors.white70, fontSize: 15),
+                              color: AppColors.textMuted, fontSize: 15),
                           textAlign: TextAlign.center,
                         ),
                       ),
@@ -1026,6 +1027,19 @@ class _AnushilanCardState extends State<_AnushilanCard> {
                           glow: const Color(0xFFEF4444),
                           onTap: () => Get.to(
                             () => const N5DakutenLessonScreen(),
+                            transition: Transition.rightToLeftWithFade,
+                            duration: const Duration(milliseconds: 300),
+                          ),
+                        ),
+                        const SizedBox(height: 10),
+                        _PracticeLessonCard(
+                          number: '７',
+                          title: 'পাঠ ৭ঃ কিছু কথা ছিল...',
+                          subtitle: 'わたし/あなた/あのひと • さん • は/です/か',
+                          gradient: const [Color(0xFF14B8A6), Color(0xFF0F766E)],
+                          glow: const Color(0xFF14B8A6),
+                          onTap: () => Get.to(
+                            () => const N5KichuKothaLessonScreenV2(),
                             transition: Transition.rightToLeftWithFade,
                             duration: const Duration(milliseconds: 300),
                           ),

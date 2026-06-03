@@ -3,6 +3,7 @@ import 'package:ez_trainz/services/jlc_tts.dart';
 import 'package:get/get.dart';
 
 import 'package:ez_trainz/models/kana.dart';
+import 'package:ez_trainz/utils/app_theme.dart';
 
 /// Interactive kana grid chart. Shows 46 base characters in a grid.
 /// Tapping a character shows its romaji, mnemonic, and stroke order animation.
@@ -51,7 +52,7 @@ class _KanaChartScreenState extends State<KanaChartScreen> {
     final list = _displayList;
 
     return Scaffold(
-      backgroundColor: const Color(0xFF0F172A),
+      backgroundColor: Colors.transparent,
       body: SafeArea(
         child: Column(
           children: [
@@ -180,10 +181,10 @@ class _KanaChartScreenState extends State<KanaChartScreen> {
                       decoration: BoxDecoration(
                         color: isSelected
                             ? _sakura.withValues(alpha: 0.18)
-                            : const Color(0xFF1E293B),
+                            : AppColors.card,
                         borderRadius: BorderRadius.circular(14),
                         border: Border.all(
-                          color: isSelected ? _sakura : const Color(0xFF334155),
+                          color: isSelected ? _sakura : AppColors.border,
                           width: isSelected ? 2 : 1,
                         ),
                         boxShadow: [
@@ -204,7 +205,7 @@ class _KanaChartScreenState extends State<KanaChartScreen> {
                               fontWeight: FontWeight.w700,
                               color: isSelected
                                   ? _sakura
-                                  : Colors.white,
+                                  : AppColors.textPrimary,
                             ),
                           ),
                           const SizedBox(height: 4),
@@ -319,7 +320,7 @@ class _KanaDetailSheetState extends State<_KanaDetailSheet>
     return Container(
       padding: const EdgeInsets.fromLTRB(24, 16, 24, 32),
       decoration: const BoxDecoration(
-        color: Color(0xFF1E293B),
+        color: AppColors.card,
         borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
       ),
       child: Column(
@@ -330,7 +331,7 @@ class _KanaDetailSheetState extends State<_KanaDetailSheet>
             width: 40,
             height: 4,
             decoration: BoxDecoration(
-              color: const Color(0xFF334155),
+              color: AppColors.border,
               borderRadius: BorderRadius.circular(2),
             ),
           ),
@@ -369,9 +370,9 @@ class _KanaDetailSheetState extends State<_KanaDetailSheet>
                   width: 100,
                   height: 100,
                   decoration: BoxDecoration(
-                    color: const Color(0xFF0F172A),
+                    color: AppColors.cardAlt,
                     borderRadius: BorderRadius.circular(20),
-                    border: Border.all(color: const Color(0xFF334155)),
+                    border: Border.all(color: AppColors.border),
                   ),
                   child: AnimatedBuilder(
                     animation: _strokeProgress,
@@ -427,14 +428,14 @@ class _KanaDetailSheetState extends State<_KanaDetailSheet>
             width: double.infinity,
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: const Color(0xFF0F172A),
+              color: AppColors.cardAlt,
               borderRadius: BorderRadius.circular(14),
-              border: Border.all(color: const Color(0xFF334155)),
+              border: Border.all(color: AppColors.border),
             ),
             child: Row(
               children: [
                 const Icon(Icons.lightbulb_outline_rounded,
-                    color: Color(0xFFFFE000), size: 22),
+                    color: AppColors.accentBlueDk, size: 22),
                 const SizedBox(width: 12),
                 Expanded(
                   child: Column(
@@ -443,7 +444,7 @@ class _KanaDetailSheetState extends State<_KanaDetailSheet>
                       Text(
                         'memory_hint'.tr,
                         style: const TextStyle(
-                          color: Color(0xFFFFE000),
+                          color: AppColors.accentBlueDk,
                           fontSize: 11,
                           fontWeight: FontWeight.w700,
                           letterSpacing: 0.5,
@@ -522,7 +523,7 @@ class _KanaDetailSheetState extends State<_KanaDetailSheet>
                   width: 56,
                   height: 56,
                   decoration: BoxDecoration(
-                    color: const Color(0xFF0F172A),
+                    color: AppColors.cardAlt,
                     borderRadius: BorderRadius.circular(16),
                     border: Border.all(color: _sakura, width: 2),
                   ),
@@ -598,7 +599,7 @@ class _StrokeOrderPainter extends CustomPainter {
 
     // Draw guide lines
     final guidePaint = Paint()
-      ..color = const Color(0xFF334155)
+      ..color = AppColors.border
       ..strokeWidth = 0.5;
 
     canvas.drawLine(

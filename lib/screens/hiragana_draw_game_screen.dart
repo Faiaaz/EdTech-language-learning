@@ -4,6 +4,7 @@ import 'dart:async';
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
+import 'package:ez_trainz/utils/app_theme.dart';
 import 'package:flutter/services.dart';
 import 'package:ez_trainz/services/jlc_tts.dart';
 import 'package:get/get.dart';
@@ -601,10 +602,10 @@ class _HiraganaDrawGameScreenState extends State<HiraganaDrawGameScreen>
           onBack: Get.back,
           onPrev: _charIdx > widget.initialIndex ? _prevChar : null,
           onNext: _charIdx < _lastIndex ? _nextChar : null,
-          lightText: !isNotepad || widget.embedded,
+          lightText: widget.embedded,
         ),
         SizedBox(height: isNotepad ? 2 : 4),
-        _CharacterLabel(char: _char, lightText: !isNotepad || widget.embedded),
+        _CharacterLabel(char: _char, lightText: widget.embedded),
         SizedBox(height: isNotepad ? 6 : 14),
         Expanded(
           child: Align(
@@ -740,7 +741,7 @@ class _HiraganaDrawGameScreenState extends State<HiraganaDrawGameScreen>
     return Scaffold(
       backgroundColor: isNotepad
           ? const Color(0xFF5C4A32)
-          : const Color(0xFF0B1220),
+          : Colors.transparent,
       body: SafeArea(child: content),
     );
   }
@@ -787,11 +788,11 @@ class _Header extends StatelessWidget {
                 width: 40,
                 height: 40,
                 decoration: BoxDecoration(
-                  color: Colors.white.withValues(alpha: 0.12),
+                  color: chipBg,
                   shape: BoxShape.circle,
                 ),
-                child: const Icon(Icons.arrow_back_rounded,
-                    color: Colors.white, size: 20),
+                child: Icon(Icons.arrow_back_rounded,
+                    color: fg, size: 20),
               ),
             ),
           const Spacer(),
@@ -968,10 +969,10 @@ class _CircleBtn extends StatelessWidget {
                   end: Alignment.bottomRight,
                 )
               : null,
-          color: primary ? null : Colors.white.withValues(alpha: 0.10),
+          color: primary ? null : AppColors.card,
           shape: BoxShape.circle,
           border: Border.all(
-            color: Colors.white.withValues(alpha: primary ? 0.0 : 0.15),
+            color: primary ? Colors.transparent : AppColors.border,
             width: 1.2,
           ),
           boxShadow: primary
@@ -984,7 +985,7 @@ class _CircleBtn extends StatelessWidget {
                 ]
               : null,
         ),
-        child: Icon(icon, color: Colors.white, size: primary ? 26 : 22),
+        child: Icon(icon, color: primary ? Colors.white : AppColors.textPrimary, size: primary ? 26 : 22),
       ),
     );
   }

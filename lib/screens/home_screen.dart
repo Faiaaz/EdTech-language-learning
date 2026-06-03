@@ -10,6 +10,7 @@ import 'package:ez_trainz/screens/login_screen.dart';
 import 'package:ez_trainz/screens/trial_game_language_picker_screen.dart';
 import 'package:ez_trainz/widgets/streak_pill.dart';
 import 'package:ez_trainz/widgets/ez_trainz_logo_text.dart';
+import 'package:ez_trainz/utils/app_theme.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -154,8 +155,8 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     final firstName = AuthController.to.firstName;
 
     return Scaffold(
-      backgroundColor: const Color(0xFF0F172A),
-      body: SafeArea(
+      body: SkyGoldBackground(
+        child: SafeArea(
         child: FadeTransition(
           opacity: _fadeIn,
           child: SlideTransition(
@@ -183,19 +184,19 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                             padding: const EdgeInsets.symmetric(
                                 horizontal: 14, vertical: 8),
                             decoration: BoxDecoration(
-                              color: Colors.white.withValues(alpha: 0.2),
+                              color: AppColors.card,
                               borderRadius: BorderRadius.circular(20),
                               border: Border.all(
-                                  color: Colors.white38, width: 1),
+                                  color: AppColors.border, width: 1),
                             ),
                             child: Row(
                               children: [
                                 const Icon(Icons.logout_rounded,
-                                    color: Color(0xFF1E293B), size: 15),
+                                    color: AppColors.textPrimary, size: 15),
                                 const SizedBox(width: 5),
                                 Text('logout'.tr,
                                     style: const TextStyle(
-                                      color: Colors.white,
+                                      color: AppColors.textPrimary,
                                       fontSize: 13,
                                       fontWeight: FontWeight.w600,
                                     )),
@@ -212,7 +213,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                     Text(
                       firstName,
                       style: const TextStyle(
-                        color: Color(0xFFFFE000),
+                        color: AppColors.textPrimary,
                         fontSize: 38,
                         fontWeight: FontWeight.w900,
                         height: 1.1,
@@ -223,8 +224,8 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
 
                     Text(
                       'choose_program'.tr,
-                      style: TextStyle(
-                        color: Colors.white.withValues(alpha: 0.75),
+                      style: const TextStyle(
+                        color: AppColors.textMuted,
                         fontSize: 15,
                         fontWeight: FontWeight.w400,
                       ),
@@ -348,8 +349,8 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                     Center(
                       child: Text(
                         'home_tagline'.tr,
-                        style: TextStyle(
-                          color: Colors.white.withValues(alpha: 0.6),
+                        style: const TextStyle(
+                          color: AppColors.textMuted,
                           fontSize: 14,
                           fontWeight: FontWeight.w500,
                           letterSpacing: 0.3,
@@ -364,6 +365,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
             ),
           ),
         ),
+        ),
       ),
     );
   }
@@ -375,7 +377,7 @@ class _TrialGameCard extends StatelessWidget {
 
   final VoidCallback onTap;
 
-  static const _gold = Color(0xFFFFE000);
+  static const _gold = AppColors.accentYellow;
 
   @override
   Widget build(BuildContext context) {
@@ -385,16 +387,12 @@ class _TrialGameCard extends StatelessWidget {
         width: double.infinity,
         padding: const EdgeInsets.fromLTRB(18, 16, 16, 16),
         decoration: BoxDecoration(
-          gradient: const LinearGradient(
-            colors: [Color(0xFF1E3A8A), Color(0xFF0EA5E9)],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
+          color: AppColors.cardAlt,
           borderRadius: BorderRadius.circular(18),
-          border: Border.all(color: _gold.withValues(alpha: 0.35), width: 1),
+          border: Border.all(color: _gold, width: 1.5),
           boxShadow: [
             BoxShadow(
-              color: const Color(0xFF0EA5E9).withValues(alpha: 0.22),
+              color: AppColors.accentBlue.withValues(alpha: 0.12),
               blurRadius: 18,
               offset: const Offset(0, 8),
             ),
@@ -406,12 +404,14 @@ class _TrialGameCard extends StatelessWidget {
               width: 52,
               height: 52,
               decoration: BoxDecoration(
-                color: Colors.white.withValues(alpha: 0.18),
+                color: AppColors.accentBlue.withValues(alpha: 0.12),
                 borderRadius: BorderRadius.circular(16),
-                border: Border.all(color: Colors.white.withValues(alpha: 0.24)),
+                border: Border.all(
+                    color: AppColors.accentBlue.withValues(alpha: 0.25)),
               ),
               alignment: Alignment.center,
-              child: const Icon(Icons.bolt_rounded, color: _gold, size: 30),
+              child: const Icon(Icons.bolt_rounded,
+                  color: AppColors.accentBlueDk, size: 30),
             ),
             const SizedBox(width: 14),
             const Expanded(
@@ -421,7 +421,7 @@ class _TrialGameCard extends StatelessWidget {
                   Text(
                     'Trial Game',
                     style: TextStyle(
-                      color: Colors.white,
+                      color: AppColors.textPrimary,
                       fontSize: 18,
                       fontWeight: FontWeight.w900,
                       height: 1.1,
@@ -431,7 +431,7 @@ class _TrialGameCard extends StatelessWidget {
                   Text(
                     'Try a language in 60 seconds with a mini-game.',
                     style: TextStyle(
-                      color: Colors.white70,
+                      color: AppColors.textMuted,
                       fontSize: 13,
                       height: 1.25,
                     ),
@@ -539,15 +539,12 @@ class _NavCardState extends State<_NavCard> with SingleTickerProviderStateMixin 
           width: double.infinity,
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
           decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: widget.gradientColors,
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-            ),
+            color: AppColors.card,
             borderRadius: BorderRadius.circular(18),
+            border: Border.all(color: AppColors.border),
             boxShadow: [
               BoxShadow(
-                color: widget.gradientColors.first.withValues(alpha: 0.35),
+                color: widget.gradientColors.first.withValues(alpha: 0.18),
                 blurRadius: 16,
                 offset: const Offset(0, 6),
               ),
@@ -555,12 +552,12 @@ class _NavCardState extends State<_NavCard> with SingleTickerProviderStateMixin 
           ),
           child: Row(
             children: [
-              // ── Flag icon in white semi-transparent box ─────────────
+              // ── Flag icon in program-color tinted box ───────────────
               Container(
                 width: 48,
                 height: 48,
                 decoration: BoxDecoration(
-                  color: Colors.white.withValues(alpha: 0.22),
+                  color: widget.gradientColors.first.withValues(alpha: 0.14),
                   borderRadius: BorderRadius.circular(14),
                 ),
                 alignment: Alignment.center,
@@ -576,7 +573,7 @@ class _NavCardState extends State<_NavCard> with SingleTickerProviderStateMixin 
                     Text(
                       widget.title,
                       style: const TextStyle(
-                        color: Colors.white,
+                        color: AppColors.textPrimary,
                         fontSize: 18,
                         fontWeight: FontWeight.w800,
                         height: 1.2,
@@ -585,8 +582,8 @@ class _NavCardState extends State<_NavCard> with SingleTickerProviderStateMixin 
                     const SizedBox(height: 3),
                     Text(
                       widget.subtitle,
-                      style: TextStyle(
-                        color: Colors.white.withValues(alpha: 0.8),
+                      style: const TextStyle(
+                        color: AppColors.textMuted,
                         fontSize: 13,
                         fontWeight: FontWeight.w400,
                       ),
@@ -600,12 +597,12 @@ class _NavCardState extends State<_NavCard> with SingleTickerProviderStateMixin 
                 width: 32,
                 height: 32,
                 decoration: BoxDecoration(
-                  color: Colors.white.withValues(alpha: 0.2),
+                  color: widget.gradientColors.first.withValues(alpha: 0.12),
                   shape: BoxShape.circle,
                 ),
-                child: const Icon(
+                child: Icon(
                   Icons.arrow_forward_rounded,
-                  color: Color(0xFF1E293B),
+                  color: widget.gradientColors.first,
                   size: 18,
                 ),
               ),

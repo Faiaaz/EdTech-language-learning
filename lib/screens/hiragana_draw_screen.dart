@@ -3,6 +3,7 @@ import 'dart:math' as math;
 import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
+import 'package:ez_trainz/utils/app_theme.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
@@ -391,7 +392,7 @@ class _HiraganaDrawScreenState extends State<HiraganaDrawScreen> {
 
   @override
   Widget build(BuildContext context) {
-    const bg = Color(0xFF0F172A);
+    const bg = Colors.transparent;
     const accent = Color(0xFFFFD86B);
 
     return Scaffold(
@@ -439,13 +440,13 @@ class _HiraganaDrawScreenState extends State<HiraganaDrawScreen> {
                     Text('hiragana_draw_intro_1'.tr,
                         textAlign: TextAlign.center,
                         style: TextStyle(
-                            color: Colors.white.withValues(alpha: 0.9),
+                            color: AppColors.textPrimary,
                             fontSize: 15)),
                     const SizedBox(height: 12),
                     Text('hiragana_draw_intro_2'.tr,
                         textAlign: TextAlign.center,
                         style: TextStyle(
-                            color: Colors.white.withValues(alpha: 0.85),
+                            color: AppColors.textMuted,
                             fontSize: 14)),
                   ],
                 ),
@@ -499,7 +500,7 @@ class _HiraganaDrawScreenState extends State<HiraganaDrawScreen> {
                 const SizedBox(height: 12),
                 Text('hiragana_draw_drawn'.trParams({'n': '$_doneCount'}),
                     style: TextStyle(
-                        color: Colors.white.withValues(alpha: 0.9),
+                        color: AppColors.textPrimary,
                         fontSize: 16)),
                 const SizedBox(height: 32),
                 Row(
@@ -511,9 +512,9 @@ class _HiraganaDrawScreenState extends State<HiraganaDrawScreen> {
                           Get.back();
                         },
                         style: OutlinedButton.styleFrom(
-                          foregroundColor: Colors.white,
+                          foregroundColor: AppColors.textPrimary,
                           side: BorderSide(
-                              color: Colors.white.withValues(alpha: 0.5)),
+                              color: AppColors.accentBlue),
                           padding: const EdgeInsets.symmetric(vertical: 14),
                         ),
                         child: Text('done'.tr),
@@ -571,7 +572,7 @@ class _HiraganaDrawScreenState extends State<HiraganaDrawScreen> {
           child: Container(
             padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 8),
             decoration: BoxDecoration(
-              color: Colors.white.withValues(alpha: 0.1),
+              color: AppColors.card,
               borderRadius: BorderRadius.circular(10),
             ),
             child: Row(
@@ -603,14 +604,14 @@ class _HiraganaDrawScreenState extends State<HiraganaDrawScreen> {
             width: double.infinity,
             padding: const EdgeInsets.all(14),
             decoration: BoxDecoration(
-              color: Colors.white.withValues(alpha: 0.15),
+              color: AppColors.card,
               borderRadius: BorderRadius.circular(12),
             ),
             child: Column(
               children: [
                 Text('hiragana_draw_prompt_label'.tr,
                     style: TextStyle(
-                        color: Colors.white.withValues(alpha: 0.85),
+                        color: AppColors.textMuted,
                         fontSize: 13)),
                 const SizedBox(height: 4),
                 Text(
@@ -658,7 +659,7 @@ class _HiraganaDrawScreenState extends State<HiraganaDrawScreen> {
                                     style: TextStyle(
                                       fontSize: kHiraganaDrawCanvas * 0.72,
                                       fontWeight: FontWeight.w500,
-                                      color: Colors.white,
+                                      color: AppColors.textPrimary,
                                     ),
                                   ),
                                 ),
@@ -744,7 +745,7 @@ class _HiraganaDrawScreenState extends State<HiraganaDrawScreen> {
             _message.isEmpty ? 'hiragana_draw_hint'.tr : _message,
             textAlign: TextAlign.center,
             style: TextStyle(
-              color: Colors.white.withValues(alpha: 0.9),
+              color: AppColors.textPrimary,
               fontSize: 14,
             ),
           ),
@@ -761,7 +762,7 @@ class _HiraganaDrawScreenState extends State<HiraganaDrawScreen> {
   }) {
     return Material(
       color: secondary
-          ? Colors.white.withValues(alpha: 0.2)
+          ? AppColors.card
           : accent,
       borderRadius: BorderRadius.circular(8),
       child: InkWell(
@@ -772,7 +773,7 @@ class _HiraganaDrawScreenState extends State<HiraganaDrawScreen> {
           child: Text(
             label,
             style: TextStyle(
-              color: secondary ? Colors.white : const Color(0xFF1E3C72),
+              color: secondary ? AppColors.textPrimary : const Color(0xFF1E3C72),
               fontWeight: FontWeight.w700,
               fontSize: 13,
             ),

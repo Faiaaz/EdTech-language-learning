@@ -15,6 +15,7 @@ import 'package:ez_trainz/screens/trial_game_language_picker_screen.dart';
 import 'package:ez_trainz/widgets/ez_trainz_logo_text.dart';
 import 'package:ez_trainz/widgets/language_switcher.dart';
 import 'package:ez_trainz/widgets/streak_pill.dart';
+import 'package:ez_trainz/utils/app_theme.dart';
 
 /// Main container after login. Fixed bottom nav (Learn, Practice, Collect, Profile, Community, Leaderboard).
 /// Learn tab shows program picker (JLC/KLC/ELC/GLC) or course list when a program is selected.
@@ -28,9 +29,9 @@ class MainShellScreen extends StatefulWidget {
 class _MainShellScreenState extends State<MainShellScreen> {
   int _currentIndex = 0;
 
-  static const _navBgColor = Color(0xFF1E293B);
-  static const _selectedColor = Color(0xFFFFE000);
-  static const _unselectedColor = Color(0xFF94A3B8);
+  static const _navBgColor = AppColors.card;
+  static const _selectedColor = AppColors.accentBlueDk;
+  static const _unselectedColor = AppColors.textMuted;
 
   static const _tabs = [
     _NavItem(icon: Icons.school_rounded, labelKey: 'nav_learn'),
@@ -76,10 +77,17 @@ class _MainShellScreenState extends State<MainShellScreen> {
           color: _navBgColor,
           border: Border(
             top: BorderSide(
-              color: Color(0xFF334155),
+              color: AppColors.border,
               width: 1,
             ),
           ),
+          boxShadow: [
+            BoxShadow(
+              color: Color(0x14000000),
+              blurRadius: 12,
+              offset: Offset(0, -2),
+            ),
+          ],
         ),
         child: SafeArea(
           top: false,
@@ -168,8 +176,9 @@ class _ProgramPickerView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: const Color(0xFF0F172A),
-      child: SafeArea(
+      color: Colors.transparent,
+      child: SkyGoldBackground(
+        child: SafeArea(
         child: SizedBox.expand(
           child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(horizontal: 24),
@@ -192,7 +201,7 @@ class _ProgramPickerView extends StatelessWidget {
               Text(
                 'choose_language_program'.tr,
                 style: const TextStyle(
-                  color: Colors.white,
+                  color: AppColors.textPrimary,
                   fontSize: 20,
                   fontWeight: FontWeight.w700,
                   height: 1.2,
@@ -202,7 +211,7 @@ class _ProgramPickerView extends StatelessWidget {
               Text(
                 'select_one_subtitle'.tr,
                 style: const TextStyle(
-                  color: Color(0xFF94A3B8),
+                  color: AppColors.textMuted,
                   fontSize: 14,
                   fontWeight: FontWeight.w400,
                 ),
@@ -238,6 +247,7 @@ class _ProgramPickerView extends StatelessWidget {
           ),
         ),
         ),
+        ),
       ),
     );
   }
@@ -248,7 +258,7 @@ class _TrialGameCard extends StatelessWidget {
 
   final VoidCallback onTap;
 
-  static const _gold = Color(0xFFFFE000);
+  static const _gold = AppColors.accentYellow;
 
   @override
   Widget build(BuildContext context) {
@@ -258,16 +268,12 @@ class _TrialGameCard extends StatelessWidget {
         width: double.infinity,
         padding: const EdgeInsets.fromLTRB(18, 16, 16, 16),
         decoration: BoxDecoration(
-          gradient: const LinearGradient(
-            colors: [Color(0xFF1E3A8A), Color(0xFF0EA5E9)],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
+          color: AppColors.cardAlt,
           borderRadius: BorderRadius.circular(18),
-          border: Border.all(color: _gold.withValues(alpha: 0.35), width: 1),
+          border: Border.all(color: _gold, width: 1.5),
           boxShadow: [
             BoxShadow(
-              color: const Color(0xFF0EA5E9).withValues(alpha: 0.22),
+              color: AppColors.accentBlue.withValues(alpha: 0.12),
               blurRadius: 18,
               offset: const Offset(0, 8),
             ),
@@ -279,14 +285,14 @@ class _TrialGameCard extends StatelessWidget {
               width: 52,
               height: 52,
               decoration: BoxDecoration(
-                color: Colors.white.withValues(alpha: 0.18),
+                color: AppColors.accentBlue.withValues(alpha: 0.12),
                 borderRadius: BorderRadius.circular(16),
-                border:
-                    Border.all(color: Colors.white.withValues(alpha: 0.24)),
+                border: Border.all(
+                    color: AppColors.accentBlue.withValues(alpha: 0.25)),
               ),
               alignment: Alignment.center,
               child: const Icon(Icons.bolt_rounded,
-                  color: _gold, size: 30),
+                  color: AppColors.accentBlueDk, size: 30),
             ),
             const SizedBox(width: 14),
             const Expanded(
@@ -296,7 +302,7 @@ class _TrialGameCard extends StatelessWidget {
                   Text(
                     'Trial Game',
                     style: TextStyle(
-                      color: Colors.white,
+                      color: AppColors.textPrimary,
                       fontSize: 18,
                       fontWeight: FontWeight.w900,
                       height: 1.1,
@@ -306,7 +312,7 @@ class _TrialGameCard extends StatelessWidget {
                   Text(
                     'Try a language in 60 seconds with a mini-game.',
                     style: TextStyle(
-                      color: Colors.white70,
+                      color: AppColors.textMuted,
                       fontSize: 13,
                       height: 1.25,
                     ),
@@ -360,15 +366,12 @@ class _ProgramCard extends StatelessWidget {
         width: double.infinity,
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
         decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: program.gradientColors,
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
+          color: AppColors.card,
           borderRadius: BorderRadius.circular(18),
+          border: Border.all(color: AppColors.border),
           boxShadow: [
             BoxShadow(
-              color: program.gradientColors.first.withValues(alpha: 0.35),
+              color: program.gradientColors.first.withValues(alpha: 0.18),
               blurRadius: 16,
               offset: const Offset(0, 6),
             ),
@@ -380,7 +383,7 @@ class _ProgramCard extends StatelessWidget {
               width: 48,
               height: 48,
               decoration: BoxDecoration(
-                color: Colors.white.withValues(alpha: 0.22),
+                color: program.gradientColors.first.withValues(alpha: 0.14),
                 borderRadius: BorderRadius.circular(14),
               ),
               alignment: Alignment.center,
@@ -397,7 +400,7 @@ class _ProgramCard extends StatelessWidget {
                   Text(
                     program.name,
                     style: const TextStyle(
-                      color: Colors.white,
+                      color: AppColors.textPrimary,
                       fontSize: 18,
                       fontWeight: FontWeight.w800,
                       height: 1.2,
@@ -406,8 +409,8 @@ class _ProgramCard extends StatelessWidget {
                   const SizedBox(height: 3),
                   Text(
                     program.subtitle,
-                    style: TextStyle(
-                      color: Colors.white.withValues(alpha: 0.8),
+                    style: const TextStyle(
+                      color: AppColors.textMuted,
                       fontSize: 13,
                       fontWeight: FontWeight.w400,
                     ),
@@ -419,10 +422,11 @@ class _ProgramCard extends StatelessWidget {
               width: 32,
               height: 32,
               decoration: BoxDecoration(
-                color: Colors.white.withValues(alpha: 0.2),
+                color: program.gradientColors.first.withValues(alpha: 0.12),
                 shape: BoxShape.circle,
               ),
-              child: const Icon(Icons.arrow_forward_rounded, color: const Color(0xFF1E293B), size: 18),
+              child: Icon(Icons.arrow_forward_rounded,
+                  color: program.gradientColors.first, size: 18),
             ),
           ],
         ),

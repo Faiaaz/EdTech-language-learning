@@ -1,6 +1,7 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
+import 'package:ez_trainz/utils/app_theme.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
@@ -9,9 +10,9 @@ import 'package:ez_trainz/screens/speech_game_screen.dart';
 class Lesson1GameHubScreen extends StatelessWidget {
   const Lesson1GameHubScreen({super.key});
 
-  static const _bgTop = Color(0xFF0B1220);
-  static const _bgMid = Color(0xFF123B8A);
-  static const _bgBottom = Color(0xFF0F172A);
+  static const _bgTop = AppColors.skyTop;
+  static const _bgMid = AppColors.skyMid;
+  static const _bgBottom = AppColors.goldBottom;
 
   @override
   Widget build(BuildContext context) {
@@ -123,9 +124,9 @@ class _HeroHeader extends StatelessWidget {
         width: double.infinity,
         padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
         decoration: BoxDecoration(
-          color: Colors.white.withValues(alpha: 0.10),
+          color: AppColors.card,
           borderRadius: BorderRadius.circular(22),
-          border: Border.all(color: Colors.white.withValues(alpha: 0.16)),
+          border: Border.all(color: AppColors.border),
           boxShadow: [
             BoxShadow(
               color: Colors.black.withValues(alpha: 0.25),
@@ -143,7 +144,7 @@ class _HeroHeader extends StatelessWidget {
                 color: const Color(0xFFFFE000).withValues(alpha: 0.16),
                 borderRadius: BorderRadius.circular(16),
                 border:
-                    Border.all(color: Colors.white.withValues(alpha: 0.14)),
+                    Border.all(color: AppColors.border),
               ),
               child: const Icon(Icons.videogame_asset_rounded,
                   color: Color(0xFFFFE000), size: 26),
@@ -217,9 +218,9 @@ class _GameCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(22),
         child: Ink(
           decoration: BoxDecoration(
-            color: Colors.white.withValues(alpha: 0.10),
+            color: AppColors.card,
             borderRadius: BorderRadius.circular(22),
-            border: Border.all(color: Colors.white.withValues(alpha: 0.16)),
+            border: Border.all(color: AppColors.border),
             boxShadow: [
               BoxShadow(
                 color: Colors.black.withValues(alpha: 0.22),
@@ -242,7 +243,7 @@ class _GameCard extends StatelessWidget {
                         color: tint.withValues(alpha: 0.16),
                         borderRadius: BorderRadius.circular(16),
                         border: Border.all(
-                            color: Colors.white.withValues(alpha: 0.14)),
+                            color: AppColors.border),
                       ),
                       child: Icon(icon, color: tint, size: 26),
                     ),
@@ -254,19 +255,19 @@ class _GameCard extends StatelessWidget {
                         color: Colors.black.withValues(alpha: 0.18),
                         borderRadius: BorderRadius.circular(999),
                         border: Border.all(
-                            color: Colors.white.withValues(alpha: 0.12)),
+                            color: AppColors.border),
                       ),
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Icon(Icons.play_arrow_rounded,
-                              color: Colors.white.withValues(alpha: 0.9),
+                              color: AppColors.textPrimary,
                               size: 16),
                           const SizedBox(width: 4),
                           Text(
                             'Play',
                             style: TextStyle(
-                              color: Colors.white.withValues(alpha: 0.92),
+                              color: AppColors.textPrimary,
                               fontWeight: FontWeight.w900,
                               fontSize: 12,
                             ),
@@ -290,7 +291,7 @@ class _GameCard extends StatelessWidget {
                 Text(
                   subtitle,
                   style: TextStyle(
-                    color: Colors.white.withValues(alpha: 0.78),
+                    color: AppColors.textMuted,
                     fontWeight: FontWeight.w600,
                     height: 1.35,
                   ),
@@ -342,13 +343,13 @@ class _FooterHint extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.black.withValues(alpha: 0.16),
         borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: Colors.white.withValues(alpha: 0.12)),
+        border: Border.all(color: AppColors.border),
       ),
       child: Text(
         'Tip: play Kana Sprint once, then Picture Words, then try Speech.',
         textAlign: TextAlign.center,
         style: TextStyle(
-          color: Colors.white.withValues(alpha: 0.85),
+          color: AppColors.textMuted,
           fontWeight: FontWeight.w700,
         ),
       ),
@@ -366,19 +367,19 @@ class _Pill extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
       decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.08),
+        color: AppColors.card,
         borderRadius: BorderRadius.circular(999),
-        border: Border.all(color: Colors.white.withValues(alpha: 0.12)),
+        border: Border.all(color: AppColors.border),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(icon, color: Colors.white.withValues(alpha: 0.9), size: 16),
+          Icon(icon, color: AppColors.textPrimary, size: 16),
           const SizedBox(width: 6),
           Text(
             text,
             style: TextStyle(
-              color: Colors.white.withValues(alpha: 0.9),
+              color: AppColors.textPrimary,
               fontWeight: FontWeight.w800,
               fontSize: 11,
             ),
@@ -401,8 +402,8 @@ class KanaSprintScreen extends StatefulWidget {
 }
 
 class _KanaSprintScreenState extends State<KanaSprintScreen> {
-  static const _bgTop = Color(0xFF0B1220);
-  static const _bgBottom = Color(0xFF164E63);
+  static const _bgTop = AppColors.skyTop;
+  static const _bgBottom = AppColors.goldBottom;
   static const _accent = Color(0xFF7CFFCB);
 
   static const _pairs = <(String romaji, String kana)>[
@@ -488,7 +489,7 @@ class _KanaSprintScreenState extends State<KanaSprintScreen> {
             child: Container(
               padding: const EdgeInsets.all(18),
               decoration: BoxDecoration(
-                color: const Color(0xFF1E293B),
+                color: AppColors.card,
                 borderRadius: BorderRadius.circular(22),
                 boxShadow: [
                   BoxShadow(
@@ -595,15 +596,15 @@ class _KanaSprintScreenState extends State<KanaSprintScreen> {
                       padding: const EdgeInsets.symmetric(
                           horizontal: 10, vertical: 7),
                       decoration: BoxDecoration(
-                        color: Colors.white.withValues(alpha: 0.08),
+                        color: AppColors.card,
                         borderRadius: BorderRadius.circular(999),
                         border: Border.all(
-                            color: Colors.white.withValues(alpha: 0.12)),
+                            color: AppColors.border),
                       ),
                       child: Text(
                         '${_i + 1}/${_deck.length}  •  $_score',
                         style: TextStyle(
-                          color: Colors.white.withValues(alpha: 0.92),
+                          color: AppColors.textPrimary,
                           fontWeight: FontWeight.w900,
                           fontSize: 12,
                         ),
@@ -618,17 +619,17 @@ class _KanaSprintScreenState extends State<KanaSprintScreen> {
                     width: double.infinity,
                     padding: const EdgeInsets.all(16),
                     decoration: BoxDecoration(
-                      color: Colors.white.withValues(alpha: 0.10),
+                      color: AppColors.card,
                       borderRadius: BorderRadius.circular(22),
                       border: Border.all(
-                          color: Colors.white.withValues(alpha: 0.16)),
+                          color: AppColors.border),
                     ),
                     child: Column(
                       children: [
                         Text(
                           'Tap the hiragana for',
                           style: TextStyle(
-                            color: Colors.white.withValues(alpha: 0.80),
+                            color: AppColors.textMuted,
                             fontWeight: FontWeight.w700,
                           ),
                         ),
@@ -723,12 +724,12 @@ class _KanaChoice extends StatelessWidget {
     final bg = switch (state) {
       _ChoiceState.correct => const Color(0xFF14B86A).withValues(alpha: 0.18),
       _ChoiceState.wrong => const Color(0xFFEF4444).withValues(alpha: 0.16),
-      _ => Colors.white.withValues(alpha: 0.10),
+      _ => AppColors.card,
     };
     final border = switch (state) {
       _ChoiceState.correct => const Color(0xFFB6F6C9),
       _ChoiceState.wrong => const Color(0xFFFFB4B4),
-      _ => Colors.white.withValues(alpha: selected ? 0.55 : 0.16),
+      _ => (selected ? AppColors.accentBlue : AppColors.border),
     };
     final width = selected ? 2.0 : 1.2;
 
@@ -781,8 +782,8 @@ class PictureWordsScreen extends StatefulWidget {
 }
 
 class _PictureWordsScreenState extends State<PictureWordsScreen> {
-  static const _bgTop = Color(0xFF0B1220);
-  static const _bgBottom = Color(0xFF1D4ED8);
+  static const _bgTop = AppColors.skyTop;
+  static const _bgBottom = AppColors.goldBottom;
   static const _accent = Color(0xFF9AD0FF);
 
   static const _items = <_VocabItem>[
@@ -857,7 +858,7 @@ class _PictureWordsScreenState extends State<PictureWordsScreen> {
             child: Container(
               padding: const EdgeInsets.all(18),
               decoration: BoxDecoration(
-                color: const Color(0xFF1E293B),
+                color: AppColors.card,
                 borderRadius: BorderRadius.circular(22),
                 boxShadow: [
                   BoxShadow(
@@ -964,15 +965,15 @@ class _PictureWordsScreenState extends State<PictureWordsScreen> {
                       padding: const EdgeInsets.symmetric(
                           horizontal: 10, vertical: 7),
                       decoration: BoxDecoration(
-                        color: Colors.white.withValues(alpha: 0.08),
+                        color: AppColors.card,
                         borderRadius: BorderRadius.circular(999),
                         border: Border.all(
-                            color: Colors.white.withValues(alpha: 0.12)),
+                            color: AppColors.border),
                       ),
                       child: Text(
                         '${_i + 1}/${_deck.length}  •  $_score',
                         style: TextStyle(
-                          color: Colors.white.withValues(alpha: 0.92),
+                          color: AppColors.textPrimary,
                           fontWeight: FontWeight.w900,
                           fontSize: 12,
                         ),
@@ -987,17 +988,17 @@ class _PictureWordsScreenState extends State<PictureWordsScreen> {
                     width: double.infinity,
                     padding: const EdgeInsets.fromLTRB(14, 14, 14, 12),
                     decoration: BoxDecoration(
-                      color: Colors.white.withValues(alpha: 0.10),
+                      color: AppColors.card,
                       borderRadius: BorderRadius.circular(22),
                       border: Border.all(
-                          color: Colors.white.withValues(alpha: 0.16)),
+                          color: AppColors.border),
                     ),
                     child: Column(
                       children: [
                         Text(
                           'Which word is this?',
                           style: TextStyle(
-                            color: Colors.white.withValues(alpha: 0.80),
+                            color: AppColors.textMuted,
                             fontWeight: FontWeight.w800,
                           ),
                         ),
@@ -1020,7 +1021,7 @@ class _PictureWordsScreenState extends State<PictureWordsScreen> {
                                   q.meaning,
                                   key: const ValueKey('meaning'),
                                   style: TextStyle(
-                                    color: Colors.white.withValues(alpha: 0.72),
+                                    color: AppColors.textMuted,
                                     fontWeight: FontWeight.w700,
                                   ),
                                 )
@@ -1090,12 +1091,12 @@ class _WordChoice extends StatelessWidget {
     final bg = switch (state) {
       _ChoiceState.correct => const Color(0xFF14B86A).withValues(alpha: 0.18),
       _ChoiceState.wrong => const Color(0xFFEF4444).withValues(alpha: 0.16),
-      _ => Colors.white.withValues(alpha: 0.10),
+      _ => AppColors.card,
     };
     final border = switch (state) {
       _ChoiceState.correct => const Color(0xFFB6F6C9),
       _ChoiceState.wrong => const Color(0xFFFFB4B4),
-      _ => Colors.white.withValues(alpha: selected ? 0.55 : 0.16),
+      _ => (selected ? AppColors.accentBlue : AppColors.border),
     };
     final width = selected ? 2.0 : 1.2;
     return Material(
@@ -1134,7 +1135,7 @@ class _WordChoice extends StatelessWidget {
                 ),
               ),
               Icon(Icons.chevron_right_rounded,
-                  color: Colors.white.withValues(alpha: 0.85)),
+                  color: AppColors.textMuted),
             ],
           ),
         ),

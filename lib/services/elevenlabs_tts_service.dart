@@ -122,10 +122,14 @@ class ElevenLabsTtsService {
   }
 
   String _stableHash(String input) {
-    var hash = 0xcbf29ce484222325;
+    // 32-bit FNV-1a. Kept to 32 bits and multiplied in 16-bit halves so it
+    // stays inside JavaScript's 53-bit safe-integer range (web builds).
+    var hash = 0x811c9dc5;
     for (final b in utf8.encode(input)) {
       hash ^= b;
-      hash = (hash * 0x100000001b3) & 0x7fffffffffffffff;
+      final lo = (hash & 0xFFFF) * 0x01000193;
+      final hi = ((hash >> 16) & 0xFFFF) * 0x01000193;
+      hash = (lo + ((hi & 0xFFFF) << 16)) & 0xFFFFFFFF;
     }
     return hash.toRadixString(16);
   }

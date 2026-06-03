@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:ez_trainz/utils/app_theme.dart';
 import 'package:flutter/services.dart';
 import 'package:ez_trainz/services/jlc_tts.dart';
 import 'package:get/get.dart';
@@ -305,7 +306,7 @@ class _FlashcardDrillState extends State<FlashcardDrillScreen>
       width: double.infinity,
       height: double.infinity,
       decoration: BoxDecoration(
-        color: const Color(0xFF1E293B),
+        color: AppColors.card,
         borderRadius: BorderRadius.circular(24),
         border: Border.all(color: accent.withValues(alpha: 0.45), width: 2.5),
         boxShadow: [
@@ -340,17 +341,17 @@ class _FlashcardDrillState extends State<FlashcardDrillScreen>
               style: const TextStyle(
                   fontSize: 100,
                   fontWeight: FontWeight.w700,
-                  color: Colors.white)),
+                  color: AppColors.textPrimary)),
           const SizedBox(height: 16),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Icon(Icons.touch_app_rounded,
-                  color: Colors.white.withValues(alpha: 0.55), size: 16),
+                  color: AppColors.textMuted, size: 16),
               const SizedBox(width: 4),
               Text('tap_to_reveal'.tr,
                   style: TextStyle(
-                      color: Colors.white.withValues(alpha: 0.65),
+                      color: AppColors.textMuted,
                       fontSize: 13)),
             ],
           ),
@@ -390,7 +391,7 @@ class _FlashcardDrillState extends State<FlashcardDrillScreen>
               style: TextStyle(
                   fontSize: 64,
                   fontWeight: FontWeight.w700,
-                  color: Colors.white.withValues(alpha: 0.4))),
+                  color: AppColors.textMuted)),
           const SizedBox(height: 4),
           if (_isBn) ...[
             Text(
@@ -398,7 +399,7 @@ class _FlashcardDrillState extends State<FlashcardDrillScreen>
               style: const TextStyle(
                 fontSize: 48,
                 fontWeight: FontWeight.w900,
-                color: Colors.white,
+                color: AppColors.textPrimary,
               ),
             ),
             const SizedBox(height: 6),
@@ -407,7 +408,7 @@ class _FlashcardDrillState extends State<FlashcardDrillScreen>
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w800,
-                color: Colors.white.withValues(alpha: 0.75),
+                color: AppColors.textMuted,
                 letterSpacing: 0.4,
               ),
             ),
@@ -417,13 +418,13 @@ class _FlashcardDrillState extends State<FlashcardDrillScreen>
               style: const TextStyle(
                 fontSize: 48,
                 fontWeight: FontWeight.w900,
-                color: Colors.white,
+                color: AppColors.textPrimary,
               ),
             ),
           const SizedBox(height: 16),
           Text('tap_to_flip'.tr,
               style: TextStyle(
-                  color: Colors.white.withValues(alpha: 0.5), fontSize: 13)),
+                  color: AppColors.textMuted, fontSize: 13)),
         ],
       ),
     );
@@ -438,15 +439,15 @@ class _FlashcardDrillState extends State<FlashcardDrillScreen>
         height: 48,
         decoration: BoxDecoration(
           color: enabled
-              ? Colors.white.withValues(alpha: 0.28)
-              : Colors.white.withValues(alpha: 0.08),
+              ? AppColors.border
+              : AppColors.border,
           shape: BoxShape.circle,
           border: Border.all(
-              color: enabled ? Colors.white54 : Colors.transparent, width: 1.5),
+              color: enabled ? AppColors.textMuted : Colors.transparent, width: 1.5),
           boxShadow: enabled
               ? [
                   BoxShadow(
-                    color: Colors.white.withValues(alpha: 0.25),
+                    color: AppColors.border,
                     blurRadius: 12,
                     spreadRadius: 0,
                   ),
@@ -454,7 +455,7 @@ class _FlashcardDrillState extends State<FlashcardDrillScreen>
               : null,
         ),
         child: Icon(icon,
-            color: enabled ? Colors.white : Colors.white24, size: 24),
+            color: enabled ? AppColors.textPrimary : AppColors.textDim, size: 24),
       ),
     );
   }
@@ -565,7 +566,7 @@ class _KanaQuizState extends State<KanaQuizScreen> {
             const Spacer(flex: 2),
             Text('what_romaji'.tr,
                 style: TextStyle(
-                    color: Colors.white.withValues(alpha: 0.7), fontSize: 15)),
+                    color: AppColors.textMuted, fontSize: 15)),
             const SizedBox(height: 8),
             TweenAnimationBuilder<double>(
               key: ValueKey(_qi),
@@ -578,7 +579,7 @@ class _KanaQuizState extends State<KanaQuizScreen> {
                 width: 140,
                 height: 140,
                 decoration: BoxDecoration(
-                  color: const Color(0xFF1E293B),
+                  color: AppColors.card,
                   borderRadius: BorderRadius.circular(24),
                   border: Border.all(
                       color: _yellow.withValues(alpha: 0.65), width: 2),
@@ -694,7 +695,7 @@ class _KanaQuizState extends State<KanaQuizScreen> {
                   const SizedBox(width: 4),
                   Text('${'score_label'.tr}: $_score / ${_questions.length}',
                       style: const TextStyle(
-                          color: Colors.white,
+                          color: AppColors.textPrimary,
                           fontSize: 15,
                           fontWeight: FontWeight.w700)),
                 ],
@@ -884,7 +885,7 @@ class _KanaMatchState extends State<KanaMatchScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF0F172A),
+      backgroundColor: Colors.transparent,
       body: SafeArea(
         child: Column(
           children: [
@@ -925,7 +926,7 @@ class _KanaMatchState extends State<KanaMatchScreen> {
       child: Center(
         child: Text(label,
             style: TextStyle(
-                color: Colors.white.withValues(alpha: 0.6),
+                color: AppColors.textMuted,
                 fontSize: 11,
                 fontWeight: FontWeight.w700,
                 letterSpacing: 1.2)),
@@ -1159,7 +1160,7 @@ class _VocabQuizState extends State<VocabQuizScreen> {
   Widget build(BuildContext context) {
     final q = _questions[_qi];
     return Scaffold(
-      backgroundColor: const Color(0xFF0F172A),
+      backgroundColor: Colors.transparent,
       body: SafeArea(
         child: Column(
           children: [
@@ -1270,7 +1271,7 @@ class _VocabQuizState extends State<VocabQuizScreen> {
                   const SizedBox(width: 4),
                   Text('$_score / ${_questions.length}',
                       style: const TextStyle(
-                          color: Colors.white,
+                          color: AppColors.textPrimary,
                           fontSize: 14,
                           fontWeight: FontWeight.w700)),
                 ],
@@ -1290,7 +1291,7 @@ class _VocabQuizState extends State<VocabQuizScreen> {
           children: [
             Text('what_word'.tr,
                 style: TextStyle(
-                    color: Colors.white.withValues(alpha: 0.8), fontSize: 16)),
+                    color: AppColors.textMuted, fontSize: 16)),
             const SizedBox(height: 14),
             Container(
               decoration: BoxDecoration(
@@ -1321,13 +1322,13 @@ class _VocabQuizState extends State<VocabQuizScreen> {
           children: [
             Text('what_meaning'.tr,
                 style: TextStyle(
-                    color: Colors.white.withValues(alpha: 0.8), fontSize: 16)),
+                    color: AppColors.textMuted, fontSize: 16)),
             const SizedBox(height: 16),
             Container(
               width: 160,
               height: 120,
               decoration: BoxDecoration(
-                color: const Color(0xFF1E293B),
+                color: AppColors.card,
                 borderRadius: BorderRadius.circular(22),
                 border: Border.all(
                     color: _yellow.withValues(alpha: 0.7), width: 2),
@@ -1366,15 +1367,15 @@ class _VocabQuizState extends State<VocabQuizScreen> {
           children: [
             Text('which_word_means'.tr,
                 style: TextStyle(
-                    color: Colors.white.withValues(alpha: 0.8), fontSize: 16)),
+                    color: AppColors.textMuted, fontSize: 16)),
             const SizedBox(height: 16),
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 18),
               decoration: BoxDecoration(
-                color: Colors.white.withValues(alpha: 0.15),
+                color: AppColors.border,
                 borderRadius: BorderRadius.circular(20),
                 border: Border.all(
-                    color: Colors.white.withValues(alpha: 0.3), width: 1.5),
+                    color: AppColors.border, width: 1.5),
               ),
               child: Column(
                 children: [
@@ -1386,7 +1387,7 @@ class _VocabQuizState extends State<VocabQuizScreen> {
                   const SizedBox(height: 4),
                   Text(q.vocab.meaningBn,
                       style: TextStyle(
-                          color: Colors.white.withValues(alpha: 0.6),
+                          color: AppColors.textMuted,
                           fontSize: 16)),
                 ],
               ),
@@ -1430,30 +1431,30 @@ Widget _header(String title, String badge) {
             width: 40,
             height: 40,
             decoration: BoxDecoration(
-              color: Colors.white.withValues(alpha: 0.2),
+              color: AppColors.border,
               shape: BoxShape.circle,
             ),
             child: const Icon(Icons.arrow_back_rounded,
-                color: const Color(0xFF1E293B), size: 20),
+                color: AppColors.card, size: 20),
           ),
         ),
         const SizedBox(width: 12),
         Expanded(
           child: Text(title,
               style: const TextStyle(
-                  color: Colors.white,
+                  color: AppColors.textPrimary,
                   fontSize: 18,
                   fontWeight: FontWeight.w800)),
         ),
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
           decoration: BoxDecoration(
-            color: Colors.white.withValues(alpha: 0.2),
+            color: AppColors.border,
             borderRadius: BorderRadius.circular(12),
           ),
           child: Text(badge,
               style: const TextStyle(
-                  color: const Color(0xFF1E293B),
+                  color: AppColors.card,
                   fontSize: 12,
                   fontWeight: FontWeight.w700)),
         ),
@@ -1475,7 +1476,7 @@ Widget _progressDots(int current, int total) {
             decoration: BoxDecoration(
               color: i <= current
                   ? _yellow
-                  : Colors.white.withValues(alpha: 0.2),
+                  : AppColors.border,
               borderRadius: BorderRadius.circular(2),
             ),
           ),
@@ -1585,7 +1586,7 @@ class _ResultDialog extends StatelessWidget {
                   ),
                   child: Text('done'.tr,
                       style: const TextStyle(
-                          color: Colors.white, fontWeight: FontWeight.w700)),
+                          color: AppColors.textPrimary, fontWeight: FontWeight.w700)),
                 ),
               ),
             ],
