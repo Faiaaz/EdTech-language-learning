@@ -11,10 +11,28 @@ class JlcTts {
   JlcTts({String? elevenLabsVoiceId})
       : _fallback = FlutterTts(),
         _elevenLabsVoiceId = elevenLabsVoiceId?.trim() {
+    _configureFallbackAudio();
     if (_useElevenLabs) {
       unawaited(ElevenLabsTtsService.instance.prewarm());
       _prefetchCommonPackOnce();
     }
+  }
+
+  /// Routes device-TTS playback to the loud speaker (not the earpiece) on iOS,
+  /// mirroring the ElevenLabs path. Best-effort; no-op on Android/web.
+  void _configureFallbackAudio() {
+    unawaited(() async {
+      try {
+        await _fallback.setVolume(1.0);
+        if (!kIsWeb && defaultTargetPlatform == TargetPlatform.iOS) {
+          await _fallback.setIosAudioCategory(
+            IosTextToSpeechAudioCategory.playback,
+            const [IosTextToSpeechAudioCategoryOptions.mixWithOthers],
+            IosTextToSpeechAudioMode.defaultMode,
+          );
+        }
+      } catch (_) {}
+    }());
   }
 
   final FlutterTts _fallback;
@@ -137,6 +155,7 @@ class JlcTts {
   }
 
   Future<void> setVolume(double volume) async {
+    await ElevenLabsTtsService.instance.setVolume(volume);
     if (!_useElevenLabs) await _fallback.setVolume(volume);
   }
 

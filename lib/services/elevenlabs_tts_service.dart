@@ -15,6 +15,26 @@ class ElevenLabsTtsService {
   static final ElevenLabsTtsService instance = ElevenLabsTtsService._();
 
   final AudioPlayer _player = AudioPlayer();
+
+  /// Forces playback through the loud speaker at media volume.
+  ///
+  /// audioplayers defaults the iOS audio session to `playAndRecord`, which
+  /// routes audio to the quiet earpiece — and the mic (STT, via the `record`
+  /// package) leaves the shared session in that state. The `playback` category
+  /// keeps every clip on the main speaker and ignores the Ring/Silent switch.
+  static final AudioContext _playbackContext = AudioContext(
+    iOS: AudioContextIOS(
+      category: AVAudioSessionCategory.playback,
+      options: const {AVAudioSessionOptions.mixWithOthers},
+    ),
+    android: const AudioContextAndroid(
+      contentType: AndroidContentType.music,
+      usageType: AndroidUsageType.media,
+      audioFocus: AndroidAudioFocus.gain,
+    ),
+  );
+  double _volume = 1.0;
+
   final http.Client _client = http.Client();
   final Map<String, Uint8List> _webCache = {};
   final Map<String, Future<Uint8List>> _inFlight = {};
@@ -71,6 +91,14 @@ class ElevenLabsTtsService {
     await _player.stop();
   }
 
+  /// Sets the playback volume (0.0–1.0). Defaults to full volume.
+  Future<void> setVolume(double volume) async {
+    _volume = volume.clamp(0.0, 1.0);
+    try {
+      await _player.setVolume(_volume);
+    } catch (_) {}
+  }
+
   Future<void> speak(
     String text, {
     double playbackRate = 1.0,
@@ -82,6 +110,12 @@ class ElevenLabsTtsService {
     }
 
     await _player.stop();
+    // Re-assert the loud-speaker route on every clip: the mic (STT) flips the
+    // shared iOS session to the earpiece, so we reset it right before playing.
+    try {
+      await _player.setAudioContext(_playbackContext);
+    } catch (_) {}
+    await _player.setVolume(_volume);
     await _player.setPlaybackRate(playbackRate.clamp(0.5, 1.25));
     _onStart?.call();
     await _player.play(await _sourceForText(trimmed, voiceId: voiceId));
@@ -130,8 +164,11 @@ class ElevenLabsTtsService {
   }) async {
     final dir = await getTemporaryDirectory();
     final resolvedVoiceId = _resolveVoiceId(voiceId);
+    final primed = _primeJapanese(text);
+    final base =
+        '${primed.text}|$resolvedVoiceId|${ElevenLabsConfig.modelId}|${ElevenLabsConfig.outputFormat}';
     final key = _stableHash(
-      '$text|$resolvedVoiceId|${ElevenLabsConfig.modelId}|${ElevenLabsConfig.outputFormat}',
+      primed.isPlain ? base : '$base|ctx:${primed.previousText ?? ''}|stable',
     );
     return '${dir.path}/el_$key.mp3';
   }
@@ -173,6 +210,7 @@ class ElevenLabsTtsService {
     String? voiceId,
   }) async {
     final resolvedVoiceId = _resolveVoiceId(voiceId);
+    final primed = _primeJapanese(text);
     final uri = Uri.parse(
       'https://api.elevenlabs.io/v1/text-to-speech/$resolvedVoiceId',
     ).replace(queryParameters: {
@@ -190,16 +228,26 @@ class ElevenLabsTtsService {
         'Accept': 'audio/mpeg',
       },
       body: jsonEncode({
-        'text': text,
+        'text': primed.text,
         'model_id': ElevenLabsConfig.modelId,
         'language_code': 'ja',
         'apply_language_text_normalization': true,
-        'voice_settings': {
-          'stability': 0.42,
-          'similarity_boost': 0.78,
-          'style': 0.15,
-          'use_speaker_boost': true,
-        },
+        // Counting context (not spoken) — forces the number reading of さん etc.
+        if (primed.previousText != null) 'previous_text': primed.previousText,
+        // Calm settings hold the vowel for crisp single-word readings.
+        'voice_settings': primed.stable
+            ? {
+                'stability': 0.65,
+                'similarity_boost': 0.80,
+                'style': 0.0,
+                'use_speaker_boost': true,
+              }
+            : {
+                'stability': 0.42,
+                'similarity_boost': 0.78,
+                'style': 0.15,
+                'use_speaker_boost': true,
+              },
       }),
     )
         .timeout(const Duration(seconds: 20));
@@ -215,6 +263,56 @@ class ElevenLabsTtsService {
     return bytes;
   }
 
+  /// Japanese number readings 1–10, in counting order.
+  static const List<String> _jaNumberReadings = <String>[
+    'いち', 'に', 'さん', 'よん', 'ご', 'ろく', 'なな', 'はち', 'きゅう', 'じゅう',
+  ];
+
+  /// Stabilizes pronunciation of short, ambiguous Japanese number words.
+  ///
+  /// A bare 2-mora word like さん has no context and drifts toward せん (1000)
+  /// under the expressive default settings. For the 1–10 readings we:
+  ///   • prime the model with the preceding numbers via `previous_text`
+  ///     (NOT spoken) so it reads さん as *three*, like 三;
+  ///   • append a sentence-final 。for a stable falling intonation;
+  ///   • flag `stable` so the request uses calm settings (style 0, higher
+  ///     stability) that hold the open "あ" vowel.
+  ///
+  /// Pure function of [input] so cache keys stay deterministic. Non-number
+  /// text returns unchanged (`isPlain: true`), preserving existing cache.
+  ({String text, String? previousText, bool stable, bool isPlain})
+      _primeJapanese(String input) {
+    final core = input.trim().replaceAll(RegExp(r'[。、．，.\s]+$'), '');
+    final idx = _jaNumberReadings.indexOf(core);
+    if (idx < 0) {
+      return (text: input, previousText: null, stable: false, isPlain: true);
+    }
+    // Katakana renders these short number words more crisply and
+    // deterministically than hiragana (ご→ゴ, ろく→ロク, さん→サン) while
+    // sounding identical to the spoken number.
+    final lead = <String>[
+      if (idx >= 2) _toKatakana(_jaNumberReadings[idx - 2]),
+      if (idx >= 1) _toKatakana(_jaNumberReadings[idx - 1]),
+    ];
+    return (
+      text: '${_toKatakana(core)}。',
+      previousText: lead.isEmpty ? null : '${lead.join('、')}、',
+      stable: true,
+      isPlain: false,
+    );
+  }
+
+  /// Converts hiragana to katakana (U+3041–U+3096 → U+30A1–U+30F6).
+  String _toKatakana(String hiragana) {
+    final buf = StringBuffer();
+    for (final rune in hiragana.runes) {
+      buf.writeCharCode(
+        (rune >= 0x3041 && rune <= 0x3096) ? rune + 0x60 : rune,
+      );
+    }
+    return buf.toString();
+  }
+
   String _resolveVoiceId(String? overrideVoiceId) {
     final trimmed = overrideVoiceId?.trim() ?? '';
     if (trimmed.isNotEmpty) return trimmed;
@@ -226,7 +324,11 @@ class ElevenLabsTtsService {
     String? voiceId,
   }) {
     final resolvedVoiceId = _resolveVoiceId(voiceId);
-    return '$text|$resolvedVoiceId';
+    final primed = _primeJapanese(text);
+    final base = '${primed.text}|$resolvedVoiceId';
+    return primed.isPlain
+        ? base
+        : '$base|ctx:${primed.previousText ?? ''}|stable';
   }
 
   void dispose() {

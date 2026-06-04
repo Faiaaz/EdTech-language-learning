@@ -3427,8 +3427,9 @@ class _HeroOrderGame extends StatefulWidget {
 
 class _HeroOrderGameState extends State<_HeroOrderGame>
     with TickerProviderStateMixin {
-  static const _teal = Color(0xFF14B8A6);
-  static const _tealDark = Color(0xFF0F766E);
+  // Royal blue — matches the active tab and the app palette.
+  static const _accent = Color(0xFF2563EB);
+  static const _accentDark = Color(0xFF1D4ED8);
   static const _sessionXpBonus = 50;
 
   final _rng = math.Random();
@@ -3572,7 +3573,7 @@ class _HeroOrderGameState extends State<_HeroOrderGame>
                   colors: const [
                     Color(0xFFFFE000),
                     Color(0xFF10B981),
-                    _teal,
+                    _accent,
                     Color(0xFF3B82F6),
                   ],
                 ),
@@ -3587,10 +3588,10 @@ class _HeroOrderGameState extends State<_HeroOrderGame>
                 decoration: BoxDecoration(
                   color: AppColors.card,
                   borderRadius: BorderRadius.circular(16),
-                  border: Border.all(color: _teal.withValues(alpha: 0.45)),
+                  border: Border.all(color: _accent.withValues(alpha: 0.45)),
                   boxShadow: [
                     BoxShadow(
-                      color: _teal.withValues(alpha: 0.12),
+                      color: _accent.withValues(alpha: 0.12),
                       blurRadius: 18,
                       offset: const Offset(0, 8),
                     ),
@@ -3602,7 +3603,7 @@ class _HeroOrderGameState extends State<_HeroOrderGame>
                     Row(
                       children: [
                         const Icon(Icons.format_list_numbered_rounded,
-                            color: _teal, size: 22),
+                            color: _accent, size: 22),
                         const SizedBox(width: 8),
                         const Expanded(
                           child: Text(
@@ -3628,7 +3629,7 @@ class _HeroOrderGameState extends State<_HeroOrderGame>
                       borderRadius: BorderRadius.circular(99),
                       value: progress.clamp(0, 1),
                       backgroundColor: AppColors.border,
-                      valueColor: const AlwaysStoppedAnimation(_teal),
+                      valueColor: const AlwaysStoppedAnimation(_accent),
                     ),
                     const SizedBox(height: 8),
                     Row(
@@ -3742,8 +3743,8 @@ class _HeroOrderGameState extends State<_HeroOrderGame>
             border = const Color(0xFF10B981);
             bg = const Color(0xFF10B981).withValues(alpha: 0.18);
           } else if (hovering) {
-            border = _teal;
-            bg = _teal.withValues(alpha: 0.18);
+            border = _accent;
+            bg = _accent.withValues(alpha: 0.18);
           } else {
             border = AppColors.border;
             bg = AppColors.card;
@@ -3771,7 +3772,7 @@ class _HeroOrderGameState extends State<_HeroOrderGame>
                         ? const LinearGradient(
                             colors: [Color(0xFF10B981), Color(0xFF059669)])
                         : const LinearGradient(
-                            colors: [_teal, _tealDark]),
+                            colors: [_accent, _accentDark]),
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: Text(
@@ -3828,7 +3829,7 @@ class _HeroOrderGameState extends State<_HeroOrderGame>
                           hovering ? 'এখানে বসান' : 'এখানে টেনে আনুন',
                           style: TextStyle(
                             color: hovering
-                                ? _teal
+                                ? _accent
                                 : AppColors.textMuted,
                             fontSize: 12,
                             fontWeight: FontWeight.w700,
@@ -3851,14 +3852,14 @@ class _HeroOrderGameState extends State<_HeroOrderGame>
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
       decoration: BoxDecoration(
         gradient: const LinearGradient(
-          colors: [_teal, _tealDark],
+          colors: [_accent, _accentDark],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
         borderRadius: BorderRadius.circular(99),
         boxShadow: [
           BoxShadow(
-            color: _teal.withValues(alpha: 0.35),
+            color: _accent.withValues(alpha: 0.35),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
