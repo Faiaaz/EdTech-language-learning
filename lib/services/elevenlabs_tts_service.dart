@@ -29,16 +29,19 @@ class ElevenLabsTtsService {
   void setStartHandler(VoidCallback? handler) => _onStart = handler;
   void setCompletionHandler(VoidCallback? handler) => _onComplete = handler;
 
-  Future<void> prefetchTexts(Iterable<String> texts) async {
+  Future<void> prefetchTexts(
+    Iterable<String> texts, {
+    String? voiceId,
+  }) async {
     if (!isAvailable) return;
     for (final raw in texts) {
       final text = raw.trim();
       if (text.isEmpty) continue;
       try {
         if (kIsWeb) {
-          await _fetchAudio(text);
+          await _fetchAudio(text, voiceId: voiceId);
         } else {
-          await _ensureLocalFile(text);
+          await _ensureLocalFile(text, voiceId: voiceId);
         }
       } catch (_) {
         // Ignore per-item failures during background prefetch.
@@ -71,6 +74,7 @@ class ElevenLabsTtsService {
   Future<void> speak(
     String text, {
     double playbackRate = 1.0,
+    String? voiceId,
   }) async {
     final trimmed = text.trim();
     if (trimmed.isEmpty || !isAvailable) {
@@ -80,43 +84,54 @@ class ElevenLabsTtsService {
     await _player.stop();
     await _player.setPlaybackRate(playbackRate.clamp(0.5, 1.25));
     _onStart?.call();
-    await _player.play(await _sourceForText(trimmed));
+    await _player.play(await _sourceForText(trimmed, voiceId: voiceId));
     await _player.onPlayerComplete.first;
     _onComplete?.call();
   }
 
   /// iOS AVPlayer needs a real `.mp3` file; in-memory bytes fail on device.
-  Future<Source> _sourceForText(String text) async {
-    if (kIsWeb) return BytesSource(await _fetchAudio(text));
+  Future<Source> _sourceForText(
+    String text, {
+    String? voiceId,
+  }) async {
+    if (kIsWeb) return BytesSource(await _fetchAudio(text, voiceId: voiceId));
 
-    final path = await _ensureLocalFile(text);
+    final path = await _ensureLocalFile(text, voiceId: voiceId);
     return DeviceFileSource(path, mimeType: 'audio/mpeg');
   }
 
-  Future<String> _ensureLocalFile(String text) async {
-    final path = await _cachedPath(text);
+  Future<String> _ensureLocalFile(
+    String text, {
+    String? voiceId,
+  }) async {
+    final key = _cacheKey(text, voiceId: voiceId);
+    final path = await _cachedPath(text, voiceId: voiceId);
     if (File(path).existsSync()) return path;
 
-    final inFlight = _inFlightFiles[text];
+    final inFlight = _inFlightFiles[key];
     if (inFlight != null) return inFlight;
 
     final future = () async {
-      final bytes = await _fetchAudio(text);
+      final bytes = await _fetchAudio(text, voiceId: voiceId);
       await File(path).writeAsBytes(bytes, flush: true);
       return path;
     }();
-    _inFlightFiles[text] = future;
+    _inFlightFiles[key] = future;
     try {
       return await future;
     } finally {
-      _inFlightFiles.remove(text);
+      _inFlightFiles.remove(key);
     }
   }
 
-  Future<String> _cachedPath(String text) async {
+  Future<String> _cachedPath(
+    String text, {
+    String? voiceId,
+  }) async {
     final dir = await getTemporaryDirectory();
+    final resolvedVoiceId = _resolveVoiceId(voiceId);
     final key = _stableHash(
-      '$text|${ElevenLabsConfig.voiceId}|${ElevenLabsConfig.modelId}|${ElevenLabsConfig.outputFormat}',
+      '$text|$resolvedVoiceId|${ElevenLabsConfig.modelId}|${ElevenLabsConfig.outputFormat}',
     );
     return '${dir.path}/el_$key.mp3';
   }
@@ -134,24 +149,32 @@ class ElevenLabsTtsService {
     return hash.toRadixString(16);
   }
 
-  Future<Uint8List> _fetchAudio(String text) async {
-    final cached = _webCache[text];
+  Future<Uint8List> _fetchAudio(
+    String text, {
+    String? voiceId,
+  }) async {
+    final key = _cacheKey(text, voiceId: voiceId);
+    final cached = _webCache[key];
     if (cached != null) return cached;
-    final inFlight = _inFlight[text];
+    final inFlight = _inFlight[key];
     if (inFlight != null) return inFlight;
 
-    final future = _fetchAudioRemote(text);
-    _inFlight[text] = future;
+    final future = _fetchAudioRemote(text, voiceId: voiceId);
+    _inFlight[key] = future;
     try {
       return await future;
     } finally {
-      _inFlight.remove(text);
+      _inFlight.remove(key);
     }
   }
 
-  Future<Uint8List> _fetchAudioRemote(String text) async {
+  Future<Uint8List> _fetchAudioRemote(
+    String text, {
+    String? voiceId,
+  }) async {
+    final resolvedVoiceId = _resolveVoiceId(voiceId);
     final uri = Uri.parse(
-      'https://api.elevenlabs.io/v1/text-to-speech/${ElevenLabsConfig.voiceId}',
+      'https://api.elevenlabs.io/v1/text-to-speech/$resolvedVoiceId',
     ).replace(queryParameters: {
       'output_format': ElevenLabsConfig.outputFormat,
       // Higher values optimize for lower latency.
@@ -188,8 +211,22 @@ class ElevenLabsTtsService {
     }
 
     final bytes = response.bodyBytes;
-    _webCache[text] = bytes;
+    _webCache[_cacheKey(text, voiceId: voiceId)] = bytes;
     return bytes;
+  }
+
+  String _resolveVoiceId(String? overrideVoiceId) {
+    final trimmed = overrideVoiceId?.trim() ?? '';
+    if (trimmed.isNotEmpty) return trimmed;
+    return ElevenLabsConfig.voiceId;
+  }
+
+  String _cacheKey(
+    String text, {
+    String? voiceId,
+  }) {
+    final resolvedVoiceId = _resolveVoiceId(voiceId);
+    return '$text|$resolvedVoiceId';
   }
 
   void dispose() {

@@ -12,6 +12,15 @@ class ElevenLabsConfig {
     defaultValue: 'pNInz6obpgDQGcFmaJgB',
   );
 
+  /// Optional per-screen override for Hero Number 1 pronunciations.
+  /// Set this to a Japanese female voice ID from ElevenLabs.
+  static const heroJapaneseFemaleVoiceId =
+      String.fromEnvironment('ELEVENLABS_HERO_JA_FEMALE_VOICE_ID');
+
+  static String get heroVoiceOrDefault => heroJapaneseFemaleVoiceId.isNotEmpty
+      ? heroJapaneseFemaleVoiceId
+      : voiceId;
+
   static const modelId = 'eleven_multilingual_v2';
   /// Lower bitrate reduces first-response latency on mobile networks.
   static const outputFormat = 'mp3_22050_32';
