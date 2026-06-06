@@ -106,7 +106,7 @@ class _N5AkasatanaLessonScreenState extends State<N5AkasatanaLessonScreen> {
                         color: AppColors.border,
                         shape: BoxShape.circle,
                       ),
-                      child: const Icon(Icons.arrow_back_rounded, color: Colors.white),
+                      child: const Icon(Icons.arrow_back_rounded, color: AppColors.textPrimary),
                     ),
                   ),
                   const SizedBox(width: 10),
@@ -184,7 +184,7 @@ class _AkaTabPills extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.card,
         borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: AppColors.bg),
+        border: Border.all(color: AppColors.border),
       ),
       child: SingleChildScrollView(
         scrollDirection: Axis.horizontal,
@@ -197,7 +197,9 @@ class _AkaTabPills extends StatelessWidget {
                   duration: const Duration(milliseconds: 180),
                   padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
                   decoration: BoxDecoration(
-                    color: i == index ? const Color(0xFF10B981) : Colors.transparent,
+                    color: i == index
+                        ? AppColors.tabActive
+                        : Colors.white.withValues(alpha: 0.58),
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: Text(labels[i],
@@ -369,25 +371,25 @@ class _NotebookRowPickerState extends State<_NotebookRowPicker> {
                       color: i == _activeRow
                           ? _rows[i].accent.withValues(alpha: 0.2)
                           : _completedRows.contains(i)
-                              ? const Color(0xFF10B981).withValues(alpha: 0.12)
+                              ? AppColors.correct.withValues(alpha: 0.12)
                               : AppColors.bg,
                       borderRadius: BorderRadius.circular(7),
                       border: Border.all(
                         color: i == _activeRow
                             ? _rows[i].accent.withValues(alpha: 0.5)
                             : _completedRows.contains(i)
-                                ? const Color(0xFF10B981).withValues(alpha: 0.3)
+                                ? AppColors.correct.withValues(alpha: 0.3)
                                 : AppColors.border,
                       ),
                     ),
                     child: Center(
                       child: _completedRows.contains(i) && i != _activeRow
-                          ? const Icon(Icons.check_rounded, color: Color(0xFF10B981), size: 14)
+                          ? const Icon(Icons.check_rounded, color: AppColors.correct, size: 14)
                           : Text(_rows[i].leader,
                               style: TextStyle(
                                 color: i == _activeRow
                                     ? _rows[i].accent
-                                    : Colors.white.withValues(alpha: 0.5),
+                                    : AppColors.textMuted,
                                 fontSize: 13,
                                 fontWeight: FontWeight.w800,
                               )),
@@ -449,7 +451,7 @@ class _NotebookRowPickerState extends State<_NotebookRowPicker> {
                           children: [
                             const Text('সারি বেছে নাও',
                                 style: TextStyle(
-                                    color: AppColors.border,
+                                    color: AppColors.textPrimary,
                                     fontWeight: FontWeight.w900,
                                     fontSize: 14)),
                             const Spacer(),
@@ -458,14 +460,13 @@ class _NotebookRowPickerState extends State<_NotebookRowPicker> {
                                 padding: const EdgeInsets.symmetric(
                                     horizontal: 8, vertical: 3),
                                 decoration: BoxDecoration(
-                                  color: const Color(0xFF10B981)
-                                      .withValues(alpha: 0.12),
+                                  color: AppColors.correct.withValues(alpha: 0.12),
                                   borderRadius: BorderRadius.circular(8),
                                 ),
                                 child: Text(
                                     '$doneCount / ${_rows.length} সম্পন্ন',
                                     style: const TextStyle(
-                                        color: Color(0xFF10B981),
+                                        color: AppColors.correct,
                                         fontWeight: FontWeight.w800,
                                         fontSize: 11)),
                               ),
@@ -515,7 +516,7 @@ class _RowCard extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(10),
         decoration: BoxDecoration(
-          color: done ? accent.withValues(alpha: 0.08) : AppColors.textMuted,
+          color: done ? accent.withValues(alpha: 0.08) : AppColors.cardAlt,
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
             color: done ? accent.withValues(alpha: 0.45) : accent.withValues(alpha: 0.18),
@@ -558,7 +559,7 @@ class _RowCard extends StatelessWidget {
                 children: [
                   Text(row.bn,
                       style: TextStyle(
-                          color: done ? accent : const Color(0xFF1E293B),
+                          color: done ? accent : AppColors.textPrimary,
                           fontWeight: FontWeight.w900,
                           fontSize: 13)),
                   const SizedBox(height: 3),
@@ -569,7 +570,7 @@ class _RowCard extends StatelessWidget {
                             style: TextStyle(
                                 color: done
                                     ? accent.withValues(alpha: 0.65)
-                                    : const Color(0xFF64748B),
+                                    : AppColors.textMuted,
                                 fontSize: 16,
                                 fontWeight: FontWeight.w700)),
                         if (i < row.members.length - 1) const SizedBox(width: 6),
@@ -583,12 +584,12 @@ class _RowCard extends StatelessWidget {
               width: 30,
               height: 30,
               decoration: BoxDecoration(
-                color: done ? accent.withValues(alpha: 0.14) : const Color(0xFFF1F5F9),
+                color: done ? accent.withValues(alpha: 0.14) : AppColors.bg,
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Icon(
                 done ? Icons.check_rounded : Icons.brush_rounded,
-                color: done ? accent : const Color(0xFF94A3B8),
+                color: done ? accent : AppColors.textDim,
                 size: 16,
               ),
             ),
@@ -605,14 +606,14 @@ class _RuledLinesPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final rulePaint = Paint()
-      ..color = const Color(0xFFD4C9B5).withValues(alpha: 0.4)
+      ..color = AppColors.border.withValues(alpha: 0.8)
       ..strokeWidth = 0.7;
     const spacing = 26.0;
     for (double y = 42; y < size.height - 8; y += spacing) {
       canvas.drawLine(Offset(12, y), Offset(size.width - 6, y), rulePaint);
     }
     final marginPaint = Paint()
-      ..color = const Color(0xFFEF9A9A).withValues(alpha: 0.22)
+      ..color = AppColors.accentBlue.withValues(alpha: 0.18)
       ..strokeWidth = 1.0;
     canvas.drawLine(const Offset(10, 0), Offset(10, size.height), marginPaint);
   }
@@ -632,18 +633,18 @@ class _Kana {
 }
 
 const _akasatanaRows = <_RowInfo>[
-  _RowInfo(leader: 'あ', members: ['あ', 'い', 'う', 'え', 'お'], bn: 'আ-সারি', startIdx: 0, endIdx: 5, accent: Color(0xFF10B981)),
-  _RowInfo(leader: 'か', members: ['か', 'き', 'く', 'け', 'こ'], bn: 'কা-সারি', startIdx: 5, endIdx: 10, accent: Color(0xFF3B82F6)),
-  _RowInfo(leader: 'さ', members: ['さ', 'し', 'す', 'せ', 'そ'], bn: 'সা-সারি', startIdx: 10, endIdx: 15, accent: Color(0xFF8B5CF6)),
-  _RowInfo(leader: 'た', members: ['た', 'ち', 'つ', 'て', 'と'], bn: 'তা-সারি', startIdx: 15, endIdx: 20, accent: Color(0xFFF59E0B)),
-  _RowInfo(leader: 'な', members: ['な', 'に', 'ぬ', 'ね', 'の'], bn: 'না-সারি', startIdx: 20, endIdx: 25, accent: Color(0xFFF43F5E)),
+  _RowInfo(leader: 'あ', members: ['あ', 'い', 'う', 'え', 'お'], bn: 'আ-সারি', startIdx: 0, endIdx: 5, accent: AppColors.accentBlue),
+  _RowInfo(leader: 'か', members: ['か', 'き', 'く', 'け', 'こ'], bn: 'কা-সারি', startIdx: 5, endIdx: 10, accent: AppColors.accentBlueDk),
+  _RowInfo(leader: 'さ', members: ['さ', 'し', 'す', 'せ', 'そ'], bn: 'সা-সারি', startIdx: 10, endIdx: 15, accent: AppColors.tabActive),
+  _RowInfo(leader: 'た', members: ['た', 'ち', 'つ', 'て', 'と'], bn: 'তা-সারি', startIdx: 15, endIdx: 20, accent: AppColors.accentYellow),
+  _RowInfo(leader: 'な', members: ['な', 'に', 'ぬ', 'ね', 'の'], bn: 'না-সারি', startIdx: 20, endIdx: 25, accent: AppColors.audio),
 ];
 
 const _bornomalaRows = <_RowInfo>[
-  _RowInfo(leader: 'ま', members: ['ま', 'み', 'む', 'め', 'も'], bn: 'মা-সারি', startIdx: 30, endIdx: 35, accent: Color(0xFF10B981)),
-  _RowInfo(leader: 'や', members: ['や', 'ゆ', 'よ'], bn: 'ইয়া-সারি', startIdx: 35, endIdx: 38, accent: Color(0xFF3B82F6)),
-  _RowInfo(leader: 'ら', members: ['ら', 'り', 'る', 'れ', 'ろ'], bn: 'রা-সারি', startIdx: 38, endIdx: 43, accent: Color(0xFF8B5CF6)),
-  _RowInfo(leader: 'わ', members: ['わ', 'を', 'ん'], bn: 'ওয়া-সারি', startIdx: 43, endIdx: 46, accent: Color(0xFFF59E0B)),
+  _RowInfo(leader: 'ま', members: ['ま', 'み', 'む', 'め', 'も'], bn: 'মা-সারি', startIdx: 30, endIdx: 35, accent: AppColors.accentBlue),
+  _RowInfo(leader: 'や', members: ['や', 'ゆ', 'よ'], bn: 'ইয়া-সারি', startIdx: 35, endIdx: 38, accent: AppColors.accentBlueDk),
+  _RowInfo(leader: 'ら', members: ['ら', 'り', 'る', 'れ', 'ろ'], bn: 'রা-সারি', startIdx: 38, endIdx: 43, accent: AppColors.tabActive),
+  _RowInfo(leader: 'わ', members: ['わ', 'を', 'ん'], bn: 'ওয়া-সারি', startIdx: 43, endIdx: 46, accent: AppColors.accentYellow),
 ];
 
 const _akasatanaKanaList = <_Kana>[
@@ -705,11 +706,11 @@ const _bornomalaKanaList = <_Kana>[
 // ── Dakuten data ─────────────────────────────────────────────────────────────
 
 const _dakutenRows = <_RowInfo>[
-  _RowInfo(leader: 'が', members: ['が', 'ぎ', 'ぐ', 'げ', 'ご'], bn: 'গা-সারি', startIdx: 0, endIdx: 5, accent: Color(0xFF10B981)),
-  _RowInfo(leader: 'ざ', members: ['ざ', 'じ', 'ず', 'ぜ', 'ぞ'], bn: 'জা-সারি', startIdx: 5, endIdx: 10, accent: Color(0xFF3B82F6)),
-  _RowInfo(leader: 'だ', members: ['だ', 'ぢ', 'づ', 'で', 'ど'], bn: 'দা-সারি', startIdx: 10, endIdx: 15, accent: Color(0xFF8B5CF6)),
-  _RowInfo(leader: 'ば', members: ['ば', 'び', 'ぶ', 'べ', 'ぼ'], bn: 'বা-সারি', startIdx: 15, endIdx: 20, accent: Color(0xFFF59E0B)),
-  _RowInfo(leader: 'ぱ', members: ['ぱ', 'ぴ', 'ぷ', 'ぺ', 'ぽ'], bn: 'পা-সারি', startIdx: 20, endIdx: 25, accent: Color(0xFFF43F5E)),
+  _RowInfo(leader: 'が', members: ['が', 'ぎ', 'ぐ', 'げ', 'ご'], bn: 'গা-সারি', startIdx: 0, endIdx: 5, accent: AppColors.accentBlue),
+  _RowInfo(leader: 'ざ', members: ['ざ', 'じ', 'ず', 'ぜ', 'ぞ'], bn: 'জা-সারি', startIdx: 5, endIdx: 10, accent: AppColors.accentBlueDk),
+  _RowInfo(leader: 'だ', members: ['だ', 'ぢ', 'づ', 'で', 'ど'], bn: 'দা-সারি', startIdx: 10, endIdx: 15, accent: AppColors.tabActive),
+  _RowInfo(leader: 'ば', members: ['ば', 'び', 'ぶ', 'べ', 'ぼ'], bn: 'বা-সারি', startIdx: 15, endIdx: 20, accent: AppColors.accentYellow),
+  _RowInfo(leader: 'ぱ', members: ['ぱ', 'ぴ', 'ぷ', 'ぺ', 'ぽ'], bn: 'পা-সারি', startIdx: 20, endIdx: 25, accent: AppColors.audio),
 ];
 
 const _dakutenKanaList = <_Kana>[
@@ -807,13 +808,13 @@ class _AkaFlashGameState extends State<_AkaFlashGame> {
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                 decoration: BoxDecoration(
-                  color: const Color(0xFF10B981).withValues(alpha: 0.18),
+                  color: AppColors.accentBlue.withValues(alpha: 0.16),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Text(
                   k.row,
                   style: const TextStyle(
-                    color: Color(0xFF10B981),
+                    color: AppColors.accentBlueDk,
                     fontWeight: FontWeight.w800,
                     fontSize: 12,
                   ),
@@ -833,7 +834,7 @@ class _AkaFlashGameState extends State<_AkaFlashGame> {
                         topText: k.kana,
                         midText: k.romaji,
                         bottomText: k.bn,
-                        accent: const Color(0xFF10B981),
+                        accent: AppColors.tabActive,
                         flipped: true,
                       )
                     : _FlipCard(
@@ -841,7 +842,7 @@ class _AkaFlashGameState extends State<_AkaFlashGame> {
                         topText: k.kana,
                         midText: '',
                         bottomText: 'ট্যাপ করুন',
-                        accent: const Color(0xFF10B981),
+                        accent: AppColors.tabActive,
                         flipped: false,
                       ),
               ),
@@ -857,7 +858,7 @@ class _AkaFlashGameState extends State<_AkaFlashGame> {
                     padding: const EdgeInsets.symmetric(vertical: 14),
                     decoration: BoxDecoration(
                       gradient: const LinearGradient(
-                        colors: [Color(0xFF10B981), Color(0xFF059669)],
+                        colors: [AppColors.tabActive, AppColors.accentBlueDk],
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
                       ),
@@ -868,11 +869,11 @@ class _AkaFlashGameState extends State<_AkaFlashGame> {
                       children: [
                         Text('পরের কার্ড',
                             style: TextStyle(
-                                color: AppColors.textPrimary,
+                                color: Colors.white,
                                 fontWeight: FontWeight.w900,
                                 fontSize: 15)),
                         SizedBox(width: 6),
-                        Icon(Icons.arrow_forward_rounded, color: AppColors.textPrimary, size: 18),
+                        Icon(Icons.arrow_forward_rounded, color: Colors.white, size: 18),
                       ],
                     ),
                   ),
@@ -927,7 +928,7 @@ class _FlipCard extends StatelessWidget {
           Text(
             topText,
             style: TextStyle(
-              color: flipped ? accent : Colors.white,
+              color: flipped ? accent : AppColors.display,
               fontSize: 96,
               fontWeight: FontWeight.w900,
               height: 1,
@@ -956,7 +957,7 @@ class _FlipCard extends StatelessWidget {
           Text(
             bottomText,
             style: TextStyle(
-              color: flipped ? Colors.white : Colors.white.withValues(alpha: 0.4),
+              color: flipped ? AppColors.textPrimary : AppColors.textMuted,
               fontSize: flipped ? 28 : 14,
               fontWeight: FontWeight.w700,
             ),
@@ -982,7 +983,7 @@ class _AkaQuizGame extends StatefulWidget {
 }
 
 class _AkaQuizGameState extends State<_AkaQuizGame> {
-  static const _accent = Color(0xFF10B981);
+  static const _accent = AppColors.tabActive;
   final _rng = math.Random();
   late List<_Kana> _deck;
   int _i = 0;
@@ -1067,7 +1068,7 @@ class _AkaQuizGameState extends State<_AkaQuizGame> {
               const SizedBox(height: 6),
               Text(
                 'স্কোর: $_score / ${_deck.length}',
-                style: const TextStyle(color: Color(0xFF6B7280), fontWeight: FontWeight.w800),
+                style: const TextStyle(color: AppColors.textMuted, fontWeight: FontWeight.w800),
               ),
               const SizedBox(height: 16),
               SizedBox(
@@ -1150,7 +1151,7 @@ class _AkaQuizGameState extends State<_AkaQuizGame> {
                           _correct! ? 'সঠিক!' : 'ভুল — পরেরটা',
                           key: ValueKey(_correct),
                           style: TextStyle(
-                            color: _correct! ? const Color(0xFFB6F6C9) : const Color(0xFFFFB4B4),
+                            color: _correct! ? AppColors.correct : AppColors.wrong,
                             fontWeight: FontWeight.w900,
                             fontSize: 16,
                           ),
@@ -1206,14 +1207,14 @@ class _QuizChoice extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final bg = switch (state) {
-      _ChoiceState.correct => const Color(0xFF14B86A).withValues(alpha: 0.18),
-      _ChoiceState.wrong => const Color(0xFFEF4444).withValues(alpha: 0.16),
+      _ChoiceState.correct => AppColors.correct.withValues(alpha: 0.18),
+      _ChoiceState.wrong => AppColors.wrong.withValues(alpha: 0.16),
       _ => AppColors.bg,
     };
     final border = switch (state) {
-      _ChoiceState.correct => const Color(0xFFB6F6C9),
-      _ChoiceState.wrong => const Color(0xFFFFB4B4),
-      _ => Colors.white.withValues(alpha: selected ? 0.5 : 0.12),
+      _ChoiceState.correct => AppColors.correct.withValues(alpha: 0.65),
+      _ChoiceState.wrong => AppColors.wrong.withValues(alpha: 0.6),
+      _ => AppColors.border,
     };
     return GestureDetector(
       onTap: onTap,
@@ -1248,7 +1249,7 @@ class _AkaMatchGame extends StatefulWidget {
 }
 
 class _AkaMatchGameState extends State<_AkaMatchGame> {
-  static const _accent = Color(0xFF10B981);
+  static const _accent = AppColors.tabActive;
   final _rng = math.Random();
 
   late List<_MatchTile> _tiles;
@@ -1337,7 +1338,7 @@ class _AkaMatchGameState extends State<_AkaMatchGame> {
                       color: AppColors.textPrimary, fontSize: 20, fontWeight: FontWeight.w900)),
               const SizedBox(height: 6),
               Text('ভুল: $_errors',
-                  style: const TextStyle(color: Color(0xFF6B7280), fontWeight: FontWeight.w800)),
+                  style: const TextStyle(color: AppColors.textMuted, fontWeight: FontWeight.w800)),
               const SizedBox(height: 16),
               SizedBox(
                 width: double.infinity,
@@ -1386,8 +1387,8 @@ class _AkaMatchGameState extends State<_AkaMatchGame> {
               Text('ভুল: $_errors',
                   style: TextStyle(
                       color: _errors > 0
-                          ? const Color(0xFFEF4444)
-                          : Colors.white.withValues(alpha: 0.5),
+                          ? AppColors.wrong
+                          : AppColors.textMuted,
                       fontWeight: FontWeight.w800,
                       fontSize: 13)),
             ],
@@ -1442,7 +1443,7 @@ class _MatchTileWidget extends StatelessWidget {
   final bool matched;
   final VoidCallback onTap;
 
-  static const _accent = Color(0xFF10B981);
+  static const _accent = AppColors.tabActive;
 
   @override
   Widget build(BuildContext context) {
@@ -1471,7 +1472,7 @@ class _MatchTileWidget extends StatelessWidget {
             tile.label,
             textAlign: TextAlign.center,
             style: TextStyle(
-              color: matched ? _accent : Colors.white,
+              color: matched ? _accent : AppColors.textPrimary,
               fontSize: tile.isKana ? 28 : 15,
               fontWeight: FontWeight.w900,
             ),
