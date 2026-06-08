@@ -1,11 +1,14 @@
 // ignore_for_file: deprecated_member_use
 
+import 'dart:io';
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:ez_trainz/utils/app_theme.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:share_plus/share_plus.dart';
 
 import 'package:ez_trainz/screens/hiragana_draw_game_screen.dart';
 import 'package:ez_trainz/widgets/spiral_notepad_frame.dart';
@@ -47,16 +50,29 @@ class N5DakutenLessonScreen extends StatelessWidget {
   }
 }
 
-enum _AkaTab { draw, notepadDraw, flashcard, quiz, match }
+enum _AkaTab { draw, notepadDraw, flashcard, quiz, match, practice }
 
 class _N5AkasatanaLessonScreenState extends State<N5AkasatanaLessonScreen> {
-  static const _tabs = [
-    _AkaTab.draw,
-    _AkaTab.notepadDraw,
-    _AkaTab.flashcard,
-    _AkaTab.quiz,
-    _AkaTab.match,
-  ];
+  /// The অনুশীলন শিট (practice sheet) download is only offered for আকাসাতানা,
+  /// since the bundled drill sheet covers the あかさたな rows.
+  List<_AkaTab> get _tabs => [
+        _AkaTab.draw,
+        _AkaTab.notepadDraw,
+        _AkaTab.flashcard,
+        _AkaTab.quiz,
+        _AkaTab.match,
+        if (_kind == _LessonKind.akasatana) _AkaTab.practice,
+      ];
+
+  List<String> get _tabLabels => [
+        'আঁকা',
+        'নোটবুক',
+        'ফ্ল্যাশকার্ড',
+        'কুইজ রান',
+        'কানা ম্যাচ',
+        if (_kind == _LessonKind.akasatana) 'অনুশীলন শিট',
+      ];
+
   int _tab = 0;
 
   _LessonKind get _kind => widget._lessonKind;
@@ -130,7 +146,11 @@ class _N5AkasatanaLessonScreenState extends State<N5AkasatanaLessonScreen> {
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: _AkaTabPills(index: _tab, onChange: (i) => setState(() => _tab = i)),
+              child: _AkaTabPills(
+                index: _tab,
+                labels: _tabLabels,
+                onChange: (i) => setState(() => _tab = i),
+              ),
             ),
             const SizedBox(height: 10),
             Expanded(
@@ -161,6 +181,9 @@ class _N5AkasatanaLessonScreenState extends State<N5AkasatanaLessonScreen> {
                     key: const ValueKey('akaMatch'),
                     kanaList: _kanaList,
                   ),
+                  _AkaTab.practice => const _PracticeSheetTab(
+                    key: ValueKey('akaPractice'),
+                  ),
                 },
               ),
             ),
@@ -172,13 +195,17 @@ class _N5AkasatanaLessonScreenState extends State<N5AkasatanaLessonScreen> {
 }
 
 class _AkaTabPills extends StatelessWidget {
-  const _AkaTabPills({required this.index, required this.onChange});
+  const _AkaTabPills({
+    required this.index,
+    required this.labels,
+    required this.onChange,
+  });
   final int index;
+  final List<String> labels;
   final ValueChanged<int> onChange;
 
   @override
   Widget build(BuildContext context) {
-    const labels = ['আঁকা', 'নোটবুক', 'ফ্ল্যাশকার্ড', 'কুইজ রান', 'কানা ম্যাচ'];
     return Container(
       padding: const EdgeInsets.all(6),
       decoration: BoxDecoration(
@@ -212,6 +239,128 @@ class _AkaTabPills extends StatelessWidget {
             ]
           ],
         ),
+      ),
+    );
+  }
+}
+
+// ── Practice sheet download ───────────────────────────────────────────────────
+
+/// অনুশীলন শিট tab — lets the learner download/share the bundled আকাসাতানা
+/// hiragana writing-practice PDF (EZ Trainz–branded on every page).
+class _PracticeSheetTab extends StatefulWidget {
+  const _PracticeSheetTab({super.key});
+
+  @override
+  State<_PracticeSheetTab> createState() => _PracticeSheetTabState();
+}
+
+class _PracticeSheetTabState extends State<_PracticeSheetTab> {
+  static const _accent = AppColors.tabActive;
+  static const _asset = 'assets/pdf/hiragana_akasatana_practice.pdf';
+  bool _busy = false;
+
+  Future<void> _download() async {
+    if (_busy) return;
+    setState(() => _busy = true);
+    HapticFeedback.selectionClick();
+    try {
+      final bytes = await rootBundle.load(_asset);
+      final dir = await getTemporaryDirectory();
+      final file = File('${dir.path}/EZ-Trainz-akasatana-onushilon-sheet.pdf');
+      await file.writeAsBytes(bytes.buffer.asUint8List(), flush: true);
+      if (!mounted) return;
+      final box = context.findRenderObject() as RenderBox?;
+      await Share.shareXFiles(
+        [XFile(file.path, mimeType: 'application/pdf')],
+        subject: 'আকাসাতানা অনুশীলন শিট — EZ Trainz',
+        sharePositionOrigin:
+            box != null ? box.localToGlobal(Offset.zero) & box.size : null,
+      );
+    } catch (_) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('শিটটি খোলা যায়নি, আবার চেষ্টা করুন।')),
+      );
+    } finally {
+      if (mounted) setState(() => _busy = false);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(20),
+      child: Column(
+        children: [
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.all(22),
+            decoration: BoxDecoration(
+              color: AppColors.card,
+              borderRadius: BorderRadius.circular(22),
+              border: Border.all(color: AppColors.border),
+            ),
+            child: Column(
+              children: [
+                Container(
+                  width: 64,
+                  height: 64,
+                  decoration: BoxDecoration(
+                    color: _accent.withValues(alpha: 0.16),
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: const Icon(Icons.picture_as_pdf_rounded,
+                      color: _accent, size: 34),
+                ),
+                const SizedBox(height: 14),
+                const Text(
+                  'আকাসাতানা অনুশীলন শিট',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                      color: AppColors.textPrimary,
+                      fontSize: 18,
+                      fontWeight: FontWeight.w900),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  'あ・か・さ・た・な সারির হিরাগানা হাতে লেখার অনুশীলন শিট (৫ পৃষ্ঠা)। '
+                  'ডাউনলোড করে প্রিন্ট করে অনুশীলন করো।',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                      color: AppColors.textMuted,
+                      fontSize: 13,
+                      fontWeight: FontWeight.w600,
+                      height: 1.5),
+                ),
+                const SizedBox(height: 18),
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton.icon(
+                    onPressed: _busy ? null : _download,
+                    icon: _busy
+                        ? const SizedBox(
+                            width: 18,
+                            height: 18,
+                            child: CircularProgressIndicator(
+                                strokeWidth: 2, color: Colors.white),
+                          )
+                        : const Icon(Icons.download_rounded, size: 20),
+                    label: Text(_busy ? 'প্রস্তুত হচ্ছে…' : 'শিট ডাউনলোড করুন',
+                        style: const TextStyle(fontWeight: FontWeight.w900)),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: _accent,
+                      foregroundColor: Colors.white,
+                      padding: const EdgeInsets.symmetric(vertical: 14),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(14)),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
