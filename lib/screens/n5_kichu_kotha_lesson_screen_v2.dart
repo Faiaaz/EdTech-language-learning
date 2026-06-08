@@ -455,11 +455,9 @@ class _MinimalGameHeader extends StatelessWidget {
 class _ContextCard extends StatelessWidget {
   const _ContextCard({
     required this.text,
-    this.caption,
   });
 
   final String text;
-  final String? caption;
 
   @override
   Widget build(BuildContext context) {
@@ -492,17 +490,6 @@ class _ContextCard extends StatelessWidget {
               height: 1.2,
             ),
           ),
-          if (caption != null) ...[
-            const SizedBox(height: 10),
-            Text(
-              caption!,
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                color: AppColors.textMuted,
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-          ],
         ],
       ),
     );
@@ -686,13 +673,11 @@ class _GameBody extends StatelessWidget {
     required this.top,
     required this.middle,
     required this.bottom,
-    this.scrollMiddle = true,
   });
 
   final Widget top;
   final Widget middle;
   final Widget bottom;
-  final bool scrollMiddle;
 
   @override
   Widget build(BuildContext context) {
@@ -701,7 +686,7 @@ class _GameBody extends StatelessWidget {
       children: [
         top,
         Expanded(
-          child: scrollMiddle ? SingleChildScrollView(child: middle) : middle,
+          child: SingleChildScrollView(child: middle),
         ),
         const SizedBox(height: 8),
         bottom,
@@ -1081,7 +1066,6 @@ class _SentenceBuilderGameState extends State<_SentenceBuilderGame> {
   int _streak = 0;
   int _comboPulse = 0;
   int _shakeTick = 0;
-  int _hintStep = 0;
   int? _lastQuestionIndex;
   late _BuilderSentence _q;
   late List<String> _bank;
@@ -1108,7 +1092,6 @@ class _SentenceBuilderGameState extends State<_SentenceBuilderGame> {
     _afterExplain = '';
     _solved = false;
     _hintVisible = false;
-    _hintStep = 0;
     unawaited(_tts.stop());
     setState(() {});
   }
@@ -1128,6 +1111,37 @@ class _SentenceBuilderGameState extends State<_SentenceBuilderGame> {
     if (_isParticle(t)) return AppColors.audio;
     if (t == 'です') return AppColors.correct;
     return AppColors.tabActive;
+  }
+
+  Widget _tokenPill(String t, {bool filled = false, bool highlight = false}) {
+    final c = _tokenColor(t);
+    final borderColor = highlight ? AppColors.audio : c;
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 140),
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+      decoration: BoxDecoration(
+        color: filled ? c : Colors.white,
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(color: borderColor, width: highlight ? 2.4 : 1.6),
+        boxShadow: filled
+            ? null
+            : [
+                BoxShadow(
+                  color: c.withValues(alpha: 0.14),
+                  blurRadius: 6,
+                  offset: const Offset(0, 2),
+                ),
+              ],
+      ),
+      child: Text(
+        t,
+        style: TextStyle(
+          color: filled ? Colors.white : c,
+          fontWeight: FontWeight.w800,
+          fontSize: 18,
+        ),
+      ),
+    );
   }
 
   void _check() {
@@ -1194,7 +1208,6 @@ class _SentenceBuilderGameState extends State<_SentenceBuilderGame> {
           Padding(
             padding: const EdgeInsets.all(14),
             child: _GameBody(
-              scrollMiddle: false,
               top: _MinimalGameHeader(
                 step: _step,
                 total: 6,
@@ -1208,26 +1221,69 @@ class _SentenceBuilderGameState extends State<_SentenceBuilderGame> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      // Compact prompt
+                      Container(
+                        width: double.infinity,
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 16, vertical: 14),
+                        decoration: BoxDecoration(
+                          color: AppColors.cardAlt,
+                          borderRadius: BorderRadius.circular(14),
+                          border: Border.all(
+                              color: AppColors.accentYellow
+                                  .withValues(alpha: 0.5)),
+                        ),
+                        child: Column(
+                          children: [
+                            Text(
+                              _q.bnHint,
+                              textAlign: TextAlign.center,
+                              style: const TextStyle(
+                                color: AppColors.textPrimary,
+                                fontWeight: FontWeight.w900,
+                                fontSize: 20,
+                                height: 1.3,
+                              ),
+                            ),
+                            if (_hintVisible) ...[
+                              const SizedBox(height: 8),
+                              Text(
+                                'ইঙ্গিত: প্রথম শব্দ "${_q.tokens.first}"',
+                                textAlign: TextAlign.center,
+                                style: const TextStyle(
+                                  color: AppColors.textMuted,
+                                  fontWeight: FontWeight.w700,
+                                  fontSize: 12,
+                                ),
+                              ),
+                            ],
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: 12),
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
                         children: [
-                          IconButton(
-                            tooltip: 'Hint',
-                            onPressed: _hint,
-                            icon: Icon(
+                          Text(
+                            'তোমার বাক্য',
+                            style: TextStyle(
+                              color: AppColors.textMuted,
+                              fontWeight: FontWeight.w800,
+                              fontSize: 12,
+                            ),
+                          ),
+                          const Spacer(),
+                          GestureDetector(
+                            onTap: _hint,
+                            child: Icon(
                               Icons.help_outline_rounded,
                               color: AppColors.textMuted,
+                              size: 20,
                             ),
                           ),
                         ],
                       ),
-                      _ContextCard(
-                        text: _q.bnHint,
-                        caption: _hintVisible
-                            ? 'ইঙ্গিত: প্রথম শব্দ "${_q.tokens.first}"'
-                            : null,
-                      ),
-                      const SizedBox(height: 12),
+                      const SizedBox(height: 6),
+                      // Answer slots — drop target / tap a chip to remove it
                       DragTarget<String>(
                         onWillAcceptWithDetails: (_) => !_solved,
                         onAcceptWithDetails: (details) {
@@ -1239,150 +1295,151 @@ class _SentenceBuilderGameState extends State<_SentenceBuilderGame> {
                             unawaited(_fx.snap());
                           }
                         },
-                        builder: (_, __, ___) => Container(
-                      width: double.infinity,
-                      padding: const EdgeInsets.all(12),
-                      decoration: BoxDecoration(
-                        color: AppColors.bg,
-                        borderRadius: BorderRadius.circular(12),
-                        border: Border.all(
-                          color: AppColors.border,
-                        ),
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const SizedBox.shrink(),
-                          if (_picked.isEmpty)
-                            Wrap(
-                              spacing: 8,
-                              runSpacing: 8,
-                              children: [
-                                for (var i = 0; i < _q.tokens.length; i++)
-                                  Container(
-                                    padding: const EdgeInsets.symmetric(
-                                      horizontal: 12,
-                                      vertical: 8,
-                                    ),
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(8),
-                                      border: Border.all(
-                                        color: AppColors.border,
-                                      ),
-                                      color: Colors.transparent,
-                                    ),
-                                    child: Text(
-                                      '___',
-                                      style: TextStyle(
-                                        color: AppColors.textDim,
-                                        fontWeight: FontWeight.w700,
-                                      ),
-                                    ),
-                                  ),
-                              ],
-                            )
-                          else
-                            Wrap(
-                              spacing: 8,
-                              runSpacing: 8,
-                              children: [
-                                for (var i = 0; i < _picked.length; i++)
-                                  AnimatedScale(
-                                    duration: const Duration(milliseconds: 120),
-                                    scale: _hintStep == 1 &&
-                                            _picked[i] == _q.tokens.first &&
-                                            i == 0
-                                        ? 1.1
-                                        : 1,
-                                    child: Chip(
-                                      label: Text(
-                                        _picked[i],
-                                        style: const TextStyle(
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.w800),
-                                      ),
-                                      backgroundColor: _tokenColor(_picked[i]),
-                                    ),
-                                  ),
-                              ],
+                        builder: (_, candidate, __) => Container(
+                          width: double.infinity,
+                          constraints: const BoxConstraints(minHeight: 66),
+                          padding: const EdgeInsets.all(12),
+                          decoration: BoxDecoration(
+                            color: AppColors.card,
+                            borderRadius: BorderRadius.circular(12),
+                            border: Border.all(
+                              color: candidate.isNotEmpty
+                                  ? AppColors.tabActive
+                                  : AppColors.border,
+                              width: candidate.isNotEmpty ? 2 : 1,
                             ),
-                        ],
-                      ),
-                    ),
-                    ),
-                    const SizedBox(height: 10),
-                    Container(
-                      width: double.infinity,
-                      padding: const EdgeInsets.all(12),
-                      decoration: BoxDecoration(
-                        color: AppColors.bg,
-                        borderRadius: BorderRadius.circular(12),
-                        border: Border.all(
-                          color: AppColors.border,
-                        ),
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const SizedBox(height: 2),
-                          Wrap(
-                              spacing: 8,
-                              runSpacing: 8,
-                              children: [
-                                for (final t in _bank)
-                                  LongPressDraggable<String>(
-                                    data: t,
-                                    feedback: Material(
-                                      color: Colors.transparent,
-                                      child: Chip(
-                                        label: Text(
-                                          t,
-                                          style: const TextStyle(
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.w800,
+                          ),
+                          child: _picked.isEmpty
+                              ? Wrap(
+                                  spacing: 8,
+                                  runSpacing: 8,
+                                  children: [
+                                    for (var i = 0; i < _q.tokens.length; i++)
+                                      Container(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 14, vertical: 9),
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          border: Border.all(
+                                              color: AppColors.border),
+                                          color: AppColors.bg,
+                                        ),
+                                        child: Text(
+                                          '___',
+                                          style: TextStyle(
+                                            color: AppColors.textDim,
+                                            fontWeight: FontWeight.w700,
                                           ),
                                         ),
-                                        backgroundColor: _tokenColor(t),
                                       ),
-                                    ),
-                                    childWhenDragging: Chip(
-                                      label: Text(
-                                        t,
-                                        style: TextStyle(
-                                          color: AppColors.textDim,
+                                  ],
+                                )
+                              : Wrap(
+                                  spacing: 8,
+                                  runSpacing: 8,
+                                  children: [
+                                    for (var i = 0; i < _picked.length; i++)
+                                      GestureDetector(
+                                        onTap: _solved
+                                            ? null
+                                            : () {
+                                                _bank.add(
+                                                    _picked.removeAt(i));
+                                                setState(() {});
+                                                unawaited(_fx.tap());
+                                              },
+                                        child: _tokenPill(
+                                          _picked[i],
+                                          filled: true,
                                         ),
                                       ),
-                                      backgroundColor: AppColors.border,
-                                    ),
-                                    onDragStarted: () => unawaited(_fx.tap()),
-                                    onDragCompleted: () {},
-                                    child: ActionChip(
-                                      label: Text(
-                                        t,
-                                        style: TextStyle(
-                                          color: _hintStep == 1 &&
-                                                  t == _q.tokens.first
-                                              ? AppColors.audio
-                                              : null,
-                                        ),
-                                      ),
-                                      onPressed: _solved
-                                          ? null
-                                          : () {
-                                              _bank.remove(t);
-                                              _picked.add(t);
-                                              setState(() {});
-                                              unawaited(_fx.snap());
-                                            },
-                                    ),
-                                  ),
-                              ],
+                                  ],
+                                ),
+                        ),
+                      ),
+                      const SizedBox(height: 14),
+                      Row(
+                        children: [
+                          Text(
+                            'শব্দভাণ্ডার',
+                            style: TextStyle(
+                              color: AppColors.textMuted,
+                              fontWeight: FontWeight.w800,
+                              fontSize: 12,
                             ),
+                          ),
+                          const SizedBox(width: 6),
+                          Text(
+                            '(ট্যাপ বা টেনে আনো)',
+                            style: TextStyle(
+                              color: AppColors.textDim,
+                              fontWeight: FontWeight.w600,
+                              fontSize: 11,
+                            ),
+                          ),
                         ],
                       ),
-                    ),
-                  ],
-                ),
+                      const SizedBox(height: 6),
+                      // Word bank
+                      Container(
+                        width: double.infinity,
+                        constraints: const BoxConstraints(minHeight: 66),
+                        padding: const EdgeInsets.all(12),
+                        decoration: BoxDecoration(
+                          color: AppColors.card,
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(color: AppColors.border),
+                        ),
+                        child: _bank.isEmpty
+                            ? Padding(
+                                padding: const EdgeInsets.all(8),
+                                child: Text(
+                                  'সব শব্দ বসানো হয়েছে — এবার পরীক্ষা করো ✅',
+                                  style: TextStyle(
+                                    color: AppColors.textMuted,
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                ),
+                              )
+                            : Wrap(
+                                spacing: 10,
+                                runSpacing: 10,
+                                children: [
+                                  for (final t in _bank)
+                                    LongPressDraggable<String>(
+                                      data: t,
+                                      feedback: Material(
+                                        color: Colors.transparent,
+                                        child: _tokenPill(t, filled: true),
+                                      ),
+                                      childWhenDragging: Opacity(
+                                        opacity: 0.35,
+                                        child: _tokenPill(t),
+                                      ),
+                                      onDragStarted: () =>
+                                          unawaited(_fx.tap()),
+                                      child: GestureDetector(
+                                        onTap: _solved
+                                            ? null
+                                            : () {
+                                                _bank.remove(t);
+                                                _picked.add(t);
+                                                setState(() {});
+                                                unawaited(_fx.snap());
+                                              },
+                                        child: _tokenPill(
+                                          t,
+                                          highlight: _hintVisible &&
+                                              t == _q.tokens.first,
+                                        ),
+                                      ),
+                                    ),
+                                ],
+                              ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
               bottom: _ActionFooter(
