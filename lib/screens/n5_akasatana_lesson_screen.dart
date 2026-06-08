@@ -1002,23 +1002,23 @@ class _AkaQuizGameState extends State<_AkaQuizGame> {
 
   List<String> _optionsFor(_Kana q) {
     final distractors = List.of(widget.kanaList)
-      ..removeWhere((k) => k.romaji == q.romaji)
+      ..removeWhere((k) => k.bn == q.bn)
       ..shuffle(_rng);
-    final opts = <String>{q.romaji};
+    final opts = <String>{q.bn};
     for (final k in distractors) {
       if (opts.length >= 4) break;
-      opts.add(k.romaji);
+      opts.add(k.bn);
     }
     return opts.toList()..shuffle(_rng);
   }
 
-  Future<void> _tap(String romaji) async {
+  Future<void> _tap(String bn) async {
     if (_locked) return;
     HapticFeedback.selectionClick();
-    final correct = romaji == _deck[_i].romaji;
+    final correct = bn == _deck[_i].bn;
     setState(() {
       _locked = true;
-      _picked = romaji;
+      _picked = bn;
       _correct = correct;
       if (correct) _score++;
     });
@@ -1133,7 +1133,7 @@ class _AkaQuizGameState extends State<_AkaQuizGame> {
             ),
             child: Column(
               children: [
-                Text('এই কানার রোমাজি কী?',
+                Text('এই কানার উচ্চারণ কী?',
                     style: TextStyle(
                         color: AppColors.textMuted,
                         fontWeight: FontWeight.w700,
@@ -1175,7 +1175,7 @@ class _AkaQuizGameState extends State<_AkaQuizGame> {
                     selected: _picked == opt,
                     state: _correct == null
                         ? null
-                        : (opt == q.romaji
+                        : (opt == q.bn
                             ? _ChoiceState.correct
                             : (_picked == opt ? _ChoiceState.wrong : null)),
                     onTap: _locked ? null : () => _tap(opt),
@@ -1268,7 +1268,7 @@ class _AkaMatchGameState extends State<_AkaMatchGame> {
     final tiles = <_MatchTile>[];
     for (final k in sample) {
       tiles.add(_MatchTile(id: k.romaji, label: k.kana, pairId: k.romaji, isKana: true));
-      tiles.add(_MatchTile(id: '${k.romaji}_r', label: k.romaji, pairId: k.romaji, isKana: false));
+      tiles.add(_MatchTile(id: '${k.romaji}_r', label: k.bn, pairId: k.romaji, isKana: false));
     }
     tiles.shuffle(_rng);
     _tiles = tiles;
@@ -1378,7 +1378,7 @@ class _AkaMatchGameState extends State<_AkaMatchGame> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'কানা ও রোমাজি মেলাও',
+                'কানা ও উচ্চারণ মেলাও',
                 style: TextStyle(
                     color: AppColors.textMuted,
                     fontWeight: FontWeight.w700,
