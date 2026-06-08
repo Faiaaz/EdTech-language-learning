@@ -1046,6 +1046,54 @@ const _builderSentences = <_BuilderSentence>[
     ['あのひと', 'は', 'にほんご', 'の', 'せんせい', 'です'],
     'ওই ব্যক্তি জাপানি ভাষার শিক্ষক।',
   ),
+  _BuilderSentence(
+    ['あなた', 'は', 'がくせい', 'です'],
+    'আপনি ছাত্র।',
+  ),
+  _BuilderSentence(
+    ['わたし', 'は', 'にほんご', 'の', 'せんせい', 'です'],
+    'আমি জাপানি ভাষার শিক্ষক।',
+  ),
+  _BuilderSentence(
+    ['あのひと', 'の', 'なまえ', 'は', 'スズキ', 'です'],
+    'ওই ব্যক্তির নাম সুজুকি।',
+  ),
+  _BuilderSentence(
+    ['あなた', 'の', 'なまえ', 'は', 'スズキ', 'です', 'か'],
+    'আপনার নাম কি সুজুকি?',
+  ),
+  _BuilderSentence(
+    ['わたし', 'の', 'なまえ', 'は', 'タナカ', 'です'],
+    'আমার নাম তানাকা।',
+  ),
+  _BuilderSentence(
+    ['あのひと', 'は', 'スズキ', 'さん', 'です'],
+    'ওই ব্যক্তি সুজুকি-সান।',
+  ),
+  _BuilderSentence(
+    ['あなた', 'は', 'タナカ', 'さん', 'です', 'か'],
+    'আপনি কি তানাকা-সান?',
+  ),
+  _BuilderSentence(
+    ['あなた', 'は', 'わたし', 'の', 'せんせい', 'です'],
+    'আপনি আমার শিক্ষক।',
+  ),
+  _BuilderSentence(
+    ['あのひと', 'は', 'あなた', 'の', 'せんせい', 'です', 'か'],
+    'ওই ব্যক্তি কি আপনার শিক্ষক?',
+  ),
+  _BuilderSentence(
+    ['あのひと', 'は', 'にほんご', 'の', 'がくせい', 'です', 'か'],
+    'ওই ব্যক্তি কি জাপানি ভাষার ছাত্র?',
+  ),
+  _BuilderSentence(
+    ['わたし', 'の', 'せんせい', 'は', 'タナカ', 'さん', 'です'],
+    'আমার শিক্ষক তানাকা-সান।',
+  ),
+  _BuilderSentence(
+    ['あなた', 'は', 'にほんご', 'の', 'せんせい', 'です', 'か'],
+    'আপনি কি জাপানি ভাষার শিক্ষক?',
+  ),
 ];
 
 class _SentenceBuilderGame extends StatefulWidget {
@@ -1067,6 +1115,7 @@ class _SentenceBuilderGameState extends State<_SentenceBuilderGame> {
   int _comboPulse = 0;
   int _shakeTick = 0;
   int? _lastQuestionIndex;
+  final List<int> _recentBuilderIdx = [];
   late _BuilderSentence _q;
   late List<String> _bank;
   final List<String> _picked = [];
@@ -1086,6 +1135,11 @@ class _SentenceBuilderGameState extends State<_SentenceBuilderGame> {
     final nextIndex = _nextQuestionIndex();
     _q = _builderSentences[nextIndex];
     _lastQuestionIndex = nextIndex;
+    _recentBuilderIdx.add(nextIndex);
+    final maxRecent = _builderSentences.length >= 10 ? 5 : 2;
+    if (_recentBuilderIdx.length > maxRecent) {
+      _recentBuilderIdx.removeAt(0);
+    }
     _bank = List<String>.of(_q.tokens)..shuffle(_rng);
     _picked.clear();
     _feedback = '';
@@ -1098,11 +1152,22 @@ class _SentenceBuilderGameState extends State<_SentenceBuilderGame> {
 
   int _nextQuestionIndex() {
     if (_builderSentences.length <= 1) return 0;
-    var idx = _rng.nextInt(_builderSentences.length);
-    while (idx == _lastQuestionIndex) {
-      idx = _rng.nextInt(_builderSentences.length);
+    final blocked = <int>{
+      if (_lastQuestionIndex != null) _lastQuestionIndex!,
+      ..._recentBuilderIdx,
+    };
+    final candidates = <int>[
+      for (var i = 0; i < _builderSentences.length; i++)
+        if (!blocked.contains(i)) i,
+    ];
+    if (candidates.isEmpty) {
+      var idx = _rng.nextInt(_builderSentences.length);
+      while (idx == _lastQuestionIndex) {
+        idx = _rng.nextInt(_builderSentences.length);
+      }
+      return idx;
     }
-    return idx;
+    return candidates[_rng.nextInt(candidates.length)];
   }
 
   bool _isParticle(String t) => t == 'は' || t == 'の' || t == 'か';
