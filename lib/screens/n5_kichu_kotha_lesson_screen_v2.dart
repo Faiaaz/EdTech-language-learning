@@ -137,7 +137,7 @@ class _Lesson7TabPills extends StatelessWidget {
       'বাক্য সাজাও',
       'সান ট্যাগ',
       'প্রশ্ন/বক্তব্য',
-      'ডায়ালগ',
+      'ডায়ালগ',
       'অর্থ মিলাও',
     ];
     return Container(
@@ -452,50 +452,6 @@ class _MinimalGameHeader extends StatelessWidget {
   }
 }
 
-class _ContextCard extends StatelessWidget {
-  const _ContextCard({
-    required this.text,
-  });
-
-  final String text;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      constraints: const BoxConstraints(minHeight: 160),
-      padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 22),
-      decoration: BoxDecoration(
-        color: AppColors.cardAlt,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppColors.accentYellow.withValues(alpha: 0.45)),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.08),
-            blurRadius: 18,
-            offset: const Offset(0, 8),
-          ),
-        ],
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(
-            text,
-            textAlign: TextAlign.center,
-            style: const TextStyle(
-              color: AppColors.textPrimary,
-              fontWeight: FontWeight.w900,
-              fontSize: 32,
-              height: 1.2,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
 class _SwipeTransitionCard extends StatelessWidget {
   const _SwipeTransitionCard({
     required this.seed,
@@ -578,42 +534,6 @@ class _StickyFeedbackToast extends StatelessWidget {
                 ),
               ),
             ),
-    );
-  }
-}
-
-class _DualActionButtons extends StatelessWidget {
-  const _DualActionButtons({
-    required this.leftText,
-    required this.rightText,
-    required this.onLeft,
-    required this.onRight,
-  });
-
-  final String leftText;
-  final String rightText;
-  final VoidCallback onLeft;
-  final VoidCallback onRight;
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Expanded(
-          child: _BanglaButton(
-            text: leftText,
-            outlined: true,
-            onTap: onLeft,
-          ),
-        ),
-        const SizedBox(width: 10),
-        Expanded(
-          child: _BanglaButton(
-            text: rightText,
-            onTap: onRight,
-          ),
-        ),
-      ],
     );
   }
 }
@@ -844,7 +764,7 @@ const _pronounQs = <_PronounQ>[
   _PronounQ('নিজেকে বলছি', 'わたし'),
   _PronounQ('সামনের ব্যক্তিকে বলছি', 'あなた'),
   _PronounQ('দূরে থাকা/অনুপস্থিত কাউকে বলছি', 'あのひと'),
-  _PronounQ('নিজের পরিচয় দিচ্ছি', 'わたし'),
+  _PronounQ('নিজের পরিচয় দিচ্ছি', 'わたし'),
   _PronounQ('প্রশ্ন করছি: “আপনি?”', 'あなた'),
   _PronounQ('ওই মানুষটার কথা বলছি', 'あのひと'),
 ];
@@ -1213,7 +1133,7 @@ class _SentenceBuilderGameState extends State<_SentenceBuilderGame> {
     if (_solved) return;
     unawaited(_fx.tap());
     if (_picked.length != _q.tokens.length) {
-      setState(() => _feedback = 'সব শব্দ বসিয়ে তারপর পরীক্ষা করো।');
+      setState(() => _feedback = 'সব শব্দ বসিয়ে তারপর পরীক্ষা করো।');
       unawaited(_fx.error());
       return;
     }
@@ -1224,12 +1144,12 @@ class _SentenceBuilderGameState extends State<_SentenceBuilderGame> {
         _score++;
         _streak++;
         _comboPulse++;
-        _feedback = 'দারুণ! ঠিকমতো সাজিয়েছো।';
+        _feedback = 'দারুণ! ঠিকমতো সাজিয়েছো।';
       } else {
         _mistake++;
         _streak = 0;
         _shakeTick++;
-        _feedback = 'ক্রমটা ঠিক হয়নি, আবার চেষ্টা করো।';
+        _feedback = 'ক্রমটা ঠিক হয়নি, আবার চেষ্টা করো।';
       }
       _afterExplain = 'সঠিক বাক্য: ${_q.tokens.join(' ')}';
     });
@@ -2027,17 +1947,38 @@ class _SanChoiceButton extends StatelessWidget {
 }
 
 class _QuestionQ {
-  const _QuestionQ(this.jp, this.bn, this.isQuestion);
+  const _QuestionQ(this.jp, this.phonetic, this.bn, this.isQuestion);
   final String jp;
-  final String bn;
+  final String phonetic; // Bengali pronunciation
+  final String bn; // Bengali meaning (revealed via hint)
   final bool isQuestion;
 }
 
 const _questionQs = <_QuestionQ>[
-  _QuestionQ('あなたはがくせいですか', 'আপনি কি ছাত্র?', true),
-  _QuestionQ('わたしはせんせいです', 'আমি শিক্ষক।', false),
-  _QuestionQ('あなたのなまえはなんですか', 'আপনার নাম কী?', true),
-  _QuestionQ('あのひとはがくせいです', 'ওই ব্যক্তি ছাত্র।', false),
+  _QuestionQ('あなたはがくせいですか', 'আনাতা ওয়া গাকুসেই দেস্‌কা',
+      'আপনি কি ছাত্র?', true),
+  _QuestionQ('わたしはせんせいです', 'ওয়াতাশি ওয়া সেন্‌সেই দেস্',
+      'আমি শিক্ষক।', false),
+  _QuestionQ('あなたのなまえはなんですか', 'আনাতা নো নামায়ে ওয়া নান্‌ দেস্‌কা',
+      'আপনার নাম কী?', true),
+  _QuestionQ('あのひとはがくせいです', 'আনোহিতো ওয়া গাকুসেই দেস্',
+      'ওই ব্যক্তি ছাত্র।', false),
+  _QuestionQ('あのひとはせんせいですか', 'আনোহিতো ওয়া সেন্‌সেই দেস্‌কা',
+      'ওই ব্যক্তি কি শিক্ষক?', true),
+  _QuestionQ('わたしはにほんごのがくせいです',
+      'ওয়াতাশি ওয়া নিহোঙ্গো নো গাকুসেই দেস্',
+      'আমি জাপানি ভাষার ছাত্র।', false),
+  _QuestionQ('あなたはタナカさんですか', 'আনাতা ওয়া তানাকা সান্‌ দেস্‌কা',
+      'আপনি কি তানাকা-সান?', true),
+  _QuestionQ('あのひとのなまえはスズキです',
+      'আনোহিতো নো নামায়ে ওয়া সুজুকি দেস্',
+      'ওই ব্যক্তির নাম সুজুকি।', false),
+  _QuestionQ('あなたはにほんごのせんせいですか',
+      'আনাতা ওয়া নিহোঙ্গো নো সেন্‌সেই দেস্‌কা',
+      'আপনি কি জাপানি ভাষার শিক্ষক?', true),
+  _QuestionQ('わたしのなまえはスロビです',
+      'ওয়াতাশি নো নামায়ে ওয়া স্রোবি দেস্',
+      'আমার নাম সুরভি।', false),
 ];
 
 class _QuestionOrStatementGame extends StatefulWidget {
@@ -2061,6 +2002,7 @@ class _QuestionOrStatementGameState extends State<_QuestionOrStatementGame> {
   int _comboPulse = 0;
   int _cardSeed = 0;
   int _swipeDirection = 1;
+  int _lastQIdx = -1;
   String _feedback = '';
   String _afterExplain = '';
   bool _hintVisible = false;
@@ -2070,7 +2012,17 @@ class _QuestionOrStatementGameState extends State<_QuestionOrStatementGame> {
   void initState() {
     super.initState();
     _confetti = ConfettiController(duration: const Duration(milliseconds: 650));
-    _q = _questionQs[_rng.nextInt(_questionQs.length)];
+    _q = _nextQuestion();
+  }
+
+  _QuestionQ _nextQuestion() {
+    if (_questionQs.length <= 1) return _questionQs[0];
+    var i = _rng.nextInt(_questionQs.length);
+    while (i == _lastQIdx) {
+      i = _rng.nextInt(_questionQs.length);
+    }
+    _lastQIdx = i;
+    return _questionQs[i];
   }
 
   void _pick(bool asQuestion) {
@@ -2110,7 +2062,7 @@ class _QuestionOrStatementGameState extends State<_QuestionOrStatementGame> {
           _feedback = '';
           _afterExplain = '';
           _hintVisible = false;
-          _q = _questionQs[_rng.nextInt(_questionQs.length)];
+          _q = _nextQuestion();
         });
       }
     });
@@ -2126,8 +2078,8 @@ class _QuestionOrStatementGameState extends State<_QuestionOrStatementGame> {
   @override
   Widget build(BuildContext context) {
     return _ScreenFrame(
-      title: 'প্রশ্ন/বক্তব্য',
-      subtitle: 'বাক্য পড়ে ধরো এটি কোন ধরন',
+      title: 'প্রশ্ন না বক্তব্য?',
+      subtitle: 'বাক্যটি পড়ে ঠিক করো — এটি প্রশ্ন নাকি বিবৃতি',
       child: Stack(
         children: [
           Padding(
@@ -2140,50 +2092,140 @@ class _QuestionOrStatementGameState extends State<_QuestionOrStatementGame> {
                 streak: _streak,
                 comboPulse: _comboPulse,
               ),
-              middle: Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
+              middle: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  // How-to-play explainer
+                  Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 12, vertical: 12),
+                    decoration: BoxDecoration(
+                      color: AppColors.tabActive.withValues(alpha: 0.08),
+                      borderRadius: BorderRadius.circular(14),
+                      border: Border.all(
+                          color: AppColors.tabActive.withValues(alpha: 0.22)),
+                    ),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        IconButton(
-                          tooltip: 'Hint',
-                          onPressed: () =>
-                              setState(() => _hintVisible = !_hintVisible),
-                          icon: Icon(
-                            Icons.help_outline_rounded,
-                            color: AppColors.textMuted,
+                        const Icon(Icons.info_outline_rounded,
+                            color: AppColors.tabActive, size: 20),
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: Text(
+                            'বাক্যের শেষে か (-কা) থাকলে সেটা প্রশ্ন; শুধু です '
+                            'দিয়ে শেষ হলে বিবৃতি। বাক্যটি পড়ে ঠিক করো।',
+                            style: TextStyle(
+                              color: AppColors.textMuted,
+                              fontWeight: FontWeight.w600,
+                              fontSize: 12,
+                              height: 1.45,
+                            ),
                           ),
                         ),
                       ],
                     ),
-                    _SwipeTransitionCard(
-                      seed: _cardSeed,
-                      direction: _swipeDirection,
-                      child: _ContextCard(text: _q.jp),
-                    ),
-                    if (_hintVisible) ...[
-                      const SizedBox(height: 10),
-                      Text(
-                        _q.bn,
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          color: AppColors.textMuted,
-                          fontWeight: FontWeight.w700,
-                        ),
+                  ),
+                  const SizedBox(height: 12),
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: IconButton(
+                      tooltip: 'Hint',
+                      onPressed: () =>
+                          setState(() => _hintVisible = !_hintVisible),
+                      icon: Icon(
+                        Icons.help_outline_rounded,
+                        color: AppColors.textMuted,
                       ),
-                    ],
+                    ),
+                  ),
+                  _SwipeTransitionCard(
+                    seed: _cardSeed,
+                    direction: _swipeDirection,
+                    child: Container(
+                      width: double.infinity,
+                      constraints: const BoxConstraints(minHeight: 160),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 18, vertical: 22),
+                      decoration: BoxDecoration(
+                        color: AppColors.cardAlt,
+                        borderRadius: BorderRadius.circular(20),
+                        border: Border.all(
+                            color: AppColors.accentYellow
+                                .withValues(alpha: 0.45)),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withValues(alpha: 0.06),
+                            blurRadius: 16,
+                            offset: const Offset(0, 6),
+                          ),
+                        ],
+                      ),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            _q.jp,
+                            textAlign: TextAlign.center,
+                            style: const TextStyle(
+                              color: AppColors.textPrimary,
+                              fontWeight: FontWeight.w900,
+                              fontSize: 25,
+                              height: 1.3,
+                            ),
+                          ),
+                          const SizedBox(height: 10),
+                          Text(
+                            _q.phonetic,
+                            textAlign: TextAlign.center,
+                            style: const TextStyle(
+                              color: AppColors.textMuted,
+                              fontWeight: FontWeight.w700,
+                              fontSize: 15,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  if (_hintVisible) ...[
+                    const SizedBox(height: 12),
+                    Text(
+                      'অর্থ: ${_q.bn}',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: AppColors.textMuted,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
                   ],
-                ),
+                ],
               ),
-              bottom: _ActionFooter(
-                child: _DualActionButtons(
-                  leftText: 'বক্তব্য',
-                  rightText: 'প্রশ্ন',
-                  onLeft: _locked ? () {} : () => _pick(false),
-                  onRight: _locked ? () {} : () => _pick(true),
-                ),
+              bottom: Row(
+                children: [
+                  Expanded(
+                    child: _SanChoiceButton(
+                      title: 'বক্তব্য',
+                      subtitle: 'です — বিবৃতি',
+                      icon: Icons.campaign_rounded,
+                      color: AppColors.tabActive,
+                      enabled: !_locked,
+                      onTap: () => _pick(false),
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: _SanChoiceButton(
+                      title: 'প্রশ্ন',
+                      subtitle: 'か — প্রশ্ন',
+                      icon: Icons.help_rounded,
+                      color: AppColors.audio,
+                      enabled: !_locked,
+                      onTap: () => _pick(true),
+                    ),
+                  ),
+                ],
               ),
             ),
           ),
@@ -2200,7 +2242,7 @@ class _QuestionOrStatementGameState extends State<_QuestionOrStatementGame> {
           Positioned(
             left: 0,
             right: 0,
-            bottom: 66,
+            bottom: 128,
             child: _StickyFeedbackToast(
               text: _afterExplain.isEmpty
                   ? _feedback
@@ -2394,8 +2436,8 @@ class _DialogueRoleSwapGameState extends State<_DialogueRoleSwapGame> {
   @override
   Widget build(BuildContext context) {
     return _ScreenFrame(
-      title: '🗣️ চরিত্র বদল ডায়ালগ',
-      subtitle: 'প্রশ্ন-উত্তরের ফাঁকা জায়গা পূরণ করো',
+      title: '🗣️ চরিত্র বদল ডায়ালগ',
+      subtitle: 'প্রশ্ন-উত্তরের ফাঁকা জায়গা পূরণ করো',
       child: Stack(
         children: [
           Padding(
@@ -2491,12 +2533,12 @@ class _MeaningWord {
 }
 
 const _meaningWords = <_MeaningWord>[
-  _MeaningWord(jp: 'わたし', phoneticBn: 'ওয়াতাশি', meaningBn: 'আমি'),
+  _MeaningWord(jp: 'わたし', phoneticBn: 'ওয়াতাশি', meaningBn: 'আমি'),
   _MeaningWord(jp: 'あなた', phoneticBn: 'আনাতা', meaningBn: 'তুমি/আপনি'),
   _MeaningWord(jp: 'あのひと', phoneticBn: 'আনোহিতো', meaningBn: 'ওই ব্যক্তি'),
   _MeaningWord(jp: 'がくせい', phoneticBn: 'গাকুসেই', meaningBn: 'ছাত্র/ছাত্রী'),
   _MeaningWord(jp: 'せんせい', phoneticBn: 'সেনসেই', meaningBn: 'শিক্ষক'),
-  _MeaningWord(jp: 'なまえ', phoneticBn: 'নামায়ে', meaningBn: 'নাম'),
+  _MeaningWord(jp: 'なまえ', phoneticBn: 'নামায়ে', meaningBn: 'নাম'),
   _MeaningWord(jp: 'さん', phoneticBn: 'সান', meaningBn: 'সম্মানসূচক'),
 ];
 
@@ -2631,7 +2673,7 @@ class _MeaningMatchGameState extends State<_MeaningMatchGame> {
                     ),
                     const SizedBox(width: 10),
                     Text(
-                      _picked == null ? 'একটি অপশন বেছে নাও' : 'চালিয়ে যাও',
+                      _picked == null ? 'একটি অপশন বেছে নাও' : 'চালিয়ে যাও',
                       style: TextStyle(
                         color: AppColors.textMuted,
                         fontWeight: FontWeight.w700,
