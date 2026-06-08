@@ -1596,18 +1596,77 @@ class _SentenceBuilderGameState extends State<_SentenceBuilderGame> {
 }
 
 class _SanQ {
-  const _SanQ(this.label, this.needSan, this.note);
-  final String label;
-  final bool needSan;
-  final String note;
+  const _SanQ({
+    required this.label,
+    required this.phonetic,
+    required this.category,
+    required this.needSan,
+    required this.note,
+  });
+  final String label; // the word shown on the card (JP, kanji, or Bengali)
+  final String phonetic; // Bengali pronunciation (empty if label already Bengali)
+  final String category; // quick context tag, e.g. '👤 মানুষের নাম'
+  final bool needSan; // true -> san should be added
+  final String note; // explanation shown as feedback / hint
 }
 
 const _sanQs = <_SanQ>[
-  _SanQ('スズキ', true, 'অন্য কারও নামের পরে さん'),
-  _SanQ('トヨタ', true, 'কোম্পানি নামের সাথেও さん'),
-  _SanQ('田中', true, 'শিক্ষক/সহকর্মীর নামেও さん'),
-  _SanQ('আমার নিজের নাম', false, 'নিজের নামে さん নয়'),
-  _SanQ('あなた', false, 'pronoun-এর পরে さん বসে না'),
+  _SanQ(
+    label: 'スズキ',
+    phonetic: 'সুজুকি',
+    category: '👤 মানুষের নাম',
+    needSan: true,
+    note: 'অন্য কারও নামের পরে さん বসে → スズキさん।',
+  ),
+  _SanQ(
+    label: 'トヨタ',
+    phonetic: 'তোয়োতা',
+    category: '🏢 কোম্পানির নাম',
+    needSan: true,
+    note: 'কোম্পানির নামের সাথেও さん ব্যবহার হয় → トヨタさん।',
+  ),
+  _SanQ(
+    label: '田中',
+    phonetic: 'তানাকা',
+    category: '👤 মানুষের নাম (kanji)',
+    needSan: true,
+    note: 'শিক্ষক/সহকর্মীর নামেও さん → 田中さん।',
+  ),
+  _SanQ(
+    label: 'やまだ',
+    phonetic: 'ইয়ামাদা',
+    category: '👤 মানুষের নাম',
+    needSan: true,
+    note: 'বন্ধু/পরিচিতের নামেও さん → やまださん।',
+  ),
+  _SanQ(
+    label: 'ソニー',
+    phonetic: 'সনি',
+    category: '🏢 ব্র্যান্ড/কোম্পানি',
+    needSan: true,
+    note: 'ব্র্যান্ড বা কোম্পানির নামেও さん বসতে পারে।',
+  ),
+  _SanQ(
+    label: 'あなた',
+    phonetic: 'আনাতা',
+    category: '👉 সর্বনাম (তুমি/আপনি)',
+    needSan: false,
+    note: 'সর্বনামের পরে さん বসে না।',
+  ),
+  _SanQ(
+    label: 'わたし',
+    phonetic: 'ওয়াতাশি',
+    category: '👉 সর্বনাম (আমি)',
+    needSan: false,
+    note: 'নিজের সর্বনামে さん নয়।',
+  ),
+  _SanQ(
+    label: 'আমার নিজের নাম',
+    phonetic: '',
+    category: '🙋 নিজের পরিচয়',
+    needSan: false,
+    note: 'নিজের নামে কখনো さん বসানো হয় না।',
+  ),
 ];
 
 class _SanTaggerGame extends StatefulWidget {
@@ -1692,8 +1751,8 @@ class _SanTaggerGameState extends State<_SanTaggerGame> {
   Widget build(BuildContext context) {
     final q = _sanQs[_idx];
     return _ScreenFrame(
-      title: 'সান ট্যাগিং',
-      subtitle: 'ট্যাপ করে ঠিক অপশন বেছে নাও',
+      title: 'সান (さん) ট্যাগিং',
+      subtitle: 'শব্দটি দেখে বলো — পরে さん বসবে কি না?',
       child: Stack(
         children: [
           Padding(
@@ -1706,50 +1765,163 @@ class _SanTaggerGameState extends State<_SanTaggerGame> {
                 streak: _streak,
                 comboPulse: _comboPulse,
               ),
-              middle: Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
+              middle: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  // How-to-play explainer
+                  Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 12, vertical: 12),
+                    decoration: BoxDecoration(
+                      color: AppColors.tabActive.withValues(alpha: 0.08),
+                      borderRadius: BorderRadius.circular(14),
+                      border: Border.all(
+                          color: AppColors.tabActive.withValues(alpha: 0.22)),
+                    ),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        IconButton(
-                          tooltip: 'Hint',
-                          onPressed: () =>
-                              setState(() => _hintVisible = !_hintVisible),
-                          icon: Icon(
-                            Icons.help_outline_rounded,
-                            color: AppColors.textMuted,
+                        const Icon(Icons.info_outline_rounded,
+                            color: AppColors.tabActive, size: 20),
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: Text(
+                            'さん (-সান) একটি সম্মানসূচক। অন্যের নাম বা কোম্পানির '
+                            'পরে বসে — কিন্তু নিজের নাম বা সর্বনামে (わたし/あなた) '
+                            'বসে না। শব্দটিতে কি さん লাগবে?',
+                            style: TextStyle(
+                              color: AppColors.textMuted,
+                              fontWeight: FontWeight.w600,
+                              fontSize: 12,
+                              height: 1.45,
+                            ),
                           ),
                         ),
                       ],
                     ),
-                    _SwipeTransitionCard(
-                      seed: _cardSeed,
-                      direction: _swipeDirection,
-                      child: _ContextCard(text: q.label),
-                    ),
-                    if (_hintVisible) ...[
-                      const SizedBox(height: 10),
-                      Text(
-                        q.note,
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          color: AppColors.textMuted,
-                          fontWeight: FontWeight.w700,
-                        ),
+                  ),
+                  const SizedBox(height: 12),
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: IconButton(
+                      tooltip: 'Hint',
+                      onPressed: () =>
+                          setState(() => _hintVisible = !_hintVisible),
+                      icon: Icon(
+                        Icons.help_outline_rounded,
+                        color: AppColors.textMuted,
                       ),
-                    ],
+                    ),
+                  ),
+                  _SwipeTransitionCard(
+                    seed: _cardSeed,
+                    direction: _swipeDirection,
+                    child: Container(
+                      width: double.infinity,
+                      constraints: const BoxConstraints(minHeight: 180),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 18, vertical: 24),
+                      decoration: BoxDecoration(
+                        color: AppColors.cardAlt,
+                        borderRadius: BorderRadius.circular(20),
+                        border: Border.all(
+                            color: AppColors.accentYellow
+                                .withValues(alpha: 0.45)),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withValues(alpha: 0.06),
+                            blurRadius: 16,
+                            offset: const Offset(0, 6),
+                          ),
+                        ],
+                      ),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 12, vertical: 6),
+                            decoration: BoxDecoration(
+                              color: AppColors.tabActive.withValues(alpha: 0.1),
+                              borderRadius: BorderRadius.circular(999),
+                              border: Border.all(
+                                  color: AppColors.tabActive
+                                      .withValues(alpha: 0.25)),
+                            ),
+                            child: Text(
+                              q.category,
+                              style: const TextStyle(
+                                color: AppColors.tabActive,
+                                fontWeight: FontWeight.w800,
+                                fontSize: 12,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 16),
+                          Text(
+                            q.label,
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              color: AppColors.textPrimary,
+                              fontWeight: FontWeight.w900,
+                              fontSize: q.label.runes.length <= 5 ? 46 : 26,
+                              height: 1.1,
+                            ),
+                          ),
+                          if (q.phonetic.isNotEmpty) ...[
+                            const SizedBox(height: 8),
+                            Text(
+                              q.phonetic,
+                              textAlign: TextAlign.center,
+                              style: const TextStyle(
+                                color: AppColors.textMuted,
+                                fontWeight: FontWeight.w700,
+                                fontSize: 17,
+                              ),
+                            ),
+                          ],
+                        ],
+                      ),
+                    ),
+                  ),
+                  if (_hintVisible) ...[
+                    const SizedBox(height: 12),
+                    Text(
+                      q.note,
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: AppColors.textMuted,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
                   ],
-                ),
+                ],
               ),
-              bottom: _ActionFooter(
-                child: _DualActionButtons(
-                  leftText: 'লাগবে না',
-                  rightText: 'সান লাগবে',
-                  onLeft: _locked ? () {} : () => _pick(false),
-                  onRight: _locked ? () {} : () => _pick(true),
-                ),
+              bottom: Row(
+                children: [
+                  Expanded(
+                    child: _SanChoiceButton(
+                      title: 'লাগবে না',
+                      subtitle: 'さん ছাড়া',
+                      icon: Icons.do_not_disturb_on_rounded,
+                      color: AppColors.wrong,
+                      enabled: !_locked,
+                      onTap: () => _pick(false),
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: _SanChoiceButton(
+                      title: 'সান লাগবে',
+                      subtitle: 'নাম + さん',
+                      icon: Icons.check_circle_rounded,
+                      color: AppColors.correct,
+                      enabled: !_locked,
+                      onTap: () => _pick(true),
+                    ),
+                  ),
+                ],
               ),
             ),
           ),
@@ -1766,7 +1938,7 @@ class _SanTaggerGameState extends State<_SanTaggerGame> {
           Positioned(
             left: 0,
             right: 0,
-            bottom: 66,
+            bottom: 128,
             child: _StickyFeedbackToast(
               text: _afterExplain.isEmpty
                   ? _feedback
@@ -1775,6 +1947,80 @@ class _SanTaggerGameState extends State<_SanTaggerGame> {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class _SanChoiceButton extends StatelessWidget {
+  const _SanChoiceButton({
+    required this.title,
+    required this.subtitle,
+    required this.icon,
+    required this.color,
+    required this.enabled,
+    required this.onTap,
+  });
+
+  final String title;
+  final String subtitle;
+  final IconData icon;
+  final Color color;
+  final bool enabled;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return Opacity(
+      opacity: enabled ? 1 : 0.55,
+      child: TapScale(
+        onTap: enabled ? onTap : () {},
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
+          decoration: BoxDecoration(
+            color: color,
+            borderRadius: BorderRadius.circular(18),
+            boxShadow: [
+              BoxShadow(
+                color: color.withValues(alpha: 0.35),
+                blurRadius: 14,
+                offset: const Offset(0, 6),
+              ),
+            ],
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                width: 40,
+                height: 40,
+                decoration: BoxDecoration(
+                  color: Colors.white.withValues(alpha: 0.22),
+                  shape: BoxShape.circle,
+                ),
+                child: Icon(icon, color: Colors.white, size: 24),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                title,
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.w900,
+                  fontSize: 17,
+                ),
+              ),
+              const SizedBox(height: 2),
+              Text(
+                subtitle,
+                style: TextStyle(
+                  color: Colors.white.withValues(alpha: 0.9),
+                  fontWeight: FontWeight.w600,
+                  fontSize: 12,
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
