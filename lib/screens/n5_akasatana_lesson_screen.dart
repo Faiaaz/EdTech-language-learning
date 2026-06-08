@@ -53,8 +53,8 @@ class N5DakutenLessonScreen extends StatelessWidget {
 enum _AkaTab { draw, notepadDraw, flashcard, quiz, match, practice }
 
 class _N5AkasatanaLessonScreenState extends State<N5AkasatanaLessonScreen> {
-  /// The অনুশীলন শিট (practice sheet) download is offered for the lessons
-  /// that ship a bundled hiragana writing-drill PDF (আকাসাতানা & বর্ণমালা).
+  /// The অনুশীলন শিট (practice sheet) download is offered for every lesson
+  /// that ships a bundled hiragana writing-drill PDF.
   List<_AkaTab> get _tabs => [
         _AkaTab.draw,
         _AkaTab.notepadDraw,
@@ -91,7 +91,14 @@ class _N5AkasatanaLessonScreenState extends State<N5AkasatanaLessonScreen> {
                 'は・ま・や・ら・わ সারির হিরাগানা হাতে লেখার অনুশীলন শিট (৫ পৃষ্ঠা)। '
                 'ডাউনলোড করে প্রিন্ট করে অনুশীলন করো।',
           ),
-        _LessonKind.dakuten => null,
+        _LessonKind.dakuten => const _PracticeSheet(
+            asset: 'assets/pdf/hiragana_dakuten_practice.pdf',
+            fileName: 'EZ-Trainz-dakuten-maru-onushilon-sheet.pdf',
+            title: 'দাকুতেন ও মারু অনুশীলন শিট',
+            description:
+                'が・ざ・だ・ば・ぱ সারির (দাকুতেন ゛ ও মারু ゜) হিরাগানা হাতে লেখার অনুশীলন শিট (৫ পৃষ্ঠা)। '
+                'ডাউনলোড করে প্রিন্ট করে অনুশীলন করো।',
+          ),
       };
 
   int _tab = 0;
