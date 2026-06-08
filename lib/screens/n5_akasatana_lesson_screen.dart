@@ -53,15 +53,15 @@ class N5DakutenLessonScreen extends StatelessWidget {
 enum _AkaTab { draw, notepadDraw, flashcard, quiz, match, practice }
 
 class _N5AkasatanaLessonScreenState extends State<N5AkasatanaLessonScreen> {
-  /// The অনুশীলন শিট (practice sheet) download is only offered for আকাসাতানা,
-  /// since the bundled drill sheet covers the あかさたな rows.
+  /// The অনুশীলন শিট (practice sheet) download is offered for the lessons
+  /// that ship a bundled hiragana writing-drill PDF (আকাসাতানা & বর্ণমালা).
   List<_AkaTab> get _tabs => [
         _AkaTab.draw,
         _AkaTab.notepadDraw,
         _AkaTab.flashcard,
         _AkaTab.quiz,
         _AkaTab.match,
-        if (_kind == _LessonKind.akasatana) _AkaTab.practice,
+        if (_practiceSheet != null) _AkaTab.practice,
       ];
 
   List<String> get _tabLabels => [
@@ -70,8 +70,29 @@ class _N5AkasatanaLessonScreenState extends State<N5AkasatanaLessonScreen> {
         'ফ্ল্যাশকার্ড',
         'কুইজ রান',
         'কানা ম্যাচ',
-        if (_kind == _LessonKind.akasatana) 'অনুশীলন শিট',
+        if (_practiceSheet != null) 'অনুশীলন শিট',
       ];
+
+  /// Per-lesson bundled practice sheet, or null when the lesson has none.
+  _PracticeSheet? get _practiceSheet => switch (_kind) {
+        _LessonKind.akasatana => const _PracticeSheet(
+            asset: 'assets/pdf/hiragana_akasatana_practice.pdf',
+            fileName: 'EZ-Trainz-akasatana-onushilon-sheet.pdf',
+            title: 'আকাসাতানা অনুশীলন শিট',
+            description:
+                'あ・か・さ・た・な সারির হিরাগানা হাতে লেখার অনুশীলন শিট (৫ পৃষ্ঠা)। '
+                'ডাউনলোড করে প্রিন্ট করে অনুশীলন করো।',
+          ),
+        _LessonKind.bornomala => const _PracticeSheet(
+            asset: 'assets/pdf/hiragana_bornomala_practice.pdf',
+            fileName: 'EZ-Trainz-bornomala-onushilon-sheet.pdf',
+            title: 'বর্ণে বর্ণে বর্ণমালা অনুশীলন শিট',
+            description:
+                'は・ま・や・ら・わ সারির হিরাগানা হাতে লেখার অনুশীলন শিট (৫ পৃষ্ঠা)। '
+                'ডাউনলোড করে প্রিন্ট করে অনুশীলন করো।',
+          ),
+        _LessonKind.dakuten => null,
+      };
 
   int _tab = 0;
 
@@ -181,8 +202,9 @@ class _N5AkasatanaLessonScreenState extends State<N5AkasatanaLessonScreen> {
                     key: const ValueKey('akaMatch'),
                     kanaList: _kanaList,
                   ),
-                  _AkaTab.practice => const _PracticeSheetTab(
-                    key: ValueKey('akaPractice'),
+                  _AkaTab.practice => _PracticeSheetTab(
+                    key: const ValueKey('akaPractice'),
+                    sheet: _practiceSheet!,
                   ),
                 },
               ),
@@ -246,10 +268,27 @@ class _AkaTabPills extends StatelessWidget {
 
 // ── Practice sheet download ───────────────────────────────────────────────────
 
-/// অনুশীলন শিট tab — lets the learner download/share the bundled আকাসাতানা
+/// A bundled, EZ Trainz–branded hiragana writing-practice PDF for a lesson.
+class _PracticeSheet {
+  const _PracticeSheet({
+    required this.asset,
+    required this.fileName,
+    required this.title,
+    required this.description,
+  });
+
+  final String asset;
+  final String fileName;
+  final String title;
+  final String description;
+}
+
+/// অনুশীলন শিট tab — lets the learner download/share the lesson's bundled
 /// hiragana writing-practice PDF (EZ Trainz–branded on every page).
 class _PracticeSheetTab extends StatefulWidget {
-  const _PracticeSheetTab({super.key});
+  const _PracticeSheetTab({super.key, required this.sheet});
+
+  final _PracticeSheet sheet;
 
   @override
   State<_PracticeSheetTab> createState() => _PracticeSheetTabState();
@@ -257,7 +296,6 @@ class _PracticeSheetTab extends StatefulWidget {
 
 class _PracticeSheetTabState extends State<_PracticeSheetTab> {
   static const _accent = AppColors.tabActive;
-  static const _asset = 'assets/pdf/hiragana_akasatana_practice.pdf';
   bool _busy = false;
 
   Future<void> _download() async {
@@ -265,15 +303,16 @@ class _PracticeSheetTabState extends State<_PracticeSheetTab> {
     setState(() => _busy = true);
     HapticFeedback.selectionClick();
     try {
-      final bytes = await rootBundle.load(_asset);
+      final sheet = widget.sheet;
+      final bytes = await rootBundle.load(sheet.asset);
       final dir = await getTemporaryDirectory();
-      final file = File('${dir.path}/EZ-Trainz-akasatana-onushilon-sheet.pdf');
+      final file = File('${dir.path}/${sheet.fileName}');
       await file.writeAsBytes(bytes.buffer.asUint8List(), flush: true);
       if (!mounted) return;
       final box = context.findRenderObject() as RenderBox?;
       await Share.shareXFiles(
         [XFile(file.path, mimeType: 'application/pdf')],
-        subject: 'আকাসাতানা অনুশীলন শিট — EZ Trainz',
+        subject: '${sheet.title} — EZ Trainz',
         sharePositionOrigin:
             box != null ? box.localToGlobal(Offset.zero) & box.size : null,
       );
@@ -314,18 +353,17 @@ class _PracticeSheetTabState extends State<_PracticeSheetTab> {
                       color: _accent, size: 34),
                 ),
                 const SizedBox(height: 14),
-                const Text(
-                  'আকাসাতানা অনুশীলন শিট',
+                Text(
+                  widget.sheet.title,
                   textAlign: TextAlign.center,
-                  style: TextStyle(
+                  style: const TextStyle(
                       color: AppColors.textPrimary,
                       fontSize: 18,
                       fontWeight: FontWeight.w900),
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  'あ・か・さ・た・な সারির হিরাগানা হাতে লেখার অনুশীলন শিট (৫ পৃষ্ঠা)। '
-                  'ডাউনলোড করে প্রিন্ট করে অনুশীলন করো।',
+                  widget.sheet.description,
                   textAlign: TextAlign.center,
                   style: TextStyle(
                       color: AppColors.textMuted,
