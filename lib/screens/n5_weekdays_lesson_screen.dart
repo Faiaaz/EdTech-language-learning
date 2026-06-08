@@ -2152,7 +2152,7 @@ class _WeekListenGameState extends State<_WeekListenGame>
                       if (i != 0) const SizedBox(height: 10),
                       _WeekOptionTile(
                         label: _options[i].bn,
-                        sublabel: _options[i].bnPronunciation,
+                        sublabel: '',
                         picked: _pickedIdx == i,
                         isCorrect: _options[i].bn == _target.bn,
                         revealed: _pickedIdx != null,
