@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import 'package:ez_trainz/services/jlc_tts.dart';
+import 'package:ez_trainz/utils/app_theme.dart';
 import 'package:ez_trainz/widgets/game_fx.dart';
 
 class N5KichuKothaLessonScreenV2 extends StatefulWidget {
@@ -41,7 +42,7 @@ class _N5KichuKothaLessonScreenV2State
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF0F172A),
+      backgroundColor: Colors.transparent,
       body: SafeArea(
         child: Column(
           children: [
@@ -55,11 +56,11 @@ class _N5KichuKothaLessonScreenV2State
                       width: 40,
                       height: 40,
                       decoration: BoxDecoration(
-                        color: Colors.white.withValues(alpha: 0.18),
+                        color: AppColors.border,
                         shape: BoxShape.circle,
                       ),
                       child: const Icon(Icons.arrow_back_rounded,
-                          color: Colors.white),
+                          color: AppColors.textPrimary),
                     ),
                   ),
                   const SizedBox(width: 10),
@@ -70,7 +71,7 @@ class _N5KichuKothaLessonScreenV2State
                         const Text(
                           'পাঠ ৭ঃ কিছু কথা ছিল...',
                           style: TextStyle(
-                            color: Colors.white,
+                            color: AppColors.textPrimary,
                             fontWeight: FontWeight.w900,
                             fontSize: 19,
                           ),
@@ -78,7 +79,7 @@ class _N5KichuKothaLessonScreenV2State
                         Text(
                           'わたし • あなた • あのひと • さん • は/です/か',
                           style: TextStyle(
-                            color: Colors.white.withValues(alpha: 0.78),
+                            color: AppColors.textMuted,
                             fontWeight: FontWeight.w600,
                             fontSize: 12,
                           ),
@@ -142,9 +143,9 @@ class _Lesson7TabPills extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(6),
       decoration: BoxDecoration(
-        color: const Color(0xFF1E293B),
+        color: AppColors.card,
         borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: Colors.white.withValues(alpha: 0.08)),
+        border: Border.all(color: AppColors.border),
       ),
       child: SingleChildScrollView(
         scrollDirection: Axis.horizontal,
@@ -159,14 +160,14 @@ class _Lesson7TabPills extends StatelessWidget {
                       const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
                   decoration: BoxDecoration(
                     color: i == index
-                        ? const Color(0xFF3B82F6)
-                        : Colors.transparent,
+                        ? AppColors.tabActive
+                        : Colors.white.withValues(alpha: 0.58),
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: Text(
                     labels[i],
-                    style: const TextStyle(
-                      color: Colors.white,
+                    style: TextStyle(
+                      color: i == index ? Colors.white : AppColors.textPrimary,
                       fontWeight: FontWeight.w900,
                       fontSize: 12,
                     ),
@@ -198,9 +199,9 @@ class _ScreenFrame extends StatelessWidget {
       padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
       child: Container(
         decoration: BoxDecoration(
-          color: const Color(0xFF111827),
+          color: AppColors.card,
           borderRadius: BorderRadius.circular(18),
-          border: Border.all(color: Colors.white.withValues(alpha: 0.09)),
+          border: Border.all(color: AppColors.border),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -213,7 +214,7 @@ class _ScreenFrame extends StatelessWidget {
                   Text(
                     title,
                     style: const TextStyle(
-                      color: Colors.white,
+                      color: AppColors.textPrimary,
                       fontWeight: FontWeight.w900,
                       fontSize: 16,
                     ),
@@ -222,7 +223,7 @@ class _ScreenFrame extends StatelessWidget {
                   Text(
                     subtitle,
                     style: TextStyle(
-                      color: Colors.white.withValues(alpha: 0.75),
+                      color: AppColors.textMuted,
                       fontWeight: FontWeight.w600,
                       fontSize: 12,
                     ),
@@ -230,14 +231,14 @@ class _ScreenFrame extends StatelessWidget {
                 ],
               ),
             ),
-            const Divider(height: 1, color: Color(0x22364759)),
+            const Divider(height: 1, color: AppColors.border),
             Expanded(child: child),
             Padding(
               padding: const EdgeInsets.fromLTRB(14, 0, 14, 12),
               child: Text(
                 'またね • মাতা নে',
                 style: TextStyle(
-                  color: Colors.white.withValues(alpha: 0.66),
+                  color: AppColors.textMuted,
                   fontWeight: FontWeight.w700,
                   fontSize: 11,
                 ),
@@ -284,14 +285,14 @@ class _HudBar extends StatelessWidget {
                 padding:
                     const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                 decoration: BoxDecoration(
-                  color: const Color(0xFFCA8A04).withValues(alpha: 0.2),
+                  color: AppColors.accentYellow.withValues(alpha: 0.2),
                   borderRadius: BorderRadius.circular(999),
-                  border: Border.all(color: const Color(0xFFFACC15)),
+                  border: Border.all(color: AppColors.accentYellow),
                 ),
                 child: Text(
                   '$streak Row Combo!',
                   style: const TextStyle(
-                    color: Color(0xFFFDE047),
+                    color: AppColors.audio,
                     fontWeight: FontWeight.w900,
                     fontSize: 11,
                   ),
@@ -310,7 +311,7 @@ class _HudBar extends StatelessWidget {
                     for (var i = 0; i < score.clamp(0, 5); i++)
                       const Icon(
                         Icons.star_rounded,
-                        color: Color(0xFFFDE047),
+                        color: AppColors.audio,
                         size: 16,
                       ),
                   ],
@@ -328,9 +329,9 @@ class _HudBar extends StatelessWidget {
             builder: (_, value, __) => LinearProgressIndicator(
               value: value,
               minHeight: 8,
-              backgroundColor: Colors.white.withValues(alpha: 0.1),
+              backgroundColor: AppColors.border,
               valueColor:
-                  const AlwaysStoppedAnimation<Color>(Color(0xFF3B82F6)),
+                  const AlwaysStoppedAnimation<Color>(AppColors.tabActive),
             ),
           ),
         ),
@@ -348,13 +349,13 @@ class _Pill extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
       decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.08),
+        color: AppColors.bg,
         borderRadius: BorderRadius.circular(999),
       ),
       child: Text(
         text,
         style: const TextStyle(
-          color: Colors.white,
+          color: AppColors.textPrimary,
           fontWeight: FontWeight.w800,
           fontSize: 12,
         ),
@@ -389,7 +390,7 @@ class _MinimalGameHeader extends StatelessWidget {
             Text(
               '$step/$total',
               style: TextStyle(
-                color: Colors.white.withValues(alpha: 0.82),
+                color: AppColors.textMuted,
                 fontWeight: FontWeight.w800,
               ),
             ),
@@ -397,7 +398,7 @@ class _MinimalGameHeader extends StatelessWidget {
             Text(
               'স্কোর $score',
               style: TextStyle(
-                color: Colors.white.withValues(alpha: 0.72),
+                color: AppColors.textMuted,
                 fontWeight: FontWeight.w700,
               ),
             ),
@@ -414,14 +415,14 @@ class _MinimalGameHeader extends StatelessWidget {
                   padding:
                       const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                   decoration: BoxDecoration(
-                    color: const Color(0xFFF59E0B).withValues(alpha: 0.16),
+                    color: AppColors.accentYellow.withValues(alpha: 0.18),
                     borderRadius: BorderRadius.circular(999),
-                    border: Border.all(color: const Color(0xFFFBBF24)),
+                    border: Border.all(color: AppColors.accentYellow),
                   ),
                   child: Text(
                     '$streak Row Combo!',
                     style: const TextStyle(
-                      color: Color(0xFFFDE68A),
+                      color: AppColors.audio,
                       fontWeight: FontWeight.w900,
                       fontSize: 11,
                     ),
@@ -440,9 +441,9 @@ class _MinimalGameHeader extends StatelessWidget {
             builder: (_, value, __) => LinearProgressIndicator(
               value: value,
               minHeight: 7,
-              backgroundColor: Colors.white.withValues(alpha: 0.12),
+              backgroundColor: AppColors.border,
               valueColor:
-                  const AlwaysStoppedAnimation<Color>(Color(0xFF3B82F6)),
+                  const AlwaysStoppedAnimation<Color>(AppColors.tabActive),
             ),
           ),
         ),
@@ -467,12 +468,12 @@ class _ContextCard extends StatelessWidget {
       constraints: const BoxConstraints(minHeight: 160),
       padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 22),
       decoration: BoxDecoration(
-        color: const Color(0xFF0F172A).withValues(alpha: 0.9),
+        color: AppColors.cardAlt,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Colors.white.withValues(alpha: 0.08)),
+        border: Border.all(color: AppColors.accentYellow.withValues(alpha: 0.45)),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.26),
+            color: Colors.black.withValues(alpha: 0.08),
             blurRadius: 18,
             offset: const Offset(0, 8),
           ),
@@ -485,7 +486,7 @@ class _ContextCard extends StatelessWidget {
             text,
             textAlign: TextAlign.center,
             style: const TextStyle(
-              color: Colors.white,
+              color: AppColors.textPrimary,
               fontWeight: FontWeight.w900,
               fontSize: 32,
               height: 1.2,
@@ -497,7 +498,7 @@ class _ContextCard extends StatelessWidget {
               caption!,
               textAlign: TextAlign.center,
               style: TextStyle(
-                color: Colors.white.withValues(alpha: 0.7),
+                color: AppColors.textMuted,
                 fontWeight: FontWeight.w700,
               ),
             ),
@@ -572,13 +573,13 @@ class _StickyFeedbackToast extends StatelessWidget {
                     const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
                 decoration: BoxDecoration(
                   color: good
-                      ? const Color(0xFF064E3B).withValues(alpha: 0.95)
-                      : const Color(0xFF7F1D1D).withValues(alpha: 0.95),
+                      ? AppColors.correct
+                      : AppColors.wrong,
                   borderRadius: BorderRadius.circular(999),
                   border: Border.all(
                     color: good
-                        ? const Color(0xFF10B981)
-                        : const Color(0xFFEF4444),
+                        ? AppColors.correct
+                        : AppColors.wrong,
                   ),
                 ),
                 child: Text(
@@ -644,8 +645,8 @@ class _BanglaButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final c = outlined ? const Color(0xFF334155) : const Color(0xFF2563EB);
-    const fg = Colors.white;
+    final c = AppColors.tabActive;
+    final fg = outlined ? c : Colors.white;
     return TapScale(
       onTap: onTap,
       child: Material(
@@ -666,7 +667,7 @@ class _BanglaButton extends StatelessWidget {
               ],
               Text(
                 text,
-                style: const TextStyle(
+                style: TextStyle(
                   color: fg,
                   fontWeight: FontWeight.w900,
                   fontSize: 13,
@@ -720,14 +721,14 @@ class _ContextBanner extends StatelessWidget {
       margin: const EdgeInsets.only(top: 10, bottom: 10),
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
       decoration: BoxDecoration(
-        color: const Color(0xFF1E293B),
+        color: AppColors.cardAlt,
         borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: Colors.white.withValues(alpha: 0.14)),
+        border: Border.all(color: AppColors.accentYellow.withValues(alpha: 0.5)),
       ),
       child: Text(
         text,
         style: const TextStyle(
-          color: Colors.white,
+          color: AppColors.textPrimary,
           fontWeight: FontWeight.w900,
           fontSize: 22,
         ),
@@ -747,9 +748,9 @@ class _OptionArea extends StatelessWidget {
       constraints: const BoxConstraints(minHeight: 230),
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: const Color(0xFF1A2540),
+        color: AppColors.bg,
         borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
+        border: Border.all(color: AppColors.border),
       ),
       child: Align(alignment: Alignment.topLeft, child: child),
     );
@@ -766,9 +767,9 @@ class _ActionFooter extends StatelessWidget {
       width: double.infinity,
       padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
-        color: const Color(0xFF172236),
+        color: AppColors.bg,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
+        border: Border.all(color: AppColors.border),
       ),
       child: child,
     );
@@ -786,17 +787,17 @@ class _FeedbackBadge extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
       decoration: BoxDecoration(
-        color: (good ? const Color(0xFF10B981) : const Color(0xFFEF4444))
+        color: (good ? AppColors.correct : AppColors.wrong)
             .withValues(alpha: 0.16),
         borderRadius: BorderRadius.circular(999),
         border: Border.all(
-          color: good ? const Color(0xFF10B981) : const Color(0xFFEF4444),
+          color: good ? AppColors.correct : AppColors.wrong,
         ),
       ),
       child: Text(
         text,
         style: TextStyle(
-          color: good ? const Color(0xFF10B981) : const Color(0xFFEF4444),
+          color: good ? AppColors.correct : AppColors.wrong,
           fontWeight: FontWeight.w900,
         ),
       ),
@@ -988,7 +989,7 @@ class _PronounSorterGameState extends State<_PronounSorterGame> {
                     Text(
                       'পরিস্থিতি দেখে বাছাই করো',
                       style: TextStyle(
-                        color: Colors.white.withValues(alpha: 0.75),
+                        color: AppColors.textMuted,
                         fontWeight: FontWeight.w700,
                         fontSize: 12,
                       ),
@@ -1124,9 +1125,9 @@ class _SentenceBuilderGameState extends State<_SentenceBuilderGame> {
   bool _isParticle(String t) => t == 'は' || t == 'の' || t == 'か';
 
   Color _tokenColor(String t) {
-    if (_isParticle(t)) return const Color(0xFFF59E0B);
-    if (t == 'です') return const Color(0xFF10B981);
-    return const Color(0xFF3B82F6);
+    if (_isParticle(t)) return AppColors.audio;
+    if (t == 'です') return AppColors.correct;
+    return AppColors.tabActive;
   }
 
   void _check() {
@@ -1215,7 +1216,7 @@ class _SentenceBuilderGameState extends State<_SentenceBuilderGame> {
                             onPressed: _hint,
                             icon: Icon(
                               Icons.help_outline_rounded,
-                              color: Colors.white.withValues(alpha: 0.75),
+                              color: AppColors.textMuted,
                             ),
                           ),
                         ],
@@ -1242,10 +1243,10 @@ class _SentenceBuilderGameState extends State<_SentenceBuilderGame> {
                       width: double.infinity,
                       padding: const EdgeInsets.all(12),
                       decoration: BoxDecoration(
-                        color: const Color(0xFF172554).withValues(alpha: 0.55),
+                        color: AppColors.bg,
                         borderRadius: BorderRadius.circular(12),
                         border: Border.all(
-                          color: Colors.white.withValues(alpha: 0.16),
+                          color: AppColors.border,
                         ),
                       ),
                       child: Column(
@@ -1266,14 +1267,14 @@ class _SentenceBuilderGameState extends State<_SentenceBuilderGame> {
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(8),
                                       border: Border.all(
-                                        color: Colors.white.withValues(alpha: 0.28),
+                                        color: AppColors.border,
                                       ),
-                                      color: Colors.white.withValues(alpha: 0.02),
+                                      color: Colors.transparent,
                                     ),
                                     child: Text(
                                       '___',
                                       style: TextStyle(
-                                        color: Colors.white.withValues(alpha: 0.4),
+                                        color: AppColors.textDim,
                                         fontWeight: FontWeight.w700,
                                       ),
                                     ),
@@ -1314,10 +1315,10 @@ class _SentenceBuilderGameState extends State<_SentenceBuilderGame> {
                       width: double.infinity,
                       padding: const EdgeInsets.all(12),
                       decoration: BoxDecoration(
-                        color: Colors.white.withValues(alpha: 0.04),
+                        color: AppColors.bg,
                         borderRadius: BorderRadius.circular(12),
                         border: Border.all(
-                          color: Colors.white.withValues(alpha: 0.1),
+                          color: AppColors.border,
                         ),
                       ),
                       child: Column(
@@ -1348,11 +1349,10 @@ class _SentenceBuilderGameState extends State<_SentenceBuilderGame> {
                                       label: Text(
                                         t,
                                         style: TextStyle(
-                                          color: Colors.white.withValues(alpha: 0.6),
+                                          color: AppColors.textDim,
                                         ),
                                       ),
-                                      backgroundColor: Colors.white
-                                          .withValues(alpha: 0.08),
+                                      backgroundColor: AppColors.border,
                                     ),
                                     onDragStarted: () => unawaited(_fx.tap()),
                                     onDragCompleted: () {},
@@ -1362,7 +1362,7 @@ class _SentenceBuilderGameState extends State<_SentenceBuilderGame> {
                                         style: TextStyle(
                                           color: _hintStep == 1 &&
                                                   t == _q.tokens.first
-                                              ? const Color(0xFFFDE047)
+                                              ? AppColors.audio
                                               : null,
                                         ),
                                       ),
@@ -1597,7 +1597,7 @@ class _SanTaggerGameState extends State<_SanTaggerGame> {
                               setState(() => _hintVisible = !_hintVisible),
                           icon: Icon(
                             Icons.help_outline_rounded,
-                            color: Colors.white.withValues(alpha: 0.75),
+                            color: AppColors.textMuted,
                           ),
                         ),
                       ],
@@ -1613,7 +1613,7 @@ class _SanTaggerGameState extends State<_SanTaggerGame> {
                         q.note,
                         textAlign: TextAlign.center,
                         style: TextStyle(
-                          color: Colors.white.withValues(alpha: 0.76),
+                          color: AppColors.textMuted,
                           fontWeight: FontWeight.w700,
                         ),
                       ),
@@ -1785,7 +1785,7 @@ class _QuestionOrStatementGameState extends State<_QuestionOrStatementGame> {
                               setState(() => _hintVisible = !_hintVisible),
                           icon: Icon(
                             Icons.help_outline_rounded,
-                            color: Colors.white.withValues(alpha: 0.75),
+                            color: AppColors.textMuted,
                           ),
                         ),
                       ],
@@ -1801,7 +1801,7 @@ class _QuestionOrStatementGameState extends State<_QuestionOrStatementGame> {
                         _q.bn,
                         textAlign: TextAlign.center,
                         style: TextStyle(
-                          color: Colors.white.withValues(alpha: 0.76),
+                          color: AppColors.textMuted,
                           fontWeight: FontWeight.w700,
                         ),
                       ),
@@ -2049,13 +2049,13 @@ class _DialogueRoleSwapGameState extends State<_DialogueRoleSwapGame> {
                       width: double.infinity,
                       padding: const EdgeInsets.all(12),
                       decoration: BoxDecoration(
-                        color: const Color(0xFF172554),
+                        color: AppColors.cardAlt,
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: Text(
                         _q.pattern,
                         style: const TextStyle(
-                          color: Colors.white,
+                          color: AppColors.textPrimary,
                           fontWeight: FontWeight.w900,
                         ),
                       ),
@@ -2265,7 +2265,7 @@ class _MeaningMatchGameState extends State<_MeaningMatchGame> {
                     Text(
                       _picked == null ? 'একটি অপশন বেছে নাও' : 'চালিয়ে যাও',
                       style: TextStyle(
-                        color: Colors.white.withValues(alpha: 0.75),
+                        color: AppColors.textMuted,
                         fontWeight: FontWeight.w700,
                         fontSize: 12,
                       ),
@@ -2307,17 +2307,17 @@ class _ChoiceCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var border = Colors.white.withValues(alpha: 0.14);
-    var bg = const Color(0xFF26324D);
+    var border = AppColors.border;
+    var bg = AppColors.card;
     if (correct) {
-      border = const Color(0xFF10B981);
-      bg = const Color(0xFF065F46);
+      border = AppColors.correct;
+      bg = AppColors.correct.withValues(alpha: 0.16);
     } else if (wrong) {
-      border = const Color(0xFFEF4444);
-      bg = const Color(0xFF7F1D1D);
+      border = AppColors.wrong;
+      bg = AppColors.wrong.withValues(alpha: 0.16);
     } else if (selected) {
-      border = const Color(0xFF3B82F6);
-      bg = const Color(0xFF1D4ED8);
+      border = AppColors.tabActive;
+      bg = AppColors.tabActive.withValues(alpha: 0.14);
     }
     final card = AnimatedContainer(
       duration: const Duration(milliseconds: 220),
@@ -2340,7 +2340,7 @@ class _ChoiceCard extends StatelessWidget {
       child: Text(
         label,
         style: const TextStyle(
-          color: Colors.white,
+          color: AppColors.textPrimary,
           fontWeight: FontWeight.w800,
           fontSize: 22,
         ),
