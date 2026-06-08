@@ -106,7 +106,7 @@ class _N5AkasatanaLessonScreenState extends State<N5AkasatanaLessonScreen> {
   };
   String get _subtitle => switch (_kind) {
     _LessonKind.akasatana => 'হিরাগানা ৫ সারি: あかさたな → বাংলা উচ্চারণ',
-    _LessonKind.bornomala => 'ま・や・ら・わ সারি: まみむめも・やゆよ・らりるれろ・わをん',
+    _LessonKind.bornomala => 'は・ま・や・ら・わ সারি: はひふへほ・まみむめも・やゆよ・らりるれろ・わをん',
     _LessonKind.dakuten  => 'てんてん ゛ ও まる ゜: がざだばぱ → ধ্বনি পরিবর্তন',
   };
   List<_RowInfo> get _rows => switch (_kind) {
@@ -828,6 +828,7 @@ const _akasatanaRows = <_RowInfo>[
 ];
 
 const _bornomalaRows = <_RowInfo>[
+  _RowInfo(leader: 'は', members: ['は', 'ひ', 'ふ', 'へ', 'ほ'], bn: 'হা-সারি', startIdx: 25, endIdx: 30, accent: AppColors.audio),
   _RowInfo(leader: 'ま', members: ['ま', 'み', 'む', 'め', 'も'], bn: 'মা-সারি', startIdx: 30, endIdx: 35, accent: AppColors.accentBlue),
   _RowInfo(leader: 'や', members: ['や', 'ゆ', 'よ'], bn: 'ইয়া-সারি', startIdx: 35, endIdx: 38, accent: AppColors.accentBlueDk),
   _RowInfo(leader: 'ら', members: ['ら', 'り', 'る', 'れ', 'ろ'], bn: 'রা-সারি', startIdx: 38, endIdx: 43, accent: AppColors.tabActive),
@@ -868,6 +869,12 @@ const _akasatanaKanaList = <_Kana>[
 ];
 
 const _bornomalaKanaList = <_Kana>[
+  // は row
+  _Kana(kana: 'は', romaji: 'ha', bn: 'হা', row: 'হা-সারি'),
+  _Kana(kana: 'ひ', romaji: 'hi', bn: 'হি', row: 'হা-সারি'),
+  _Kana(kana: 'ふ', romaji: 'fu', bn: 'ফু', row: 'হা-সারি'),
+  _Kana(kana: 'へ', romaji: 'he', bn: 'হে', row: 'হা-সারি'),
+  _Kana(kana: 'ほ', romaji: 'ho', bn: 'হো', row: 'হা-সারি'),
   // ま row
   _Kana(kana: 'ま', romaji: 'ma', bn: 'মা', row: 'মা-সারি'),
   _Kana(kana: 'み', romaji: 'mi', bn: 'মি', row: 'মা-সারি'),
