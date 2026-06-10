@@ -1,9 +1,11 @@
+import 'package:flutter/foundation.dart' show kDebugMode;
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import 'package:ez_trainz/controllers/auth_controller.dart';
 import 'package:ez_trainz/controllers/locale_controller.dart';
 import 'package:ez_trainz/screens/login_screen.dart';
+import 'package:ez_trainz/screens/pronunciation_benchmark_screen.dart';
 import 'package:ez_trainz/screens/user_history_screen.dart';
 import 'package:ez_trainz/utils/app_theme.dart';
 
@@ -269,6 +271,45 @@ class ProfileScreen extends StatelessWidget {
 
                     // ── Language Picker ──────────────────────────
                     _LanguagePickerCard(),
+
+                    // ── Dev: pronunciation accuracy benchmark ────
+                    if (kDebugMode) ...[
+                      const SizedBox(height: 14),
+                      GestureDetector(
+                        onTap: () => Get.to(
+                            () => const PronunciationBenchmarkScreen()),
+                        child: Container(
+                          width: double.infinity,
+                          padding: const EdgeInsets.all(16),
+                          decoration: BoxDecoration(
+                            color: AppColors.card,
+                            borderRadius: BorderRadius.circular(16),
+                            border: Border.all(
+                                color: const Color(0xFF8B5CF6)
+                                    .withValues(alpha: 0.4)),
+                          ),
+                          child: const Row(
+                            children: [
+                              Icon(Icons.analytics_outlined,
+                                  color: Color(0xFF8B5CF6), size: 22),
+                              SizedBox(width: 14),
+                              Expanded(
+                                child: Text(
+                                  'উচ্চারণ Accuracy Benchmark (dev)',
+                                  style: TextStyle(
+                                    color: AppColors.textPrimary,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                              ),
+                              Icon(Icons.arrow_forward_ios_rounded,
+                                  color: AppColors.textMuted, size: 16),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
                   ],
                 ),
               ),
