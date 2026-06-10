@@ -1,4 +1,4 @@
-package com.example.ez_trainz
+package com.ez.ez_trainz
 
 import io.flutter.embedding.android.FlutterActivity
 

@@ -71,6 +71,7 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       theme: buildAppTheme(),
+      title: "ez_trainz",
       translations: AppTranslations(),
       locale: LocaleController.to.locale,
       fallbackLocale: const Locale('en', 'US'),
