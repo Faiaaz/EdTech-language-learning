@@ -18,6 +18,7 @@ import 'package:ez_trainz/screens/n5_kana_modules_screen.dart';
 import 'package:ez_trainz/screens/n5_kichu_kotha_lesson_screen_v2.dart';
 import 'package:ez_trainz/screens/n5_akasatana_lesson_screen.dart';
 import 'package:ez_trainz/screens/n5_weekdays_lesson_screen.dart';
+import 'package:ez_trainz/screens/pronunciation_coach_screen.dart';
 import 'package:ez_trainz/widgets/ez_trainz_logo_text.dart';
 
 class CourseListScreen extends StatefulWidget {
@@ -1040,6 +1041,19 @@ class _AnushilanCardState extends State<_AnushilanCard> {
                           glow: const Color(0xFF14B8A6),
                           onTap: () => Get.to(
                             () => const N5KichuKothaLessonScreenV2(),
+                            transition: Transition.rightToLeftWithFade,
+                            duration: const Duration(milliseconds: 300),
+                          ),
+                        ),
+                        const SizedBox(height: 10),
+                        _PracticeLessonCard(
+                          number: 'AI',
+                          title: 'উচ্চারণ কোচ ✨',
+                          subtitle: 'শুনুন • বলুন • AI আপনার উচ্চারণ স্কোর করবে',
+                          gradient: const [Color(0xFFEC4899), Color(0xFF8B5CF6)],
+                          glow: const Color(0xFFEC4899),
+                          onTap: () => Get.to(
+                            () => const PronunciationCoachScreen(),
                             transition: Transition.rightToLeftWithFade,
                             duration: const Duration(milliseconds: 300),
                           ),

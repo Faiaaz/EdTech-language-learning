@@ -602,10 +602,10 @@ class _HiraganaDrawGameScreenState extends State<HiraganaDrawGameScreen>
           onBack: Get.back,
           onPrev: _charIdx > widget.initialIndex ? _prevChar : null,
           onNext: _charIdx < _lastIndex ? _nextChar : null,
-          lightText: widget.embedded,
+          lightText: false,
         ),
         SizedBox(height: isNotepad ? 2 : 4),
-        _CharacterLabel(char: _char, lightText: widget.embedded),
+        _CharacterLabel(char: _char, lightText: false),
         SizedBox(height: isNotepad ? 6 : 14),
         Expanded(
           child: Align(
@@ -730,18 +730,28 @@ class _HiraganaDrawGameScreenState extends State<HiraganaDrawGameScreen>
     );
 
     if (widget.embedded) {
-      return Container(
-        color: isNotepad
-            ? const Color(0xFF0F172A)
-            : const Color(0xFF0B1220),
+      return DecoratedBox(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: isNotepad
+                ? [
+                    AppColors.bg.withValues(alpha: 0.96),
+                    AppColors.cardAlt.withValues(alpha: 0.90),
+                  ]
+                : [
+                    AppColors.cardAlt.withValues(alpha: 0.86),
+                    AppColors.bg.withValues(alpha: 0.93),
+                  ],
+          ),
+        ),
         child: content,
       );
     }
 
     return Scaffold(
-      backgroundColor: isNotepad
-          ? const Color(0xFF5C4A32)
-          : Colors.transparent,
+      backgroundColor: Colors.transparent,
       body: SafeArea(child: content),
     );
   }
@@ -769,13 +779,13 @@ class _Header extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final fg = lightText ? Colors.white : const Color(0xFF334155);
+    final fg = lightText ? Colors.white : AppColors.display;
     final chipBg = lightText
         ? Colors.white.withValues(alpha: 0.08)
-        : const Color(0xFF334155).withValues(alpha: 0.08);
+        : AppColors.card.withValues(alpha: 0.88);
     final chipBorder = lightText
         ? Colors.white.withValues(alpha: 0.12)
-        : const Color(0xFF334155).withValues(alpha: 0.16);
+        : AppColors.border;
 
     return Padding(
       padding: const EdgeInsets.fromLTRB(16, 10, 16, 6),
@@ -848,7 +858,7 @@ class _IconBtn extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final fg = lightText ? Colors.white : const Color(0xFF334155);
+    final fg = lightText ? Colors.white : AppColors.display;
     return GestureDetector(
       onTap: enabled ? onTap : null,
       child: Container(
@@ -878,10 +888,10 @@ class _CharacterLabel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final fg = lightText ? Colors.white : const Color(0xFF334155);
+    final fg = lightText ? Colors.white : AppColors.display;
     final sub = lightText
         ? Colors.white.withValues(alpha: 0.55)
-        : const Color(0xFF64748B);
+        : AppColors.textMuted;
 
     return Column(
       children: [
@@ -1016,11 +1026,11 @@ class _Footer extends StatelessWidget {
     switch (mode) {
       case _GameMode.tracing:
         text = 'স্ট্রোক ${strokeIdx + 1} / $totalStrokes — ছায়া অনুসরণ করে আঁকো';
-        color = Colors.white.withValues(alpha: 0.75);
+        color = AppColors.instruction;
         break;
       case _GameMode.freehand:
         text = 'স্মৃতি থেকে আঁকো — স্ট্রোক ${strokeIdx + 1} / $totalStrokes';
-        color = const Color(0xFFFFE000);
+        color = AppColors.audio;
         break;
       case _GameMode.completed:
         if (autoAdvance) {
@@ -1030,7 +1040,7 @@ class _Footer extends StatelessWidget {
         } else {
           text = 'দারুণ! পরের ধাপে যেতে এখানে ট্যাপ করো';
         }
-        color = const Color(0xFF3B82F6);
+        color = AppColors.accentBlueDk;
         break;
     }
 
@@ -1038,7 +1048,7 @@ class _Footer extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 12),
       margin: const EdgeInsets.symmetric(horizontal: 20),
       decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.06),
+        color: AppColors.card.withValues(alpha: 0.90),
         borderRadius: BorderRadius.circular(14),
         border: Border.all(
           color: color.withValues(alpha: 0.45),
@@ -1064,7 +1074,7 @@ class _Footer extends StatelessWidget {
           if (mode == _GameMode.completed) ...[
             const SizedBox(width: 8),
             const Icon(Icons.arrow_forward_rounded,
-                color: Color(0xFF3B82F6), size: 18),
+                color: AppColors.accentBlueDk, size: 18),
           ],
         ],
       ),
