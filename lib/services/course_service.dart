@@ -154,7 +154,7 @@ class CourseService {
         {
           "id": 1,
           "courseId": 1,
-          "title": "Lesson 1: Hiragana Part 1",
+          "title": "Lesson 1: Hero Number 1 😎",
           "description": "Introduction to Hiragana — the foundational Japanese syllabary.",
           "content": {
             "body":
@@ -375,7 +375,7 @@ class CourseService {
       {
         "id": 1,
         "courseId": 1,
-        "title": "Lesson 1: Hiragana Part 1",
+        "title": "Lesson 1: Hero Number 1 😎",
         "description": "Introduction to Hiragana — the foundational Japanese syllabary.",
         "content": {
           "body":

@@ -11,7 +11,7 @@ import 'package:ez_trainz/screens/ielts_speaking_screen.dart';
 import 'package:ez_trainz/screens/ielts_vocabulary_screen.dart';
 import 'package:ez_trainz/screens/ielts_mini_games_screen.dart';
 import 'package:ez_trainz/screens/ielts_band_calculator_screen.dart';
-import 'package:ez_trainz/screens/login_screen.dart';
+import 'package:ez_trainz/widgets/app_settings_menu.dart';
 
 /// Main IELTS hub — entry point for the English Language and Career module.
 /// Shows the 4 IELTS sections + vocabulary builder + games + band calculator.
@@ -67,26 +67,10 @@ class IeltsDashboardScreen extends StatelessWidget {
                           ),
                         ),
                       ),
-                      GestureDetector(
-                        onTap: () {
-                          AuthController.to.logout();
-                          Get.offAll(() => const LoginScreen());
-                        },
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-                          decoration: BoxDecoration(
-                            color: Colors.white.withValues(alpha: 0.08),
-                            borderRadius: BorderRadius.circular(20),
-                            border: Border.all(color: _navyBorder),
-                          ),
-                          child: Row(
-                            children: [
-                              const Icon(Icons.logout_rounded, color: const Color(0xFF1E293B), size: 15),
-                              const SizedBox(width: 5),
-                              Text('logout'.tr, style: const TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w600)),
-                            ],
-                          ),
-                        ),
+                      AppSettingsMenuButton(
+                        iconColor: Colors.white,
+                        backgroundColor: Colors.white.withValues(alpha: 0.08),
+                        borderColor: _navyBorder,
                       ),
                     ],
                   ),

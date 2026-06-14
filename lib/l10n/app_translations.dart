@@ -96,6 +96,22 @@ const _en = <String, String>{
   'profile_logout_yes': 'Yes, Logout',
   'profile_cancel': 'Cancel',
 
+  // ── Settings menu ───────────────────────────────────────────────
+  'settings_profile': 'Profile',
+  'settings_username_password': 'Username & Password',
+  'settings_username': 'Username',
+  'settings_password': 'Password',
+  'settings_password_masked': '••••••••',
+  'settings_password_hint':
+      'To change your password, use Forgot Password on the login screen.',
+  'settings_phone': 'Phone Number',
+  'settings_phone_empty': 'Not added yet',
+  'settings_phone_hint':
+      'Phone number is saved during sign-up. Contact support to update it.',
+  'settings_progress': 'Progress',
+  'settings_billing': 'Billing',
+  'settings_logout': 'Log out',
+
   // ── Language Picker ─────────────────────────────────────────────
   'app_language': 'App Language',
   'language_english': 'English',
@@ -103,11 +119,43 @@ const _en = <String, String>{
 
   // ── Nav (bottom bar) ───────────────────────────────────────────
   'nav_learn': 'Learn',
+  'nav_game': 'Game',
+  'nav_for_you': 'For You',
+  'nav_call_us': 'Call Us',
+  'nav_library': 'Library',
   'nav_practice': 'Practice',
   'nav_collectibles': 'Collect',
   'nav_profile': 'Profile',
   'nav_community': 'Community',
   'nav_leaderboard': 'Leaderboard',
+
+  // ── For You feed ───────────────────────────────────────────────
+  'for_you_title': 'For You',
+  'for_you_subtitle': 'EZ Trainz reels, tips, and curated content.',
+  'for_you_reel_badge': 'Reel',
+  'for_you_reel_1_title': 'Meet your ninja guide',
+  'for_you_reel_1_sub': 'Quick intro to how EZ Trainz lessons work.',
+  'for_you_reel_2_title': 'Study smarter every day',
+  'for_you_reel_2_sub': 'Short tips to build your language habit.',
+  'for_you_reel_3_title': 'Career + language',
+  'for_you_reel_3_sub': 'See how language skills open global opportunities.',
+
+  // ── Library hub ────────────────────────────────────────────────
+  'library_subtitle': 'Collectibles, career videos, and exam prep.',
+  'library_collectibles_title': 'Collectibles',
+  'library_collectibles_sub': 'Grow your tree and unlock rewards.',
+  'library_career_title': 'Career Videos',
+  'library_career_sub': 'Watch lessons and career-focused content.',
+  'library_exam_title': 'Exam Content',
+  'library_exam_sub': 'IELTS practice, mock tests, and study tools.',
+  'library_pick_program': 'Pick a language program on the Learn tab first.',
+
+  // ── Call Us tab ────────────────────────────────────────────────
+  'call_us_subtitle': 'Book a live session with our team.',
+  'call_us_prompt': 'Talk to a coach about lessons, careers, or exams.',
+  'call_us_book_button': 'Book a call',
+  'call_us_opening': 'Opening…',
+  'call_us_opened_hint': 'Booking page opened in your browser. Tap again to reopen.',
 
   // ── Home / Learn tab ──────────────────────────────────────────
   'home_subtitle': 'Which language will you learn today?',
@@ -309,7 +357,7 @@ const _en = <String, String>{
 
   // ── Hiragana Lesson 1 video screen ───────────────────────────────
   'lesson_nav_chip': 'レッスン',
-  'hiragana_l1_screen_title': 'Lesson 1: Hiragana Part 1',
+  'hiragana_l1_screen_title': 'Lesson 1: Hero Number 1 😎',
   'hiragana_l1_screen_desc':
       'Introduction to Hiragana — the foundational Japanese syllabary.',
   'hiragana_l1_checkpoints_heading': 'Interactive Checkpoints',
@@ -617,6 +665,22 @@ const _bn = <String, String>{
   'profile_logout_yes': 'হ্যাঁ, লগ আউট করুন',
   'profile_cancel': 'বাতিল',
 
+  // ── Settings menu ───────────────────────────────────────────────
+  'settings_profile': 'প্রোফাইল',
+  'settings_username_password': 'ইউজারনেম ও পাসওয়ার্ড',
+  'settings_username': 'ইউজারনেম',
+  'settings_password': 'পাসওয়ার্ড',
+  'settings_password_masked': '••••••••',
+  'settings_password_hint':
+      'পাসওয়ার্ড পরিবর্তন করতে লগইন স্ক্রিনে Forgot Password ব্যবহার করুন।',
+  'settings_phone': 'ফোন নম্বর',
+  'settings_phone_empty': 'এখনো যোগ করা হয়নি',
+  'settings_phone_hint':
+      'সাইন-আপের সময় ফোন নম্বর সংরক্ষিত হয়। আপডেট করতে সাপোর্টে যোগাযোগ করুন।',
+  'settings_progress': 'অগ্রগতি',
+  'settings_billing': 'বিলিং',
+  'settings_logout': 'লগ আউট',
+
   // ── Language Picker ─────────────────────────────────────────────
   'app_language': 'অ্যাপের ভাষা',
   'language_english': 'English',
@@ -624,11 +688,43 @@ const _bn = <String, String>{
 
   // ── Nav (bottom bar) ───────────────────────────────────────────
   'nav_learn': 'শিখুন',
+  'nav_game': 'খেলা',
+  'nav_for_you': 'তোমার জন্য',
+  'nav_call_us': 'কল করুন',
+  'nav_library': 'লাইব্রেরি',
   'nav_practice': 'প্র্যাকটিস',
-  'nav_collectibles': 'Collect',
+  'nav_collectibles': 'সংগ্রহ',
   'nav_profile': 'প্রোফাইল',
   'nav_community': 'সম্প্রদায়',
   'nav_leaderboard': 'লিডারবোর্ড',
+
+  // ── For You feed ───────────────────────────────────────────────
+  'for_you_title': 'তোমার জন্য',
+  'for_you_subtitle': 'EZ Trainz রিল, টিপস ও বাছাইকৃত কন্টেন্ট।',
+  'for_you_reel_badge': 'রিল',
+  'for_you_reel_1_title': 'নিনজা গাইডের সাথে পরিচয়',
+  'for_you_reel_1_sub': 'EZ Trainz পাঠ কীভাবে কাজ করে—দ্রুত পরিচয়।',
+  'for_you_reel_2_title': 'প্রতিদিন স্মার্টভাবে পড়াশোনা',
+  'for_you_reel_2_sub': 'ভাষা অভ্যাস গড়ে তোলার ছোট টিপস।',
+  'for_you_reel_3_title': 'ক্যারিয়ার + ভাষা',
+  'for_you_reel_3_sub': 'ভাষা দক্ষতা কীভাবে গ্লোবাল সুযোগ খুলে দেয়।',
+
+  // ── Library hub ────────────────────────────────────────────────
+  'library_subtitle': 'সংগ্রহ, ক্যারিয়ার ভিডিও ও পরীক্ষার প্রস্তুতি।',
+  'library_collectibles_title': 'সংগ্রহ',
+  'library_collectibles_sub': 'গাছ বাড়ান এবং পুরস্কার আনলক করুন।',
+  'library_career_title': 'ক্যারিয়ার ভিডিও',
+  'library_career_sub': 'পাঠ ও ক্যারিয়ার-কেন্দ্রিক কন্টেন্ট দেখুন।',
+  'library_exam_title': 'পরীক্ষার কন্টেন্ট',
+  'library_exam_sub': 'IELTS প্র্যাকটিস, মক টেস্ট ও স্টাডি টুলস।',
+  'library_pick_program': 'আগে শিখুন ট্যাবে একটি ভাষা প্রোগ্রাম বেছে নিন।',
+
+  // ── Call Us tab ────────────────────────────────────────────────
+  'call_us_subtitle': 'আমাদের টিমের সাথে লাইভ সেশন বুক করুন।',
+  'call_us_prompt': 'পাঠ, ক্যারিয়ার বা পরীক্ষা নিয়ে কোচের সাথে কথা বলুন।',
+  'call_us_book_button': 'কল বুক করুন',
+  'call_us_opening': 'খোলা হচ্ছে…',
+  'call_us_opened_hint': 'বুকিং পেজ ব্রাউজারে খোলা হয়েছে। আবার খুলতে ট্যাপ করুন।',
 
   // ── Home / Learn tab ──────────────────────────────────────────
   'home_subtitle': 'আজ কোন ভাষা শিখবেন?',
@@ -830,7 +926,7 @@ const _bn = <String, String>{
 
   // ── Hiragana Lesson 1 video screen ───────────────────────────────
   'lesson_nav_chip': 'পাঠ',
-  'hiragana_l1_screen_title': 'পাঠ ১: হিরাগানা (প্রথম ভাগ)',
+  'hiragana_l1_screen_title': 'পাঠ ১ঃ হিরো নাম্বার ১ 😎',
   'hiragana_l1_screen_desc':
       'হিরাগানা পরিচয় — জাপানি ভাষার এই মৌলিক ও কণ্ঠস্থ অক্ষরলিপি।',
   'hiragana_l1_checkpoints_heading': 'ইন্টার‍্যাকটিভ চেকপয়েন্ট',

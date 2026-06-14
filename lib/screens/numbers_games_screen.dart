@@ -74,26 +74,13 @@ class NumbersGameScreen extends StatelessWidget {
                   ),
                   const SizedBox(width: 12),
                   Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          mode.titleBn,
-                          style: const TextStyle(
-                            color: AppColors.textPrimary,
-                            fontSize: 18,
-                            fontWeight: FontWeight.w900,
-                          ),
-                        ),
-                        Text(
-                          'জাপানি সংখ্যা ১–১০ (Kanji + Hiragana -> বাংলা)',
-                          style: TextStyle(
-                            color: AppColors.textMuted,
-                            fontSize: 12,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                      ],
+                    child: Text(
+                      mode.titleBn,
+                      style: const TextStyle(
+                        color: AppColors.textPrimary,
+                        fontSize: 18,
+                        fontWeight: FontWeight.w900,
+                      ),
                     ),
                   ),
                 ],

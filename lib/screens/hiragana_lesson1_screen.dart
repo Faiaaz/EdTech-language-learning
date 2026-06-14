@@ -13,7 +13,7 @@ import 'package:confetti/confetti.dart';
 import 'package:ez_trainz/controllers/course_controller.dart';
 import 'package:ez_trainz/controllers/collectibles_controller.dart';
 import 'package:ez_trainz/screens/hat_preview_interstitial_screen.dart';
-import 'package:ez_trainz/screens/hiragana_games.dart';
+import 'package:ez_trainz/screens/n5_hero_number1_lesson_screen.dart';
 
 class HiraganaLesson1Screen extends StatefulWidget {
   const HiraganaLesson1Screen({super.key});
@@ -37,7 +37,6 @@ class _HiraganaLesson1ScreenState extends State<HiraganaLesson1Screen> {
   static const _autoHide = Duration(seconds: 3);
   static const _navyBg = Colors.transparent;
   static const _navyCard = Color(0xFF1E293B);
-  static const _navyBorder = Color(0xFF334155);
   static const _textMuted = Color(0xFF94A3B8);
   static const _accentBlue = Color(0xFF3B82F6);
 
@@ -431,134 +430,8 @@ class _HiraganaLesson1ScreenState extends State<HiraganaLesson1Screen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _card(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'hiragana_l1_screen_title'.tr,
-                  style: const TextStyle(
-                    color: AppColors.textPrimary,
-                    fontSize: 18,
-                    fontWeight: FontWeight.w800,
-                    height: 1.2,
-                  ),
-                ),
-                const SizedBox(height: 6),
-                Text(
-                  'hiragana_l1_screen_desc'.tr,
-                  style: const TextStyle(
-                    color: _textMuted,
-                    fontSize: 13,
-                    fontWeight: FontWeight.w500,
-                    height: 1.4,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(height: 12),
-          _card(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    Container(
-                      width: 32,
-                      height: 32,
-                      decoration: BoxDecoration(
-                        color: _accentBlue.withValues(alpha: 0.18),
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: const Icon(Icons.flag_rounded,
-                          color: _accentBlue, size: 18),
-                    ),
-                    const SizedBox(width: 10),
-                    Text(
-                      'hiragana_l1_checkpoints_heading'.tr,
-                      style: const TextStyle(
-                        color: AppColors.textPrimary,
-                        fontSize: 15,
-                        fontWeight: FontWeight.w800,
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 14),
-                _checkpoint('1:10', 'hiragana_l1_checkpoint_intro'.tr,
-                    Icons.play_circle_outline_rounded),
-                const SizedBox(height: 10),
-                _checkpoint('1:56', 'hiragana_l1_checkpoint_vowel'.tr,
-                    Icons.music_note_rounded),
-                const SizedBox(height: 10),
-                _checkpoint('2:40', 'hiragana_l1_checkpoint_basic'.tr,
-                    Icons.translate_rounded),
-              ],
-            ),
-          ),
-          const SizedBox(height: 12),
-          _card(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    Container(
-                      width: 32,
-                      height: 32,
-                      decoration: BoxDecoration(
-                        color: const Color(0xFFFFE000).withValues(alpha: 0.15),
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: const Icon(Icons.quiz_rounded,
-                          color: Color(0xFFFFE000), size: 18),
-                    ),
-                    const SizedBox(width: 10),
-                    Text(
-                      'hiragana_l1_quizzes_heading'.tr,
-                      style: const TextStyle(
-                        color: AppColors.textPrimary,
-                        fontSize: 15,
-                        fontWeight: FontWeight.w800,
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 14),
-                Row(
-                  children: [
-                    Expanded(
-                      child: _quizCard(
-                        'flashcard_drill'.tr,
-                        Icons.style_rounded,
-                        const Color(0xFF10B981),
-                        onTap: () => Get.to(
-                          () => const FlashcardDrillScreen(),
-                          transition: Transition.rightToLeftWithFade,
-                          duration: const Duration(milliseconds: 300),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 10),
-                    Expanded(
-                      child: _quizCard(
-                        'match_pairs'.tr,
-                        Icons.extension_rounded,
-                        const Color(0xFFFFE000),
-                        onTap: () => Get.to(
-                          () => const KanaMatchScreen(),
-                          transition: Transition.rightToLeftWithFade,
-                          duration: const Duration(milliseconds: 300),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(height: 12),
+          _buildGamesSection(),
+          const SizedBox(height: 16),
           GestureDetector(
             onTap: () {
               HapticFeedback.selectionClick();
@@ -638,89 +511,65 @@ class _HiraganaLesson1ScreenState extends State<HiraganaLesson1Screen> {
     );
   }
 
-  Widget _card({required Widget child}) {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: _navyCard,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: _navyBorder, width: 1),
+  // ── Mini-games grouped into tappable প্র্যাকটিস / চ্যালেঞ্জ cards ────
+  Widget _buildGamesSection() {
+    const practice = <_GameDef>[
+      (
+        label: 'শুনে ট্যাপ',
+        sub: 'শুনে বাংলা বাছাই',
+        icon: Icons.headphones_rounded,
+        colors: [Color(0xFFFF8C00), Color(0xFFFF5722)],
+        tab: 0,
       ),
-      child: child,
-    );
-  }
+      (
+        label: 'পড়া মাস্টার',
+        sub: 'পড়ে উত্তর দাও',
+        icon: Icons.menu_book_rounded,
+        colors: [Color(0xFF3B82F6), Color(0xFF2563EB)],
+        tab: 1,
+      ),
+      (
+        label: '১-১০ বলো',
+        sub: 'ক্রমে বলো',
+        icon: Icons.record_voice_over_rounded,
+        colors: [Color(0xFF14B8A6), Color(0xFF0F766E)],
+        tab: 3,
+      ),
+    ];
+    const challenge = <_GameDef>[
+      (
+        label: 'সাজাও',
+        sub: 'ক্রমে সাজাও',
+        icon: Icons.swap_vert_rounded,
+        colors: [Color(0xFF8B5CF6), Color(0xFF6D28D9)],
+        tab: 2,
+      ),
+      (
+        label: 'স্পিড বস',
+        sub: 'দ্রুত উত্তরের পরীক্ষা',
+        icon: Icons.bolt_rounded,
+        colors: [Color(0xFFEF4444), Color(0xFFB91C1C)],
+        tab: 6,
+      ),
+    ];
 
-  Widget _checkpoint(String time, String label, IconData icon) {
-    return Row(
+    return const Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-          decoration: BoxDecoration(
-            color: _accentBlue.withValues(alpha: 0.18),
-            borderRadius: BorderRadius.circular(6),
-          ),
-          child: Text(
-            time,
-            style: const TextStyle(
-              color: _accentBlue,
-              fontSize: 12,
-              fontWeight: FontWeight.w700,
-            ),
-          ),
+        _GameGroupCard(
+          title: 'প্র্যাকটিস',
+          icon: Icons.fitness_center_rounded,
+          accent: _accentBlue,
+          games: practice,
         ),
-        const SizedBox(width: 12),
-        Icon(icon, color: _textMuted, size: 18),
-        const SizedBox(width: 8),
-        Text(
-          label,
-          style: const TextStyle(
-            color: AppColors.textPrimary,
-            fontSize: 14,
-            fontWeight: FontWeight.w600,
-          ),
+        SizedBox(height: 12),
+        _GameGroupCard(
+          title: 'চ্যালেঞ্জ',
+          icon: Icons.bolt_rounded,
+          accent: Color(0xFFEF4444),
+          games: challenge,
         ),
       ],
-    );
-  }
-
-  Widget _quizCard(
-    String label,
-    IconData icon,
-    Color color, {
-    VoidCallback? onTap,
-  }) {
-    return Material(
-      color: Colors.transparent,
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(12),
-        child: Ink(
-          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
-          decoration: BoxDecoration(
-            color: color.withValues(alpha: 0.10),
-            borderRadius: BorderRadius.circular(12),
-            border: Border.all(color: color.withValues(alpha: 0.25), width: 1),
-          ),
-          child: Row(
-            children: [
-              Icon(icon, color: color, size: 22),
-              const SizedBox(width: 10),
-              Expanded(
-                child: Text(
-                  label,
-                  style: const TextStyle(
-                    color: AppColors.textPrimary,
-                    fontSize: 13,
-                    fontWeight: FontWeight.w700,
-                    height: 1.3,
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
     );
   }
 
@@ -1685,6 +1534,221 @@ class _LeafEarnedDialogState extends State<_LeafEarnedDialog>
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+// ── Mini-game grouping (Practice / Challenge) ────────────────────────
+typedef _GameDef = ({
+  String label,
+  String sub,
+  IconData icon,
+  List<Color> colors,
+  int tab,
+});
+
+String _bnNum(int n) {
+  const digits = ['০', '১', '২', '৩', '৪', '৫', '৬', '৭', '৮', '৯'];
+  return n.toString().split('').map((c) {
+    final d = int.tryParse(c);
+    return d == null ? c : digits[d];
+  }).join();
+}
+
+/// A rectangular dark card that groups mini-game tiles under a heading and
+/// reveals them in a 2-column grid when tapped.
+class _GameGroupCard extends StatefulWidget {
+  const _GameGroupCard({
+    required this.title,
+    required this.icon,
+    required this.accent,
+    required this.games,
+  });
+
+  final String title;
+  final IconData icon;
+  final Color accent;
+  final List<_GameDef> games;
+
+  @override
+  State<_GameGroupCard> createState() => _GameGroupCardState();
+}
+
+class _GameGroupCardState extends State<_GameGroupCard> {
+  bool _expanded = false;
+
+  static const _navyCard = Color(0xFF1E293B);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      decoration: BoxDecoration(
+        color: _navyCard,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: const Color(0xFF334155), width: 1),
+      ),
+      clipBehavior: Clip.antiAlias,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Material(
+            color: Colors.transparent,
+            child: InkWell(
+              onTap: () {
+                HapticFeedback.selectionClick();
+                setState(() => _expanded = !_expanded);
+              },
+              child: Padding(
+                padding: const EdgeInsets.all(14),
+                child: Row(
+                  children: [
+                    Container(
+                      width: 36,
+                      height: 36,
+                      decoration: BoxDecoration(
+                        color: widget.accent.withValues(alpha: 0.2),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Icon(widget.icon, color: widget.accent, size: 20),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            widget.title,
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w800,
+                            ),
+                          ),
+                          Text(
+                            '${_bnNum(widget.games.length)}টি গেম',
+                            style: const TextStyle(
+                              color: Colors.white60,
+                              fontSize: 11,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    AnimatedRotation(
+                      turns: _expanded ? 0.5 : 0,
+                      duration: const Duration(milliseconds: 220),
+                      curve: Curves.easeInOut,
+                      child: const Icon(Icons.expand_more_rounded,
+                          color: Colors.white70, size: 26),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          AnimatedSize(
+            duration: const Duration(milliseconds: 240),
+            curve: Curves.easeInOut,
+            alignment: Alignment.topCenter,
+            child: _expanded
+                ? Padding(
+                    padding: const EdgeInsets.fromLTRB(14, 0, 14, 14),
+                    child: GridView.count(
+                      crossAxisCount: 2,
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      mainAxisSpacing: 10,
+                      crossAxisSpacing: 10,
+                      childAspectRatio: 1.05,
+                      children: [
+                        for (final g in widget.games) _GameTile(game: g),
+                      ],
+                    ),
+                  )
+                : const SizedBox(width: double.infinity),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// A single mini-game tile that deep-links into its game mode.
+class _GameTile extends StatelessWidget {
+  const _GameTile({required this.game});
+
+  final _GameDef game;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        HapticFeedback.selectionClick();
+        Get.to(
+          () => N5HeroNumber1LessonScreen(initialTab: game.tab, showTabs: false),
+          transition: Transition.rightToLeftWithFade,
+          duration: const Duration(milliseconds: 300),
+        );
+      },
+      child: Container(
+        padding: const EdgeInsets.all(14),
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: game.colors,
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+          borderRadius: BorderRadius.circular(16),
+          boxShadow: [
+            BoxShadow(
+              color: game.colors.first.withValues(alpha: 0.3),
+              blurRadius: 10,
+              offset: const Offset(0, 4),
+            ),
+          ],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Container(
+              width: 40,
+              height: 40,
+              decoration: BoxDecoration(
+                color: Colors.white.withValues(alpha: 0.22),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Icon(game.icon, color: Colors.white, size: 22),
+            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  game.label,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 15,
+                    fontWeight: FontWeight.w800,
+                  ),
+                ),
+                const SizedBox(height: 2),
+                Text(
+                  game.sub,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(
+                    color: Colors.white70,
+                    fontSize: 11,
+                    height: 1.2,
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -4,10 +4,10 @@ import 'package:get/get.dart';
 
 import 'package:ez_trainz/controllers/auth_controller.dart';
 import 'package:ez_trainz/controllers/locale_controller.dart';
-import 'package:ez_trainz/screens/login_screen.dart';
 import 'package:ez_trainz/screens/pronunciation_benchmark_screen.dart';
 import 'package:ez_trainz/screens/user_history_screen.dart';
 import 'package:ez_trainz/utils/app_theme.dart';
+import 'package:ez_trainz/widgets/app_settings_menu.dart';
 
 /// Basic user information: Name, Email, Bio. Matches JLC/KLC/ELC/GLC theme.
 class ProfileScreen extends StatelessWidget {
@@ -59,35 +59,7 @@ class ProfileScreen extends StatelessWidget {
                           )),
                     ],
                   ),
-                  GestureDetector(
-                    onTap: () {
-                      AuthController.to.logout();
-                      Get.offAll(() => const LoginScreen());
-                    },
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 14, vertical: 8),
-                      decoration: BoxDecoration(
-                        color: AppColors.card,
-                        borderRadius: BorderRadius.circular(20),
-                        border: Border.all(
-                            color: AppColors.border, width: 1),
-                      ),
-                      child: Row(
-                        children: [
-                          const Icon(Icons.logout_rounded,
-                              color: AppColors.textPrimary, size: 15),
-                          const SizedBox(width: 5),
-                          Text('logout'.tr,
-                              style: const TextStyle(
-                                color: AppColors.textPrimary,
-                                fontSize: 13,
-                                fontWeight: FontWeight.w600,
-                              )),
-                        ],
-                      ),
-                    ),
-                  ),
+                  const AppSettingsMenuButton(),
                 ],
               ),
             ),
