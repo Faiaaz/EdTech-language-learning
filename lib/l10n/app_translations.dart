@@ -358,6 +358,16 @@ const _en = <String, String>{
   // ── Hiragana Lesson 1 video screen ───────────────────────────────
   'lesson_nav_chip': 'レッスン',
   'hiragana_l1_screen_title': 'Lesson 1: Hero Number 1 😎',
+
+  // ── Hi-Hello Lesson 2 video screen ─────────────────────────────
+  'hi_hello_l2_screen_title': 'Lesson 2: Japanese Hi-Hello',
+
+  // ── N5 lesson video screens (৩–৭) ────────────────────────────────
+  'n5_l3_screen_title': 'Lesson 3: Weekdays',
+  'n5_l4_screen_title': 'Lesson 4: Akasatana',
+  'n5_l5_screen_title': 'Lesson 5: Borne Borne Bornomala',
+  'n5_l6_screen_title': 'Lesson 6: Dakuten & Handakuten',
+  'n5_l7_screen_title': 'Lesson 7: Kichu Kotha',
   'hiragana_l1_screen_desc':
       'Introduction to Hiragana — the foundational Japanese syllabary.',
   'hiragana_l1_checkpoints_heading': 'Interactive Checkpoints',
@@ -927,6 +937,16 @@ const _bn = <String, String>{
   // ── Hiragana Lesson 1 video screen ───────────────────────────────
   'lesson_nav_chip': 'পাঠ',
   'hiragana_l1_screen_title': 'পাঠ ১ঃ হিরো নাম্বার ১ 😎',
+
+  // ── Hi-Hello Lesson 2 video screen ─────────────────────────────
+  'hi_hello_l2_screen_title': 'পাঠ ২ঃ জাপানিজে হাই-হ্যালো',
+
+  // ── N5 lesson video screens (৩–৭) ────────────────────────────────
+  'n5_l3_screen_title': 'পাঠ ৩ঃ শুক্র-শনি বাকিটা জানি',
+  'n5_l4_screen_title': 'পাঠ ৪ঃ আকাসাতানা',
+  'n5_l5_screen_title': 'পাঠ ৫ঃ বর্ণে বর্ণে বর্ণমালা',
+  'n5_l6_screen_title': 'পাঠ ৬ঃ জাপানের চন্দ্রবিন্দু',
+  'n5_l7_screen_title': 'পাঠ ৭ঃ কিছু কথা ছিল...',
   'hiragana_l1_screen_desc':
       'হিরাগানা পরিচয় — জাপানি ভাষার এই মৌলিক ও কণ্ঠস্থ অক্ষরলিপি।',
   'hiragana_l1_checkpoints_heading': 'ইন্টার‍্যাকটিভ চেকপয়েন্ট',

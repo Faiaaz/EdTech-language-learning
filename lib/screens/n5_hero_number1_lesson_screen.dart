@@ -11,12 +11,14 @@ import 'package:flutter/services.dart';
 import 'package:ez_trainz/services/jlc_tts.dart';
 import 'package:get/get.dart';
 import 'package:ez_trainz/services/jlc_stt.dart';
+import 'package:ez_trainz/utils/lesson_practice_config.dart';
 
 class N5HeroNumber1LessonScreen extends StatefulWidget {
   const N5HeroNumber1LessonScreen({
     super.key,
     this.initialTab = 0,
     this.showTabs = true,
+    this.sessionRounds,
   });
 
   /// Which game to open on first build (index into
@@ -27,6 +29,7 @@ class N5HeroNumber1LessonScreen extends StatefulWidget {
   /// When false, the tab pills are hidden and only [initialTab]'s game is
   /// playable — used when a single game is launched from the lesson screen.
   final bool showTabs;
+  final int? sessionRounds;
 
   @override
   State<N5HeroNumber1LessonScreen> createState() => _N5HeroNumber1LessonScreenState();
@@ -92,17 +95,20 @@ class _N5HeroNumber1LessonScreenState extends State<N5HeroNumber1LessonScreen> {
             ] else
               const SizedBox(height: 4),
             Expanded(
-              child: AnimatedSwitcher(
-                duration: const Duration(milliseconds: 220),
-                child: switch (_tabs[_tab]) {
-                  _HeroTab.speak => const _HeroSpeakGame(key: ValueKey('heroSpeak')),
-                  _HeroTab.match => const _HeroMatchGame(key: ValueKey('heroMatch')),
-                  _HeroTab.blitz => const _HeroBlitzGame(key: ValueKey('heroBlitz')),
-                  _HeroTab.tapHear => const _HeroTapWhatYouHearGame(key: ValueKey('heroTapHear')),
-                  _HeroTab.read => const _HeroReadGame(key: ValueKey('heroRead')),
-                  _HeroTab.order => const _HeroOrderGame(key: ValueKey('heroOrder')),
-                  _HeroTab.speakSeq => const _HeroSpeakSequenceGame(key: ValueKey('heroSpeakSeq')),
-                },
+              child: LessonSessionScope(
+                sessionRounds: widget.sessionRounds,
+                child: AnimatedSwitcher(
+                  duration: const Duration(milliseconds: 220),
+                  child: switch (_tabs[_tab]) {
+                    _HeroTab.speak => const _HeroSpeakGame(key: ValueKey('heroSpeak')),
+                    _HeroTab.match => const _HeroMatchGame(key: ValueKey('heroMatch')),
+                    _HeroTab.blitz => const _HeroBlitzGame(key: ValueKey('heroBlitz')),
+                    _HeroTab.tapHear => const _HeroTapWhatYouHearGame(key: ValueKey('heroTapHear')),
+                    _HeroTab.read => const _HeroReadGame(key: ValueKey('heroRead')),
+                    _HeroTab.order => const _HeroOrderGame(key: ValueKey('heroOrder')),
+                    _HeroTab.speakSeq => const _HeroSpeakSequenceGame(key: ValueKey('heroSpeakSeq')),
+                  },
+                ),
               ),
             ),
           ],
@@ -2087,7 +2093,15 @@ class _HeroTapWhatYouHearGame extends StatefulWidget {
 
 class _HeroTapWhatYouHearGameState extends State<_HeroTapWhatYouHearGame>
     with TickerProviderStateMixin {
-  static const _totalRounds = 10;
+  static const _defaultRounds = 10;
+  int _totalRounds = _defaultRounds;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _totalRounds = LessonSessionScope.roundsFor(context, _defaultRounds);
+  }
+
   static const _sessionXpBonus = 50;
 
   final _rng = math.Random();
@@ -2590,7 +2604,15 @@ class _HeroReadGame extends StatefulWidget {
 
 class _HeroReadGameState extends State<_HeroReadGame>
     with TickerProviderStateMixin {
-  static const _totalRounds = 10;
+  static const _defaultRounds = 10;
+  int _totalRounds = _defaultRounds;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _totalRounds = LessonSessionScope.roundsFor(context, _defaultRounds);
+  }
+
   static const _sessionXpBonus = 50;
   static const _violet = Color(0xFF8B5CF6);
   static const _violetDark = Color(0xFF6D28D9);
@@ -3668,13 +3690,16 @@ class _HeroSpeakSequenceGameState extends State<_HeroSpeakSequenceGame>
   late AnimationController _pulseCtrl;
   late AnimationController _waveCtrl;
 
+  List<_SeqEvalEntry> _buildPendingResults(int count) => _heroNumbers
+      .take(count)
+      .map((h) =>
+          _SeqEvalEntry(expected: h, heard: null, status: _SeqStatus.pending))
+      .toList();
+
   @override
   void initState() {
     super.initState();
-    _results = _heroNumbers
-        .map((h) =>
-            _SeqEvalEntry(expected: h, heard: null, status: _SeqStatus.pending))
-        .toList();
+    _results = _buildPendingResults(_heroNumbers.length);
     _confetti = ConfettiController(duration: const Duration(milliseconds: 900));
     _pulseCtrl = AnimationController(
         vsync: this, duration: const Duration(milliseconds: 1100))
@@ -3685,6 +3710,19 @@ class _HeroSpeakSequenceGameState extends State<_HeroSpeakSequenceGame>
     _sessionTimer.start();
     _initTts();
     _initStt();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final count = LessonSessionScope.itemCountFor(context, _heroNumbers.length);
+    if (_results.length != count) {
+      setState(() {
+        _results = _buildPendingResults(count);
+        _evaluated = false;
+        _extras = const [];
+      });
+    }
   }
 
   @override
@@ -3916,8 +3954,8 @@ class _HeroSpeakSequenceGameState extends State<_HeroSpeakSequenceGame>
   void _evaluate(List<int> heard) {
     final entries = <_SeqEvalEntry>[];
     int correctCount = 0;
-    for (var i = 0; i < _heroNumbers.length; i++) {
-      final expected = _heroNumbers[i];
+    for (var i = 0; i < _results.length; i++) {
+      final expected = _results[i].expected;
       if (i >= heard.length) {
         entries.add(_SeqEvalEntry(
             expected: expected, heard: null, status: _SeqStatus.missed));
@@ -3933,8 +3971,8 @@ class _HeroSpeakSequenceGameState extends State<_HeroSpeakSequenceGame>
             expected: expected, heard: h, status: _SeqStatus.wrong));
       }
     }
-    final extras = heard.length > _heroNumbers.length
-        ? heard.sublist(_heroNumbers.length)
+    final extras = heard.length > _results.length
+        ? heard.sublist(_results.length)
         : const <int>[];
 
     _attempts += 1;
@@ -3946,7 +3984,7 @@ class _HeroSpeakSequenceGameState extends State<_HeroSpeakSequenceGame>
       _evaluated = true;
     });
 
-    if (correctCount == 10 && extras.isEmpty) {
+    if (correctCount == _results.length && extras.isEmpty) {
       HapticFeedback.heavyImpact();
       _confetti.play();
     } else if (correctCount >= 7) {
@@ -3964,10 +4002,9 @@ class _HeroSpeakSequenceGameState extends State<_HeroSpeakSequenceGame>
       _error = null;
       _evaluated = false;
       _extras = const [];
-      _results = _heroNumbers
-          .map((h) => _SeqEvalEntry(
-              expected: h, heard: null, status: _SeqStatus.pending))
-          .toList();
+      _results = _buildPendingResults(
+        LessonSessionScope.itemCountFor(context, _heroNumbers.length),
+      );
       _secondsLeft = _maxSeconds;
       _soundLevel = 0;
     });

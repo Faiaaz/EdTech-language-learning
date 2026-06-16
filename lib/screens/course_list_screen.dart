@@ -10,6 +10,7 @@ import 'package:ez_trainz/models/lesson.dart';
 import 'package:ez_trainz/models/program.dart';
 import 'package:ez_trainz/utils/app_theme.dart';
 import 'package:ez_trainz/screens/hiragana_lesson1_screen.dart';
+import 'package:ez_trainz/screens/n5_lesson_video_screens.dart';
 import 'package:ez_trainz/screens/lesson_screen.dart';
 import 'package:ez_trainz/screens/n5_kana_modules_screen.dart';
 import 'package:ez_trainz/widgets/app_settings_menu.dart';
@@ -612,11 +613,20 @@ void _openLessonFromPath(Course course, Lesson lesson) {
       duration: const Duration(milliseconds: 300),
     );
   } else {
-    Get.to(
-      () => const LessonScreen(),
-      transition: Transition.rightToLeftWithFade,
-      duration: const Duration(milliseconds: 300),
-    );
+    final screen = n5LessonVideoScreenForId(lesson.id);
+    if (screen != null) {
+      Get.to(
+        () => screen,
+        transition: Transition.rightToLeftWithFade,
+        duration: const Duration(milliseconds: 300),
+      );
+    } else {
+      Get.to(
+        () => const LessonScreen(),
+        transition: Transition.rightToLeftWithFade,
+        duration: const Duration(milliseconds: 300),
+      );
+    }
   }
 }
 
@@ -645,13 +655,17 @@ class _LessonListTile extends StatelessWidget {
         case 1:
           return 'পাঠ ১ঃ হিরো নাম্বার ১ 😎';
         case 2:
-          return 'পাঠ ২: সংখ্যা';
+          return 'পাঠ ২ঃ জাপানিজে হাই-হ্যালো';
         case 3:
-          return 'পাঠ ৩: মৌলিক ব্যাকরণ';
+          return 'পাঠ ৩ঃ শুক্র-শনি বাকিটা জানি';
         case 13:
-          return 'পাঠ ৪: হিরাগানা (দ্বিতীয় ভাগ)';
+          return 'পাঠ ৪ঃ আকাসাতানা';
         case 14:
-          return 'পাঠ ৫: হিরাগানা (তৃতীয় ভাগ)';
+          return 'পাঠ ৫ঃ বর্ণে বর্ণে বর্ণমালা';
+        case 15:
+          return 'পাঠ ৬ঃ জাপানের চন্দ্রবিন্দু';
+        case 16:
+          return 'পাঠ ৭ঃ কিছু কথা ছিল...';
       }
     }
     return lesson.title;
@@ -663,13 +677,17 @@ class _LessonListTile extends StatelessWidget {
         case 1:
           return 'হিরাগানা পরিচয় — জাপানি ভাষার এই মৌলিক ও কণ্ঠস্থ অক্ষরলিপি।';
         case 2:
-          return 'জাপানিতে ১ থেকে ১০ পর্যন্ত গোনা শিখুন।';
+          return 'জাপানি অভিবাদন ও দৈনন্দিন বাক্য শিখুন।';
         case 3:
-          return 'জাপানি বাক্যের মৌলিক গঠন শিখুন।';
+          return 'সপ্তাহের দিন • ক্যালেন্ডার • অভ্যাস';
         case 13:
-          return 'হিরাগানা শেখা চালিয়ে যান — স, ত, ন ও হ সারি।';
+          return 'হিরাগানা ৫ সারি • কানা চর্চা • ম্যাচ';
         case 14:
-          return 'হিরাগানা সম্পূর্ণ করুন — ম, য, র, ও সারি এবং “ん” অক্ষর।';
+          return 'ま-や-ら-わ সারি • নোটবুক আঁকা • ম্যাচ';
+        case 15:
+          return 'てんてん ゛ ও まる ゜ • がざだばぱ সারি';
+        case 16:
+          return 'わたし/あなた/あのひと • さん • は/です/か';
       }
     }
     return lesson.description;

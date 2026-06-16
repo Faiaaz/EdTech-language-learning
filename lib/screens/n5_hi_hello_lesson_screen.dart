@@ -10,9 +10,19 @@ import 'package:flutter/services.dart';
 import 'package:ez_trainz/services/jlc_tts.dart';
 import 'package:get/get.dart';
 import 'package:ez_trainz/services/jlc_stt.dart';
+import 'package:ez_trainz/utils/lesson_practice_config.dart';
 
 class N5HiHelloLessonScreen extends StatefulWidget {
-  const N5HiHelloLessonScreen({super.key});
+  const N5HiHelloLessonScreen({
+    super.key,
+    this.initialTab = 0,
+    this.showTabs = true,
+    this.sessionRounds,
+  });
+
+  final int initialTab;
+  final bool showTabs;
+  final int? sessionRounds;
 
   @override
   State<N5HiHelloLessonScreen> createState() => _N5HiHelloLessonScreenState();
@@ -30,7 +40,7 @@ class _N5HiHelloLessonScreenState extends State<N5HiHelloLessonScreen> {
     _HiTab.match,
     _HiTab.rush,
   ];
-  int _tab = 0;
+  late int _tab = widget.initialTab.clamp(0, _tabs.length - 1).toInt();
 
   @override
   Widget build(BuildContext context) {
@@ -57,40 +67,42 @@ class _N5HiHelloLessonScreenState extends State<N5HiHelloLessonScreen> {
                   ),
                   const SizedBox(width: 10),
                   Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text('জাপানিজে হাই-হ্যালো',
-                            style: TextStyle(
-                                color: AppColors.textPrimary, fontWeight: FontWeight.w900, fontSize: 18)),
-                        Text('দৈনন্দিন জাপানি বাক্য: Japanese -> বাংলা',
-                            style: TextStyle(
-                                color: AppColors.textMuted,
-                                fontWeight: FontWeight.w600,
-                                fontSize: 12)),
-                      ],
+                    child: Text(
+                      widget.showTabs
+                          ? 'জাপানিজে হাই-হ্যালো'
+                          : 'hi_hello_l2_screen_title'.tr,
+                      style: const TextStyle(
+                          color: AppColors.textPrimary,
+                          fontWeight: FontWeight.w900,
+                          fontSize: 18),
                     ),
                   ),
                 ],
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: _HiTabPills(index: _tab, onChange: (i) => setState(() => _tab = i)),
-            ),
-            const SizedBox(height: 10),
+            if (widget.showTabs) ...[
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: _HiTabPills(index: _tab, onChange: (i) => setState(() => _tab = i)),
+              ),
+              const SizedBox(height: 10),
+            ] else
+              const SizedBox(height: 4),
             Expanded(
-              child: AnimatedSwitcher(
-                duration: const Duration(milliseconds: 220),
-                child: switch (_tabs[_tab]) {
-                  _HiTab.flashcard => const _HiFlashGame(key: ValueKey('hiFlash')),
-                  _HiTab.quiz => const _HiQuizGame(key: ValueKey('hiQuiz')),
-                  _HiTab.match => const _HiMatchGame(key: ValueKey('hiMatch')),
-                  _HiTab.rush => const _HiRushGame(key: ValueKey('hiRush')),
-                  _HiTab.listen => const _HiListenGame(key: ValueKey('hiListen')),
-                  _HiTab.read => const _HiReadGame(key: ValueKey('hiRead')),
-                  _HiTab.speak => const _HiSpeakGame(key: ValueKey('hiSpeak')),
-                },
+              child: LessonSessionScope(
+                sessionRounds: widget.sessionRounds,
+                child: AnimatedSwitcher(
+                  duration: const Duration(milliseconds: 220),
+                  child: switch (_tabs[_tab]) {
+                    _HiTab.flashcard => const _HiFlashGame(key: ValueKey('hiFlash')),
+                    _HiTab.quiz => const _HiQuizGame(key: ValueKey('hiQuiz')),
+                    _HiTab.match => const _HiMatchGame(key: ValueKey('hiMatch')),
+                    _HiTab.rush => const _HiRushGame(key: ValueKey('hiRush')),
+                    _HiTab.listen => const _HiListenGame(key: ValueKey('hiListen')),
+                    _HiTab.read => const _HiReadGame(key: ValueKey('hiRead')),
+                    _HiTab.speak => const _HiSpeakGame(key: ValueKey('hiSpeak')),
+                  },
+                ),
               ),
             ),
           ],
@@ -314,8 +326,15 @@ class _HiFlashGameState extends State<_HiFlashGame>
   int _flips = 0;
   final Set<int> _seen = {};
   bool _doneShown = false;
+  int _cardGoal = _phrases.length;
 
   _Phrase get _item => _phrases[_index];
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _cardGoal = LessonSessionScope.itemCountFor(context, _phrases.length);
+  }
 
   @override
   void initState() {
@@ -357,7 +376,7 @@ class _HiFlashGameState extends State<_HiFlashGame>
   }
 
   void _go(int delta) {
-    final next = (_index + delta).clamp(0, _phrases.length - 1);
+    final next = (_index + delta).clamp(0, _cardGoal - 1);
     if (next == _index) return;
     HapticFeedback.lightImpact();
     setState(() {
@@ -366,7 +385,7 @@ class _HiFlashGameState extends State<_HiFlashGame>
       _flipTurns = 0;
       if (_seen.add(_index)) _xp += 10;
     });
-    if (_seen.length == _phrases.length && !_doneShown) {
+    if (_seen.length >= _cardGoal && !_doneShown) {
       _doneShown = true;
       _confetti.play();
       HapticFeedback.mediumImpact();
@@ -384,7 +403,7 @@ class _HiFlashGameState extends State<_HiFlashGame>
 
   @override
   Widget build(BuildContext context) {
-    final progress = _seen.length / _phrases.length;
+    final progress = _cardGoal == 0 ? 0.0 : _seen.length / _cardGoal;
     return Padding(
       padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
       child: Stack(
@@ -427,7 +446,7 @@ class _HiFlashGameState extends State<_HiFlashGame>
                       children: [
                         const Icon(Icons.style_rounded, color: Color(0xFFFFE000)),
                         const SizedBox(width: 8),
-                        Text('কার্ড ${_index + 1}/${_phrases.length}',
+                        Text('কার্ড ${_index + 1}/$_cardGoal',
                             style: const TextStyle(
                                 color: AppColors.textPrimary, fontWeight: FontWeight.w900)),
                         const SizedBox(width: 10),
@@ -441,7 +460,7 @@ class _HiFlashGameState extends State<_HiFlashGame>
                                     title: 'ফ্ল্যাশকার্ড — রিভিউ',
                                     scoreLabel: 'XP: $_xp',
                                     stats: [
-                                      'কার্ড দেখা: ${_seen.length}/${_phrases.length}',
+                                      'কার্ড দেখা: ${_seen.length}/$_cardGoal',
                                       'ফ্লিপ: $_flips',
                                     ],
                                     missed: const [],
@@ -599,7 +618,7 @@ class _HiFlashGameState extends State<_HiFlashGame>
                   const SizedBox(width: 10),
                   Expanded(
                     child: ElevatedButton.icon(
-                      onPressed: _index >= _phrases.length - 1
+                      onPressed: _index >= _cardGoal - 1
                           ? null
                           : () => _go(1),
                       style: ElevatedButton.styleFrom(
@@ -1864,7 +1883,15 @@ class _HiListenGame extends StatefulWidget {
 class _HiListenGameState extends State<_HiListenGame>
     with TickerProviderStateMixin {
   static const _teal = Color(0xFF14B8A6);
-  static const _totalRounds = 8;
+  static const _defaultRounds = 8;
+  int _totalRounds = _defaultRounds;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _totalRounds = LessonSessionScope.roundsFor(context, _defaultRounds);
+  }
+
   static const _sessionXpBonus = 50;
 
   final _rng = math.Random();
@@ -1878,7 +1905,6 @@ class _HiListenGameState extends State<_HiListenGame>
   int _roundIdx = 0;
   int? _pickedId;
   bool _locked = false;
-  bool _slowMode = false;
   bool _showCorrectBanner = false;
 
   late List<int> _deck;
@@ -1908,11 +1934,6 @@ class _HiListenGameState extends State<_HiListenGame>
     await _tts.setSpeechRate(0.46);
     await _tts.setPitch(1.05);
     await _tts.setVolume(1.0);
-  }
-
-  Future<void> _applyRate() async {
-    await _ttsReady;
-    await _tts.setSpeechRate(_slowMode ? 0.30 : 0.46);
   }
 
   Future<void> _speak() async {
@@ -2006,7 +2027,7 @@ class _HiListenGameState extends State<_HiListenGame>
         _missed[_target.id] = (_missed[_target.id] ?? 0) + 1;
       });
       _shakeCtrl.forward(from: 0);
-      Future.delayed(const Duration(milliseconds: 700), () {
+      Future.delayed(const Duration(milliseconds: 1700), () {
         if (!mounted) return;
         setState(() {
           _pickedId = null;
@@ -2053,7 +2074,6 @@ class _HiListenGameState extends State<_HiListenGame>
 
   @override
   Widget build(BuildContext context) {
-    final progress = (_roundIdx + 1) / _totalRounds;
     return Padding(
       padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
       child: Stack(
@@ -2086,16 +2106,15 @@ class _HiListenGameState extends State<_HiListenGame>
           ),
           Column(
             children: [
-              _HiHeaderPanel(
-                color: _teal,
-                title: 'শুনে বলো — অডিও শুনে অর্থ বাছুন',
-                progress: progress,
-                roundText: 'রাউন্ড ${_roundIdx + 1}/$_totalRounds',
-                xp: _xp,
-                streak: _streak,
-                timer: _fmtDur(_sessionTimer.elapsed),
+              const Text(
+                'শুনে বলো — অডিও শুনে অর্থ বাছুন',
+                style: TextStyle(
+                  color: AppColors.textPrimary,
+                  fontWeight: FontWeight.w900,
+                  fontSize: 15,
+                ),
               ),
-              const SizedBox(height: 12),
+              const SizedBox(height: 10),
               AnimatedBuilder(
                 animation: _shakeCtrl,
                 builder: (context, child) {
@@ -2146,52 +2165,37 @@ class _HiListenGameState extends State<_HiListenGame>
                           fontWeight: FontWeight.w900,
                         ),
                       ),
-                      const SizedBox(height: 14),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: ElevatedButton.icon(
-                              onPressed: _locked ? null : _speak,
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: _teal,
-                                foregroundColor: Colors.white,
-                                padding: const EdgeInsets.symmetric(vertical: 12),
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(12)),
-                              ),
-                              icon: const Icon(Icons.volume_up_rounded),
-                              label: const Text('আবার শুনুন',
-                                  style: TextStyle(fontWeight: FontWeight.w900)),
+                      const SizedBox(height: 16),
+                      GestureDetector(
+                        onTap: _locked ? null : _speak,
+                        child: Container(
+                          width: 72,
+                          height: 72,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            gradient: const LinearGradient(
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
+                              colors: [Color(0xFF3B82F6), Color(0xFF1E3A8A)],
                             ),
-                          ),
-                          const SizedBox(width: 10),
-                          Expanded(
-                            child: OutlinedButton.icon(
-                              onPressed: _locked
-                                  ? null
-                                  : () async {
-                                      setState(() => _slowMode = !_slowMode);
-                                      await _applyRate();
-                                      await _speak();
-                                    },
-                              style: OutlinedButton.styleFrom(
-                                foregroundColor: _slowMode ? _teal : AppColors.textPrimary,
-                                side: BorderSide(
-                                    color: _slowMode
-                                        ? _teal
-                                        : AppColors.border),
-                                padding: const EdgeInsets.symmetric(vertical: 12),
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(12)),
-                              ),
-                              icon: Icon(_slowMode
-                                  ? Icons.speed_rounded
-                                  : Icons.hourglass_bottom_rounded),
-                              label: Text(_slowMode ? 'স্বাভাবিক' : 'ধীর শোনা',
-                                  style: const TextStyle(fontWeight: FontWeight.w900)),
+                            border: Border.all(
+                              color: const Color(0xFFFFE000),
+                              width: 2.5,
                             ),
+                            boxShadow: [
+                              BoxShadow(
+                                color: const Color(0xFF1D4ED8).withValues(alpha: 0.55),
+                                blurRadius: 24,
+                                offset: const Offset(0, 10),
+                              ),
+                            ],
                           ),
-                        ],
+                          child: const Icon(
+                            Icons.volume_up_rounded,
+                            color: Color(0xFFFFE000),
+                            size: 34,
+                          ),
+                        ),
                       ),
                     ],
                   ),
@@ -2214,7 +2218,8 @@ class _HiListenGameState extends State<_HiListenGame>
                       if (i != 0) const SizedBox(height: 10),
                       _HiOptionTile(
                         label: _options[i].bnMeaning,
-                        sublabel: _options[i].timeLabel,
+                        sceneId: _options[i].id,
+                        popText: _options[i].bnPron,
                         picked: _pickedId == _options[i].id,
                         isCorrect: _options[i].id == _target.id,
                         revealed: _pickedId != null,
@@ -2251,7 +2256,15 @@ class _HiReadGame extends StatefulWidget {
 
 class _HiReadGameState extends State<_HiReadGame> with TickerProviderStateMixin {
   static const _violet = Color(0xFF8B5CF6);
-  static const _totalRounds = 8;
+  static const _defaultRounds = 8;
+  int _totalRounds = _defaultRounds;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _totalRounds = LessonSessionScope.roundsFor(context, _defaultRounds);
+  }
+
   static const _sessionXpBonus = 50;
 
   final _rng = math.Random();
@@ -2379,7 +2392,7 @@ class _HiReadGameState extends State<_HiReadGame> with TickerProviderStateMixin 
         if (_scenario.trick != null) _showTrick = true;
       });
       _shakeCtrl.forward(from: 0);
-      Future.delayed(const Duration(milliseconds: 800), () {
+      Future.delayed(const Duration(milliseconds: 1700), () {
         if (!mounted) return;
         setState(() {
           _pickedId = null;
@@ -2426,7 +2439,6 @@ class _HiReadGameState extends State<_HiReadGame> with TickerProviderStateMixin 
 
   @override
   Widget build(BuildContext context) {
-    final progress = (_roundIdx + 1) / _totalRounds;
     return Padding(
       padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
       child: Stack(
@@ -2459,16 +2471,15 @@ class _HiReadGameState extends State<_HiReadGame> with TickerProviderStateMixin 
           ),
           Column(
             children: [
-              _HiHeaderPanel(
-                color: _violet,
-                title: 'পড়ে বলো — দৃশ্য পড়ে সঠিক উত্তর বাছুন',
-                progress: progress,
-                roundText: 'রাউন্ড ${_roundIdx + 1}/$_totalRounds',
-                xp: _xp,
-                streak: _streak,
-                timer: _fmtDur(_sessionTimer.elapsed),
+              const Text(
+                'পড়ে বলো — দৃশ্য পড়ে সঠিক উত্তর বাছুন',
+                style: TextStyle(
+                  color: AppColors.textPrimary,
+                  fontWeight: FontWeight.w900,
+                  fontSize: 15,
+                ),
               ),
-              const SizedBox(height: 12),
+              const SizedBox(height: 10),
               AnimatedBuilder(
                 animation: _shakeCtrl,
                 builder: (context, child) {
@@ -2501,8 +2512,6 @@ class _HiReadGameState extends State<_HiReadGame> with TickerProviderStateMixin 
                     ),
                     child: Column(
                       children: [
-                        Icon(_scenario.icon, color: _scenario.color, size: 52),
-                        const SizedBox(height: 10),
                         Text(
                           _scenario.scene,
                           textAlign: TextAlign.center,
@@ -2575,7 +2584,8 @@ class _HiReadGameState extends State<_HiReadGame> with TickerProviderStateMixin 
                       if (i != 0) const SizedBox(height: 10),
                       _HiOptionTile(
                         label: _options[i].bnPron,
-                        sublabel: _options[i].bnMeaning,
+                        sceneId: _options[i].id,
+                        popText: _options[i].bnMeaning,
                         picked: _pickedId == _options[i].id,
                         isCorrect: _options[i].id == _target.id,
                         revealed: _pickedId != null,
@@ -2613,7 +2623,15 @@ class _HiSpeakGame extends StatefulWidget {
 class _HiSpeakGameState extends State<_HiSpeakGame> with TickerProviderStateMixin {
   static const _rose = Color(0xFFE11D48);
   static const _maxSeconds = 6;
-  static const _totalRounds = 6;
+  static const _defaultRounds = 6;
+  int _totalRounds = _defaultRounds;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _totalRounds = LessonSessionScope.roundsFor(context, _defaultRounds);
+  }
+
   static const _sessionXpBonus = 50;
 
   final _rng = math.Random();
@@ -3379,19 +3397,30 @@ class _HiHeaderPanel extends StatelessWidget {
 class _HiOptionTile extends StatelessWidget {
   const _HiOptionTile({
     required this.label,
-    required this.sublabel,
     required this.picked,
     required this.isCorrect,
     required this.revealed,
     required this.onTap,
+    this.sceneId,
+    this.popText,
   });
 
   final String label;
-  final String sublabel;
   final bool picked;
   final bool isCorrect;
   final bool revealed;
   final VoidCallback? onTap;
+
+  /// Optional time-of-day scene drawn on the right (0 sunrise, 1 midday,
+  /// 2 sunset, 3 night). Used by the reading MCQ to illustrate each greeting.
+  final int? sceneId;
+
+  /// Optional helper text that "pops" inside this card when it is the wrong
+  /// option the user picked — e.g. the greeting that this option really maps to.
+  final String? popText;
+
+  static const Color _correctBlue = Color(0xFF2563EB);
+  static const Color _wrongAmber = Color(0xFFF59E0B);
 
   @override
   Widget build(BuildContext context) {
@@ -3402,13 +3431,13 @@ class _HiOptionTile extends StatelessWidget {
       border = AppColors.border;
       bg = AppColors.bg;
     } else if (isCorrect) {
-      border = const Color(0xFF10B981);
-      bg = const Color(0xFF10B981).withValues(alpha: 0.22);
-      textColor = const Color(0xFF10B981);
+      border = _correctBlue;
+      bg = _correctBlue.withValues(alpha: 0.18);
+      textColor = _correctBlue;
     } else if (picked) {
-      border = const Color(0xFFEF4444);
-      bg = const Color(0xFFEF4444).withValues(alpha: 0.18);
-      textColor = const Color(0xFFEF4444);
+      border = _wrongAmber;
+      bg = _wrongAmber.withValues(alpha: 0.20);
+      textColor = _wrongAmber;
     } else {
       border = AppColors.border;
       bg = AppColors.bg;
@@ -3429,38 +3458,83 @@ class _HiOptionTile extends StatelessWidget {
               ),
             ),
             padding: const EdgeInsets.symmetric(horizontal: 12),
-            child: Row(
+            child: Stack(
               children: [
-                Expanded(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        label,
-                        style: TextStyle(
-                          color: textColor,
-                          fontSize: 17,
-                          fontWeight: FontWeight.w900,
-                        ),
+                Row(
+                  children: [
+                    Expanded(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            label,
+                            style: TextStyle(
+                              color: textColor,
+                              fontSize: 17,
+                              fontWeight: FontWeight.w900,
+                            ),
+                          ),
+                        ],
                       ),
-                      Text(
-                        sublabel,
-                        style: TextStyle(
-                          color: textColor.withValues(alpha: 0.65),
-                          fontSize: 11,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
+                    ),
+                    if (sceneId != null) ...[
+                      const SizedBox(width: 10),
+                      _GreetingScene(id: sceneId!),
                     ],
-                  ),
+                    if (revealed && isCorrect) ...[
+                      const SizedBox(width: 8),
+                      const Icon(Icons.check_circle_rounded,
+                          color: _correctBlue, size: 22),
+                    ],
+                    if (revealed && picked && !isCorrect) ...[
+                      const SizedBox(width: 8),
+                      const Icon(Icons.cancel_rounded,
+                          color: _wrongAmber, size: 22),
+                    ],
+                  ],
                 ),
-                if (revealed && isCorrect)
-                  const Icon(Icons.check_circle_rounded,
-                      color: Color(0xFF10B981), size: 22),
-                if (revealed && picked && !isCorrect)
-                  const Icon(Icons.cancel_rounded,
-                      color: Color(0xFFEF4444), size: 22),
+                if (revealed && picked && !isCorrect && popText != null)
+                  Positioned.fill(
+                    child: Center(
+                      child: TweenAnimationBuilder<double>(
+                        tween: Tween(begin: 0, end: 1),
+                        duration: const Duration(milliseconds: 300),
+                        curve: Curves.easeOutBack,
+                        builder: (context, t, child) => Transform.scale(
+                          scale: 0.8 + 0.2 * t,
+                          child: Opacity(
+                            opacity: t.clamp(0.0, 1.0),
+                            child: child,
+                          ),
+                        ),
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 12, vertical: 6),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(20),
+                            border: Border.all(color: _wrongAmber, width: 1.6),
+                            boxShadow: [
+                              BoxShadow(
+                                color: _wrongAmber.withValues(alpha: 0.35),
+                                blurRadius: 12,
+                                offset: const Offset(0, 3),
+                              ),
+                            ],
+                          ),
+                          child: Text(
+                            popText!,
+                            style: const TextStyle(
+                              color: _wrongAmber,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w900,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
               ],
             ),
           ),
@@ -3468,6 +3542,217 @@ class _HiOptionTile extends StatelessWidget {
       ),
     );
   }
+}
+
+// ── Mini time-of-day illustration shown beside each greeting option ──
+// 0 sunrise (ohayou) • 1 midday (konnichiwa) • 2 sunset (konbanwa)
+// 3 night/moon+star (oyasumi nasai)
+class _GreetingScene extends StatelessWidget {
+  const _GreetingScene({required this.id});
+
+  final int id;
+
+  static const double _size = 46;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: _size,
+      height: _size,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: Colors.white.withValues(alpha: 0.25)),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.18),
+            blurRadius: 6,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(11),
+        child: CustomPaint(
+          painter: _GreetingScenePainter(id),
+          size: const Size(_size, _size),
+        ),
+      ),
+    );
+  }
+}
+
+class _GreetingScenePainter extends CustomPainter {
+  _GreetingScenePainter(this.id);
+
+  final int id;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final rect = Offset.zero & size;
+    final w = size.width;
+    final h = size.height;
+
+    // ── Sky gradient ──
+    late final List<Color> sky;
+    switch (id) {
+      case 0: // sunrise — fresh blue fading to warm peach
+        sky = const [Color(0xFFBAE6FD), Color(0xFFFED7AA)];
+        break;
+      case 1: // midday — bright clear blue
+        sky = const [Color(0xFF38BDF8), Color(0xFF7DD3FC)];
+        break;
+      case 2: // sunset — violet sky melting into amber
+        sky = const [Color(0xFF7C3AED), Color(0xFFF59E0B)];
+        break;
+      default: // night — deep indigo
+        sky = const [Color(0xFF1E3A8A), Color(0xFF312E81)];
+    }
+    canvas.drawRect(
+      rect,
+      Paint()
+        ..shader = LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: sky,
+        ).createShader(rect),
+    );
+
+    switch (id) {
+      case 0:
+        _sunOverHorizon(canvas, w, h,
+            colors: const [Color(0xFFFDE047), Color(0xFFFB923C)],
+            ground: const Color(0xFF4D7C0F));
+        break;
+      case 1:
+        _middaySun(canvas, w, h);
+        break;
+      case 2:
+        _sunOverHorizon(canvas, w, h,
+            colors: const [Color(0xFFFB923C), Color(0xFFEF4444)],
+            ground: const Color(0xFF7C2D12),
+            low: true);
+        break;
+      default:
+        _night(canvas, w, h);
+    }
+  }
+
+  // Sun resting on a horizon band (used for sunrise & sunset).
+  void _sunOverHorizon(
+    Canvas canvas,
+    double w,
+    double h, {
+    required List<Color> colors,
+    required Color ground,
+    bool low = false,
+  }) {
+    final horizonY = h * (low ? 0.74 : 0.68);
+    final sunCenter = Offset(w * 0.5, horizonY);
+    final sunR = w * (low ? 0.18 : 0.2);
+
+    // glow
+    canvas.drawCircle(
+      sunCenter,
+      sunR * 1.8,
+      Paint()..color = colors.first.withValues(alpha: 0.30),
+    );
+    // sun disc
+    canvas.drawCircle(
+      sunCenter,
+      sunR,
+      Paint()
+        ..shader = LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: colors,
+        ).createShader(Rect.fromCircle(center: sunCenter, radius: sunR)),
+    );
+    // ground band covers the lower half of the sun → "rising / setting"
+    canvas.drawRect(
+      Rect.fromLTRB(0, horizonY, w, h),
+      Paint()..color = ground,
+    );
+    // thin highlight line on the horizon
+    canvas.drawRect(
+      Rect.fromLTWH(0, horizonY, w, h * 0.04),
+      Paint()..color = colors.first.withValues(alpha: 0.55),
+    );
+  }
+
+  void _middaySun(Canvas canvas, double w, double h) {
+    final center = Offset(w * 0.5, h * 0.46);
+    final sunR = w * 0.18;
+
+    // rays
+    final rayPaint = Paint()
+      ..color = const Color(0xFFFDE047)
+      ..strokeWidth = w * 0.035
+      ..strokeCap = StrokeCap.round;
+    for (var i = 0; i < 8; i++) {
+      final a = i * (math.pi / 4);
+      final d = Offset(math.cos(a), math.sin(a));
+      canvas.drawLine(center + d * (sunR * 1.45), center + d * (sunR * 2.1),
+          rayPaint);
+    }
+    // glow + disc
+    canvas.drawCircle(center, sunR * 1.5,
+        Paint()..color = const Color(0xFFFDE047).withValues(alpha: 0.30));
+    canvas.drawCircle(
+      center,
+      sunR,
+      Paint()
+        ..shader = const LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [Color(0xFFFEF08A), Color(0xFFFBBF24)],
+        ).createShader(Rect.fromCircle(center: center, radius: sunR)),
+    );
+  }
+
+  void _night(Canvas canvas, double w, double h) {
+    // stars
+    final star = Paint()..color = Colors.white;
+    _sparkle(canvas, Offset(w * 0.26, h * 0.30), w * 0.07, star);
+    canvas.drawCircle(Offset(w * 0.72, h * 0.24), w * 0.025, star);
+    canvas.drawCircle(Offset(w * 0.40, h * 0.66), w * 0.02, star);
+
+    // crescent moon (carve a circle out of a disc)
+    final moonCenter = Offset(w * 0.62, h * 0.56);
+    final moonR = w * 0.2;
+    canvas.saveLayer(Offset.zero & Size(w, h), Paint());
+    canvas.drawCircle(
+      moonCenter,
+      moonR,
+      Paint()
+        ..shader = const LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [Color(0xFFFEF9C3), Color(0xFFFDE68A)],
+        ).createShader(Rect.fromCircle(center: moonCenter, radius: moonR)),
+    );
+    canvas.drawCircle(
+      moonCenter.translate(moonR * 0.55, -moonR * 0.28),
+      moonR * 0.95,
+      Paint()..blendMode = BlendMode.clear,
+    );
+    canvas.restore();
+  }
+
+  // Concave 4-point sparkle star.
+  void _sparkle(Canvas canvas, Offset c, double r, Paint p) {
+    final path = Path()
+      ..moveTo(c.dx, c.dy - r)
+      ..quadraticBezierTo(c.dx, c.dy, c.dx + r, c.dy)
+      ..quadraticBezierTo(c.dx, c.dy, c.dx, c.dy + r)
+      ..quadraticBezierTo(c.dx, c.dy, c.dx - r, c.dy)
+      ..quadraticBezierTo(c.dx, c.dy, c.dx, c.dy - r)
+      ..close();
+    canvas.drawPath(path, p);
+  }
+
+  @override
+  bool shouldRepaint(_GreetingScenePainter oldDelegate) =>
+      oldDelegate.id != id;
 }
 
 class _HiCorrectBanner extends StatelessWidget {

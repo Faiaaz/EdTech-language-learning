@@ -11,41 +11,83 @@ import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
 
 import 'package:ez_trainz/screens/hiragana_draw_game_screen.dart';
+import 'package:ez_trainz/utils/lesson_practice_config.dart';
 import 'package:ez_trainz/widgets/spiral_notepad_frame.dart';
 
 enum _LessonKind { akasatana, bornomala, dakuten }
 
 class N5AkasatanaLessonScreen extends StatefulWidget {
-  const N5AkasatanaLessonScreen({super.key})
-      : _lessonKind = _LessonKind.akasatana;
+  const N5AkasatanaLessonScreen({
+    super.key,
+    this.initialTab = 0,
+    this.showTabs = true,
+    this.sessionRounds,
+  })  : _lessonKind = _LessonKind.akasatana,
+        _titleKey = 'n5_l4_screen_title';
+
   const N5AkasatanaLessonScreen._forKind({
     required _LessonKind lessonKind,
-  }) : _lessonKind = lessonKind;
+    this.initialTab = 0,
+    this.showTabs = true,
+    this.sessionRounds,
+    required String titleKey,
+  })  : _lessonKind = lessonKind,
+        _titleKey = titleKey;
 
   final _LessonKind _lessonKind;
+  final int initialTab;
+  final bool showTabs;
+  final int? sessionRounds;
+  final String _titleKey;
 
   @override
   State<N5AkasatanaLessonScreen> createState() => _N5AkasatanaLessonScreenState();
 }
 
 class N5BorneBorneBornomalaLessonScreen extends StatelessWidget {
-  const N5BorneBorneBornomalaLessonScreen({super.key});
+  const N5BorneBorneBornomalaLessonScreen({
+    super.key,
+    this.initialTab = 0,
+    this.showTabs = true,
+    this.sessionRounds,
+  });
+
+  final int initialTab;
+  final bool showTabs;
+  final int? sessionRounds;
 
   @override
   Widget build(BuildContext context) {
-    return const N5AkasatanaLessonScreen._forKind(
+    return N5AkasatanaLessonScreen._forKind(
       lessonKind: _LessonKind.bornomala,
+      initialTab: initialTab,
+      showTabs: showTabs,
+      sessionRounds: sessionRounds,
+      titleKey: 'n5_l5_screen_title',
     );
   }
 }
 
 class N5DakutenLessonScreen extends StatelessWidget {
-  const N5DakutenLessonScreen({super.key});
+  const N5DakutenLessonScreen({
+    super.key,
+    this.initialTab = 0,
+    this.showTabs = true,
+    this.sessionRounds,
+  });
+
+  final int initialTab;
+  final bool showTabs;
+  final int? sessionRounds;
 
   @override
   Widget build(BuildContext context) {
-    return const N5AkasatanaLessonScreen._forKind(
+    return N5AkasatanaLessonScreen._forKind(
       lessonKind: _LessonKind.dakuten,
+      initialTab: initialTab,
+      showTabs: showTabs,
+      sessionRounds: sessionRounds,
+      titleKey: 'n5_l6_screen_title',
     );
   }
 }
@@ -101,7 +143,7 @@ class _N5AkasatanaLessonScreenState extends State<N5AkasatanaLessonScreen> {
           ),
       };
 
-  int _tab = 0;
+  late int _tab = widget.initialTab.clamp(0, _tabs.length - 1).toInt();
 
   _LessonKind get _kind => widget._lessonKind;
   bool get _isDakuten => _kind == _LessonKind.dakuten;
@@ -155,65 +197,81 @@ class _N5AkasatanaLessonScreenState extends State<N5AkasatanaLessonScreen> {
                   ),
                   const SizedBox(width: 10),
                   Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(_title,
+                    child: widget.showTabs
+                        ? Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(_title,
+                                  style: const TextStyle(
+                                      color: AppColors.textPrimary,
+                                      fontWeight: FontWeight.w900,
+                                      fontSize: 18)),
+                              Text(_subtitle,
+                                  style: TextStyle(
+                                      color: AppColors.textMuted,
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 12)),
+                            ],
+                          )
+                        : Text(
+                            widget._titleKey.tr,
                             style: const TextStyle(
-                                color: AppColors.textPrimary, fontWeight: FontWeight.w900, fontSize: 18)),
-                        Text(_subtitle,
-                            style: TextStyle(
-                                color: AppColors.textMuted,
-                                fontWeight: FontWeight.w600,
-                                fontSize: 12)),
-                      ],
-                    ),
+                                color: AppColors.textPrimary,
+                                fontWeight: FontWeight.w900,
+                                fontSize: 18),
+                          ),
                   ),
                 ],
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: _AkaTabPills(
-                index: _tab,
-                labels: _tabLabels,
-                onChange: (i) => setState(() => _tab = i),
+            if (widget.showTabs) ...[
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: _AkaTabPills(
+                  index: _tab,
+                  labels: _tabLabels,
+                  onChange: (i) => setState(() => _tab = i),
+                ),
               ),
-            ),
-            const SizedBox(height: 10),
+              const SizedBox(height: 10),
+            ] else
+              const SizedBox(height: 4),
             Expanded(
-              child: AnimatedSwitcher(
-                duration: const Duration(milliseconds: 220),
-                child: switch (_tabs[_tab]) {
-                  _AkaTab.draw => _AkaDrawPicker(
-                    key: const ValueKey('akaDraw'),
-                    startIdx: _drawStart,
-                    endIdx: _drawEnd,
-                    charSet: _charSet,
-                  ),
-                  _AkaTab.notepadDraw =>
-                    _NotebookRowPicker(
-                      key: const ValueKey('akaNotepadDraw'),
-                      rows: _rows,
+              child: LessonSessionScope(
+                sessionRounds: widget.sessionRounds,
+                child: AnimatedSwitcher(
+                  duration: const Duration(milliseconds: 220),
+                  child: switch (_tabs[_tab]) {
+                    _AkaTab.draw => _AkaDrawPicker(
+                      key: const ValueKey('akaDraw'),
+                      startIdx: _drawStart,
+                      endIdx: _drawEnd,
                       charSet: _charSet,
                     ),
-                  _AkaTab.flashcard => _AkaFlashGame(
-                    key: const ValueKey('akaFlash'),
-                    kanaList: _kanaList,
-                  ),
-                  _AkaTab.quiz => _AkaQuizGame(
-                    key: const ValueKey('akaQuiz'),
-                    kanaList: _kanaList,
-                  ),
-                  _AkaTab.match => _AkaMatchGame(
-                    key: const ValueKey('akaMatch'),
-                    kanaList: _kanaList,
-                  ),
-                  _AkaTab.practice => _PracticeSheetTab(
-                    key: const ValueKey('akaPractice'),
-                    sheet: _practiceSheet!,
-                  ),
-                },
+                    _AkaTab.notepadDraw =>
+                      _NotebookRowPicker(
+                        key: const ValueKey('akaNotepadDraw'),
+                        rows: _rows,
+                        charSet: _charSet,
+                      ),
+                    _AkaTab.flashcard => _AkaFlashGame(
+                      key: const ValueKey('akaFlash'),
+                      kanaList: _kanaList,
+                    ),
+                    _AkaTab.quiz => _AkaQuizGame(
+                      key: const ValueKey('akaQuiz'),
+                      kanaList: _kanaList,
+                    ),
+                    _AkaTab.match => _AkaMatchGame(
+                      key: const ValueKey('akaMatch'),
+                      kanaList: _kanaList,
+                    ),
+                    _AkaTab.practice => _PracticeSheetTab(
+                      key: const ValueKey('akaPractice'),
+                      sheet: _practiceSheet!,
+                    ),
+                  },
+                ),
               ),
             ),
           ],
@@ -965,12 +1023,26 @@ class _AkaFlashGameState extends State<_AkaFlashGame> {
   late List<_Kana> _deck;
   int _i = 0;
   bool _flipped = false;
+  int _cardGoal = 0;
   final _rng = math.Random();
 
   @override
   void initState() {
     super.initState();
     _deck = List.of(widget.kanaList)..shuffle(_rng);
+    _cardGoal = _deck.length;
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final goal = LessonSessionScope.itemCountFor(context, widget.kanaList.length);
+    if (goal != _cardGoal) {
+      _cardGoal = goal;
+      _deck = List.of(widget.kanaList.take(goal))..shuffle(_rng);
+      _i = 0;
+      _flipped = false;
+    }
   }
 
   void _next() {
@@ -1199,6 +1271,21 @@ class _AkaQuizGameState extends State<_AkaQuizGame> {
     super.initState();
     _deck = List.of(widget.kanaList)..shuffle(_rng);
     _opts = _optionsFor(_deck[_i]);
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final rounds = LessonSessionScope.roundsFor(context, widget.kanaList.length);
+    if (rounds < _deck.length) {
+      _deck = List.of(widget.kanaList.take(rounds))..shuffle(_rng);
+      _i = 0;
+      _score = 0;
+      _locked = false;
+      _picked = null;
+      _correct = null;
+      _opts = _optionsFor(_deck[_i]);
+    }
   }
 
   List<String> _optionsFor(_Kana q) {

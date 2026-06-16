@@ -5,6 +5,7 @@ import 'package:ez_trainz/controllers/course_controller.dart';
 import 'package:ez_trainz/models/kana.dart';
 import 'package:ez_trainz/models/lesson.dart';
 import 'package:ez_trainz/utils/app_theme.dart';
+import 'package:ez_trainz/screens/n5_lesson_video_screens.dart';
 import 'package:ez_trainz/screens/hiragana_lesson1_screen.dart';
 import 'package:ez_trainz/screens/lesson_screen.dart';
 import 'package:ez_trainz/screens/n5_kana_modules_screen.dart';
@@ -271,7 +272,12 @@ class _LessonTile extends StatelessWidget {
         if (lesson.id == 1) {
           Get.to(() => const HiraganaLesson1Screen());
         } else {
-          Get.to(() => const LessonScreen());
+          final screen = n5LessonVideoScreenForId(lesson.id);
+          if (screen != null) {
+            Get.to(() => screen);
+          } else {
+            Get.to(() => const LessonScreen());
+          }
         }
       },
       child: Container(

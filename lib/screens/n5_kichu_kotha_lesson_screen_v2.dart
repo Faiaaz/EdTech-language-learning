@@ -8,10 +8,20 @@ import 'package:get/get.dart';
 
 import 'package:ez_trainz/services/jlc_tts.dart';
 import 'package:ez_trainz/utils/app_theme.dart';
+import 'package:ez_trainz/utils/lesson_practice_config.dart';
 import 'package:ez_trainz/widgets/game_fx.dart';
 
 class N5KichuKothaLessonScreenV2 extends StatefulWidget {
-  const N5KichuKothaLessonScreenV2({super.key});
+  const N5KichuKothaLessonScreenV2({
+    super.key,
+    this.initialTab = 0,
+    this.showTabs = true,
+    this.sessionRounds,
+  });
+
+  final int initialTab;
+  final bool showTabs;
+  final int? sessionRounds;
 
   @override
   State<N5KichuKothaLessonScreenV2> createState() =>
@@ -37,7 +47,7 @@ class _N5KichuKothaLessonScreenV2State
     _Lesson7Tab.dialogue,
     _Lesson7Tab.meaning,
   ];
-  int _tab = 0;
+  late int _tab = widget.initialTab.clamp(0, _tabs.length - 1).toInt();
 
   @override
   Widget build(BuildContext context) {
@@ -65,57 +75,52 @@ class _N5KichuKothaLessonScreenV2State
                   ),
                   const SizedBox(width: 10),
                   Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text(
-                          'পাঠ ৭ঃ কিছু কথা ছিল...',
-                          style: TextStyle(
-                            color: AppColors.textPrimary,
-                            fontWeight: FontWeight.w900,
-                            fontSize: 19,
-                          ),
-                        ),
-                        Text(
-                          'わたし • あなた • あのひと • さん • は/です/か',
-                          style: TextStyle(
-                            color: AppColors.textMuted,
-                            fontWeight: FontWeight.w600,
-                            fontSize: 12,
-                          ),
-                        ),
-                      ],
+                    child: Text(
+                      widget.showTabs
+                          ? 'পাঠ ৭ঃ কিছু কথা ছিল...'
+                          : 'n5_l7_screen_title'.tr,
+                      style: const TextStyle(
+                        color: AppColors.textPrimary,
+                        fontWeight: FontWeight.w900,
+                        fontSize: 19,
+                      ),
                     ),
                   ),
                 ],
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: _Lesson7TabPills(
-                index: _tab,
-                onChange: (i) => setState(() => _tab = i),
+            if (widget.showTabs) ...[
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: _Lesson7TabPills(
+                  index: _tab,
+                  onChange: (i) => setState(() => _tab = i),
+                ),
               ),
-            ),
-            const SizedBox(height: 10),
+              const SizedBox(height: 10),
+            ] else
+              const SizedBox(height: 4),
             Expanded(
-              child: AnimatedSwitcher(
-                duration: const Duration(milliseconds: 220),
-                child: switch (_tabs[_tab]) {
-                  _Lesson7Tab.pronoun =>
-                    const _PronounSorterGame(key: ValueKey('l7_pronoun')),
-                  _Lesson7Tab.builder =>
-                    const _SentenceBuilderGame(key: ValueKey('l7_builder')),
-                  _Lesson7Tab.san =>
-                    const _SanTaggerGame(key: ValueKey('l7_san')),
-                  _Lesson7Tab.question =>
-                    const _QuestionOrStatementGame(
-                        key: ValueKey('l7_question')),
-                  _Lesson7Tab.dialogue =>
-                    const _DialogueRoleSwapGame(key: ValueKey('l7_dialogue')),
-                  _Lesson7Tab.meaning =>
-                    const _MeaningMatchGame(key: ValueKey('l7_meaning')),
-                },
+              child: LessonSessionScope(
+                sessionRounds: widget.sessionRounds,
+                child: AnimatedSwitcher(
+                  duration: const Duration(milliseconds: 220),
+                  child: switch (_tabs[_tab]) {
+                    _Lesson7Tab.pronoun =>
+                      const _PronounSorterGame(key: ValueKey('l7_pronoun')),
+                    _Lesson7Tab.builder =>
+                      const _SentenceBuilderGame(key: ValueKey('l7_builder')),
+                    _Lesson7Tab.san =>
+                      const _SanTaggerGame(key: ValueKey('l7_san')),
+                    _Lesson7Tab.question =>
+                      const _QuestionOrStatementGame(
+                          key: ValueKey('l7_question')),
+                    _Lesson7Tab.dialogue =>
+                      const _DialogueRoleSwapGame(key: ValueKey('l7_dialogue')),
+                    _Lesson7Tab.meaning =>
+                      const _MeaningMatchGame(key: ValueKey('l7_meaning')),
+                  },
+                ),
               ),
             ),
           ],
@@ -777,7 +782,15 @@ class _PronounSorterGame extends StatefulWidget {
 }
 
 class _PronounSorterGameState extends State<_PronounSorterGame> {
-  static const _total = 8;
+  static const _defaultTotal = 8;
+  int _total = _defaultTotal;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _total = LessonSessionScope.roundsFor(context, _defaultTotal);
+  }
+
   final _rng = math.Random();
   final _tts = _L7Tts();
   final _fx = GameFx();
@@ -1036,6 +1049,8 @@ class _SentenceBuilderGameState extends State<_SentenceBuilderGame> {
   int _shakeTick = 0;
   int? _lastQuestionIndex;
   final List<int> _recentBuilderIdx = [];
+  static const _defaultTotal = 6;
+  int _totalGoal = _defaultTotal;
   late _BuilderSentence _q;
   late List<String> _bank;
   final List<String> _picked = [];
@@ -1049,6 +1064,12 @@ class _SentenceBuilderGameState extends State<_SentenceBuilderGame> {
     super.initState();
     _confetti = ConfettiController(duration: const Duration(milliseconds: 700));
     _setRound();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _totalGoal = LessonSessionScope.roundsFor(context, _defaultTotal);
   }
 
   void _setRound() {
@@ -1162,8 +1183,8 @@ class _SentenceBuilderGameState extends State<_SentenceBuilderGame> {
     unawaited(_fx.progressFill());
     Future.delayed(const Duration(milliseconds: 820), () {
       if (!mounted) return;
-      if (_step >= 6) {
-        _showFinishDialog(context, _score, 6);
+      if (_step >= _totalGoal) {
+        _showFinishDialog(context, _score, _totalGoal);
       } else {
         setState(() => _step++);
         _setRound();
@@ -1195,7 +1216,7 @@ class _SentenceBuilderGameState extends State<_SentenceBuilderGame> {
             child: _GameBody(
               top: _MinimalGameHeader(
                 step: _step,
-                total: 6,
+                total: _totalGoal,
                 score: _score,
                 streak: _streak,
                 comboPulse: _comboPulse,
@@ -1610,11 +1631,18 @@ class _SanTaggerGameState extends State<_SanTaggerGame> {
   bool _hintVisible = false;
   String _feedback = '';
   String _afterExplain = '';
+  int _goal = _sanQs.length;
 
   @override
   void initState() {
     super.initState();
     _confetti = ConfettiController(duration: const Duration(milliseconds: 650));
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _goal = LessonSessionScope.itemCountFor(context, _sanQs.length);
   }
 
   void _pick(bool useSan) {
@@ -1645,8 +1673,8 @@ class _SanTaggerGameState extends State<_SanTaggerGame> {
     }
     Future.delayed(const Duration(milliseconds: 520), () {
       if (!mounted) return;
-      if (_idx == _sanQs.length - 1) {
-        _showFinishDialog(context, _score, _sanQs.length);
+      if (_idx == _goal - 1) {
+        _showFinishDialog(context, _score, _goal);
       } else {
         setState(() {
           _idx++;
@@ -1680,7 +1708,7 @@ class _SanTaggerGameState extends State<_SanTaggerGame> {
             child: _GameBody(
               top: _MinimalGameHeader(
                 step: _idx + 1,
-                total: _sanQs.length,
+                total: _goal,
                 score: _score,
                 streak: _streak,
                 comboPulse: _comboPulse,
@@ -1990,7 +2018,15 @@ class _QuestionOrStatementGame extends StatefulWidget {
 }
 
 class _QuestionOrStatementGameState extends State<_QuestionOrStatementGame> {
-  static const _total = 8;
+  static const _defaultTotal = 8;
+  int _total = _defaultTotal;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _total = LessonSessionScope.roundsFor(context, _defaultTotal);
+  }
+
   final _rng = math.Random();
   final _fx = GameFx();
   late ConfettiController _confetti;
@@ -2340,7 +2376,15 @@ class _DialogueRoleSwapGame extends StatefulWidget {
 }
 
 class _DialogueRoleSwapGameState extends State<_DialogueRoleSwapGame> {
-  static const _total = 7;
+  static const _defaultTotal = 7;
+  int _total = _defaultTotal;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _total = LessonSessionScope.roundsFor(context, _defaultTotal);
+  }
+
   final _rng = math.Random();
   final _tts = _L7Tts();
   final _fx = GameFx();
@@ -2550,7 +2594,15 @@ class _MeaningMatchGame extends StatefulWidget {
 }
 
 class _MeaningMatchGameState extends State<_MeaningMatchGame> {
-  static const _total = 8;
+  static const _defaultTotal = 8;
+  int _total = _defaultTotal;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _total = LessonSessionScope.roundsFor(context, _defaultTotal);
+  }
+
   final _rng = math.Random();
   final _tts = _L7Tts();
   final _fx = GameFx();
