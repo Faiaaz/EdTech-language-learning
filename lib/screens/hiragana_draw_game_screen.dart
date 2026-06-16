@@ -730,24 +730,9 @@ class _HiraganaDrawGameScreenState extends State<HiraganaDrawGameScreen>
     );
 
     if (widget.embedded) {
-      return DecoratedBox(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: isNotepad
-                ? [
-                    AppColors.bg.withValues(alpha: 0.96),
-                    AppColors.cardAlt.withValues(alpha: 0.90),
-                  ]
-                : [
-                    AppColors.cardAlt.withValues(alpha: 0.86),
-                    AppColors.bg.withValues(alpha: 0.93),
-                  ],
-          ),
-        ),
-        child: content,
-      );
+      // No background of its own: the host lesson paints the sky→gold page
+      // gradient, and an opaque block here reads as a mismatched panel.
+      return content;
     }
 
     return Scaffold(

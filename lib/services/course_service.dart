@@ -154,7 +154,7 @@ class CourseService {
         {
           "id": 1,
           "courseId": 1,
-          "title": "Lesson 1: Hiragana Part 1",
+          "title": "Lesson 1: Hero Number 1 😎",
           "description": "Introduction to Hiragana — the foundational Japanese syllabary.",
           "content": {
             "body":
@@ -167,10 +167,10 @@ class CourseService {
         {
           "id": 2,
           "courseId": 1,
-          "title": "Lesson 2: Numbers",
-          "description": "Learn to count from 1 to 10 in Japanese.",
+          "title": "Lesson 2: Japanese Hi-Hello",
+          "description": "Learn Japanese greetings and everyday phrases.",
           "content": {
-            "body": "Basic numbers from ichi (1) to juu (10).",
+            "body": "Master ohayou, konnichiwa, arigatou, and more essential greetings.",
             "type": "text"
           },
           "createdAt": "2026-01-27T08:42:17.818Z",
@@ -179,10 +179,10 @@ class CourseService {
         {
           "id": 3,
           "courseId": 1,
-          "title": "Lesson 3: Basic Grammar",
-          "description": "Learn basic Japanese sentence structure.",
+          "title": "Lesson 3: Weekdays",
+          "description": "Learn the days of the week in Japanese.",
           "content": {
-            "body": "Understand subject-object-verb order.",
+            "body": "Master getsuyou through nichiyou and everyday calendar phrases.",
             "type": "text"
           },
           "createdAt": "2026-01-27T08:42:17.818Z",
@@ -191,11 +191,10 @@ class CourseService {
         {
           "id": 13,
           "courseId": 1,
-          "title": "Lesson 4: Hiragana Part 2",
-          "description": "Continue learning Hiragana — S, T, N, and H rows.",
+          "title": "Lesson 4: Akasatana",
+          "description": "Hiragana rows あ・か・さ・た・な — read, write, and match.",
           "content": {
-            "body":
-                "In this lesson, we continue building your Hiragana foundation. You will learn the S-row (さ し す せ そ), T-row (た ち つ て と), N-row (な に ぬ ね の), and H-row (は ひ ふ へ ほ). Practice each character carefully to improve your reading and writing skills.",
+            "body": "Practice the first five Hiragana rows with drawing, flashcards, and matching games.",
             "type": "text"
           },
           "createdAt": "2026-01-27T08:42:17.818Z",
@@ -204,11 +203,34 @@ class CourseService {
         {
           "id": 14,
           "courseId": 1,
-          "title": "Lesson 5: Hiragana Part 3",
-          "description": "Complete your Hiragana — M, Y, R, W rows and the N character.",
+          "title": "Lesson 5: Borne Borne Bornomala",
+          "description": "Hiragana rows は・ま・や・ら・わ — complete the syllabary.",
           "content": {
-            "body":
-                "This final Hiragana lesson covers the M-row (ま み む め も), Y-row (や ゆ よ), R-row (ら り る れ ろ), W-row (わ を), and the standalone N (ん). By the end of this lesson you will have mastered all 46 basic Hiragana characters.",
+            "body": "Learn the remaining Hiragana rows with notebook practice and matching games.",
+            "type": "text"
+          },
+          "createdAt": "2026-01-27T08:42:17.818Z",
+          "updatedAt": "2026-01-27T08:42:17.818Z"
+        },
+        {
+          "id": 15,
+          "courseId": 1,
+          "title": "Lesson 6: Dakuten & Handakuten",
+          "description": "てんてん ゛ and まる ゜ — voiced Hiragana rows.",
+          "content": {
+            "body": "Master が・ざ・だ・ば・ぱ rows with drawing drills and matching games.",
+            "type": "text"
+          },
+          "createdAt": "2026-01-27T08:42:17.818Z",
+          "updatedAt": "2026-01-27T08:42:17.818Z"
+        },
+        {
+          "id": 16,
+          "courseId": 1,
+          "title": "Lesson 7: Kichu Kotha",
+          "description": "Basic pronouns, particles, and simple sentences.",
+          "content": {
+            "body": "Learn わたし, あなた, さん, は, です, and か through interactive games.",
             "type": "text"
           },
           "createdAt": "2026-01-27T08:42:17.818Z",
@@ -375,7 +397,7 @@ class CourseService {
       {
         "id": 1,
         "courseId": 1,
-        "title": "Lesson 1: Hiragana Part 1",
+        "title": "Lesson 1: Hero Number 1 😎",
         "description": "Introduction to Hiragana — the foundational Japanese syllabary.",
         "content": {
           "body":
@@ -414,9 +436,12 @@ class CourseService {
       {
         "id": 2,
         "courseId": 1,
-        "title": "Lesson 2: Numbers",
-        "description": "Learn to count from 1 to 10 in Japanese.",
-        "content": {"body": "Basic numbers from ichi (1) to juu (10).", "type": "text"},
+        "title": "Lesson 2: Japanese Hi-Hello",
+        "description": "Learn Japanese greetings and everyday phrases.",
+        "content": {
+          "body": "Master ohayou, konnichiwa, arigatou, and more essential greetings.",
+          "type": "text"
+        },
         "createdAt": "2026-01-27T08:42:17.818Z",
         "updatedAt": "2026-01-27T08:42:17.818Z",
         "quizzes": []
@@ -424,9 +449,9 @@ class CourseService {
       {
         "id": 3,
         "courseId": 1,
-        "title": "Lesson 3: Basic Grammar",
-        "description": "Learn basic Japanese sentence structure.",
-        "content": {"body": "Understand subject-object-verb order.", "type": "text"},
+        "title": "Lesson 3: Weekdays",
+        "description": "Learn the days of the week in Japanese.",
+        "content": {"body": "Master getsuyou through nichiyou and everyday calendar phrases.", "type": "text"},
         "createdAt": "2026-01-27T08:42:17.818Z",
         "updatedAt": "2026-01-27T08:42:17.818Z",
         "quizzes": []
@@ -434,11 +459,10 @@ class CourseService {
       {
         "id": 13,
         "courseId": 1,
-        "title": "Lesson 4: Hiragana Part 2",
-        "description": "Continue learning Hiragana — S, T, N, and H rows.",
+        "title": "Lesson 4: Akasatana",
+        "description": "Hiragana rows あ・か・さ・た・な — read, write, and match.",
         "content": {
-          "body":
-              "In this lesson, we continue building your Hiragana foundation. You will learn the S-row (さ し す せ そ), T-row (た ち つ て と), N-row (な に ぬ ね の), and H-row (は ひ ふ へ ほ). Practice each character carefully to improve your reading and writing skills.",
+          "body": "Practice the first five Hiragana rows with drawing, flashcards, and matching games.",
           "type": "text"
         },
         "createdAt": "2026-01-27T08:42:17.818Z",
@@ -448,11 +472,36 @@ class CourseService {
       {
         "id": 14,
         "courseId": 1,
-        "title": "Lesson 5: Hiragana Part 3",
-        "description": "Complete your Hiragana — M, Y, R, W rows and the N character.",
+        "title": "Lesson 5: Borne Borne Bornomala",
+        "description": "Hiragana rows は・ま・や・ら・わ — complete the syllabary.",
         "content": {
-          "body":
-              "This final Hiragana lesson covers the M-row (ま み む め も), Y-row (や ゆ よ), R-row (ら り る れ ろ), W-row (わ を), and the standalone N (ん). By the end of this lesson you will have mastered all 46 basic Hiragana characters.",
+          "body": "Learn the remaining Hiragana rows with notebook practice and matching games.",
+          "type": "text"
+        },
+        "createdAt": "2026-01-27T08:42:17.818Z",
+        "updatedAt": "2026-01-27T08:42:17.818Z",
+        "quizzes": []
+      },
+      {
+        "id": 15,
+        "courseId": 1,
+        "title": "Lesson 6: Dakuten & Handakuten",
+        "description": "てんてん ゛ and まる ゜ — voiced Hiragana rows.",
+        "content": {
+          "body": "Master が・ざ・だ・ば・ぱ rows with drawing drills and matching games.",
+          "type": "text"
+        },
+        "createdAt": "2026-01-27T08:42:17.818Z",
+        "updatedAt": "2026-01-27T08:42:17.818Z",
+        "quizzes": []
+      },
+      {
+        "id": 16,
+        "courseId": 1,
+        "title": "Lesson 7: Kichu Kotha",
+        "description": "Basic pronouns, particles, and simple sentences.",
+        "content": {
+          "body": "Learn わたし, あなた, さん, は, です, and か through interactive games.",
           "type": "text"
         },
         "createdAt": "2026-01-27T08:42:17.818Z",

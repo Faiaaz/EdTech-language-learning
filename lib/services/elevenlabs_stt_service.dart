@@ -1,10 +1,39 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:math' as math;
 
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:ez_trainz/config/elevenlabs_config.dart';
+
+/// One transcribed token with Scribe's acoustic confidence for it.
+class SttWord {
+  const SttWord(this.text, this.probability);
+
+  final String text;
+
+  /// exp(logprob) — 0..1. 1.0 when the API returned no logprob.
+  final double probability;
+}
+
+/// Transcript plus per-word confidence.
+///
+/// STT language models "snap" mispronounced speech to the nearest real
+/// phrase (こんにちぱ → こんにちは), so the text alone can hide errors.
+/// The per-word probability is the tell: a snapped word has weak acoustic
+/// support and a visibly lower probability.
+class SttTranscription {
+  const SttTranscription(this.text, this.words);
+
+  final String text;
+  final List<SttWord> words;
+
+  /// Weakest word in the utterance (1.0 when no word data).
+  double get minWordProbability => words.isEmpty
+      ? 1.0
+      : words.map((w) => w.probability).reduce((a, b) => a < b ? a : b);
+}
 
 /// Calls [ElevenLabs Speech-to-Text (Scribe)](https://elevenlabs.io/docs/api-reference/speech-to-text/convert)
 /// to transcribe a recorded audio file into Japanese text.
@@ -38,8 +67,9 @@ class ElevenLabsSttService {
     }
   }
 
-  /// Uploads [file] and returns the recognised text ('' if nothing recognised).
-  Future<String> transcribe(File file) async {
+  /// Uploads [file] and returns the recognised text with per-word confidence
+  /// (empty text if nothing recognised).
+  Future<SttTranscription> transcribe(File file) async {
     if (!isAvailable) {
       throw StateError('ElevenLabs STT unavailable (no API key)');
     }
@@ -53,6 +83,8 @@ class ElevenLabsSttService {
       ..fields['language_code'] = 'ja'
       ..fields['tag_audio_events'] = 'false'
       ..fields['diarize'] = 'false'
+      // Deterministic decoding so the same clip always scores the same.
+      ..fields['temperature'] = '0'
       ..files.add(await http.MultipartFile.fromPath('file', file.path));
 
     final streamed = await _client.send(request).timeout(
@@ -67,10 +99,30 @@ class ElevenLabsSttService {
     }
 
     final decoded = jsonDecode(utf8.decode(response.bodyBytes));
-    final text = (decoded is Map && decoded['text'] is String)
-        ? (decoded['text'] as String).trim()
-        : '';
-    if (kDebugMode) debugPrint('Scribe transcript: "$text"');
-    return text;
+    if (decoded is! Map) return const SttTranscription('', []);
+
+    final text =
+        decoded['text'] is String ? (decoded['text'] as String).trim() : '';
+
+    final words = <SttWord>[];
+    final rawWords = decoded['words'];
+    if (rawWords is List) {
+      for (final w in rawWords) {
+        if (w is! Map || w['type'] != 'word') continue;
+        final wText = w['text'];
+        if (wText is! String || wText.trim().isEmpty) continue;
+        final logprob = w['logprob'];
+        final prob = logprob is num
+            ? math.exp(logprob.toDouble()).clamp(0.0, 1.0)
+            : 1.0;
+        words.add(SttWord(wText, prob));
+      }
+    }
+
+    if (kDebugMode) {
+      debugPrint('Scribe transcript: "$text" '
+          '(words: ${words.map((w) => '${w.text}:${w.probability.toStringAsFixed(2)}').join(' ')})');
+    }
+    return SttTranscription(text, words);
   }
 }

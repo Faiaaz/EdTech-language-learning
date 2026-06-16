@@ -10,9 +10,19 @@ import 'package:flutter/services.dart';
 import 'package:ez_trainz/services/jlc_tts.dart';
 import 'package:get/get.dart';
 import 'package:ez_trainz/services/jlc_stt.dart';
+import 'package:ez_trainz/utils/lesson_practice_config.dart';
 
 class N5WeekdaysLessonScreen extends StatefulWidget {
-  const N5WeekdaysLessonScreen({super.key});
+  const N5WeekdaysLessonScreen({
+    super.key,
+    this.initialTab = 0,
+    this.showTabs = true,
+    this.sessionRounds,
+  });
+
+  final int initialTab;
+  final bool showTabs;
+  final int? sessionRounds;
 
   @override
   State<N5WeekdaysLessonScreen> createState() => _N5WeekdaysLessonScreenState();
@@ -31,7 +41,7 @@ class _N5WeekdaysLessonScreenState extends State<N5WeekdaysLessonScreen> {
     _WeekTab.match,
     _WeekTab.sequence,
   ];
-  int _tab = 0;
+  late int _tab = widget.initialTab.clamp(0, _tabs.length - 1).toInt();
 
   @override
   Widget build(BuildContext context) {
@@ -58,41 +68,43 @@ class _N5WeekdaysLessonScreenState extends State<N5WeekdaysLessonScreen> {
                   ),
                   const SizedBox(width: 10),
                   Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text('শুক্র-শনি বাকিটা জানি',
-                            style: TextStyle(
-                                color: AppColors.textPrimary, fontWeight: FontWeight.w900, fontSize: 18)),
-                        Text('সপ্তাহের দিন: Japanese -> বাংলা',
-                            style: TextStyle(
-                                color: AppColors.textMuted,
-                                fontWeight: FontWeight.w600,
-                                fontSize: 12)),
-                      ],
+                    child: Text(
+                      widget.showTabs
+                          ? 'শুক্র-শনি বাকিটা জানি'
+                          : 'n5_l3_screen_title'.tr,
+                      style: const TextStyle(
+                          color: AppColors.textPrimary,
+                          fontWeight: FontWeight.w900,
+                          fontSize: 18),
                     ),
                   ),
                 ],
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: _WeekTabPills(index: _tab, onChange: (i) => setState(() => _tab = i)),
-            ),
-            const SizedBox(height: 10),
+            if (widget.showTabs) ...[
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: _WeekTabPills(index: _tab, onChange: (i) => setState(() => _tab = i)),
+              ),
+              const SizedBox(height: 10),
+            ] else
+              const SizedBox(height: 4),
             Expanded(
-              child: AnimatedSwitcher(
-                duration: const Duration(milliseconds: 220),
-                child: switch (_tabs[_tab]) {
-                  _WeekTab.flash => const _WeekFlashGame(key: ValueKey('weekFlash')),
-                  _WeekTab.quiz => const _WeekQuizGame(key: ValueKey('weekQuiz')),
-                  _WeekTab.match => const _WeekMatchGame(key: ValueKey('weekMatch')),
-                  _WeekTab.sequence => const _WeekSequenceGame(key: ValueKey('weekSequence')),
-                  _WeekTab.listen => const _WeekListenGame(key: ValueKey('weekListen')),
-                  _WeekTab.read => const _WeekReadGame(key: ValueKey('weekRead')),
-                  _WeekTab.speak => const _WeekSpeakGame(key: ValueKey('weekSpeak')),
-                  _WeekTab.seqSpeak => const _WeekSeqSpeakGame(key: ValueKey('weekSeqSpeak')),
-                },
+              child: LessonSessionScope(
+                sessionRounds: widget.sessionRounds,
+                child: AnimatedSwitcher(
+                  duration: const Duration(milliseconds: 220),
+                  child: switch (_tabs[_tab]) {
+                    _WeekTab.flash => const _WeekFlashGame(key: ValueKey('weekFlash')),
+                    _WeekTab.quiz => const _WeekQuizGame(key: ValueKey('weekQuiz')),
+                    _WeekTab.match => const _WeekMatchGame(key: ValueKey('weekMatch')),
+                    _WeekTab.sequence => const _WeekSequenceGame(key: ValueKey('weekSequence')),
+                    _WeekTab.listen => const _WeekListenGame(key: ValueKey('weekListen')),
+                    _WeekTab.read => const _WeekReadGame(key: ValueKey('weekRead')),
+                    _WeekTab.speak => const _WeekSpeakGame(key: ValueKey('weekSpeak')),
+                    _WeekTab.seqSpeak => const _WeekSeqSpeakGame(key: ValueKey('weekSeqSpeak')),
+                  },
+                ),
               ),
             ),
           ],
@@ -261,8 +273,15 @@ class _WeekFlashGameState extends State<_WeekFlashGame>
   int _flips = 0;
   final Set<int> _seen = {};
   bool _doneShown = false;
+  int _cardGoal = _weekdays.length;
 
   _Weekday get _item => _weekdays[_i];
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _cardGoal = LessonSessionScope.itemCountFor(context, _weekdays.length);
+  }
 
   @override
   void initState() {
@@ -304,7 +323,7 @@ class _WeekFlashGameState extends State<_WeekFlashGame>
   }
 
   void _go(int delta) {
-    final next = (_i + delta).clamp(0, _weekdays.length - 1);
+    final next = (_i + delta).clamp(0, _cardGoal - 1);
     if (next == _i) return;
     HapticFeedback.lightImpact();
     setState(() {
@@ -313,7 +332,7 @@ class _WeekFlashGameState extends State<_WeekFlashGame>
       _flipTurns = 0;
       if (_seen.add(_i)) _xp += 10;
     });
-    if (_seen.length == _weekdays.length && !_doneShown) {
+    if (_seen.length >= _cardGoal && !_doneShown) {
       _doneShown = true;
       _confetti.play();
       HapticFeedback.mediumImpact();
@@ -331,7 +350,7 @@ class _WeekFlashGameState extends State<_WeekFlashGame>
 
   @override
   Widget build(BuildContext context) {
-    final progress = _seen.length / _weekdays.length;
+    final progress = _cardGoal == 0 ? 0.0 : _seen.length / _cardGoal;
     return Padding(
       padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
       child: Stack(
@@ -374,7 +393,7 @@ class _WeekFlashGameState extends State<_WeekFlashGame>
                       const Icon(Icons.calendar_month_rounded,
                           color: Color(0xFFFFE000)),
                       const SizedBox(width: 8),
-                      Text('দিন ${_i + 1}/${_weekdays.length}',
+                      Text('দিন ${_i + 1}/$_cardGoal',
                           style: const TextStyle(
                               color: AppColors.textPrimary, fontWeight: FontWeight.w900)),
                       const SizedBox(width: 10),
@@ -388,7 +407,7 @@ class _WeekFlashGameState extends State<_WeekFlashGame>
                                   title: 'ফ্ল্যাশকার্ড — রিভিউ',
                                   scoreLabel: 'XP: $_xp',
                                   stats: [
-                                    'দিন দেখা: ${_seen.length}/${_weekdays.length}',
+                                    'দিন দেখা: ${_seen.length}/$_cardGoal',
                                     'ফ্লিপ: $_flips',
                                   ],
                                   missed: const [],
@@ -547,7 +566,7 @@ class _WeekFlashGameState extends State<_WeekFlashGame>
                 Expanded(
                   child: ElevatedButton.icon(
                     onPressed:
-                        _i >= _weekdays.length - 1 ? null : () => _go(1),
+                        _i >= _cardGoal - 1 ? null : () => _go(1),
                     style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xFF3B82F6),
                         foregroundColor: Colors.white),
@@ -1821,7 +1840,15 @@ class _WeekListenGame extends StatefulWidget {
 class _WeekListenGameState extends State<_WeekListenGame>
     with TickerProviderStateMixin {
   static const _teal = Color(0xFF14B8A6);
-  static const _totalRounds = 8;
+  static const _defaultRounds = 8;
+  int _totalRounds = _defaultRounds;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _totalRounds = LessonSessionScope.roundsFor(context, _defaultRounds);
+  }
+
   static const _sessionXpBonus = 50;
 
   final _rng = math.Random();
@@ -2188,7 +2215,15 @@ class _WeekReadGame extends StatefulWidget {
 class _WeekReadGameState extends State<_WeekReadGame>
     with TickerProviderStateMixin {
   static const _violet = Color(0xFF8B5CF6);
-  static const _totalRounds = 8;
+  static const _defaultRounds = 8;
+  int _totalRounds = _defaultRounds;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _totalRounds = LessonSessionScope.roundsFor(context, _defaultRounds);
+  }
+
   static const _sessionXpBonus = 50;
 
   final _rng = math.Random();
@@ -2577,7 +2612,15 @@ class _WeekSpeakGameState extends State<_WeekSpeakGame>
     with TickerProviderStateMixin {
   static const _rose = Color(0xFFE11D48);
   static const _maxSeconds = 6;
-  static const _totalRounds = 7;
+  static const _defaultRounds = 7;
+  int _totalRounds = _defaultRounds;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _totalRounds = LessonSessionScope.roundsFor(context, _defaultRounds);
+  }
+
   static const _sessionXpBonus = 50;
 
   final _rng = math.Random();
@@ -3266,13 +3309,16 @@ class _WeekSeqSpeakGameState extends State<_WeekSeqSpeakGame>
   late ConfettiController _confetti;
   late AnimationController _pulseCtrl;
 
+  List<_WeekSlotResult> _buildPendingResults(int count) => _weekdays
+      .take(count)
+      .map((w) => _WeekSlotResult(
+          expected: w, heardIdx: null, status: _WeekSlotStatus.pending))
+      .toList();
+
   @override
   void initState() {
     super.initState();
-    _results = _weekdays
-        .map((w) => _WeekSlotResult(
-            expected: w, heardIdx: null, status: _WeekSlotStatus.pending))
-        .toList();
+    _results = _buildPendingResults(_weekdays.length);
     _confetti = ConfettiController(duration: const Duration(milliseconds: 900));
     _pulseCtrl = AnimationController(
         vsync: this, duration: const Duration(milliseconds: 1100))
@@ -3280,6 +3326,19 @@ class _WeekSeqSpeakGameState extends State<_WeekSeqSpeakGame>
     _sessionTimer.start();
     _initTts();
     _initStt();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final count = LessonSessionScope.itemCountFor(context, _weekdays.length);
+    if (_results.length != count) {
+      setState(() {
+        _results = _buildPendingResults(count);
+        _evaluated = false;
+        _extras = const [];
+      });
+    }
   }
 
   @override
@@ -3403,10 +3462,11 @@ class _WeekSeqSpeakGameState extends State<_WeekSeqSpeakGame>
   void _evaluate(List<int> heard) {
     final entries = <_WeekSlotResult>[];
     int correctCount = 0;
-    for (var i = 0; i < _weekdays.length; i++) {
+    for (var i = 0; i < _results.length; i++) {
+      final day = _results[i].expected;
       if (i >= heard.length) {
         entries.add(_WeekSlotResult(
-            expected: _weekdays[i],
+            expected: day,
             heardIdx: null,
             status: _WeekSlotStatus.missed));
         continue;
@@ -3414,25 +3474,25 @@ class _WeekSeqSpeakGameState extends State<_WeekSeqSpeakGame>
       final h = heard[i];
       if (h == i) {
         entries.add(_WeekSlotResult(
-            expected: _weekdays[i],
+            expected: day,
             heardIdx: h,
             status: _WeekSlotStatus.correct));
         correctCount++;
       } else {
         entries.add(_WeekSlotResult(
-            expected: _weekdays[i],
+            expected: day,
             heardIdx: h,
             status: _WeekSlotStatus.wrong));
       }
     }
-    final extras = heard.length > _weekdays.length
-        ? heard.sublist(_weekdays.length)
+    final extras = heard.length > _results.length
+        ? heard.sublist(_results.length)
         : const <int>[];
 
     _attempts += 1;
     if (correctCount > _bestCorrect) _bestCorrect = correctCount;
-    // XP: +10 per correct slot, +50 bonus for perfect run.
-    final delta = correctCount * 10 + (correctCount == 7 ? 50 : 0);
+    final delta = correctCount * 10 +
+        (correctCount == _results.length && extras.isEmpty ? 50 : 0);
     _xp += delta;
 
     setState(() {
@@ -3441,7 +3501,7 @@ class _WeekSeqSpeakGameState extends State<_WeekSeqSpeakGame>
       _evaluated = true;
     });
 
-    if (correctCount == 7 && extras.isEmpty) {
+    if (correctCount == _results.length && extras.isEmpty) {
       HapticFeedback.heavyImpact();
       _confetti.play();
     } else if (correctCount >= 5) {
@@ -3459,10 +3519,9 @@ class _WeekSeqSpeakGameState extends State<_WeekSeqSpeakGame>
       _error = null;
       _evaluated = false;
       _extras = const [];
-      _results = _weekdays
-          .map((w) => _WeekSlotResult(
-              expected: w, heardIdx: null, status: _WeekSlotStatus.pending))
-          .toList();
+      _results = _buildPendingResults(
+        LessonSessionScope.itemCountFor(context, _weekdays.length),
+      );
       _secondsLeft = _maxSeconds;
       _soundLevel = 0;
     });
@@ -3561,7 +3620,7 @@ class _WeekSeqSpeakGameState extends State<_WeekSeqSpeakGame>
     final missedCount =
         _results.where((r) => r.status == _WeekSlotStatus.missed).length;
     final accuracy =
-        _evaluated ? ((correctCount * 100) / _weekdays.length).round() : 0;
+        _evaluated ? ((correctCount * 100) / _results.length).round() : 0;
 
     return Padding(
       padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
@@ -3574,9 +3633,9 @@ class _WeekSeqSpeakGameState extends State<_WeekSeqSpeakGame>
               _WeekHeaderPanel(
                 color: _amber,
                 title: 'ক্রম বলো — সোম থেকে রবি একবারে বলুন',
-                progress: _evaluated ? correctCount / _weekdays.length : 0,
+                progress: _evaluated ? correctCount / _results.length : 0,
                 roundText: _evaluated
-                    ? 'সঠিক: $correctCount/${_weekdays.length}'
+                    ? 'সঠিক: $correctCount/${_results.length}'
                     : 'মাইক চাপুন',
                 xp: _xp,
                 streak: _bestCorrect,

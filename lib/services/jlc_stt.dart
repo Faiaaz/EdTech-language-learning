@@ -19,6 +19,10 @@ class JlcSttResult {
   const JlcSttResult(this.recognizedWords, this.confidence, this.finalResult);
 
   final String recognizedWords;
+
+  /// Scribe's weakest per-word acoustic probability (0..1). Low values mean
+  /// the transcript may be a language-model auto-correction of what was
+  /// actually said — treat "perfect" matches sceptically.
   final double confidence;
   final bool finalResult;
 }
@@ -122,8 +126,13 @@ class JlcStt {
     }
 
     try {
-      final text = await ElevenLabsSttService.instance.transcribe(File(file));
-      _onResult?.call(JlcSttResult(text, text.isEmpty ? 0 : 1, true));
+      final result =
+          await ElevenLabsSttService.instance.transcribe(File(file));
+      _onResult?.call(JlcSttResult(
+        result.text,
+        result.text.isEmpty ? 0 : result.minWordProbability,
+        true,
+      ));
     } catch (e) {
       debugPrint('JlcStt: transcription failed: $e');
       _onResult?.call(const JlcSttResult('', 0, true));

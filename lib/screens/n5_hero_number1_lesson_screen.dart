@@ -11,9 +11,25 @@ import 'package:flutter/services.dart';
 import 'package:ez_trainz/services/jlc_tts.dart';
 import 'package:get/get.dart';
 import 'package:ez_trainz/services/jlc_stt.dart';
+import 'package:ez_trainz/utils/lesson_practice_config.dart';
 
 class N5HeroNumber1LessonScreen extends StatefulWidget {
-  const N5HeroNumber1LessonScreen({super.key});
+  const N5HeroNumber1LessonScreen({
+    super.key,
+    this.initialTab = 0,
+    this.showTabs = true,
+    this.sessionRounds,
+  });
+
+  /// Which game to open on first build (index into
+  /// [_N5HeroNumber1LessonScreenState._tabs]). Lets callers deep-link to a
+  /// specific mini-game.
+  final int initialTab;
+
+  /// When false, the tab pills are hidden and only [initialTab]'s game is
+  /// playable — used when a single game is launched from the lesson screen.
+  final bool showTabs;
+  final int? sessionRounds;
 
   @override
   State<N5HeroNumber1LessonScreen> createState() => _N5HeroNumber1LessonScreenState();
@@ -31,7 +47,7 @@ class _N5HeroNumber1LessonScreenState extends State<N5HeroNumber1LessonScreen> {
     _HeroTab.match,
     _HeroTab.blitz,
   ];
-  int _tab = 0;
+  late int _tab = widget.initialTab.clamp(0, _tabs.length - 1).toInt();
 
   @override
   Widget build(BuildContext context) {
@@ -57,44 +73,42 @@ class _N5HeroNumber1LessonScreenState extends State<N5HeroNumber1LessonScreen> {
                     ),
                   ),
                   const SizedBox(width: 10),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text('হিরো নাম্বার ১',
-                            style: TextStyle(
-                                color: AppColors.textPrimary, fontWeight: FontWeight.w900, fontSize: 18)),
-                        Text('১-১০ সংখ্যা: কানজি + হিরাগানা -> বাংলা',
-                            style: TextStyle(
-                                color: AppColors.textMuted,
-                                fontWeight: FontWeight.w600,
-                                fontSize: 12)),
-                      ],
-                    ),
+                  const Expanded(
+                    child: Text('হিরো নাম্বার ১',
+                        style: TextStyle(
+                            color: AppColors.textPrimary,
+                            fontWeight: FontWeight.w900,
+                            fontSize: 18)),
                   ),
                 ],
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: _HeroTabPills(
-                index: _tab,
-                onChange: (i) => setState(() => _tab = i),
+            if (widget.showTabs) ...[
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: _HeroTabPills(
+                  index: _tab,
+                  onChange: (i) => setState(() => _tab = i),
+                ),
               ),
-            ),
-            const SizedBox(height: 10),
+              const SizedBox(height: 10),
+            ] else
+              const SizedBox(height: 4),
             Expanded(
-              child: AnimatedSwitcher(
-                duration: const Duration(milliseconds: 220),
-                child: switch (_tabs[_tab]) {
-                  _HeroTab.speak => const _HeroSpeakGame(key: ValueKey('heroSpeak')),
-                  _HeroTab.match => const _HeroMatchGame(key: ValueKey('heroMatch')),
-                  _HeroTab.blitz => const _HeroBlitzGame(key: ValueKey('heroBlitz')),
-                  _HeroTab.tapHear => const _HeroTapWhatYouHearGame(key: ValueKey('heroTapHear')),
-                  _HeroTab.read => const _HeroReadGame(key: ValueKey('heroRead')),
-                  _HeroTab.order => const _HeroOrderGame(key: ValueKey('heroOrder')),
-                  _HeroTab.speakSeq => const _HeroSpeakSequenceGame(key: ValueKey('heroSpeakSeq')),
-                },
+              child: LessonSessionScope(
+                sessionRounds: widget.sessionRounds,
+                child: AnimatedSwitcher(
+                  duration: const Duration(milliseconds: 220),
+                  child: switch (_tabs[_tab]) {
+                    _HeroTab.speak => const _HeroSpeakGame(key: ValueKey('heroSpeak')),
+                    _HeroTab.match => const _HeroMatchGame(key: ValueKey('heroMatch')),
+                    _HeroTab.blitz => const _HeroBlitzGame(key: ValueKey('heroBlitz')),
+                    _HeroTab.tapHear => const _HeroTapWhatYouHearGame(key: ValueKey('heroTapHear')),
+                    _HeroTab.read => const _HeroReadGame(key: ValueKey('heroRead')),
+                    _HeroTab.order => const _HeroOrderGame(key: ValueKey('heroOrder')),
+                    _HeroTab.speakSeq => const _HeroSpeakSequenceGame(key: ValueKey('heroSpeakSeq')),
+                  },
+                ),
               ),
             ),
           ],
@@ -1404,8 +1418,6 @@ class _HeroMatchGameState extends State<_HeroMatchGame>
 
   @override
   Widget build(BuildContext context) {
-    final progress = _cards.isEmpty ? 0.0 : _matched.length / _cards.length;
-    final elapsed = _formatDuration(_stopwatch.elapsed);
     return Padding(
       padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
       child: Stack(
@@ -1437,62 +1449,21 @@ class _HeroMatchGameState extends State<_HeroMatchGame>
             ),
           ),
           Column(children: [
-            Container(
-              padding: const EdgeInsets.all(14),
-              decoration: _cardDeco(),
-              child: Column(
-                children: [
-                  Row(
-                    children: [
-                      const Icon(Icons.extension_rounded, color: Color(0xFFFFE000)),
-                      const SizedBox(width: 8),
-                      const Expanded(
-                        child: Text('জাপানি ↔ বাংলা মিলাও',
-                            style: TextStyle(
-                                color: AppColors.textPrimary,
-                                fontWeight: FontWeight.w900)),
-                      ),
-                      _MatchStatChip(label: 'XP', value: '$_xp'),
-                      const SizedBox(width: 6),
-                      _MatchStatChip(label: 'স্ট্রিক', value: '$_streak'),
-                    ],
+            Row(
+              children: [
+                const Icon(Icons.extension_rounded,
+                    color: Color(0xFFFFE000), size: 20),
+                const SizedBox(width: 8),
+                const Expanded(
+                  child: Text(
+                    'জাপানি ↔ বাংলা মিলাও',
+                    style: TextStyle(
+                        color: AppColors.textPrimary,
+                        fontWeight: FontWeight.w800,
+                        fontSize: 13),
                   ),
-                  const SizedBox(height: 8),
-                  Row(
-                    children: [
-                      Icon(Icons.timer_rounded,
-                          size: 14, color: AppColors.textMuted),
-                      const SizedBox(width: 4),
-                      Text(elapsed,
-                          style: TextStyle(
-                              color: AppColors.textMuted,
-                              fontWeight: FontWeight.w800,
-                              fontSize: 12)),
-                      const SizedBox(width: 14),
-                      Text('মুভ: $_moves',
-                          style: TextStyle(
-                              color: AppColors.textMuted,
-                              fontWeight: FontWeight.w800,
-                              fontSize: 12)),
-                      const Spacer(),
-                      Text('${_matched.length ~/ 2}/${_cards.length ~/ 2} মিলেছে',
-                          style: const TextStyle(
-                              color: Color(0xFFFFE000),
-                              fontWeight: FontWeight.w900,
-                              fontSize: 12)),
-                    ],
-                  ),
-                  const SizedBox(height: 8),
-                  LinearProgressIndicator(
-                    minHeight: 7,
-                    borderRadius: BorderRadius.circular(99),
-                    value: progress.clamp(0, 1),
-                    backgroundColor: AppColors.border,
-                    valueColor:
-                        const AlwaysStoppedAnimation(Color(0xFFFFE000)),
-                  ),
-                ],
-              ),
+                ),
+              ],
             ),
             const SizedBox(height: 10),
             Expanded(
@@ -1613,38 +1584,6 @@ class _HeroMatchGameState extends State<_HeroMatchGame>
   }
 }
 
-class _MatchStatChip extends StatelessWidget {
-  const _MatchStatChip({required this.label, required this.value});
-  final String label;
-  final String value;
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-      decoration: BoxDecoration(
-        color: AppColors.bg,
-        borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: AppColors.border),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text(label,
-              style: TextStyle(
-                  color: AppColors.textMuted,
-                  fontSize: 10,
-                  fontWeight: FontWeight.w800)),
-          const SizedBox(width: 4),
-          Text(value,
-              style: const TextStyle(
-                  color: Color(0xFFFFE000),
-                  fontWeight: FontWeight.w900,
-                  fontSize: 12)),
-        ],
-      ),
-    );
-  }
-}
 
 class _HeroBlitzGame extends StatefulWidget {
   const _HeroBlitzGame({super.key});
@@ -1819,7 +1758,6 @@ class _HeroBlitzGameState extends State<_HeroBlitzGame>
 
   @override
   Widget build(BuildContext context) {
-    final progress = _round / _maxRounds;
     return Padding(
       padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
       child: Stack(
@@ -1852,38 +1790,21 @@ class _HeroBlitzGameState extends State<_HeroBlitzGame>
           ),
           Column(
             children: [
-              Container(
-                padding: const EdgeInsets.all(14),
-                decoration: _cardDeco(),
-                child: Column(
-                  children: [
-                    Row(
-                      children: [
-                        const Icon(Icons.flash_on_rounded,
-                            color: Color(0xFFFFE000)),
-                        const SizedBox(width: 8),
-                        Text('রাউন্ড: $_round/$_maxRounds',
-                            style: const TextStyle(
-                                color: AppColors.textPrimary,
-                                fontWeight: FontWeight.w900)),
-                        const Spacer(),
-                        Text('স্কোর: $_score',
-                            style: const TextStyle(
-                                color: AppColors.textPrimary,
-                                fontWeight: FontWeight.w900)),
-                      ],
+              Row(
+                children: [
+                  const Icon(Icons.flash_on_rounded,
+                      color: Color(0xFFFFE000), size: 20),
+                  const SizedBox(width: 8),
+                  const Expanded(
+                    child: Text(
+                      'স্পিড বস — সময়ের মধ্যে সঠিক উত্তর দাও',
+                      style: TextStyle(
+                          color: AppColors.textPrimary,
+                          fontWeight: FontWeight.w800,
+                          fontSize: 13),
                     ),
-                    const SizedBox(height: 8),
-                    LinearProgressIndicator(
-                      minHeight: 8,
-                      borderRadius: BorderRadius.circular(99),
-                      value: progress.clamp(0, 1),
-                      backgroundColor: AppColors.border,
-                      valueColor:
-                          const AlwaysStoppedAnimation(Color(0xFFFFE000)),
-                    ),
-                  ],
-                ),
+                  ),
+                ],
               ),
               const SizedBox(height: 10),
               AnimatedBuilder(
@@ -2172,7 +2093,15 @@ class _HeroTapWhatYouHearGame extends StatefulWidget {
 
 class _HeroTapWhatYouHearGameState extends State<_HeroTapWhatYouHearGame>
     with TickerProviderStateMixin {
-  static const _totalRounds = 10;
+  static const _defaultRounds = 10;
+  int _totalRounds = _defaultRounds;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _totalRounds = LessonSessionScope.roundsFor(context, _defaultRounds);
+  }
+
   static const _sessionXpBonus = 50;
 
   final _rng = math.Random();
@@ -2186,7 +2115,6 @@ class _HeroTapWhatYouHearGameState extends State<_HeroTapWhatYouHearGame>
   late _HeroNum _target;
   late List<_HeroNum> _options;
 
-  bool _slowMode = false;
   bool _locked = false;
   int? _pickedN;
   bool? _lastWasCorrect;
@@ -2218,11 +2146,6 @@ class _HeroTapWhatYouHearGameState extends State<_HeroTapWhatYouHearGame>
     await _tts.prefetchTexts(
       _heroNumbers.expand((h) => <String>[h.kana, '${h.kana}。']),
     );
-  }
-
-  Future<void> _applySpeechRate() async {
-    await _ttsReady;
-    await _tts.setSpeechRate(_slowMode ? 0.34 : 0.52);
   }
 
   void _newSession() {
@@ -2431,7 +2354,6 @@ class _HeroTapWhatYouHearGameState extends State<_HeroTapWhatYouHearGame>
   @override
   Widget build(BuildContext context) {
     const orange = AppColors.audio;
-    final progress = (_roundIdx + 1) / _totalRounds;
 
     return Padding(
       padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
@@ -2465,76 +2387,20 @@ class _HeroTapWhatYouHearGameState extends State<_HeroTapWhatYouHearGame>
           ),
           Column(
             children: [
-              Container(
-                padding: const EdgeInsets.all(14),
-                decoration: BoxDecoration(
-                  color: AppColors.card,
-                  borderRadius: BorderRadius.circular(16),
-                  border: Border.all(color: orange.withValues(alpha: 0.45)),
-                  boxShadow: [
-                    BoxShadow(
-                      color: orange.withValues(alpha: 0.12),
-                      blurRadius: 18,
-                      offset: const Offset(0, 8),
-                    ),
-                  ],
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    Row(
-                      children: [
-                        const Icon(Icons.headphones_rounded, color: orange, size: 22),
-                        const SizedBox(width: 8),
-                        const Expanded(
-                          child: Text(
-                            'শুনে ট্যাপ — জাপানি বলা শুনে বাংলা বেছে নিন',
-                            style: TextStyle(
-                                color: AppColors.textPrimary, fontWeight: FontWeight.w900, fontSize: 13),
-                          ),
-                        ),
-                        Text(
-                          _formatDuration(_sessionTimer.elapsed),
-                          style: TextStyle(
-                            color: AppColors.textMuted,
-                            fontWeight: FontWeight.w900,
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 10),
-                    LinearProgressIndicator(
-                      minHeight: 8,
-                      borderRadius: BorderRadius.circular(99),
-                      value: progress.clamp(0, 1),
-                      backgroundColor: AppColors.border,
-                      valueColor: const AlwaysStoppedAnimation(orange),
-                    ),
-                    const SizedBox(height: 8),
-                    Row(
-                      children: [
-                        Text(
-                          'রাউন্ড ${_roundIdx + 1}/$_totalRounds',
-                          style: TextStyle(
-                              color: AppColors.textMuted, fontWeight: FontWeight.w800),
-                        ),
-                        const Spacer(),
-                        Text('XP: $_xp',
-                            style: const TextStyle(color: Color(0xFFFFE000), fontWeight: FontWeight.w900)),
-                        const SizedBox(width: 10),
-                        Text('স্ট্রিক: $_streak',
-                            style: TextStyle(
-                                color: AppColors.textMuted, fontWeight: FontWeight.w800)),
-                      ],
-                    ),
-                    const SizedBox(height: 6),
-                    Text(
-                      'নির্ভুলতা: ${_totalAttempts == 0 ? 0 : ((_correct * 100) / _totalAttempts).round()}%',
+              Row(
+                children: [
+                  const Icon(Icons.headphones_rounded, color: orange, size: 20),
+                  const SizedBox(width: 8),
+                  const Expanded(
+                    child: Text(
+                      'শুনে ট্যাপ — জাপানি বলা শুনে বাংলা বেছে নিন',
                       style: TextStyle(
-                          color: AppColors.textMuted, fontWeight: FontWeight.w700, fontSize: 12),
+                          color: AppColors.textPrimary,
+                          fontWeight: FontWeight.w800,
+                          fontSize: 13),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
               const SizedBox(height: 12),
               // ── Number card ──────────────────────────────────────────
@@ -2577,53 +2443,40 @@ class _HeroTapWhatYouHearGameState extends State<_HeroTapWhatYouHearGame>
                           ),
                         ),
                       ),
-                      const SizedBox(height: 16),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: ElevatedButton.icon(
-                              onPressed: _locked ? null : _speakPrompt,
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: orange,
-                                foregroundColor: Colors.white,
-                                padding: const EdgeInsets.symmetric(vertical: 12),
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(12)),
+                      const SizedBox(height: 14),
+                      GestureDetector(
+                        onTap: _locked ? null : _speakPrompt,
+                        child: Container(
+                          width: 56,
+                          height: 56,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            gradient: LinearGradient(
+                              colors: [
+                                orange,
+                                Color.lerp(orange, const Color(0xFFC2410C), 0.35)!,
+                              ],
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
+                            ),
+                            boxShadow: [
+                              BoxShadow(
+                                color: orange.withValues(alpha: 0.42),
+                                blurRadius: 18,
+                                offset: const Offset(0, 6),
                               ),
-                              icon: const Icon(Icons.volume_up_rounded),
-                              label: const Text('আবার শুনুন',
-                                  style: TextStyle(fontWeight: FontWeight.w900)),
+                            ],
+                            border: Border.all(
+                              color: Colors.white.withValues(alpha: 0.35),
+                              width: 1.5,
                             ),
                           ),
-                          const SizedBox(width: 10),
-                          Expanded(
-                            child: OutlinedButton.icon(
-                              onPressed: _locked
-                                  ? null
-                                  : () async {
-                                      setState(() => _slowMode = !_slowMode);
-                                      await _applySpeechRate();
-                                      if (mounted) setState(() {});
-                                      await _speakPrompt();
-                                    },
-                              style: OutlinedButton.styleFrom(
-                                foregroundColor: _slowMode ? orange : AppColors.textPrimary,
-                                side: BorderSide(
-                                    color: _slowMode
-                                        ? orange
-                                        : AppColors.border),
-                                padding: const EdgeInsets.symmetric(vertical: 12),
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(12)),
-                              ),
-                              icon: Icon(_slowMode
-                                  ? Icons.speed_rounded
-                                  : Icons.hourglass_bottom_rounded),
-                              label: Text(_slowMode ? 'স্বাভাবিক' : 'ধীর শোনা',
-                                  style: const TextStyle(fontWeight: FontWeight.w900)),
-                            ),
+                          child: const Icon(
+                            Icons.volume_up_rounded,
+                            color: Colors.white,
+                            size: 28,
                           ),
-                        ],
+                        ),
                       ),
                     ],
                   ),
@@ -2751,7 +2604,15 @@ class _HeroReadGame extends StatefulWidget {
 
 class _HeroReadGameState extends State<_HeroReadGame>
     with TickerProviderStateMixin {
-  static const _totalRounds = 10;
+  static const _defaultRounds = 10;
+  int _totalRounds = _defaultRounds;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _totalRounds = LessonSessionScope.roundsFor(context, _defaultRounds);
+  }
+
   static const _sessionXpBonus = 50;
   static const _violet = Color(0xFF8B5CF6);
   static const _violetDark = Color(0xFF6D28D9);
@@ -2965,7 +2826,6 @@ class _HeroReadGameState extends State<_HeroReadGame>
 
   @override
   Widget build(BuildContext context) {
-    final progress = (_roundIdx + 1) / _totalRounds;
 
     return Padding(
       padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
@@ -3000,77 +2860,20 @@ class _HeroReadGameState extends State<_HeroReadGame>
           Column(
             children: [
               // ── Header panel ───────────────────────────────────────
-              Container(
-                padding: const EdgeInsets.all(14),
-                decoration: BoxDecoration(
-                  color: AppColors.card,
-                  borderRadius: BorderRadius.circular(16),
-                  border: Border.all(color: _violet.withValues(alpha: 0.45)),
-                  boxShadow: [
-                    BoxShadow(
-                      color: _violet.withValues(alpha: 0.12),
-                      blurRadius: 18,
-                      offset: const Offset(0, 8),
+              Row(
+                children: [
+                  const Icon(Icons.menu_book_rounded, color: _violet, size: 20),
+                  const SizedBox(width: 8),
+                  const Expanded(
+                    child: Text(
+                      'পড়া মাস্টার — পড়ে বুঝে সঠিক উত্তর বাছুন',
+                      style: TextStyle(
+                          color: AppColors.textPrimary,
+                          fontWeight: FontWeight.w800,
+                          fontSize: 13),
                     ),
-                  ],
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    Row(
-                      children: [
-                        const Icon(Icons.menu_book_rounded,
-                            color: _violet, size: 22),
-                        const SizedBox(width: 8),
-                        const Expanded(
-                          child: Text(
-                            'পড়া মাস্টার — পড়ে বুঝে সঠিক উত্তর বাছুন',
-                            style: TextStyle(
-                                color: AppColors.textPrimary,
-                                fontWeight: FontWeight.w900,
-                                fontSize: 13),
-                          ),
-                        ),
-                        Text(
-                          _formatDuration(_sessionTimer.elapsed),
-                          style: TextStyle(
-                            color: AppColors.textMuted,
-                            fontWeight: FontWeight.w900,
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 10),
-                    LinearProgressIndicator(
-                      minHeight: 8,
-                      borderRadius: BorderRadius.circular(99),
-                      value: progress.clamp(0, 1),
-                      backgroundColor: AppColors.border,
-                      valueColor: const AlwaysStoppedAnimation(_violet),
-                    ),
-                    const SizedBox(height: 8),
-                    Row(
-                      children: [
-                        Text(
-                          'রাউন্ড ${_roundIdx + 1}/$_totalRounds',
-                          style: TextStyle(
-                              color: AppColors.textMuted,
-                              fontWeight: FontWeight.w800),
-                        ),
-                        const Spacer(),
-                        Text('XP: $_xp',
-                            style: const TextStyle(
-                                color: Color(0xFFFFE000),
-                                fontWeight: FontWeight.w900)),
-                        const SizedBox(width: 10),
-                        Text('স্ট্রিক: $_streak',
-                            style: TextStyle(
-                                color: AppColors.textMuted,
-                                fontWeight: FontWeight.w800)),
-                      ],
-                    ),
-                  ],
-                ),
+                  ),
+                ],
               ),
               const SizedBox(height: 12),
 
@@ -3546,9 +3349,6 @@ class _HeroOrderGameState extends State<_HeroOrderGame>
 
   @override
   Widget build(BuildContext context) {
-    final placedCount = _correct;
-    final progress = placedCount / _heroNumbers.length;
-
     return Padding(
       padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
       child: Stack(
@@ -3583,77 +3383,21 @@ class _HeroOrderGameState extends State<_HeroOrderGame>
           Column(
             children: [
               // ── Header panel ───────────────────────────────────────
-              Container(
-                padding: const EdgeInsets.all(14),
-                decoration: BoxDecoration(
-                  color: AppColors.card,
-                  borderRadius: BorderRadius.circular(16),
-                  border: Border.all(color: _accent.withValues(alpha: 0.45)),
-                  boxShadow: [
-                    BoxShadow(
-                      color: _accent.withValues(alpha: 0.12),
-                      blurRadius: 18,
-                      offset: const Offset(0, 8),
+              Row(
+                children: [
+                  const Icon(Icons.format_list_numbered_rounded,
+                      color: _accent, size: 20),
+                  const SizedBox(width: 8),
+                  const Expanded(
+                    child: Text(
+                      'সাজাও — ক্রম অনুযায়ী টেনে বসান',
+                      style: TextStyle(
+                          color: AppColors.textPrimary,
+                          fontWeight: FontWeight.w800,
+                          fontSize: 13),
                     ),
-                  ],
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    Row(
-                      children: [
-                        const Icon(Icons.format_list_numbered_rounded,
-                            color: _accent, size: 22),
-                        const SizedBox(width: 8),
-                        const Expanded(
-                          child: Text(
-                            'সাজাও — ক্রম অনুযায়ী টেনে বসান',
-                            style: TextStyle(
-                                color: AppColors.textPrimary,
-                                fontWeight: FontWeight.w900,
-                                fontSize: 13),
-                          ),
-                        ),
-                        Text(
-                          _formatDuration(_sessionTimer.elapsed),
-                          style: TextStyle(
-                            color: AppColors.textMuted,
-                            fontWeight: FontWeight.w900,
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 10),
-                    LinearProgressIndicator(
-                      minHeight: 8,
-                      borderRadius: BorderRadius.circular(99),
-                      value: progress.clamp(0, 1),
-                      backgroundColor: AppColors.border,
-                      valueColor: const AlwaysStoppedAnimation(_accent),
-                    ),
-                    const SizedBox(height: 8),
-                    Row(
-                      children: [
-                        Text(
-                          'স্থাপন: $placedCount/${_heroNumbers.length}',
-                          style: TextStyle(
-                              color: AppColors.textMuted,
-                              fontWeight: FontWeight.w800),
-                        ),
-                        const Spacer(),
-                        Text('XP: $_xp',
-                            style: const TextStyle(
-                                color: Color(0xFFFFE000),
-                                fontWeight: FontWeight.w900)),
-                        const SizedBox(width: 10),
-                        Text('স্ট্রিক: $_streak',
-                            style: TextStyle(
-                                color: AppColors.textMuted,
-                                fontWeight: FontWeight.w800)),
-                      ],
-                    ),
-                  ],
-                ),
+                  ),
+                ],
               ),
               const SizedBox(height: 12),
 
@@ -3938,7 +3682,6 @@ class _HeroSpeakSequenceGameState extends State<_HeroSpeakSequenceGame>
   List<int> _extras = const [];
   bool _evaluated = false;
 
-  int _xp = 0;
   int _attempts = 0;
   int _bestCorrect = 0;
   final Stopwatch _sessionTimer = Stopwatch();
@@ -3947,13 +3690,16 @@ class _HeroSpeakSequenceGameState extends State<_HeroSpeakSequenceGame>
   late AnimationController _pulseCtrl;
   late AnimationController _waveCtrl;
 
+  List<_SeqEvalEntry> _buildPendingResults(int count) => _heroNumbers
+      .take(count)
+      .map((h) =>
+          _SeqEvalEntry(expected: h, heard: null, status: _SeqStatus.pending))
+      .toList();
+
   @override
   void initState() {
     super.initState();
-    _results = _heroNumbers
-        .map((h) =>
-            _SeqEvalEntry(expected: h, heard: null, status: _SeqStatus.pending))
-        .toList();
+    _results = _buildPendingResults(_heroNumbers.length);
     _confetti = ConfettiController(duration: const Duration(milliseconds: 900));
     _pulseCtrl = AnimationController(
         vsync: this, duration: const Duration(milliseconds: 1100))
@@ -3964,6 +3710,19 @@ class _HeroSpeakSequenceGameState extends State<_HeroSpeakSequenceGame>
     _sessionTimer.start();
     _initTts();
     _initStt();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final count = LessonSessionScope.itemCountFor(context, _heroNumbers.length);
+    if (_results.length != count) {
+      setState(() {
+        _results = _buildPendingResults(count);
+        _evaluated = false;
+        _extras = const [];
+      });
+    }
   }
 
   @override
@@ -4195,8 +3954,8 @@ class _HeroSpeakSequenceGameState extends State<_HeroSpeakSequenceGame>
   void _evaluate(List<int> heard) {
     final entries = <_SeqEvalEntry>[];
     int correctCount = 0;
-    for (var i = 0; i < _heroNumbers.length; i++) {
-      final expected = _heroNumbers[i];
+    for (var i = 0; i < _results.length; i++) {
+      final expected = _results[i].expected;
       if (i >= heard.length) {
         entries.add(_SeqEvalEntry(
             expected: expected, heard: null, status: _SeqStatus.missed));
@@ -4212,15 +3971,12 @@ class _HeroSpeakSequenceGameState extends State<_HeroSpeakSequenceGame>
             expected: expected, heard: h, status: _SeqStatus.wrong));
       }
     }
-    final extras = heard.length > _heroNumbers.length
-        ? heard.sublist(_heroNumbers.length)
+    final extras = heard.length > _results.length
+        ? heard.sublist(_results.length)
         : const <int>[];
 
     _attempts += 1;
     if (correctCount > _bestCorrect) _bestCorrect = correctCount;
-    // XP: +10 per correct slot, +50 bonus for perfect run.
-    final delta = correctCount * 10 + (correctCount == 10 ? 50 : 0);
-    _xp += delta;
 
     setState(() {
       _results = entries;
@@ -4228,7 +3984,7 @@ class _HeroSpeakSequenceGameState extends State<_HeroSpeakSequenceGame>
       _evaluated = true;
     });
 
-    if (correctCount == 10 && extras.isEmpty) {
+    if (correctCount == _results.length && extras.isEmpty) {
       HapticFeedback.heavyImpact();
       _confetti.play();
     } else if (correctCount >= 7) {
@@ -4246,10 +4002,9 @@ class _HeroSpeakSequenceGameState extends State<_HeroSpeakSequenceGame>
       _error = null;
       _evaluated = false;
       _extras = const [];
-      _results = _heroNumbers
-          .map((h) => _SeqEvalEntry(
-              expected: h, heard: null, status: _SeqStatus.pending))
-          .toList();
+      _results = _buildPendingResults(
+        LessonSessionScope.itemCountFor(context, _heroNumbers.length),
+      );
       _secondsLeft = _maxSeconds;
       _soundLevel = 0;
     });
@@ -4345,8 +4100,6 @@ class _HeroSpeakSequenceGameState extends State<_HeroSpeakSequenceGame>
         _results.where((r) => r.status == _SeqStatus.wrong).length;
     final missedCount =
         _results.where((r) => r.status == _SeqStatus.missed).length;
-    final accuracy =
-        _evaluated ? ((correctCount * 100) / _heroNumbers.length).round() : 0;
 
     return Padding(
       padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
@@ -4380,7 +4133,7 @@ class _HeroSpeakSequenceGameState extends State<_HeroSpeakSequenceGame>
           ),
           Column(
             children: [
-              _buildHeader(correctCount, accuracy),
+              _buildHeader(),
               const SizedBox(height: 12),
               _buildMicCard(),
               const SizedBox(height: 12),
@@ -4399,95 +4152,21 @@ class _HeroSpeakSequenceGameState extends State<_HeroSpeakSequenceGame>
     );
   }
 
-  Widget _buildHeader(int correctCount, int accuracy) {
-    return Container(
-      padding: const EdgeInsets.all(14),
-      decoration: BoxDecoration(
-        color: AppColors.card,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: _rose.withValues(alpha: 0.45)),
-        boxShadow: [
-          BoxShadow(
-            color: _rose.withValues(alpha: 0.12),
-            blurRadius: 18,
-            offset: const Offset(0, 8),
+  Widget _buildHeader() {
+    return Row(
+      children: [
+        const Icon(Icons.record_voice_over_rounded, color: _rose, size: 20),
+        const SizedBox(width: 8),
+        const Expanded(
+          child: Text(
+            '১-১০ বলো — এক টানে জাপানিতে বলুন',
+            style: TextStyle(
+                color: AppColors.textPrimary,
+                fontWeight: FontWeight.w800,
+                fontSize: 13),
           ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Row(
-            children: [
-              const Icon(Icons.record_voice_over_rounded,
-                  color: _rose, size: 22),
-              const SizedBox(width: 8),
-              const Expanded(
-                child: Text(
-                  '১-১০ বলো — এক টানে জাপানিতে বলুন',
-                  style: TextStyle(
-                      color: AppColors.textPrimary,
-                      fontWeight: FontWeight.w900,
-                      fontSize: 13),
-                ),
-              ),
-              if (_listening)
-                Text(
-                  '$_secondsLeft s',
-                  style: const TextStyle(
-                    color: _rose,
-                    fontWeight: FontWeight.w900,
-                  ),
-                ),
-            ],
-          ),
-          const SizedBox(height: 10),
-          LinearProgressIndicator(
-            minHeight: 8,
-            borderRadius: BorderRadius.circular(99),
-            value: _evaluated ? correctCount / _heroNumbers.length : 0,
-            backgroundColor: AppColors.border,
-            valueColor: const AlwaysStoppedAnimation(_rose),
-          ),
-          const SizedBox(height: 8),
-          Row(
-            children: [
-              Text(
-                _evaluated
-                    ? 'সঠিক: $correctCount/${_heroNumbers.length}'
-                    : 'মাইক চাপুন',
-                style: TextStyle(
-                    color: AppColors.textMuted,
-                    fontWeight: FontWeight.w800),
-              ),
-              const Spacer(),
-              Text('XP: $_xp',
-                  style: const TextStyle(
-                      color: Color(0xFFFFE000),
-                      fontWeight: FontWeight.w900)),
-              const SizedBox(width: 10),
-              Text(
-                'সেরা: $_bestCorrect/10',
-                style: TextStyle(
-                    color: AppColors.textMuted,
-                    fontWeight: FontWeight.w800),
-              ),
-            ],
-          ),
-          if (_evaluated)
-            Padding(
-              padding: const EdgeInsets.only(top: 6),
-              child: Text(
-                'নির্ভুলতা: $accuracy%',
-                style: TextStyle(
-                  color: AppColors.textMuted,
-                  fontWeight: FontWeight.w700,
-                  fontSize: 12,
-                ),
-              ),
-            ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 

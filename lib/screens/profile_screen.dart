@@ -1,11 +1,13 @@
+import 'package:flutter/foundation.dart' show kDebugMode;
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import 'package:ez_trainz/controllers/auth_controller.dart';
 import 'package:ez_trainz/controllers/locale_controller.dart';
-import 'package:ez_trainz/screens/login_screen.dart';
+import 'package:ez_trainz/screens/pronunciation_benchmark_screen.dart';
 import 'package:ez_trainz/screens/user_history_screen.dart';
 import 'package:ez_trainz/utils/app_theme.dart';
+import 'package:ez_trainz/widgets/app_settings_menu.dart';
 
 /// Basic user information: Name, Email, Bio. Matches JLC/KLC/ELC/GLC theme.
 class ProfileScreen extends StatelessWidget {
@@ -57,35 +59,7 @@ class ProfileScreen extends StatelessWidget {
                           )),
                     ],
                   ),
-                  GestureDetector(
-                    onTap: () {
-                      AuthController.to.logout();
-                      Get.offAll(() => const LoginScreen());
-                    },
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 14, vertical: 8),
-                      decoration: BoxDecoration(
-                        color: AppColors.card,
-                        borderRadius: BorderRadius.circular(20),
-                        border: Border.all(
-                            color: AppColors.border, width: 1),
-                      ),
-                      child: Row(
-                        children: [
-                          const Icon(Icons.logout_rounded,
-                              color: AppColors.textPrimary, size: 15),
-                          const SizedBox(width: 5),
-                          Text('logout'.tr,
-                              style: const TextStyle(
-                                color: AppColors.textPrimary,
-                                fontSize: 13,
-                                fontWeight: FontWeight.w600,
-                              )),
-                        ],
-                      ),
-                    ),
-                  ),
+                  const AppSettingsMenuButton(),
                 ],
               ),
             ),
@@ -269,6 +243,45 @@ class ProfileScreen extends StatelessWidget {
 
                     // ── Language Picker ──────────────────────────
                     _LanguagePickerCard(),
+
+                    // ── Dev: pronunciation accuracy benchmark ────
+                    if (kDebugMode) ...[
+                      const SizedBox(height: 14),
+                      GestureDetector(
+                        onTap: () => Get.to(
+                            () => const PronunciationBenchmarkScreen()),
+                        child: Container(
+                          width: double.infinity,
+                          padding: const EdgeInsets.all(16),
+                          decoration: BoxDecoration(
+                            color: AppColors.card,
+                            borderRadius: BorderRadius.circular(16),
+                            border: Border.all(
+                                color: const Color(0xFF8B5CF6)
+                                    .withValues(alpha: 0.4)),
+                          ),
+                          child: const Row(
+                            children: [
+                              Icon(Icons.analytics_outlined,
+                                  color: Color(0xFF8B5CF6), size: 22),
+                              SizedBox(width: 14),
+                              Expanded(
+                                child: Text(
+                                  'উচ্চারণ Accuracy Benchmark (dev)',
+                                  style: TextStyle(
+                                    color: AppColors.textPrimary,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                              ),
+                              Icon(Icons.arrow_forward_ios_rounded,
+                                  color: AppColors.textMuted, size: 16),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
                   ],
                 ),
               ),
