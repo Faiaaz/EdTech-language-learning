@@ -171,7 +171,7 @@ class _SplashScreenState extends State<SplashScreen>
 
   @override
   Widget build(BuildContext context) {
-    final screenH = MediaQuery.of(context).size.height;
+    final screenH = MediaQuery.sizeOf(context).height;
     final double logoTravelY = (screenH / 2) - 56;
 
     return Scaffold(
