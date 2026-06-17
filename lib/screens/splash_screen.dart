@@ -190,7 +190,6 @@ class _SplashScreenState extends State<SplashScreen>
             builder: (context, _) {
               final isExiting =
                   _exitCtrl.isAnimating || _exitCtrl.isCompleted;
-
               final taglineOffset = isExiting
                   ? _taglineExitOffset.value
                   : _taglineInOffset.value;
@@ -204,9 +203,7 @@ class _SplashScreenState extends State<SplashScreen>
                   : screenH / 2 - 21;
 
               return Opacity(
-                opacity: isExiting
-                    ? _splashOpacity.value.clamp(0.0, 1.0)
-                    : 1.0,
+                opacity: isExiting ? _splashOpacity.value.clamp(0.0, 1.0) : 1.0,
                 child: Stack(
                   children: [
                     Container(color: Colors.white),
@@ -228,11 +225,9 @@ class _SplashScreenState extends State<SplashScreen>
                             ),
                             const SizedBox(width: 8),
                             Transform.translate(
-                              offset: Offset(
-                                  isExiting ? 0 : _trainzOffset.value, 0),
+                              offset: Offset(isExiting ? 0 : _trainzOffset.value, 0),
                               child: Opacity(
-                                opacity:
-                                    isExiting ? 1.0 : _trainzOpacity.value,
+                                opacity: isExiting ? 1.0 : _trainzOpacity.value,
                                 child: const Text(
                                   'TRAINZ',
                                   style: TextStyle(
@@ -284,86 +279,75 @@ class _SplashScreenState extends State<SplashScreen>
 
 // ── Shared sky background (GIF + gradient, no navigation logic) ──────────────
 
-class _SkyBackground extends StatelessWidget {
-  const _SkyBackground();
 
-  // Pixel-sampled from popup_screen.gif edges
-  static const _topSky     = Color(0xFF5BC1E4);
-  static const _bottomCloud = Color(0xFFE6F4F9);
+class _SkyBackground extends StatelessWidget {
+  const _SkyBackground({super.key});
+
+  static const Color skyColor = Color(0xFF69C1E7);
 
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(builder: (_, constraints) {
-      // GIF is square (460×460). On a portrait screen it's width-constrained,
-      // leaving (screenH - screenW) / 2 gap on each side.
-      // Feather covers the gap plus a small bleed into the GIF.
-      final w = constraints.maxWidth;
-      final h = constraints.maxHeight;
-      final gifDisplayH = w.clamp(0.0, h);
-      final gapFraction = ((h - gifDisplayH) / 2 / h).clamp(0.0, 0.45);
-      final featherH = h * (gapFraction + 0.06); // gap + 6% bleed
+    return Scaffold(
+      backgroundColor: skyColor,
+      body: SizedBox.expand(
+        child: Stack(
+          fit: StackFit.expand,
+          children: [
 
-      return Stack(
-        fit: StackFit.expand,
-        children: [
-          // 1. Full-screen gradient — extends the GIF's sky palette above & below
-          const DecoratedBox(
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: [_topSky, _bottomCloud],
-              ),
-            ),
-          ),
-
-          // 2. GIF centred with contain (no distortion)
-          Center(
-            child: Image.asset(
-              'assets/images/popup_screen.gif',
-              fit: BoxFit.contain,
-              width: double.infinity,
-              gaplessPlayback: true,
-            ),
-          ),
-
-          // 3. Top feather — fades background colour *into* the GIF's sky,
-          //    dissolving the join from above regardless of device height.
-          Positioned(
-            top: 0, left: 0, right: 0,
-            height: featherH,
-            child: const IgnorePointer(
-              child: DecoratedBox(
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    colors: [_topSky, Color(0x005BC1E4)],
-                  ),
+            /// Sky Background
+            Container(
+              decoration: const BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    Color(0xFF238DCA),
+                    Color(0xFF2A91CE),
+                    Color(0xFF58B3DE),
+                  ],
                 ),
               ),
             ),
-          ),
 
-          // 4. Bottom feather — fades GIF clouds into background colour.
-          Positioned(
-            bottom: 0, left: 0, right: 0,
-            height: featherH,
-            child: const IgnorePointer(
-              child: DecoratedBox(
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    colors: [Color(0x00E6F4F9), _bottomCloud],
-                  ),
+            /// Airplane GIF
+            ShaderMask(
+              shaderCallback: (Rect bounds) {
+                return const LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    Colors.transparent,
+                    Colors.white,
+                    Colors.white,
+                    Colors.transparent,
+                  ],
+                  stops: [
+                    0.0,
+                    0.08,
+                    0.92,
+                    1.0,
+                  ],
+                ).createShader(bounds);
+              },
+              blendMode: BlendMode.dstIn,
+              child: ColorFiltered(
+                colorFilter: ColorFilter.mode(
+                  skyColor,
+                  BlendMode.modulate,
+                ),
+                child: Image.asset(
+                  'assets/images/popup_screen.gif',
+                  width: double.infinity,
+                  height: double.infinity,
+                  fit: BoxFit.contain,
+                  gaplessPlayback: true,
                 ),
               ),
             ),
-          ),
-        ],
-      );
-    });
+          ],
+        ),
+      ),
+    );
   }
 }
 

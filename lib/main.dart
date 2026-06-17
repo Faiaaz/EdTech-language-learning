@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:get/get.dart';
-
 import 'package:ez_trainz/controllers/auth_controller.dart';
 import 'package:ez_trainz/controllers/course_controller.dart';
 import 'package:ez_trainz/controllers/game_controller.dart';
