@@ -69,7 +69,7 @@ class _N5HiHelloLessonScreenState extends State<N5HiHelloLessonScreen> {
                   Expanded(
                     child: Text(
                       widget.showTabs
-                          ? 'জাপানিজে হাই-হ্যালো'
+                          ? 'জাপানিজে হাই-হ্যালো 👋'
                           : 'hi_hello_l2_screen_title'.tr,
                       style: const TextStyle(
                           color: AppColors.textPrimary,

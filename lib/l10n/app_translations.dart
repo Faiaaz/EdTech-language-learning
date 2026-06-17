@@ -939,7 +939,7 @@ const _bn = <String, String>{
   'hiragana_l1_screen_title': 'পাঠ ১ঃ হিরো নাম্বার ১ 😎',
 
   // ── Hi-Hello Lesson 2 video screen ─────────────────────────────
-  'hi_hello_l2_screen_title': 'পাঠ ২ঃ জাপানিজে হাই-হ্যালো',
+  'hi_hello_l2_screen_title': 'পাঠ ২ঃ জাপানিজে হাই-হ্যালো 👋',
 
   // ── N5 lesson video screens (৩–৭) ────────────────────────────────
   'n5_l3_screen_title': 'পাঠ ৩ঃ শুক্র-শনি বাকিটা জানি',

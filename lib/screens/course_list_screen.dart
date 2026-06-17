@@ -655,7 +655,7 @@ class _LessonListTile extends StatelessWidget {
         case 1:
           return 'পাঠ ১ঃ হিরো নাম্বার ১ 😎';
         case 2:
-          return 'পাঠ ২ঃ জাপানিজে হাই-হ্যালো';
+          return 'পাঠ ২ঃ জাপানিজে হাই-হ্যালো 👋';
         case 3:
           return 'পাঠ ৩ঃ শুক্র-শনি বাকিটা জানি';
         case 13:
