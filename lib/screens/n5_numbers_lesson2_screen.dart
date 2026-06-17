@@ -681,7 +681,7 @@ class _FallingNumbersGameState extends State<_FallingNumbersGame>
                             if (!_started) return const SizedBox.shrink();
                             final t = _fall.value;
                             final top = (t * 0.78) *
-                                (MediaQuery.of(context).size.height * 0.45);
+                                (MediaQuery.sizeOf(context).height * 0.45);
                             return Positioned(
                               top: 20 + top,
                               left: 0,
