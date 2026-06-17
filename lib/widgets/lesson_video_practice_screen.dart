@@ -42,8 +42,8 @@ class _LessonVideoPracticeScreenState extends State<LessonVideoPracticeScreen> {
   static const _seekStep = Duration(seconds: 10);
   static const _autoHide = Duration(seconds: 3);
   static const _navyBg = Colors.transparent;
-  static const _navyCard = Color(0xFF1E293B);
-  static const _textMuted = Color(0xFF94A3B8);
+  static const _navyCard = AppColors.cardAlt;
+  static const _textMuted = AppColors.textMuted;
   static const _accentBlue = Color(0xFF3B82F6);
 
   @override
