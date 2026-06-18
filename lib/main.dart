@@ -141,9 +141,7 @@ class MyApp extends StatelessWidget {
 /// so layouts match iPhone designs (no desktop stretching).
 class _WebPhonePreview extends StatelessWidget {
   const _WebPhonePreview({required this.child});
-
   final Widget child;
-
   static const Size _iPhoneLogicalSize = Size(390, 844); // iPhone 12/13/14-ish
   static const EdgeInsets _iPhoneSafePadding = EdgeInsets.only(top: 44, bottom: 34);
 
