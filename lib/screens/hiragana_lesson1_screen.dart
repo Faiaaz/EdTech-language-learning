@@ -361,14 +361,19 @@ class _HiraganaLesson1ScreenState extends State<HiraganaLesson1Screen> {
                   ),
                   const SizedBox(width: 12),
                   Expanded(
-                    child: Text(
-                      'hiragana_l1_screen_title'.tr,
-                      style: const TextStyle(
-                        color: AppColors.textPrimary,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w800,
+                    child: ShaderMask(
+                      shaderCallback: (bounds) => AppColors
+                          .vibrantTitleGradient
+                          .createShader(bounds),
+                      child: Text(
+                        'hiragana_l1_screen_title'.tr,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w800,
+                        ),
+                        overflow: TextOverflow.ellipsis,
                       ),
-                      overflow: TextOverflow.ellipsis,
                     ),
                   ),
                 ],
