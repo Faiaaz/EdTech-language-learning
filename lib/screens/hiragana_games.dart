@@ -194,7 +194,7 @@ class _FlashcardDrillState extends State<FlashcardDrillScreen>
 
   @override
   Widget build(BuildContext context) {
-    final screenW = MediaQuery.of(context).size.width;
+    final screenW = MediaQuery.sizeOf(context).width;
     final cardSide = screenW * 0.72;
 
     return Scaffold(
