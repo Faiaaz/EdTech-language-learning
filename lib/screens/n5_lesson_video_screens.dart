@@ -421,6 +421,38 @@ class AkasatanaLesson4Screen extends StatelessWidget {
             5,
           ),
         ),
+        LessonPracticeGame(
+          label: 'ছক পূরণ',
+          sub: 'খালি ঘরে কানা বসাও',
+          icon: Icons.grid_on_rounded,
+          colors: const [Color(0xFF10B981), Color(0xFF059669)],
+          onTap: (context) => _openPracticeGame(
+            context,
+            ({required initialTab, required showTabs, int? sessionRounds}) =>
+                N5AkasatanaLessonScreen(
+                  initialTab: initialTab,
+                  showTabs: showTabs,
+                  sessionRounds: sessionRounds,
+                ),
+            6,
+          ),
+        ),
+        LessonPracticeGame(
+          label: 'স্বর কলাম',
+          sub: 'কোন স্বর-কলাম বাছো',
+          icon: Icons.view_column_rounded,
+          colors: const [Color(0xFF3B82F6), Color(0xFF2563EB)],
+          onTap: (context) => _openPracticeGame(
+            context,
+            ({required initialTab, required showTabs, int? sessionRounds}) =>
+                N5AkasatanaLessonScreen(
+                  initialTab: initialTab,
+                  showTabs: showTabs,
+                  sessionRounds: sessionRounds,
+                ),
+            8,
+          ),
+        ),
       ],
       challengeGames: [
         LessonPracticeGame(
@@ -453,6 +485,38 @@ class AkasatanaLesson4Screen extends StatelessWidget {
                   sessionRounds: sessionRounds,
                 ),
             4,
+          ),
+        ),
+        LessonPracticeGame(
+          label: 'সারি দৌড়',
+          sub: 'সারি ক্রমে সাজাও',
+          icon: Icons.sort_rounded,
+          colors: const [Color(0xFFF59E0B), Color(0xFFD97706)],
+          onTap: (context) => _openGame(
+            context,
+            ({required initialTab, required showTabs, int? sessionRounds}) =>
+                N5AkasatanaLessonScreen(
+                  initialTab: initialTab,
+                  showTabs: showTabs,
+                  sessionRounds: sessionRounds,
+                ),
+            7,
+          ),
+        ),
+        LessonPracticeGame(
+          label: 'শুনে খুঁজো',
+          sub: 'শুনে সঠিক কানা চাপো',
+          icon: Icons.hearing_rounded,
+          colors: const [Color(0xFFEC4899), Color(0xFFBE185D)],
+          onTap: (context) => _openGame(
+            context,
+            ({required initialTab, required showTabs, int? sessionRounds}) =>
+                N5AkasatanaLessonScreen(
+                  initialTab: initialTab,
+                  showTabs: showTabs,
+                  sessionRounds: sessionRounds,
+                ),
+            9,
           ),
         ),
       ],
@@ -533,6 +597,38 @@ class BornomalaLesson5Screen extends StatelessWidget {
             5,
           ),
         ),
+        LessonPracticeGame(
+          label: 'ফাঁক খোঁজো',
+          sub: 'や/わ সারির ব্যতিক্রম',
+          icon: Icons.search_rounded,
+          colors: const [Color(0xFF8B5CF6), Color(0xFF6D28D9)],
+          onTap: (context) => _openPracticeGame(
+            context,
+            ({required initialTab, required showTabs, int? sessionRounds}) =>
+                N5BorneBorneBornomalaLessonScreen(
+                  initialTab: initialTab,
+                  showTabs: showTabs,
+                  sessionRounds: sessionRounds,
+                ),
+            6,
+          ),
+        ),
+        LessonPracticeGame(
+          label: 'শব্দ গড়ো',
+          sub: 'কানা দিয়ে শব্দ বানাও',
+          icon: Icons.spellcheck_rounded,
+          colors: const [Color(0xFF10B981), Color(0xFF059669)],
+          onTap: (context) => _openPracticeGame(
+            context,
+            ({required initialTab, required showTabs, int? sessionRounds}) =>
+                N5BorneBorneBornomalaLessonScreen(
+                  initialTab: initialTab,
+                  showTabs: showTabs,
+                  sessionRounds: sessionRounds,
+                ),
+            7,
+          ),
+        ),
       ],
       challengeGames: [
         LessonPracticeGame(
@@ -565,6 +661,38 @@ class BornomalaLesson5Screen extends StatelessWidget {
                   sessionRounds: sessionRounds,
                 ),
             4,
+          ),
+        ),
+        LessonPracticeGame(
+          label: 'বর্ণমালা বস',
+          sub: 'পুরো বর্ণমালা সাজাও',
+          icon: Icons.dashboard_customize_rounded,
+          colors: const [Color(0xFF6366F1), Color(0xFF4338CA)],
+          onTap: (context) => _openGame(
+            context,
+            ({required initialTab, required showTabs, int? sessionRounds}) =>
+                N5BorneBorneBornomalaLessonScreen(
+                  initialTab: initialTab,
+                  showTabs: showTabs,
+                  sessionRounds: sessionRounds,
+                ),
+            8,
+          ),
+        ),
+        LessonPracticeGame(
+          label: 'ট্রেস ব্যাটল',
+          sub: 'সময়ের মধ্যে যত পারো আঁকো',
+          icon: Icons.gesture_rounded,
+          colors: const [Color(0xFFEF4444), Color(0xFFB91C1C)],
+          onTap: (context) => _openGame(
+            context,
+            ({required initialTab, required showTabs, int? sessionRounds}) =>
+                N5BorneBorneBornomalaLessonScreen(
+                  initialTab: initialTab,
+                  showTabs: showTabs,
+                  sessionRounds: sessionRounds,
+                ),
+            9,
           ),
         ),
       ],
@@ -645,6 +773,38 @@ class DakutenLesson6Screen extends StatelessWidget {
             5,
           ),
         ),
+        LessonPracticeGame(
+          label: 'মার্ক লাগাও',
+          sub: '゛ / ゜ দিয়ে রূপ বদলাও',
+          icon: Icons.add_circle_outline_rounded,
+          colors: const [Color(0xFFEF4444), Color(0xFFDC2626)],
+          onTap: (context) => _openPracticeGame(
+            context,
+            ({required initialTab, required showTabs, int? sessionRounds}) =>
+                N5DakutenLessonScreen(
+                  initialTab: initialTab,
+                  showTabs: showTabs,
+                  sessionRounds: sessionRounds,
+                ),
+            6,
+          ),
+        ),
+        LessonPracticeGame(
+          label: 'রূপান্তর জোড়া',
+          sub: 'পরিষ্কার ↔ দাকুতেন মেলাও',
+          icon: Icons.join_inner_rounded,
+          colors: const [Color(0xFFEC4899), Color(0xFFBE185D)],
+          onTap: (context) => _openPracticeGame(
+            context,
+            ({required initialTab, required showTabs, int? sessionRounds}) =>
+                N5DakutenLessonScreen(
+                  initialTab: initialTab,
+                  showTabs: showTabs,
+                  sessionRounds: sessionRounds,
+                ),
+            9,
+          ),
+        ),
       ],
       challengeGames: [
         LessonPracticeGame(
@@ -677,6 +837,38 @@ class DakutenLesson6Screen extends StatelessWidget {
                   sessionRounds: sessionRounds,
                 ),
             4,
+          ),
+        ),
+        LessonPracticeGame(
+          label: 'てんてん নাকি まる',
+          sub: 'কোন চিহ্ন চিনে নাও',
+          icon: Icons.contrast_rounded,
+          colors: const [Color(0xFFF59E0B), Color(0xFFD97706)],
+          onTap: (context) => _openGame(
+            context,
+            ({required initialTab, required showTabs, int? sessionRounds}) =>
+                N5DakutenLessonScreen(
+                  initialTab: initialTab,
+                  showTabs: showTabs,
+                  sessionRounds: sessionRounds,
+                ),
+            7,
+          ),
+        ),
+        LessonPracticeGame(
+          label: 'শুনে আলাদা করো',
+          sub: 'か vs が — শুনে বাছো',
+          icon: Icons.hearing_rounded,
+          colors: const [Color(0xFF8B5CF6), Color(0xFF6D28D9)],
+          onTap: (context) => _openGame(
+            context,
+            ({required initialTab, required showTabs, int? sessionRounds}) =>
+                N5DakutenLessonScreen(
+                  initialTab: initialTab,
+                  showTabs: showTabs,
+                  sessionRounds: sessionRounds,
+                ),
+            8,
           ),
         ),
       ],

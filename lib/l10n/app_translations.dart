@@ -356,7 +356,7 @@ const _en = <String, String>{
       'Hunt matching kana on a 12-tile board — combos, streaks, and round bonuses.',
 
   // ── Hiragana Lesson 1 video screen ───────────────────────────────
-  'lesson_nav_chip': 'レッスン',
+  'lesson_nav_chip': 'Lesson',
   'hiragana_l1_screen_title': 'Lesson 1: Hero Number 1 😎',
 
   // ── Hi-Hello Lesson 2 video screen ─────────────────────────────
@@ -369,11 +369,11 @@ const _en = <String, String>{
   'n5_l6_screen_title': 'Lesson 6: Dakuten & Handakuten',
   'n5_l7_screen_title': 'Lesson 7: Kichu Kotha',
   'hiragana_l1_screen_desc':
-      'Introduction to Hiragana — the foundational Japanese syllabary.',
+      'Bangla-first Japanese pronunciation practice for Lesson 1.',
   'hiragana_l1_checkpoints_heading': 'Interactive Checkpoints',
   'hiragana_l1_checkpoint_intro': 'Introduction',
-  'hiragana_l1_checkpoint_vowel': 'Vowel Sounds',
-  'hiragana_l1_checkpoint_basic': 'Basic Characters',
+  'hiragana_l1_checkpoint_vowel': 'Pronunciation Set 1',
+  'hiragana_l1_checkpoint_basic': 'Pronunciation Set 2',
   'hiragana_l1_quizzes_heading': 'Practice Quizzes',
   'hiragana_l1_quiz_speaking': 'Speaking\nQuiz',
   'hiragana_l1_quiz_listening': 'Listening\nQuiz',
@@ -382,10 +382,10 @@ const _en = <String, String>{
   'hiragana_l1_live_lesson': 'Book a Live Lesson',
   'hiragana_l1_live_lesson_sub':
       '20 mins • 1-on-1 with a tutor',
-  'hiragana_l1_quick_check_vowels': 'Quick Check — Vowels',
-  'hiragana_l1_quick_check_k_row': 'Quick Check — K Row',
-  'hiragana_l1_quick_check_s_row': 'Quick Check — S Row',
-  'hiragana_l1_mcq_prompt': 'Tap the hiragana for',
+  'hiragana_l1_quick_check_vowels': 'Quick Check — Round 1',
+  'hiragana_l1_quick_check_k_row': 'Quick Check — Round 2',
+  'hiragana_l1_quick_check_s_row': 'Quick Check — Round 3',
+  'hiragana_l1_mcq_prompt': 'Tap the matching pronunciation for',
   'hiragana_l1_mcq_hint': 'Choose wisely…',
   'hiragana_l1_mcq_correct': 'Correct!',
   'hiragana_l1_mcq_try_next': 'Not quite — try the next one.',
@@ -399,7 +399,7 @@ const _en = <String, String>{
   'hiragana_l1_continue_video': 'Continue video',
   'hiragana_l1_speech_title': 'Great job finishing the video!',
   'hiragana_l1_speech_body':
-      'Now try our Speech Game — upload a short audio clip and we\'ll transcribe it to Japanese, romaji, and English.',
+      'Now try our Speech Game — practice saying Bangla-written Japanese pronunciations.',
   'hiragana_l1_speech_cta': 'Start Speech Game',
   'hiragana_l1_leaf_title': 'Leaf earned!',
   'hiragana_l1_leaf_body': 'Lesson 1 complete. Your tree just grew.',
@@ -948,11 +948,11 @@ const _bn = <String, String>{
   'n5_l6_screen_title': 'পাঠ ৬ঃ জাপানের চন্দ্রবিন্দু',
   'n5_l7_screen_title': 'পাঠ ৭ঃ কিছু কথা ছিল...',
   'hiragana_l1_screen_desc':
-      'হিরাগানা পরিচয় — জাপানি ভাষার এই মৌলিক ও কণ্ঠস্থ অক্ষরলিপি।',
+      'পাঠ ১-এ বাংলা ও বাংলা-লিখিত জাপানি উচ্চারণ দিয়ে অনুশীলন করুন।',
   'hiragana_l1_checkpoints_heading': 'ইন্টার‍্যাকটিভ চেকপয়েন্ট',
   'hiragana_l1_checkpoint_intro': 'ভূমিকা',
-  'hiragana_l1_checkpoint_vowel': 'স্বরধ্বনি',
-  'hiragana_l1_checkpoint_basic': 'মৌলিক অক্ষর',
+  'hiragana_l1_checkpoint_vowel': 'উচ্চারণ সেট ১',
+  'hiragana_l1_checkpoint_basic': 'উচ্চারণ সেট ২',
   'hiragana_l1_quizzes_heading': 'অনুশীলনের কুইজ',
   'hiragana_l1_quiz_speaking': 'বলার কুইজ',
   'hiragana_l1_quiz_listening': 'শোনার কুইজ',
@@ -961,13 +961,11 @@ const _bn = <String, String>{
   'hiragana_l1_live_lesson': 'লাইভ ক্লাস বুক করুন',
   'hiragana_l1_live_lesson_sub':
       '২০ মিনিট • শিক্ষকের সঙ্গে একক সেশন',
-  'hiragana_l1_quick_check_vowels': 'দ্রুত যাচাই — স্বরধ্বনির হিরাগানা',
-  'hiragana_l1_quick_check_k_row':
-      'দ্রুত যাচাই — ক থেকে শুরু সারির হিরাগানা',
-  'hiragana_l1_quick_check_s_row':
-      'দ্রুত যাচাই — স থেকে শুরু সারির হিরাগানা',
+  'hiragana_l1_quick_check_vowels': 'দ্রুত যাচাই — রাউন্ড ১',
+  'hiragana_l1_quick_check_k_row': 'দ্রুত যাচাই — রাউন্ড ২',
+  'hiragana_l1_quick_check_s_row': 'দ্রুত যাচাই — রাউন্ড ৩',
   'hiragana_l1_mcq_prompt':
-      'রোমাজি অনুযায়ী সঠিক হিরাগানা ট্যাপ করুন',
+      'বাংলা ইঙ্গিত দেখে সঠিক উচ্চারণ ট্যাপ করুন',
   'hiragana_l1_mcq_hint': 'ভালো করে চিন্তা করুন…',
   'hiragana_l1_mcq_correct': 'সঠিক!',
   'hiragana_l1_mcq_try_next':
@@ -982,7 +980,7 @@ const _bn = <String, String>{
   'hiragana_l1_continue_video': 'ভিডিও চালিয়ে যান',
   'hiragana_l1_speech_title': 'ভিডিও শেষ করায় অসাধারণ!',
   'hiragana_l1_speech_body':
-      'এখন স্পিচ গেম চেষ্টা করুন — সংক্ষেপে একটি অডিও রেকর্ড আপলোড করুন; আমরা সেটিকে জাপানি, রোমাজি ও ইংরেজিতে ট্রান্সক্রিপ্ট করব।',
+      'এখন স্পিচ গেম চেষ্টা করুন — বাংলা-লিখিত জাপানি উচ্চারণ বলার অনুশীলন করুন।',
   'hiragana_l1_leaf_title': 'একটি পাতা জিতলেন!',
   'hiragana_l1_leaf_body': 'পাঠ ১ সম্পূর্ণ। আপনার গাছ একটু বড় হলো।',
   'hiragana_l1_leaf_cta': 'চমৎকার',

@@ -11,6 +11,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
 
 import 'package:ez_trainz/screens/hiragana_draw_game_screen.dart';
+import 'package:ez_trainz/screens/n5_kana_games.dart';
 import 'package:ez_trainz/utils/lesson_practice_config.dart';
 import 'package:ez_trainz/widgets/spiral_notepad_frame.dart';
 
@@ -92,7 +93,29 @@ class N5DakutenLessonScreen extends StatelessWidget {
   }
 }
 
-enum _AkaTab { draw, notepadDraw, flashcard, quiz, match, practice }
+enum _AkaTab {
+  draw,
+  notepadDraw,
+  flashcard,
+  quiz,
+  match,
+  practice,
+  // পাঠ ৪ (akasatana)
+  gridFill,
+  rowRace,
+  vowelSort,
+  listenLocate,
+  // পাঠ ৫ (bornomala)
+  spotGap,
+  buildWord,
+  alphabetBoss,
+  traceBattle,
+  // পাঠ ৬ (dakuten)
+  addMark,
+  tenMaru,
+  hearDiff,
+  transformMatch,
+}
 
 class _N5AkasatanaLessonScreenState extends State<N5AkasatanaLessonScreen> {
   /// The অনুশীলন শিট (practice sheet) download is offered for every lesson
@@ -104,6 +127,7 @@ class _N5AkasatanaLessonScreenState extends State<N5AkasatanaLessonScreen> {
         _AkaTab.quiz,
         _AkaTab.match,
         if (_practiceSheet != null) _AkaTab.practice,
+        ..._lessonGameTabs,
       ];
 
   List<String> get _tabLabels => [
@@ -113,7 +137,43 @@ class _N5AkasatanaLessonScreenState extends State<N5AkasatanaLessonScreen> {
         'কুইজ রান',
         'কানা ম্যাচ',
         if (_practiceSheet != null) 'অনুশীলন শিট',
+        ..._lessonGameLabels,
       ];
+
+  /// Lesson-specific mini-game tabs, appended after the shared tabs.
+  /// Indices: gridFill/spotGap/addMark = 6, … = 7, … = 8, … = 9.
+  List<_AkaTab> get _lessonGameTabs => switch (_kind) {
+        _LessonKind.akasatana => const [
+            _AkaTab.gridFill,
+            _AkaTab.rowRace,
+            _AkaTab.vowelSort,
+            _AkaTab.listenLocate,
+          ],
+        _LessonKind.bornomala => const [
+            _AkaTab.spotGap,
+            _AkaTab.buildWord,
+            _AkaTab.alphabetBoss,
+            _AkaTab.traceBattle,
+          ],
+        _LessonKind.dakuten => const [
+            _AkaTab.addMark,
+            _AkaTab.tenMaru,
+            _AkaTab.hearDiff,
+            _AkaTab.transformMatch,
+          ],
+      };
+
+  List<String> get _lessonGameLabels => switch (_kind) {
+        _LessonKind.akasatana => const ['ছক পূরণ', 'সারি দৌড়', 'স্বর কলাম', 'শুনে খুঁজো'],
+        _LessonKind.bornomala => const ['ফাঁক খোঁজো', 'শব্দ গড়ো', 'বর্ণমালা বস', 'ট্রেস ব্যাটল'],
+        _LessonKind.dakuten => const ['মার্ক লাগাও', 'てんてん নাকি まる', 'শুনে আলাদা করো', 'রূপান্তর জোড়া'],
+      };
+
+  KanaLesson get _kanaLesson => switch (_kind) {
+        _LessonKind.akasatana => KanaLesson.akasatana,
+        _LessonKind.bornomala => KanaLesson.bornomala,
+        _LessonKind.dakuten => KanaLesson.dakuten,
+      };
 
   /// Per-lesson bundled practice sheet, or null when the lesson has none.
   _PracticeSheet? get _practiceSheet => switch (_kind) {
@@ -269,6 +329,66 @@ class _N5AkasatanaLessonScreenState extends State<N5AkasatanaLessonScreen> {
                     _AkaTab.practice => _PracticeSheetTab(
                       key: const ValueKey('akaPractice'),
                       sheet: _practiceSheet!,
+                    ),
+                    _AkaTab.gridFill => KanaGame(
+                      key: const ValueKey('kgGridFill'),
+                      type: KanaGameType.gridFill,
+                      lesson: _kanaLesson,
+                    ),
+                    _AkaTab.rowRace => KanaGame(
+                      key: const ValueKey('kgRowRace'),
+                      type: KanaGameType.rowRace,
+                      lesson: _kanaLesson,
+                    ),
+                    _AkaTab.vowelSort => KanaGame(
+                      key: const ValueKey('kgVowelSort'),
+                      type: KanaGameType.vowelSort,
+                      lesson: _kanaLesson,
+                    ),
+                    _AkaTab.listenLocate => KanaGame(
+                      key: const ValueKey('kgListenLocate'),
+                      type: KanaGameType.listenLocate,
+                      lesson: _kanaLesson,
+                    ),
+                    _AkaTab.spotGap => KanaGame(
+                      key: const ValueKey('kgSpotGap'),
+                      type: KanaGameType.spotGap,
+                      lesson: _kanaLesson,
+                    ),
+                    _AkaTab.buildWord => KanaGame(
+                      key: const ValueKey('kgBuildWord'),
+                      type: KanaGameType.buildWord,
+                      lesson: _kanaLesson,
+                    ),
+                    _AkaTab.alphabetBoss => KanaGame(
+                      key: const ValueKey('kgAlphabetBoss'),
+                      type: KanaGameType.alphabetBoss,
+                      lesson: _kanaLesson,
+                    ),
+                    _AkaTab.traceBattle => KanaGame(
+                      key: const ValueKey('kgTraceBattle'),
+                      type: KanaGameType.traceBattle,
+                      lesson: _kanaLesson,
+                    ),
+                    _AkaTab.addMark => KanaGame(
+                      key: const ValueKey('kgAddMark'),
+                      type: KanaGameType.addMark,
+                      lesson: _kanaLesson,
+                    ),
+                    _AkaTab.tenMaru => KanaGame(
+                      key: const ValueKey('kgTenMaru'),
+                      type: KanaGameType.tenMaru,
+                      lesson: _kanaLesson,
+                    ),
+                    _AkaTab.hearDiff => KanaGame(
+                      key: const ValueKey('kgHearDiff'),
+                      type: KanaGameType.hearDiff,
+                      lesson: _kanaLesson,
+                    ),
+                    _AkaTab.transformMatch => KanaGame(
+                      key: const ValueKey('kgTransformMatch'),
+                      type: KanaGameType.transformMatch,
+                      lesson: _kanaLesson,
                     ),
                   },
                 ),
