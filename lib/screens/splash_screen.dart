@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:ez_trainz/screens/home_screen.dart';
 import 'package:ez_trainz/widgets/ez_logo_boxed.dart';
 import 'package:ez_trainz/utils/spring_curve.dart';
+import 'package:gif_view/gif_view.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -173,12 +174,10 @@ class _SplashScreenState extends State<SplashScreen>
   Widget build(BuildContext context) {
     final screenH = MediaQuery.of(context).size.height;
     final double logoTravelY = (screenH / 2) - 56;
-
     return Scaffold(
       backgroundColor: const Color(0xFF4DA6E8),
       body: Stack(
         children: [
-          const _SkyBackground(),
           AnimatedBuilder(
             animation: Listenable.merge([
               _scaleRotateUpCtrl,
@@ -280,10 +279,29 @@ class _SplashScreenState extends State<SplashScreen>
 // ── Shared sky background (GIF + gradient, no navigation logic) ──────────────
 
 
-class _SkyBackground extends StatelessWidget {
+class _SkyBackground extends StatefulWidget {
   const _SkyBackground({super.key});
 
-  static const Color skyColor = Color(0xFF69C1E7);
+  @override
+  State<_SkyBackground> createState() => _SkyBackgroundState();
+}
+
+class _SkyBackgroundState extends State<_SkyBackground> {
+  static const Color skyColor = Color(0xFF8FD3F4);
+
+  late GifController _gifController;
+
+  @override
+  void initState() {
+    super.initState();
+    _gifController = GifController();
+  }
+
+  @override
+  void dispose() {
+    _gifController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -293,7 +311,6 @@ class _SkyBackground extends StatelessWidget {
         child: Stack(
           fit: StackFit.expand,
           children: [
-
             /// Sky Background
             Container(
               decoration: const BoxDecoration(
@@ -301,15 +318,19 @@ class _SkyBackground extends StatelessWidget {
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
                   colors: [
-                    Color(0xFF238DCA),
-                    Color(0xFF2A91CE),
-                    Color(0xFF58B3DE),
+                    Color(0xFF2E97D4),
+                    Color(0xFF45A7DE),
+                    Color(0xFF5CB6E5),
+                    Color(0xFF7AC6EC),
+                    Color(0xFF9AD7F2),
+                    Color(0xFFBFE6F8),
                   ],
+                  stops: [0.0, 0.2, 0.4, 0.6, 0.8, 1.0],
                 ),
               ),
             ),
 
-            /// Airplane GIF
+            /// Airplane GIF — plays once only, then freezes on last frame
             ShaderMask(
               shaderCallback: (Rect bounds) {
                 return const LinearGradient(
@@ -321,27 +342,17 @@ class _SkyBackground extends StatelessWidget {
                     Colors.white,
                     Colors.transparent,
                   ],
-                  stops: [
-                    0.0,
-                    0.08,
-                    0.92,
-                    1.0,
-                  ],
+                  stops: [0.0, 0.22, 0.78, 1.0],
                 ).createShader(bounds);
               },
               blendMode: BlendMode.dstIn,
-              child: ColorFiltered(
-                colorFilter: ColorFilter.mode(
-                  skyColor,
-                  BlendMode.modulate,
-                ),
-                child: Image.asset(
-                  'assets/images/popup_screen.gif',
-                  width: double.infinity,
-                  height: double.infinity,
-                  fit: BoxFit.contain,
-                  gaplessPlayback: true,
-                ),
+              child: GifView.asset(
+                'assets/images/popup_screen.gif',
+                controller: _gifController,
+                width: double.infinity,
+                height: double.infinity,
+                fit: BoxFit.contain,
+                loop: false, // <-- plays only once, then stays on last frame
               ),
             ),
           ],

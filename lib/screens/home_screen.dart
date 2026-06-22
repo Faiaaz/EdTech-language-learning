@@ -163,11 +163,11 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
             position: _slideIn,
             child: SingleChildScrollView(
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 24),
+                padding: const EdgeInsets.symmetric(horizontal: 14),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const SizedBox(height: 16),
+                    const SizedBox(height: 8),
 
                     // ── TOP BAR ────────────────────────────────────
                     Row(
@@ -207,18 +207,18 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                       ],
                     ),
 
-                    const SizedBox(height: 36),
+                    //const SizedBox(height: 16),
 
                     // ── GREETING ───────────────────────────────────
-                    Text(
-                      firstName,
-                      style: const TextStyle(
-                        color: AppColors.textPrimary,
-                        fontSize: 38,
-                        fontWeight: FontWeight.w900,
-                        height: 1.1,
-                      ),
-                    ),
+                    // Text(
+                    //   firstName,
+                    //   style: const TextStyle(
+                    //     color: AppColors.textPrimary,
+                    //     fontSize: 38,
+                    //     fontWeight: FontWeight.w900,
+                    //     height: 1.1,
+                    //   ),
+                    // ),
 
                     const SizedBox(height: 8),
 
@@ -231,7 +231,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                       ),
                     ),
 
-                    const SizedBox(height: 32),
+                    const SizedBox(height: 16),
 
                     // ── TRIAL GAME CARD ─────────────────────────────
                     AnimatedBuilder(
