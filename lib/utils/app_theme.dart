@@ -38,6 +38,14 @@ abstract class AppColors {
   static const accentPink   = Color(0xFFEC4899);
   static const accentPurple = Color(0xFF6366F1);
 
+  /// Vibrant pink → purple → blue sweep for lesson titles.
+  /// Apply to text via a [ShaderMask] (the Text color must be white).
+  static const vibrantTitleGradient = LinearGradient(
+    colors: [Color(0xFFEC4899), Color(0xFF8B5CF6), Color(0xFF3B82F6)],
+    begin: Alignment.centerLeft,
+    end: Alignment.centerRight,
+  );
+
   // ── Semantic ─────────────────────────────────────────────────
   static const correct = Color(0xFF14B86A);
   static const wrong   = Color(0xFFE53935);

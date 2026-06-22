@@ -642,14 +642,19 @@ class _LessonVideoPracticeScreenState extends State<LessonVideoPracticeScreen> {
                   ),
                   const SizedBox(width: 12),
                   Expanded(
-                    child: Text(
-                      widget.titleKey.tr,
-                      style: const TextStyle(
-                        color: AppColors.textPrimary,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w800,
+                    child: ShaderMask(
+                      shaderCallback: (bounds) => AppColors
+                          .vibrantTitleGradient
+                          .createShader(bounds),
+                      child: Text(
+                        widget.titleKey.tr,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w800,
+                        ),
+                        overflow: TextOverflow.ellipsis,
                       ),
-                      overflow: TextOverflow.ellipsis,
                     ),
                   ),
                 ],

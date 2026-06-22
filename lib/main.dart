@@ -1,3 +1,4 @@
+import 'package:ez_trainz/utils/responsive_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:get/get.dart';
@@ -75,8 +76,10 @@ class MyApp extends StatelessWidget {
       locale: LocaleController.to.locale,
       fallbackLocale: const Locale('en', 'US'),
       builder: (context, child) {
+        ResponsiveConfig.init(context);
         // Paint the sky→gold brand gradient once behind the whole app so every
         // (transparent) scaffold sits on it.
+        ResponsiveConfig.init(context);
         final app = SkyGoldBackground(child: child ?? const SizedBox.shrink());
         if (!kIsWeb) return app;
         return _WebPhonePreview(child: app);
