@@ -180,10 +180,10 @@ class _SignUpScreenState extends State<SignUpScreen>
 
   @override
   Widget build(BuildContext context) {
-    final mq = MediaQuery.of(context);
-    final topPad = mq.padding.top;
-    final bottomPad = mq.padding.bottom;
-    final screenH = mq.size.height;
+    final padding = MediaQuery.paddingOf(context);
+    final topPad = padding.top;
+    final bottomPad = padding.bottom;
+    final screenH = MediaQuery.sizeOf(context).height;
 
     return Scaffold(
       backgroundColor: _sky,

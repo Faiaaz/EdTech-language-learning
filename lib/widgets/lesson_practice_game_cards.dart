@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:ez_trainz/utils/app_theme.dart';
 
 class LessonPracticeGame {
   const LessonPracticeGame({
@@ -48,7 +49,7 @@ class LessonPracticeGameGroup extends StatefulWidget {
 class _LessonPracticeGameGroupState extends State<LessonPracticeGameGroup> {
   bool _expanded = true;
 
-  static const _cardBg = Color(0xFF1E293B);
+  static const _cardBg = AppColors.cardAlt;
 
   @override
   Widget build(BuildContext context) {
@@ -57,7 +58,7 @@ class _LessonPracticeGameGroupState extends State<LessonPracticeGameGroup> {
       decoration: BoxDecoration(
         color: _cardBg,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: const Color(0xFF334155)),
+        border: Border.all(color: AppColors.border),
       ),
       clipBehavior: Clip.antiAlias,
       child: Column(
@@ -92,7 +93,7 @@ class _LessonPracticeGameGroupState extends State<LessonPracticeGameGroup> {
                           Text(
                             widget.title,
                             style: const TextStyle(
-                              color: Colors.white,
+                              color: AppColors.textPrimary,
                               fontSize: 16,
                               fontWeight: FontWeight.w800,
                             ),
@@ -100,7 +101,7 @@ class _LessonPracticeGameGroupState extends State<LessonPracticeGameGroup> {
                           Text(
                             '${lessonPracticeBnCount(widget.games.length)}টি গেম',
                             style: const TextStyle(
-                              color: Colors.white60,
+                              color: AppColors.textMuted,
                               fontSize: 11,
                               fontWeight: FontWeight.w600,
                             ),
@@ -112,8 +113,11 @@ class _LessonPracticeGameGroupState extends State<LessonPracticeGameGroup> {
                       turns: _expanded ? 0.5 : 0,
                       duration: const Duration(milliseconds: 220),
                       curve: Curves.easeInOut,
-                      child: const Icon(Icons.expand_more_rounded,
-                          color: Colors.white70, size: 26),
+                      child: const Icon(
+                        Icons.expand_more_rounded,
+                        color: AppColors.textMuted,
+                        size: 26,
+                      ),
                     ),
                   ],
                 ),

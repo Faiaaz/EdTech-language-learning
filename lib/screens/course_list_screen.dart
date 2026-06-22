@@ -655,7 +655,7 @@ class _LessonListTile extends StatelessWidget {
         case 1:
           return 'পাঠ ১ঃ হিরো নাম্বার ১ 😎';
         case 2:
-          return 'পাঠ ২ঃ জাপানিজে হাই-হ্যালো';
+          return 'পাঠ ২ঃ জাপানিজে হাই-হ্যালো 👋';
         case 3:
           return 'পাঠ ৩ঃ শুক্র-শনি বাকিটা জানি';
         case 13:
@@ -693,10 +693,24 @@ class _LessonListTile extends StatelessWidget {
     return lesson.description;
   }
 
+  /// Splits a trailing emoji (e.g. 😎 / 👋) off the title so it can render in
+  /// its natural colour instead of being recoloured by the title gradient.
+  /// Returns (text, emoji); emoji is '' when the title has none.
+  (String, String) _splitTrailingEmoji(String s) {
+    final runes = s.runes.toList();
+    var i = 0;
+    while (i < runes.length && runes[i] < 0x1F000) {
+      i++;
+    }
+    if (i == runes.length) return (s, '');
+    final text = String.fromCharCodes(runes.sublist(0, i)).trimRight();
+    final emoji = String.fromCharCodes(runes.sublist(i));
+    return (text, emoji);
+  }
+
   @override
   Widget build(BuildContext context) {
-    final titleColor =
-        jlcLayout ? const Color(0xFF0F172A) : Colors.white.withValues(alpha: 0.9);
+    final (titleText, titleEmoji) = _splitTrailingEmoji(_title);
     final subColor = jlcLayout
         ? const Color(0xFF334155)
         : Colors.white.withValues(alpha: 0.55);
@@ -742,14 +756,37 @@ class _LessonListTile extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      _title,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                        color: titleColor,
-                        fontWeight: FontWeight.w800,
-                      ),
+                    Row(
+                      children: [
+                        Flexible(
+                          child: ShaderMask(
+                            shaderCallback: (bounds) => AppColors
+                                .vibrantTitleGradient
+                                .createShader(bounds),
+                            child: Text(
+                              titleText,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w800,
+                              ),
+                            ),
+                          ),
+                        ),
+                        // Emoji rendered outside the ShaderMask so it keeps its
+                        // natural colour (yellow 😎 / 👋) instead of the gradient.
+                        if (titleEmoji.isNotEmpty) ...[
+                          const SizedBox(width: 5),
+                          Text(
+                            titleEmoji,
+                            maxLines: 1,
+                            style: const TextStyle(
+                              fontWeight: FontWeight.w800,
+                            ),
+                          ),
+                        ],
+                      ],
                     ),
                     const SizedBox(height: 3),
                     Text(

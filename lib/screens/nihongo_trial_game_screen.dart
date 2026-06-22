@@ -814,8 +814,8 @@ class _TrialCompleteDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final mq = MediaQuery.of(context);
-    final maxW = math.min(340.0, mq.size.width - 32);
+    final size = MediaQuery.sizeOf(context);
+    final maxW = math.min(340.0, size.width - 32);
 
     void onSignUp() {
       Get.dialog(
@@ -942,8 +942,8 @@ class _SubscribeUpsellDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final mq = MediaQuery.of(context);
-    final maxW = math.min(380.0, mq.size.width - 28);
+    final size = MediaQuery.sizeOf(context);
+    final maxW = math.min(380.0, size.width - 28);
 
     return Dialog(
       backgroundColor: Colors.transparent,
@@ -1017,8 +1017,8 @@ class _SignupFormImageDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final mq = MediaQuery.of(context);
-    final maxW = math.min(380.0, mq.size.width - 24);
+    final size = MediaQuery.sizeOf(context);
+    final maxW = math.min(380.0, size.width - 24);
 
     return Dialog(
       backgroundColor: Colors.transparent,
