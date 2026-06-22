@@ -653,16 +653,10 @@ class _HiQuizGameState extends State<_HiQuizGame>
   late ConfettiController _confetti;
   late AnimationController _shakeCtrl;
   bool _ttsReady = false;
-  bool _slowMode = false;
+  final bool _slowMode = false;
 
   late _Phrase _target;
   late List<_Phrase> _options;
-  int _score = 0;
-  int _streak = 0;
-  int _bestStreak = 0;
-  int _attempts = 0;
-  int _correct = 0;
-  final Map<String, int> _missed = {};
   bool _locked = false;
   String? _picked;
 
@@ -716,16 +710,6 @@ class _HiQuizGameState extends State<_HiQuizGame>
     setState(() {
       _locked = true;
       _picked = p.jp;
-      _attempts += 1;
-      if (ok) {
-        _streak += 1;
-        if (_streak > _bestStreak) _bestStreak = _streak;
-        _score += 10;
-        _correct += 1;
-      } else {
-        _streak = 0;
-        _missed[_target.jp] = (_missed[_target.jp] ?? 0) + 1;
-      }
     });
     if (ok) {
       HapticFeedback.mediumImpact();
@@ -781,61 +765,15 @@ class _HiQuizGameState extends State<_HiQuizGame>
             ),
           ),
           Column(children: [
-            Container(
-              width: double.infinity,
-              padding: const EdgeInsets.all(14),
-              decoration: _deco(),
-              child: Row(
-                children: [
-                  const Icon(Icons.bolt_rounded, color: Color(0xFFFFE000)),
-                  const SizedBox(width: 8),
-                  Text('স্কোর: $_score',
-                      style: const TextStyle(
-                          color: AppColors.textPrimary, fontWeight: FontWeight.w900)),
-                  const SizedBox(width: 10),
-                  _HiStatChip(label: 'স্ট্রিক', value: '$_streak'),
-                  const SizedBox(width: 6),
-                  _HiStatChip(label: 'সেরা', value: '$_bestStreak'),
-                  const Spacer(),
-                  OutlinedButton(
-                    onPressed: _attempts == 0
-                        ? null
-                        : () => _showHiAwesomeResult(
-                              context: context,
-                              title: 'কুইজ রান — রিভিউ',
-                              scoreLabel: 'স্কোর: $_score',
-                              stats: [
-                                'চেষ্টা: $_attempts',
-                                'সঠিক: $_correct',
-                                'নির্ভুলতা: ${((_correct * 100) / _attempts).round()}%',
-                                'সেরা স্ট্রিক: $_bestStreak',
-                              ],
-                              missed: _missed.entries.toList()
-                                ..sort((a, b) => b.value.compareTo(a.value)),
-                              onPlayAgain: () {
-                                setState(() {
-                                  _score = 0;
-                                  _streak = 0;
-                                  _bestStreak = 0;
-                                  _attempts = 0;
-                                  _correct = 0;
-                                  _missed.clear();
-                                });
-                                _next();
-                              },
-                            ),
-                    style: OutlinedButton.styleFrom(
-                      foregroundColor: AppColors.textPrimary,
-                      side: BorderSide(
-                          color: AppColors.border),
-                    ),
-                    child: const Text('রিভিউ',
-                        style: TextStyle(fontWeight: FontWeight.w900)),
-                  ),
-                ],
-              ),
+            const Align(
+              alignment: Alignment.centerLeft,
+              child: Text('কুইজ রান',
+                  style: TextStyle(
+                      color: AppColors.textPrimary,
+                      fontWeight: FontWeight.w900,
+                      fontSize: 18)),
             ),
-            const SizedBox(height: 10),
+            const SizedBox(height: 12),
             AnimatedBuilder(
               animation: _shakeCtrl,
               builder: (_, child) {
@@ -857,90 +795,11 @@ class _HiQuizGameState extends State<_HiQuizGame>
                         style: TextStyle(
                             color: AppColors.textPrimary, fontWeight: FontWeight.w900)),
                     const SizedBox(height: 10),
-                    Text(_target.jp,
+                    Text(_target.bnPronunciation,
                         style: const TextStyle(
                             color: Color(0xFFFFE000),
                             fontSize: 40,
                             fontWeight: FontWeight.w900)),
-                    const SizedBox(height: 4),
-                    Text(_target.romaji,
-                        style: TextStyle(
-                            color: AppColors.textMuted,
-                            fontWeight: FontWeight.w700)),
-                    const SizedBox(height: 4),
-                    Text('উচ্চারণ: ${_target.bnPronunciation}',
-                        style: TextStyle(
-                            color: AppColors.textMuted,
-                            fontWeight: FontWeight.w700)),
-                    const SizedBox(height: 10),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        GestureDetector(
-                          onTap: _speak,
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 14, vertical: 8),
-                            decoration: BoxDecoration(
-                              color: const Color(0xFFFFE000)
-                                  .withValues(alpha: 0.18),
-                              borderRadius: BorderRadius.circular(99),
-                              border: Border.all(
-                                  color: const Color(0xFFFFE000)
-                                      .withValues(alpha: 0.6)),
-                            ),
-                            child: const Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Icon(Icons.volume_up_rounded,
-                                    color: Color(0xFFFFE000), size: 18),
-                                SizedBox(width: 6),
-                                Text('শুনি',
-                                    style: TextStyle(
-                                        color: Color(0xFFFFE000),
-                                        fontWeight: FontWeight.w900)),
-                              ],
-                            ),
-                          ),
-                        ),
-                        const SizedBox(width: 10),
-                        GestureDetector(
-                          onTap: () async {
-                            setState(() => _slowMode = !_slowMode);
-                            await _speak();
-                          },
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 14, vertical: 8),
-                            decoration: BoxDecoration(
-                              color: _slowMode
-                                  ? const Color(0xFFFFE000)
-                                  : AppColors.border,
-                              borderRadius: BorderRadius.circular(99),
-                              border: Border.all(
-                                  color: AppColors.border),
-                            ),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Icon(Icons.pets_rounded,
-                                    color: _slowMode
-                                        ? AppColors.textPrimary
-                                        : AppColors.textMuted,
-                                    size: 18),
-                                const SizedBox(width: 6),
-                                Text('ধীরে',
-                                    style: TextStyle(
-                                        color: _slowMode
-                                            ? AppColors.textPrimary
-                                            : AppColors.textMuted,
-                                        fontWeight: FontWeight.w900)),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
                   ],
                 ),
               ),

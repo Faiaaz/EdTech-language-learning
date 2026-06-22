@@ -710,6 +710,16 @@ class _LessonListTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final (titleText, titleEmoji) = _splitTrailingEmoji(_title);
+    // Vibrant brand gradient for the JLC lesson tiles — blue-dominant with a
+    // golden-yellow accent only at the tail.
+    const vibrantGradient = LinearGradient(
+      colors: [Color(0xFF0284C7), Color(0xFF0EA5E9), Color(0xFFFFC107)],
+      stops: [0.0, 0.7, 1.0],
+      begin: Alignment.topLeft,
+      end: Alignment.bottomRight,
+    );
+    final titleColor =
+        jlcLayout ? const Color(0xFF0F172A) : Colors.white.withValues(alpha: 0.9);
     final subColor = jlcLayout
         ? const Color(0xFF334155)
         : Colors.white.withValues(alpha: 0.55);
@@ -736,15 +746,27 @@ class _LessonListTile extends StatelessWidget {
                 width: 34,
                 height: 34,
                 decoration: BoxDecoration(
-                  color: accentColor.withValues(alpha: 0.14),
+                  gradient: jlcLayout ? vibrantGradient : null,
+                  color: jlcLayout ? null : accentColor.withValues(alpha: 0.14),
                   borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: accentColor.withValues(alpha: 0.35)),
+                  border: jlcLayout
+                      ? null
+                      : Border.all(color: accentColor.withValues(alpha: 0.35)),
+                  boxShadow: jlcLayout
+                      ? [
+                          BoxShadow(
+                            color: const Color(0xFF0EA5E9).withValues(alpha: 0.30),
+                            blurRadius: 8,
+                            offset: const Offset(0, 3),
+                          ),
+                        ]
+                      : null,
                 ),
                 child: Center(
                   child: Text(
                     '$index',
                     style: TextStyle(
-                      color: accentColor,
+                      color: jlcLayout ? Colors.white : accentColor,
                       fontWeight: FontWeight.w900,
                     ),
                   ),
@@ -755,38 +777,47 @@ class _LessonListTile extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Row(
-                      children: [
-                        Flexible(
-                          child: ShaderMask(
-                            shaderCallback: (bounds) => AppColors
-                                .vibrantTitleGradient
-                                .createShader(bounds),
-                            child: Text(
-                              titleText,
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.w800,
+                    jlcLayout
+                        ? Row(
+                            children: [
+                              Flexible(
+                                child: ShaderMask(
+                                  shaderCallback: (bounds) =>
+                                      vibrantGradient.createShader(bounds),
+                                  blendMode: BlendMode.srcIn,
+                                  child: Text(
+                                    titleText,
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w800,
+                                    ),
+                                  ),
+                                ),
                               ),
-                            ),
-                          ),
-                        ),
-                        // Emoji rendered outside the ShaderMask so it keeps its
-                        // natural colour (yellow 😎 / 👋) instead of the gradient.
-                        if (titleEmoji.isNotEmpty) ...[
-                          const SizedBox(width: 5),
-                          Text(
-                            titleEmoji,
+                              // Keep emoji outside shader so it stays natural color.
+                              if (titleEmoji.isNotEmpty) ...[
+                                const SizedBox(width: 5),
+                                Text(
+                                  titleEmoji,
+                                  maxLines: 1,
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.w800,
+                                  ),
+                                ),
+                              ],
+                            ],
+                          )
+                        : Text(
+                            _title,
                             maxLines: 1,
-                            style: const TextStyle(
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                              color: titleColor,
                               fontWeight: FontWeight.w800,
                             ),
                           ),
-                        ],
-                      ],
-                    ),
                     const SizedBox(height: 3),
                     Text(
                       _description,
@@ -802,11 +833,22 @@ class _LessonListTile extends StatelessWidget {
                 ),
               ),
               const SizedBox(width: 8),
-              Icon(
-                Icons.play_circle_fill_rounded,
-                color: accentColor.withValues(alpha: 0.9),
-                size: 22,
-              ),
+              jlcLayout
+                  ? ShaderMask(
+                      shaderCallback: (bounds) =>
+                          vibrantGradient.createShader(bounds),
+                      blendMode: BlendMode.srcIn,
+                      child: const Icon(
+                        Icons.play_circle_fill_rounded,
+                        color: Colors.white,
+                        size: 24,
+                      ),
+                    )
+                  : Icon(
+                      Icons.play_circle_fill_rounded,
+                      color: accentColor.withValues(alpha: 0.9),
+                      size: 22,
+                    ),
             ],
           ),
         ),

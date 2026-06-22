@@ -9,6 +9,7 @@ import 'package:get/get.dart';
 import 'package:ez_trainz/controllers/lightning_streak_controller.dart';
 import 'package:ez_trainz/models/hiragana_lesson_data.dart';
 import 'package:ez_trainz/screens/hat_earned_screen.dart';
+import 'package:ez_trainz/widgets/lesson1_speaker_icon.dart';
 import 'package:ez_trainz/widgets/lightning_streak_bar.dart';
 import 'package:ez_trainz/widgets/tree_shadow.dart';
 
@@ -36,6 +37,7 @@ class _LessonStep {
         promptRomaji = null,
         vocab = null;
 
+  // ignore: unused_element
   const _LessonStep.draw(this.kana)
       : type = _StepType.drawKana,
         promptRomaji = null,
@@ -62,6 +64,26 @@ class _Lesson1GameFlowScreenState extends State<Lesson1GameFlowScreen>
   static const _bgMid = Color(0xFFBFEFFF);
   static const _bgBottom = AppColors.goldBottom;
   static const _green = Color(0xFF9AE11B);
+  static const _bnPronByKana = <String, String>{
+    'あ': 'আ',
+    'い': 'ই',
+    'う': 'উ',
+    'え': 'এ',
+    'お': 'ও',
+    'か': 'কা',
+    'き': 'কি',
+    'く': 'কু',
+    'け': 'কে',
+    'こ': 'কো',
+    'さ': 'সা',
+    'し': 'শি',
+    'す': 'সু',
+    'せ': 'সে',
+    'そ': 'সো',
+    'あさ': 'আসা',
+    'いえ': 'ইয়ে',
+    'すし': 'সুশি',
+  };
 
   final _rng = math.Random();
   final _tts = JlcTts();
@@ -104,6 +126,8 @@ class _Lesson1GameFlowScreenState extends State<Lesson1GameFlowScreen>
     } catch (_) {}
   }
 
+  String _bnPron(String kana) => _bnPronByKana[kana] ?? kana;
+
   @override
   void dispose() {
     // ignore: discarded_futures
@@ -114,35 +138,30 @@ class _Lesson1GameFlowScreenState extends State<Lesson1GameFlowScreen>
 
   List<_LessonStep> _buildSteps() {
     final kana = HiraganaLesson1Data.kanaList.map((k) => k.kana).toList();
-    final romaji = HiraganaLesson1Data.kanaList.map((k) => k.romaji).toList();
     final steps = <_LessonStep>[];
 
-    // MCQ: select correct character for romaji.
+    // MCQ: বাংলা ইঙ্গিত দেখে জাপানি উচ্চারণ (বাংলা) বাছাই।
     for (var idx = 0; idx < 5; idx++) {
-      final r = romaji[idx];
-      final correctKana = kana[idx];
-      final opts = <String>{correctKana};
+      final promptBn = _bnPron(kana[idx]);
+      final opts = <String>{promptBn};
       while (opts.length < 4) {
-        opts.add(kana[_rng.nextInt(kana.length)]);
+        opts.add(_bnPron(kana[_rng.nextInt(kana.length)]));
       }
-      steps.add(_LessonStep.kanaMcq(r, options: opts.toList()..shuffle(_rng)));
+      steps.add(
+          _LessonStep.kanaMcq(promptBn, options: opts.toList()..shuffle(_rng)));
     }
 
-    // Listening: "What do you hear?"
-    for (var idx = 5; idx < 8; idx++) {
+    // Listening: অডিও শুনে সঠিক উচ্চারণ (বাংলা) বাছাই।
+    for (var idx = 5; idx < 10; idx++) {
       final correct = kana[idx];
-      final opts = <String>{correct};
+      final opts = <String>{_bnPron(correct)};
       while (opts.length < 4) {
-        opts.add(kana[_rng.nextInt(kana.length)]);
+        opts.add(_bnPron(kana[_rng.nextInt(kana.length)]));
       }
       steps.add(_LessonStep.listen(correct, options: opts.toList()..shuffle(_rng)));
     }
 
-    // Drawing: 2 kana.
-    steps.add(_LessonStep.draw('あ'));
-    steps.add(_LessonStep.draw('う'));
-
-    // Vocab picture.
+    // Vocabulary picture.
     for (final v in HiraganaLesson1Data.vocabList) {
       steps.add(_LessonStep.vocab(v));
     }
@@ -354,17 +373,17 @@ class _Lesson1GameFlowScreenState extends State<Lesson1GameFlowScreen>
 
   String _titleForStep(_LessonStep s) {
     return switch (s.type) {
-      _StepType.mcqKana => 'Select the correct character',
-      _StepType.listenKana => 'What do you hear?',
-      _StepType.drawKana => 'Draw this character',
-      _StepType.vocabPic => 'Pick the correct word',
+      _StepType.mcqKana => 'বাংলা দেখে সঠিক উচ্চারণ বাছুন',
+      _StepType.listenKana => 'অডিও থেকে সঠিক উচ্চারণ ধরুন',
+      _StepType.drawKana => 'উচ্চারণ অনুশীলন',
+      _StepType.vocabPic => 'ছবি দেখে সঠিক শব্দ বাছুন',
     };
   }
 
   Widget _buildStepBody() {
     return switch (_step.type) {
       _StepType.mcqKana => _KanaMcq(
-          prompt: 'Select the correct character for “${_step.promptRomaji}”',
+          prompt: 'এটার জাপানি উচ্চারণ কোনটি? — ${_step.promptRomaji}',
           options: _step.options,
           selected: _selected,
           locked: _locked,
@@ -401,6 +420,8 @@ class _Lesson1GameFlowScreenState extends State<Lesson1GameFlowScreen>
         ),
       _StepType.vocabPic => _VocabPic(
           vocab: _step.vocab!,
+          options:
+              HiraganaLesson1Data.vocabList.map((v) => _bnPron(v.kana)).toList(),
           selected: _selected,
           locked: _locked,
           onPick: (v) => setState(() => _selected = v),
@@ -411,10 +432,9 @@ class _Lesson1GameFlowScreenState extends State<Lesson1GameFlowScreen>
   Future<bool> _check() async {
     if (_locked) return false;
     final ok = switch (_step.type) {
-      _StepType.mcqKana =>
-        _selected == HiraganaLesson1Data.kanaList.firstWhere((k) => k.romaji == _step.promptRomaji).kana,
-      _StepType.listenKana => _selected == _step.kana,
-      _StepType.vocabPic => _selected == _step.vocab!.kana,
+      _StepType.mcqKana => _selected == _step.promptRomaji,
+      _StepType.listenKana => _selected == _bnPron(_step.kana!),
+      _StepType.vocabPic => _selected == _bnPron(_step.vocab!.kana),
       _StepType.drawKana => await _checkDrawing(kana: _step.kana!),
     };
 
@@ -736,7 +756,7 @@ class _KanaMcq extends StatelessWidget {
                     style: const TextStyle(
                       color: const Color(0xFF1E293B),
                       fontWeight: FontWeight.w900,
-                      fontSize: 52,
+                      fontSize: 34,
                     ),
                   ),
                   selected: selected == k,
@@ -775,7 +795,7 @@ class _ListenKana extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Tap what you hear',
+          'অডিও শুনে সঠিক উচ্চারণ বাছুন',
           style: TextStyle(
             color: AppColors.textPrimary,
             fontWeight: FontWeight.w800,
@@ -786,16 +806,7 @@ class _ListenKana extends StatelessWidget {
         Center(
           child: GestureDetector(
             onTap: locked ? null : onPlay,
-            child: Container(
-              width: 96,
-              height: 96,
-              decoration: BoxDecoration(
-                color: const Color(0xFF43B9FF),
-                borderRadius: BorderRadius.circular(22),
-              ),
-              child: const Icon(Icons.volume_up_rounded,
-                  color: AppColors.textPrimary, size: 46),
-            ),
+            child: const Lesson1SpeakerIcon(size: 96),
           ),
         ),
         const SizedBox(height: 14),
@@ -813,7 +824,7 @@ class _ListenKana extends StatelessWidget {
                     style: const TextStyle(
                       color: const Color(0xFF1E293B),
                       fontWeight: FontWeight.w900,
-                      fontSize: 52,
+                      fontSize: 34,
                     ),
                   ),
                   selected: selected == k,
@@ -874,16 +885,7 @@ class _DrawKana extends StatelessWidget {
           children: [
             GestureDetector(
               onTap: () => HapticFeedback.selectionClick(),
-              child: Container(
-                width: 44,
-                height: 44,
-                decoration: BoxDecoration(
-                  color: const Color(0xFF43B9FF),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: const Icon(Icons.volume_up_rounded,
-                    color: AppColors.textPrimary, size: 24),
-              ),
+              child: const Lesson1SpeakerIcon(size: 44, showGlow: false),
             ),
             const SizedBox(width: 12),
             Column(
@@ -1521,24 +1523,26 @@ class _TracePainter extends CustomPainter {
 class _VocabPic extends StatelessWidget {
   const _VocabPic({
     required this.vocab,
+    required this.options,
     required this.selected,
     required this.locked,
     required this.onPick,
   });
 
   final VocabWord vocab;
+  final List<String> options;
   final String? selected;
   final bool locked;
   final ValueChanged<String> onPick;
 
   @override
   Widget build(BuildContext context) {
-    final opts = HiraganaLesson1Data.vocabList.map((v) => v.kana).toList();
+    final opts = options;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Which word matches this picture?',
+          'ছবির সাথে মিলিয়ে সঠিক উচ্চারণ বাছুন',
           style: TextStyle(
             color: AppColors.textPrimary,
             fontWeight: FontWeight.w800,
@@ -1554,6 +1558,14 @@ class _VocabPic extends StatelessWidget {
               aspectRatio: 16 / 9,
               child: Image.asset(vocab.imagePath, fit: BoxFit.cover),
             ),
+          ),
+        ),
+        const SizedBox(height: 8),
+        Text(
+          'ইঙ্গিত: ${vocab.meaningBn}',
+          style: TextStyle(
+            color: AppColors.textMuted,
+            fontWeight: FontWeight.w700,
           ),
         ),
         const SizedBox(height: 14),

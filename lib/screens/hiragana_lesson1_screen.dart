@@ -52,28 +52,28 @@ class _HiraganaLesson1ScreenState extends State<HiraganaLesson1Screen> {
   bool _mcqOpen = false;
   bool _speechPrompted = false;
 
-  static const _vowelPairs = <(String romaji, String kana)>[
-    ('a', 'あ'),
-    ('i', 'い'),
-    ('u', 'う'),
-    ('e', 'え'),
-    ('o', 'お'),
+  static const _vowelPairs = <(String prompt, String answer)>[
+    ('এক', 'ইচি'),
+    ('দুই', 'নি'),
+    ('তিন', 'সান'),
+    ('চার', 'ইয়োন'),
+    ('পাঁচ', 'গো'),
   ];
 
-  static const _kRowPairs = <(String romaji, String kana)>[
-    ('ka', 'か'),
-    ('ki', 'き'),
-    ('ku', 'く'),
-    ('ke', 'け'),
-    ('ko', 'こ'),
+  static const _kRowPairs = <(String prompt, String answer)>[
+    ('ছয়', 'রোকু'),
+    ('সাত', 'নানা'),
+    ('আট', 'হাচি'),
+    ('নয়', 'কিউ'),
+    ('দশ', 'জু'),
   ];
 
-  static const _sRowPairs = <(String romaji, String kana)>[
-    ('sa', 'さ'),
-    ('shi', 'し'),
-    ('su', 'す'),
-    ('se', 'せ'),
-    ('so', 'そ'),
+  static const _sRowPairs = <(String prompt, String answer)>[
+    ('ইচি', 'এক'),
+    ('সান', 'তিন'),
+    ('গো', 'পাঁচ'),
+    ('কিউ', 'নয়'),
+    ('জু', 'দশ'),
   ];
 
   @override
@@ -867,7 +867,7 @@ class _HiraganaMcqDialog extends StatefulWidget {
   });
 
   final String title;
-  final List<(String romaji, String kana)> pairs;
+  final List<(String prompt, String answer)> pairs;
 
   @override
   State<_HiraganaMcqDialog> createState() => _HiraganaMcqDialogState();
@@ -878,7 +878,7 @@ class _HiraganaMcqDialogState extends State<_HiraganaMcqDialog> {
   static const _bgTop = AppColors.skyTop;
   static const _bgBottom = AppColors.goldBottom;
 
-  List<(String romaji, String kana)> get _pairs => widget.pairs;
+  List<(String prompt, String answer)> get _pairs => widget.pairs;
 
   int _index = 0;
   int _score = 0;
@@ -893,7 +893,7 @@ class _HiraganaMcqDialogState extends State<_HiraganaMcqDialog> {
     _options = _optionsFor(_pairs[_index].$2);
   }
 
-  List<String> _optionsFor(String correctKana) {
+  List<String> _optionsFor(String correctAnswer) {
     final opts = _pairs.map((p) => p.$2).toList();
     opts.shuffle();
     // Ensure the correct answer is present (it always is) and return all 5.
@@ -1004,7 +1004,7 @@ class _HiraganaMcqDialogState extends State<_HiraganaMcqDialog> {
                         ),
                         const SizedBox(height: 6),
                         Text(
-                          q.$1.toUpperCase(),
+                          q.$1,
                           style: TextStyle(
                             color: _accent,
                             fontSize: promptFont,

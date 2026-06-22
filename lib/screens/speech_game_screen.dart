@@ -7,6 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:ez_trainz/services/jlc_tts.dart';
 import 'package:get/get.dart';
 import 'package:ez_trainz/services/jlc_stt.dart';
+import 'package:ez_trainz/widgets/lesson1_speaker_icon.dart';
 import 'package:ez_trainz/widgets/game_fx.dart';
 
 class SpeechGameScreen extends StatefulWidget {
@@ -15,6 +16,38 @@ class SpeechGameScreen extends StatefulWidget {
   @override
   State<SpeechGameScreen> createState() => _SpeechGameScreenState();
 }
+
+const _bnPronByJapanese = <String, String>{
+  'あ': 'আ',
+  'い': 'ই',
+  'う': 'উ',
+  'え': 'এ',
+  'お': 'ও',
+  'か': 'কা',
+  'き': 'কি',
+  'く': 'কু',
+  'け': 'কে',
+  'こ': 'কো',
+  'さ': 'সা',
+  'し': 'শি',
+  'す': 'সু',
+  'せ': 'সে',
+  'そ': 'সো',
+  'あさ': 'আসা',
+  'いえ': 'ইয়ে',
+  'すし': 'সুশি',
+};
+
+const _bnMeaningByJapanese = <String, String>{
+  'あさ': 'সকাল',
+  'いえ': 'বাড়ি',
+  'すし': 'সুশি',
+};
+
+String _bnPron(String japanese) => _bnPronByJapanese[japanese] ?? japanese;
+
+String _bnMeaning(String japanese) =>
+    _bnMeaningByJapanese[japanese] ?? _bnPron(japanese);
 
 class _SpeechGameScreenState extends State<SpeechGameScreen> {
   // Lesson 1 only.
@@ -312,7 +345,7 @@ class _SpeechGameScreenState extends State<SpeechGameScreen> {
                     const SizedBox(width: 4),
                     const Expanded(
                       child: Text(
-                        'Speech (Lesson 1)',
+                        'স্পিচ গেম (পাঠ ১)',
                         style: TextStyle(
                           color: const Color(0xFF1E293B),
                           fontWeight: FontWeight.w900,
@@ -341,7 +374,6 @@ class _SpeechGameScreenState extends State<SpeechGameScreen> {
                     constraints: const BoxConstraints(maxWidth: 520),
                     child: _JudgeBanner(
                       judge: _judge!,
-                      recognized: _recognized,
                       confidence: _confidence,
                     ),
                   ),
@@ -373,8 +405,11 @@ class _SpeechGameScreenState extends State<SpeechGameScreen> {
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(14)),
                             ),
-                            icon: const Icon(Icons.volume_up_rounded, size: 18),
-                            label: const Text('Hear',
+                            icon: const Lesson1SpeakerIcon(
+                              size: 20,
+                              showGlow: false,
+                            ),
+                            label: const Text('প্লে',
                                 style: TextStyle(fontWeight: FontWeight.w900)),
                           ),
                         ),
@@ -404,7 +439,7 @@ class _SpeechGameScreenState extends State<SpeechGameScreen> {
                               size: 18,
                             ),
                             label: Text(
-                              _listening ? 'Stop' : 'Speak',
+                              _listening ? 'থামুন' : 'বলুন',
                               style: const TextStyle(fontWeight: FontWeight.w900),
                             ),
                           ),
@@ -422,7 +457,7 @@ class _SpeechGameScreenState extends State<SpeechGameScreen> {
                                   borderRadius: BorderRadius.circular(14)),
                             ),
                             icon: const Icon(Icons.skip_next_rounded, size: 18),
-                            label: const Text('Next',
+                            label: const Text('পরেরটি',
                                 style: TextStyle(fontWeight: FontWeight.w900)),
                           ),
                         ),
@@ -433,10 +468,10 @@ class _SpeechGameScreenState extends State<SpeechGameScreen> {
                 const SizedBox(height: 8),
                 Text(
                   _listening
-                      ? 'Recording… (${_fmt(_recorded)}/${_fmt(_maxLen)})'
+                      ? 'রেকর্ড হচ্ছে… (${_fmt(_recorded)}/${_fmt(_maxLen)})'
                       : _checking
-                          ? 'Checking…'
-                          : 'Hear → Record → Next',
+                          ? 'যাচাই হচ্ছে…'
+                          : 'প্লে → বলুন → পরেরটি',
                   style: TextStyle(
                     color: AppColors.textMuted,
                     fontWeight: FontWeight.w700,
@@ -544,18 +579,18 @@ class _SimplePromptCard extends StatelessWidget {
             const SizedBox(height: 12),
           ],
           Text(
-            prompt.japanese,
+            _bnPron(prompt.japanese),
             textAlign: TextAlign.center,
             style: const TextStyle(
               color: Color(0xFFFFD86B),
-              fontSize: 64,
+              fontSize: 56,
               fontWeight: FontWeight.w900,
               height: 1,
             ),
           ),
           const SizedBox(height: 10),
           Text(
-            '${prompt.romaji} • ${prompt.english}',
+            'বাংলা: ${_bnMeaning(prompt.japanese)}',
             textAlign: TextAlign.center,
             style: TextStyle(
               color: AppColors.textMuted,
@@ -571,12 +606,10 @@ class _SimplePromptCard extends StatelessWidget {
 class _JudgeBanner extends StatelessWidget {
   const _JudgeBanner({
     required this.judge,
-    required this.recognized,
     required this.confidence,
   });
 
   final _Judge judge;
-  final String recognized;
   final double confidence;
 
   @override
@@ -586,8 +619,7 @@ class _JudgeBanner extends StatelessWidget {
         ? const Color(0xFF22C55E).withValues(alpha: 0.14)
         : const Color(0xFFEF4444).withValues(alpha: 0.14);
     final border = ok ? const Color(0xFF86EFAC) : const Color(0xFFFFB4B4);
-    final title = ok ? 'Correct' : 'Try again';
-    final said = recognized.trim().isEmpty ? '—' : recognized.trim();
+    final title = ok ? 'সঠিক' : 'আবার চেষ্টা করুন';
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
@@ -607,7 +639,9 @@ class _JudgeBanner extends StatelessWidget {
           ),
           const SizedBox(height: 6),
           Text(
-            'Heard: $said',
+            ok
+                ? 'উচ্চারণ মিলেছে। দারুণ!'
+                : 'এইবার মেলেনি। আবার বলুন।',
             style: TextStyle(
               color: AppColors.textPrimary,
               fontWeight: FontWeight.w700,
@@ -615,7 +649,7 @@ class _JudgeBanner extends StatelessWidget {
           ),
           const SizedBox(height: 2),
           Text(
-            'Confidence: ${(confidence * 100).round()}%',
+            'নিশ্চয়তা: ${(confidence * 100).round()}%',
             style: TextStyle(
               color: AppColors.textMuted,
               fontWeight: FontWeight.w700,

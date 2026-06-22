@@ -7,6 +7,29 @@ import 'package:get/get.dart';
 
 import 'package:ez_trainz/screens/speech_game_screen.dart';
 
+const _lesson1BnPronByKana = <String, String>{
+  'あ': 'আ',
+  'い': 'ই',
+  'う': 'উ',
+  'え': 'এ',
+  'お': 'ও',
+  'か': 'কা',
+  'き': 'কি',
+  'く': 'কু',
+  'け': 'কে',
+  'こ': 'কো',
+  'さ': 'সা',
+  'し': 'শি',
+  'す': 'সু',
+  'せ': 'সে',
+  'そ': 'সো',
+  'あさ': 'আসা',
+  'いえ': 'ইয়ে',
+  'すし': 'সুশি',
+};
+
+String _bnPron(String kana) => _lesson1BnPronByKana[kana] ?? kana;
+
 class Lesson1GameHubScreen extends StatelessWidget {
   const Lesson1GameHubScreen({super.key});
 
@@ -51,7 +74,7 @@ class Lesson1GameHubScreen extends StatelessWidget {
                     ),
                     const _Pill(
                       icon: Icons.auto_awesome_rounded,
-                      text: 'あ い う え お / か き く け こ / さ し す せ そ',
+                      text: 'আ ই উ এ ও / কা কি কু কে কো / সা শি সু সে সো',
                     ),
                   ],
                 ),
@@ -75,7 +98,7 @@ class Lesson1GameHubScreen extends StatelessWidget {
                             icon: Icons.mic_rounded,
                             title: 'Speech Game',
                             subtitle:
-                                'Record a short clip and see Japanese + romaji + English.',
+                                'বাংলা উচ্চারণ বলুন, মিলিয়ে নিন, আর আত্মবিশ্বাস বাড়ান।',
                             tint: Color(0xFFFFD86B),
                             route: _Route.speech,
                           ),
@@ -83,7 +106,7 @@ class Lesson1GameHubScreen extends StatelessWidget {
                             icon: Icons.flash_on_rounded,
                             title: 'Kana Sprint',
                             subtitle:
-                                'Fast multiple-choice: pick the right hiragana for romaji.',
+                                'দ্রুত কুইজ: বাংলা দেখে সঠিক জাপানি উচ্চারণ বাছুন।',
                             tint: Color(0xFF7CFFCB),
                             route: _Route.kana,
                           ),
@@ -91,7 +114,7 @@ class Lesson1GameHubScreen extends StatelessWidget {
                             icon: Icons.image_search_rounded,
                             title: 'Picture Words',
                             subtitle:
-                                'Match the image to あさ / いえ / すし. Quick and fun.',
+                                'ছবির সাথে মিলান: আসা / ইয়ে / সুশি।',
                             tint: Color(0xFF9AD0FF),
                             route: _Route.vocab,
                           ),
@@ -164,7 +187,7 @@ class _HeroHeader extends StatelessWidget {
                   ),
                   SizedBox(height: 4),
                   Text(
-                    'Everything here uses only Lesson 1 kana and 3 words.',
+                    'সব অনুশীলন বাংলা ও বাংলা-লিখিত জাপানি উচ্চারণভিত্তিক।',
                     style: TextStyle(
                       color: const Color(0xFF1E293B),
                       fontWeight: FontWeight.w600,
@@ -627,7 +650,7 @@ class _KanaSprintScreenState extends State<KanaSprintScreen> {
                     child: Column(
                       children: [
                         Text(
-                          'Tap the hiragana for',
+                          'বাংলা উচ্চারণ দেখে সঠিকটি বাছুন',
                           style: TextStyle(
                             color: AppColors.textMuted,
                             fontWeight: FontWeight.w700,
@@ -635,7 +658,7 @@ class _KanaSprintScreenState extends State<KanaSprintScreen> {
                         ),
                         const SizedBox(height: 8),
                         Text(
-                          q.$1.toUpperCase(),
+                          _bnPron(q.$2),
                           style: const TextStyle(
                             color: _accent,
                             fontSize: 44,
@@ -679,7 +702,7 @@ class _KanaSprintScreenState extends State<KanaSprintScreen> {
                         children: [
                           for (final k in _opts)
                             _KanaChoice(
-                              kana: k,
+                              label: _bnPron(k),
                               selected: _picked == k,
                               state: _correct == null
                                   ? null
@@ -708,13 +731,13 @@ enum _ChoiceState { correct, wrong }
 
 class _KanaChoice extends StatelessWidget {
   const _KanaChoice({
-    required this.kana,
+    required this.label,
     required this.selected,
     required this.state,
     required this.onTap,
   });
 
-  final String kana;
+  final String label;
   final bool selected;
   final _ChoiceState? state;
   final VoidCallback? onTap;
@@ -755,10 +778,10 @@ class _KanaChoice extends StatelessWidget {
           ),
           child: Center(
             child: Text(
-              kana,
+              label,
               style: const TextStyle(
                 color: const Color(0xFF1E293B),
-                fontSize: 34,
+                fontSize: 28,
                 fontWeight: FontWeight.w900,
                 height: 1,
               ),
@@ -787,9 +810,9 @@ class _PictureWordsScreenState extends State<PictureWordsScreen> {
   static const _accent = Color(0xFF9AD0FF);
 
   static const _items = <_VocabItem>[
-    _VocabItem(word: 'あさ', meaning: 'Morning', asset: 'assets/images/vocab_asa.png'),
-    _VocabItem(word: 'いえ', meaning: 'House', asset: 'assets/images/vocab_ie.png'),
-    _VocabItem(word: 'すし', meaning: 'Sushi', asset: 'assets/images/vocab_sushi.png'),
+    _VocabItem(word: 'あさ', meaning: 'সকাল', asset: 'assets/images/vocab_asa.png'),
+    _VocabItem(word: 'いえ', meaning: 'বাড়ি', asset: 'assets/images/vocab_ie.png'),
+    _VocabItem(word: 'すし', meaning: 'সুশি', asset: 'assets/images/vocab_sushi.png'),
   ];
 
   final _rng = math.Random();
@@ -996,7 +1019,7 @@ class _PictureWordsScreenState extends State<PictureWordsScreen> {
                     child: Column(
                       children: [
                         Text(
-                          'Which word is this?',
+                          'ছবির শব্দের জাপানি উচ্চারণ কোনটি?',
                           style: TextStyle(
                             color: AppColors.textMuted,
                             fontWeight: FontWeight.w800,
@@ -1048,7 +1071,7 @@ class _PictureWordsScreenState extends State<PictureWordsScreen> {
                         Padding(
                           padding: const EdgeInsets.only(bottom: 10),
                           child: _WordChoice(
-                            word: w,
+                            label: _bnPron(w),
                             selected: _picked == w,
                             state: _correct == null
                                 ? null
@@ -1075,13 +1098,13 @@ class _PictureWordsScreenState extends State<PictureWordsScreen> {
 
 class _WordChoice extends StatelessWidget {
   const _WordChoice({
-    required this.word,
+    required this.label,
     required this.selected,
     required this.state,
     required this.onTap,
   });
 
-  final String word;
+  final String label;
   final bool selected;
   final _ChoiceState? state;
   final VoidCallback? onTap;
@@ -1125,10 +1148,10 @@ class _WordChoice extends StatelessWidget {
             children: [
               Expanded(
                 child: Text(
-                  word,
+                  label,
                   style: const TextStyle(
                     color: const Color(0xFF1E293B),
-                    fontSize: 26,
+                    fontSize: 24,
                     fontWeight: FontWeight.w900,
                     height: 1,
                   ),

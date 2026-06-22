@@ -12,6 +12,7 @@ import 'package:ez_trainz/services/jlc_tts.dart';
 import 'package:get/get.dart';
 import 'package:ez_trainz/services/jlc_stt.dart';
 import 'package:ez_trainz/utils/lesson_practice_config.dart';
+import 'package:ez_trainz/widgets/lesson1_speaker_icon.dart';
 
 class N5HeroNumber1LessonScreen extends StatefulWidget {
   const N5HeroNumber1LessonScreen({
@@ -750,7 +751,7 @@ class _SpeechCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final kanaRunes = target.kana.runes.toList();
+    final hasMatch = showHighlight && matchedIdx.isNotEmpty;
     return Stack(
       clipBehavior: Clip.none,
       children: [
@@ -775,11 +776,11 @@ class _SpeechCard extends StatelessWidget {
                       color: AppColors.border, width: 2),
                 ),
                 alignment: Alignment.center,
-                child: const Text('先生',
+                child: const Text('শিক্ষক',
                     style: TextStyle(
                         color: Color(0xFF1E293B),
                         fontWeight: FontWeight.w900,
-                        fontSize: 16)),
+                        fontSize: 12)),
               ),
               const SizedBox(width: 12),
               Expanded(
@@ -804,47 +805,38 @@ class _SpeechCard extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            target.kanji,
+                            target.bnPronunciation,
                             style: const TextStyle(
                                 color: Color(0xFF1E293B),
-                                fontSize: 42,
+                                fontSize: 40,
                                 fontWeight: FontWeight.w900,
                                 height: 1.0),
                           ),
                           const SizedBox(height: 6),
-                          Wrap(
-                            children: [
-                              for (var i = 0; i < kanaRunes.length; i++)
-                                _KanaChar(
-                                  ch: String.fromCharCode(kanaRunes[i]),
-                                  highlight:
-                                      showHighlight && matchedIdx.contains(i),
-                                ),
-                            ],
+                          Text(
+                            'জাপানি উচ্চারণ',
+                            style: TextStyle(
+                              color: AppColors.textMuted,
+                              fontSize: 13,
+                              fontWeight: FontWeight.w700,
+                            ),
                           ),
                           const SizedBox(height: 4),
                           Text(
-                            target.romaji,
-                            style: const TextStyle(
-                              color: Color(0xFF64748B),
-                              fontSize: 16,
-                              fontWeight: FontWeight.w700,
-                              letterSpacing: 0.5,
+                            'বাংলা সংখ্যা: ${target.bnDigit} ${target.bnWord}',
+                            style: TextStyle(
+                              color: hasMatch
+                                  ? const Color(0xFF16A34A)
+                                  : const Color(0xFF64748B),
+                              fontSize: 15,
+                              fontWeight: FontWeight.w800,
                             ),
                           ),
                           const SizedBox(height: 8),
                           Text(
-                            'উচ্চারণ: ${target.bnPronunciation}',
+                            'বলুন: ${target.bnPronunciation}',
                             style: const TextStyle(
                               color: Color(0xFF334155),
-                              fontWeight: FontWeight.w700,
-                            ),
-                          ),
-                          const SizedBox(height: 2),
-                          Text(
-                            'বাংলা: ${target.bnDigit} ${target.bnWord}',
-                            style: const TextStyle(
-                              color: Color(0xFF1E293B),
                               fontWeight: FontWeight.w900,
                             ),
                           ),
@@ -860,36 +852,6 @@ class _SpeechCard extends StatelessWidget {
         if (scoreBadge != null)
           Positioned(top: -10, right: -6, child: scoreBadge!),
       ],
-    );
-  }
-}
-
-class _KanaChar extends StatelessWidget {
-  const _KanaChar({required this.ch, required this.highlight});
-  final String ch;
-  final bool highlight;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.only(right: 2),
-      padding: const EdgeInsets.only(bottom: 2),
-      decoration: BoxDecoration(
-        border: Border(
-          bottom: BorderSide(
-            color: highlight ? const Color(0xFF22C55E) : Colors.transparent,
-            width: 3,
-          ),
-        ),
-      ),
-      child: Text(
-        ch,
-        style: const TextStyle(
-          color: Color(0xFF1E293B),
-          fontSize: 26,
-          fontWeight: FontWeight.w900,
-        ),
-      ),
     );
   }
 }
@@ -968,13 +930,14 @@ class _UtilityRow extends StatelessWidget {
           icon: Icons.pets_rounded,
           active: slow,
           onTap: disabled ? null : onSlow,
-          tooltip: 'ধীরে',
         ),
         const SizedBox(width: 18),
-        _UtilityButton(
-          icon: Icons.volume_up_rounded,
+        GestureDetector(
           onTap: disabled ? null : onPlay,
-          tooltip: 'শুনি',
+          child: const Lesson1SpeakerIcon(
+            size: 48,
+            showGlow: false,
+          ),
         ),
         const SizedBox(width: 18),
         _UtilityButton(
@@ -1289,7 +1252,7 @@ class _HeroMatchGameState extends State<_HeroMatchGame>
       cards.add(_HeroPair(
           id: 'jp_${n.n}',
           n: n.n,
-          label: '${n.kanji}\n${n.kana}\n(${n.bnPronunciation})',
+          label: '${n.bnPronunciation}\n(${n.bnDigit} ${n.bnWord})',
           jp: true));
       cards.add(_HeroPair(
           id: 'bn_${n.n}', n: n.n, label: '${n.bnDigit} ${n.bnWord}', jp: false));
@@ -1538,14 +1501,9 @@ class _HeroMatchGameState extends State<_HeroMatchGame>
                                 Positioned(
                                   top: 4,
                                   right: 4,
-                                  child: Container(
-                                    padding: const EdgeInsets.all(4),
-                                    decoration: BoxDecoration(
-                                      color: AppColors.border,
-                                      shape: BoxShape.circle,
-                                    ),
-                                    child: const Icon(Icons.volume_up_rounded,
-                                        size: 12, color: AppColors.textPrimary),
+                                  child: const Lesson1SpeakerIcon(
+                                    size: 16,
+                                    showGlow: false,
                                   ),
                                 ),
                               if (matched)
@@ -1901,12 +1859,12 @@ class _HeroBlitzGameState extends State<_HeroBlitzGame>
                         ],
                       ),
                       const SizedBox(height: 14),
-                      Text(_target.kanji,
+                      Text(_target.bnPronunciation,
                           style: const TextStyle(
                               color: AppColors.textPrimary,
-                              fontSize: 58,
+                              fontSize: 56,
                               fontWeight: FontWeight.w900)),
-                      Text('${_target.kana} (${_target.bnPronunciation})',
+                      Text('${_target.bnDigit} ${_target.bnWord}',
                           style: TextStyle(
                               color: AppColors.textMuted,
                               fontWeight: FontWeight.w700)),
@@ -1926,16 +1884,13 @@ class _HeroBlitzGameState extends State<_HeroBlitzGame>
                                     color: AppColors.audio
                                         .withValues(alpha: 0.5)),
                               ),
-                              child: const Row(
+                              child: Row(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
-                                  Icon(Icons.volume_up_rounded,
-                                      color: AppColors.audio, size: 18),
-                                  SizedBox(width: 6),
-                                  Text('শুনি',
-                                      style: TextStyle(
-                                          color: AppColors.audio,
-                                          fontWeight: FontWeight.w900)),
+                                  Lesson1SpeakerIcon(
+                                    size: 28,
+                                    showGlow: false,
+                                  ),
                                 ],
                               ),
                             ),
@@ -1966,13 +1921,6 @@ class _HeroBlitzGameState extends State<_HeroBlitzGame>
                                           ? AppColors.textPrimary
                                           : AppColors.textMuted,
                                       size: 18),
-                                  const SizedBox(width: 6),
-                                  Text('ধীরে',
-                                      style: TextStyle(
-                                          color: _slowMode
-                                              ? AppColors.textPrimary
-                                              : AppColors.textMuted,
-                                          fontWeight: FontWeight.w900)),
                                 ],
                               ),
                             ),
@@ -2446,36 +2394,8 @@ class _HeroTapWhatYouHearGameState extends State<_HeroTapWhatYouHearGame>
                       const SizedBox(height: 14),
                       GestureDetector(
                         onTap: _locked ? null : _speakPrompt,
-                        child: Container(
-                          width: 56,
-                          height: 56,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            gradient: LinearGradient(
-                              colors: [
-                                orange,
-                                Color.lerp(orange, const Color(0xFFC2410C), 0.35)!,
-                              ],
-                              begin: Alignment.topLeft,
-                              end: Alignment.bottomRight,
-                            ),
-                            boxShadow: [
-                              BoxShadow(
-                                color: orange.withValues(alpha: 0.42),
-                                blurRadius: 18,
-                                offset: const Offset(0, 6),
-                              ),
-                            ],
-                            border: Border.all(
-                              color: Colors.white.withValues(alpha: 0.35),
-                              width: 1.5,
-                            ),
-                          ),
-                          child: const Icon(
-                            Icons.volume_up_rounded,
-                            color: Colors.white,
-                            size: 28,
-                          ),
+                        child: const Lesson1SpeakerIcon(
+                          size: 56,
                         ),
                       ),
                     ],
@@ -2565,7 +2485,7 @@ class _HeroTapWhatYouHearGameState extends State<_HeroTapWhatYouHearGame>
                         ),
                         const SizedBox(height: 6),
                         Text(
-                          '${_target.kana} (${_target.kanji}) → ${_target.bnDigit} ${_target.bnWord}',
+                          '${_target.bnPronunciation} → ${_target.bnDigit} ${_target.bnWord}',
                           textAlign: TextAlign.center,
                           style: const TextStyle(
                             color: AppColors.textPrimary,
@@ -3043,7 +2963,7 @@ class _HeroReadGameState extends State<_HeroReadGame>
                         ),
                         const SizedBox(height: 6),
                         Text(
-                          '${_target.kanji} ${_target.kana} (${_target.bnPronunciation}) → ${_target.bnDigit} ${_target.bnWord}',
+                          '${_target.bnPronunciation} → ${_target.bnDigit} ${_target.bnWord}',
                           textAlign: TextAlign.center,
                           style: const TextStyle(
                             color: AppColors.textPrimary,
@@ -3110,19 +3030,10 @@ class _HeroReadGameState extends State<_HeroReadGame>
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
-            _target.kanji,
-            style: const TextStyle(
-              color: AppColors.textPrimary,
-              fontSize: 24,
-              fontWeight: FontWeight.w900,
-            ),
-          ),
-          const SizedBox(width: 8),
-          Text(
-            _target.kana,
+            _target.bnPronunciation,
             style: TextStyle(
-              color: AppColors.textMuted,
-              fontSize: 18,
+              color: AppColors.textPrimary,
+              fontSize: 22,
               fontWeight: FontWeight.w800,
             ),
           ),
@@ -3552,7 +3463,7 @@ class _HeroOrderGameState extends State<_HeroOrderGame>
                                   ),
                                   const SizedBox(height: 2),
                                   Text(
-                                    '${placed.kanji}  ${placed.kana}',
+                                    '${placed.bnDigit} ${placed.bnWord}',
                                     style: TextStyle(
                                       color: AppColors.textMuted,
                                       fontSize: 11,
@@ -4472,8 +4383,8 @@ class _HeroSpeakSequenceGameState extends State<_HeroSpeakSequenceGame>
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12)),
             ),
-            icon: const Icon(Icons.volume_up_rounded),
-            label: const Text('সব শুনুন',
+            icon: const Lesson1SpeakerIcon(size: 20, showGlow: false),
+            label: const Text('সব প্লে',
                 style: TextStyle(fontWeight: FontWeight.w900)),
           ),
         ),
@@ -4489,7 +4400,7 @@ class _HeroSpeakSequenceGameState extends State<_HeroSpeakSequenceGame>
                   borderRadius: BorderRadius.circular(12)),
             ),
             icon: const Icon(Icons.school_rounded),
-            label: const Text('ভুলগুলি শুনুন',
+            label: const Text('ভুল প্লে',
                 style: TextStyle(fontWeight: FontWeight.w900)),
           ),
         ),
@@ -4537,7 +4448,8 @@ void _showAwesomeResult({
   final missed = <String>[];
   for (final e in missedLines.take(6)) {
     final it = _heroNumbers.firstWhere((x) => x.n == e.key);
-    missed.add('${it.kanji} ${it.kana} (${it.bnPronunciation}) → ${it.bnDigit} ${it.bnWord}  ×${e.value}');
+    missed.add(
+        '${it.bnPronunciation} → ${it.bnDigit} ${it.bnWord}  ×${e.value}');
   }
   showModalBottomSheet<void>(
     context: context,
