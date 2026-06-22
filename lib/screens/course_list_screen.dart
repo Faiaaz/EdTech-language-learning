@@ -364,8 +364,7 @@ class _ExpandableCourseCard extends StatelessWidget {
                       width: 52,
                       height: 52,
                       decoration: BoxDecoration(
-                        color: badgeColor
-                            .withValues(alpha: jlcLayout ? 0.18 : 0.15),
+                        color: badgeColor.withValues(alpha: jlcLayout ? 0.18 : 0.15),
                         borderRadius: BorderRadius.circular(14),
                       ),
                       child: Center(
