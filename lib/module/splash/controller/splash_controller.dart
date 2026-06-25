@@ -1,6 +1,6 @@
 import 'dart:math' as math;
+import 'package:ez_trainz/module/module.dart';
 import 'package:ez_trainz/utils/utils.dart';
-import 'package:ez_trainz/view/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -134,16 +134,20 @@ class SplashController extends GetxController with GetTickerProviderStateMixin {
   }
 
   Future<void> _startAnimation() async {
-    await Future.delayed(const Duration(milliseconds: 300));
-    await scaleRotateUpCtrl.forward();
-    await rotateBackCtrl.forward();
-    await Future.delayed(const Duration(milliseconds: 100));
-    await trainzCtrl.forward();
-    await Future.delayed(const Duration(milliseconds: 150));
-    await taglineInCtrl.forward();
-    //await Future.delayed(const Duration(milliseconds: 800));
-    //await exitCtrl.forward();
-    //Get.off(() => const AirplaneTransitionScreen(), transition: Transition.noTransition,);
+    await Future.delayed(Duration(milliseconds: 300),() async {
+      await scaleRotateUpCtrl.forward();
+      await rotateBackCtrl.forward();
+      await Future.delayed(Duration(milliseconds: 100),() async {
+        await trainzCtrl.forward();
+        await Future.delayed(Duration(milliseconds: 150),() async {
+          await taglineInCtrl.forward();
+          await Future.delayed(Duration(milliseconds: 800),() async {
+            await exitCtrl.forward();
+            Get.off(()=>AirplaneTransitionView(), transition: Transition.noTransition,);
+          });
+        });
+      });
+    });
   }
 
   double get currentRotation {
