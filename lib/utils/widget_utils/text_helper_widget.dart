@@ -24,7 +24,7 @@ class TextHelperWidget {
     TextDecoration? decoration,
   }) {
     return GoogleFonts.montserrat(
-      fontSize: fontSize?.sp,
+      fontSize: fontSize?.sp(),
       color: color,
       fontWeight: fontWeight,
       fontStyle: fontStyle,
@@ -50,7 +50,7 @@ class TextHelperWidget {
       shape: shape,
       borderRadius: shape == BoxShape.rectangle ? borderRadius : null,
       border: hasBorder
-          ? Border.all(color: borderColor, width: borderWidth.w)
+          ? Border.all(color: borderColor, width: borderWidth.w())
           : null,
     );
   }
@@ -101,7 +101,7 @@ class TextHelperWidget {
     );
 
     final bool isCircle = boxShape == BoxShape.circle;
-    final double size = (isCircle ? circleDiameter! : width).w;
+    final double size = (isCircle ? circleDiameter! : width).w();
 
     final resolvedGradient = _resolveGradient(
       gradient: gradient,
@@ -228,7 +228,7 @@ class TextHelperWidget {
     return Text(
       flagEmoji,
       style: GoogleFonts.montserrat(
-        fontSize: 26.sp,
+        fontSize: 26.sp(),
         height: 1.2,
       ),
     );

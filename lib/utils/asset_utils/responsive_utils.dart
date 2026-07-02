@@ -1,9 +1,12 @@
 import 'dart:math';
+
 import 'package:flutter/material.dart';
 
 class ResponsiveConfig {
   ResponsiveConfig._();
 
+  /// Reference design size — authored in PORTRAIT
+  /// (e.g. iPhone 13/14 Pro Max: 428 x 926 logical pixels).
   static const double designWidth = 428.0;
   static const double designHeight = 926.0;
 
@@ -14,15 +17,18 @@ class ResponsiveConfig {
   static late double _heightScale;
   static late double _scale;
 
-  /// Initialize once (recommended in MaterialApp builder)
   static void init(BuildContext context) {
     final mq = MediaQuery.of(context);
 
     _mediaQuery = mq;
     _screenSize = mq.size;
 
-    _widthScale = _screenSize.width / designWidth;
-    _heightScale = _screenSize.height / designHeight;
+    final bool isLandscape = mq.orientation == Orientation.landscape;
+    final double effectiveDesignWidth = isLandscape ? designHeight : designWidth;
+    final double effectiveDesignHeight = isLandscape ? designWidth : designHeight;
+
+    _widthScale = _screenSize.width / effectiveDesignWidth;
+    _heightScale = _screenSize.height / effectiveDesignHeight;
 
     _scale = min(_widthScale, _heightScale);
   }
@@ -31,49 +37,70 @@ class ResponsiveConfig {
   static Size get screenSize => _screenSize;
   static double get screenWidth => _screenSize.width;
   static double get screenHeight => _screenSize.height;
+  static bool get isLandscape => _mediaQuery.orientation == Orientation.landscape;
 
-  /// Width scaling
   static double width(num value) {
-    return (value * _widthScale);
+    print(value);
+    if (value == _screenSize.width) {
+      return _screenSize.width;
+    } else {
+      return value * _widthScale;
+    }
   }
 
-  /// Height scaling
   static double height(num value) {
-    return (value * _heightScale);
+    if (value == _screenSize.height) {
+      return _screenSize.height;
+    } else {
+      return value * _heightScale;
+    }
   }
 
   /// Radius scaling (use uniform scale)
   static double radius(num value) {
-    return (value * _scale);
+    return value * _scale;
   }
 
   /// Font scaling (respects accessibility properly)
   static double font(num value) {
     return _mediaQuery.textScaler.scale(value * _scale);
   }
-
 }
 
 /// Extensions
 extension ResponsiveExtension on num {
   /// width
-  double get w => ResponsiveConfig.width(this);
+  double w() {
+    return ResponsiveConfig.width(this);
+  }
 
   /// height
-  double get h => ResponsiveConfig.height(this);
+  double h() {
+    return ResponsiveConfig.height(this);
+  }
 
   /// font size
-  double get sp => ResponsiveConfig.font(this);
+  double sp() {
+    return ResponsiveConfig.font(this);
+  }
 
   /// radius
-  double get r => ResponsiveConfig.radius(this);
+  double r() {
+    return ResponsiveConfig.radius(this);
+  }
 
   /// all padding margin
-  double get apm => ResponsiveConfig.radius(this);
+  double apm() {
+    return ResponsiveConfig.radius(this);
+  }
 
   /// horizontal padding/margin
-  double get hp => ResponsiveConfig.width(this);
+  double hp() {
+    return ResponsiveConfig.width(this);
+  }
 
   /// vertical padding/margin
-  double get vp => ResponsiveConfig.height(this);
+  double vp() {
+    return ResponsiveConfig.height(this);
+  }
 }

@@ -312,8 +312,8 @@ class _SkyBackgroundState extends State<_SkyBackground> {
         children: [
           /// Seamless Sky Background
           Container(
-            height: 926.h,
-            width: 428.w,
+            height: 926.h(),
+            width: 428.w(),
             decoration: const BoxDecoration(
               gradient: LinearGradient(
                 begin: Alignment.topCenter,
@@ -333,7 +333,7 @@ class _SkyBackgroundState extends State<_SkyBackground> {
             child: GifView.asset(
               'assets/images/popup_screen.gif',
               controller: _gifController,
-              width: 428.w,
+              width: 428.w(),
               fit: BoxFit.contain,
               loop: false, // Plays only once, then stays on the last frame
             ),
