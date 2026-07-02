@@ -224,5 +224,15 @@ class TextHelperWidget {
     );
   }
 
+  Widget flagIcon(String flagEmoji) {
+    return Text(
+      flagEmoji,
+      style: GoogleFonts.montserrat(
+        fontSize: 26.sp,
+        height: 1.2,
+      ),
+    );
+  }
+
 
 }

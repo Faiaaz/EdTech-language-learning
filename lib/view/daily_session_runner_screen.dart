@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 import 'package:ez_trainz/controllers/lms_controller.dart';
 import 'package:ez_trainz/controllers/journey_controller.dart';
 import 'package:ez_trainz/controllers/srs_controller.dart';
-import 'package:ez_trainz/controllers/streak_controller.dart';
+import 'package:ez_trainz/module/module.dart';
 import 'package:ez_trainz/models/daily_session.dart';
 import 'package:ez_trainz/models/lesson.dart';
 import 'package:ez_trainz/models/xp_event.dart';

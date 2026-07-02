@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import 'package:ez_trainz/controllers/streak_controller.dart';
+import 'package:ez_trainz/module/module.dart';
 
 /// Duolingo-style top bar with language flag + streak / gem / heart counters.
 class DuoTopCurrencyBar extends StatelessWidget {

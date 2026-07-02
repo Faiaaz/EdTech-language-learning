@@ -15,7 +15,7 @@ import 'package:ez_trainz/view/trial_game_language_picker_screen.dart';
 import 'package:ez_trainz/widgets/app_settings_menu.dart';
 import 'package:ez_trainz/widgets/ez_trainz_logo_text.dart';
 import 'package:ez_trainz/widgets/language_switcher.dart';
-import 'package:ez_trainz/widgets/streak_pill.dart';
+import 'package:ez_trainz/module/module.dart';
 import 'package:ez_trainz/utils/app_theme.dart';
 
 /// Main container after login. Bottom nav: Learn, Game, EZ (For You), Call Us, Library.
@@ -496,7 +496,7 @@ class _ProgramPickerView extends StatelessWidget {
                         height: 30,
                         alignment: Alignment.centerLeft,
                       ),
-                  const StreakPill(),
+                  const StreakPillWidget(),
                   const LanguageSwitcher(),
                   const SizedBox(width: 8),
                   const AppSettingsMenuButton(compact: true),

@@ -144,7 +144,7 @@ class HomeController extends GetxController with GetTickerProviderStateMixin {
   void navigateToProgram(Program program) {
     ProgramController.to.setProgram(program);
     CourseController.to.loadCourses();
-    Get.to(() => const MainShellScreen(),
+    Get.off(() => const MainShellScreen(),
       transition: Transition.rightToLeftWithFade,
       duration: const Duration(milliseconds: 300),
     );

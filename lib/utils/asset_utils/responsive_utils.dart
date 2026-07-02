@@ -33,13 +33,19 @@ class ResponsiveConfig {
   static double get screenHeight => _screenSize.height;
 
   /// Width scaling
-  static double width(num value) => value * _widthScale;
+  static double width(num value) {
+    return (value * _widthScale);
+  }
 
   /// Height scaling
-  static double height(num value) => value * _heightScale;
+  static double height(num value) {
+    return (value * _heightScale);
+  }
 
   /// Radius scaling (use uniform scale)
-  static double radius(num value) => value * _scale;
+  static double radius(num value) {
+    return (value * _scale);
+  }
 
   /// Font scaling (respects accessibility properly)
   static double font(num value) {

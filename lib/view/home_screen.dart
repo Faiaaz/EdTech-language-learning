@@ -8,7 +8,7 @@ import 'package:ez_trainz/models/program.dart';
 import 'package:ez_trainz/view/main_shell_screen.dart';
 import 'package:ez_trainz/view/login_screen.dart';
 import 'package:ez_trainz/view/trial_game_language_picker_screen.dart';
-import 'package:ez_trainz/widgets/streak_pill.dart';
+import 'package:ez_trainz/module/module.dart';
 import 'package:ez_trainz/widgets/ez_trainz_logo_text.dart';
 import 'package:ez_trainz/utils/app_theme.dart';
 
@@ -177,7 +177,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                           height: 30,
                           alignment: Alignment.centerLeft,
                         ),
-                        const StreakPill(),
+                        const StreakPillWidget(),
                         GestureDetector(
                           onTap: _onLogout,
                           child: Container(

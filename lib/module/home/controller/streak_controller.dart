@@ -1,7 +1,6 @@
-import 'package:get/get.dart';
-
 import 'package:ez_trainz/models/daily_streak.dart';
 import 'package:ez_trainz/services/daily_streak_service.dart';
+import 'package:get/get.dart';
 
 class StreakController extends GetxController {
   static StreakController get to => Get.find();
@@ -79,4 +78,3 @@ class StreakController extends GetxController {
     return '$y-$m-$d';
   }
 }
-

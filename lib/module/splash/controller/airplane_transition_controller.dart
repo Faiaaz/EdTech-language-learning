@@ -1,7 +1,7 @@
+import 'package:ez_trainz/module/module.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:gif_view/gif_view.dart';
-import '../../../view/home_screen.dart';
 
 class AirplaneTransitionController extends GetxController with GetSingleTickerProviderStateMixin {
 
@@ -22,7 +22,7 @@ class AirplaneTransitionController extends GetxController with GetSingleTickerPr
 
   Future<void> _navigateToDashboard() async {
     await fadeOut.forward();
-    Get.off(()=> HomeScreen(),transition: Transition.noTransition, duration: Duration.zero,);
+    Get.off(()=> HomeView(),transition: Transition.noTransition, duration: Duration.zero,);
   }
 
   @override
