@@ -1,0 +1,390 @@
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+
+import 'package:ez_trainz/controllers/course_controller.dart';
+import 'package:ez_trainz/models/kana.dart';
+import 'package:ez_trainz/models/lesson.dart';
+import 'package:ez_trainz/utils/app_theme.dart';
+import 'package:ez_trainz/view/n5_lesson_video_screens.dart';
+import 'package:ez_trainz/view/hiragana_lesson1_screen.dart';
+import 'package:ez_trainz/view/lesson_screen.dart';
+import 'package:ez_trainz/view/n5_kana_modules_screen.dart';
+
+class CourseDetailScreen extends StatelessWidget {
+  const CourseDetailScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final ctrl = CourseController.to;
+    final course = ctrl.selectedCourse!;
+
+    return Scaffold(
+      backgroundColor: Colors.transparent,
+      body: SafeArea(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // ── HEADER ─────────────────────────────────────────
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SizedBox(height: 16),
+                  GestureDetector(
+                    onTap: () => Get.back(),
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 12, vertical: 8),
+                      decoration: BoxDecoration(
+                        color: AppColors.card,
+                        borderRadius: BorderRadius.circular(20),
+                        border:
+                            Border.all(color: AppColors.border, width: 1),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const Icon(Icons.arrow_back_ios_rounded,
+                              color: AppColors.textPrimary, size: 14),
+                          const SizedBox(width: 4),
+                          Text('back'.tr,
+                              style: const TextStyle(
+                                color: AppColors.textPrimary,
+                                fontSize: 13,
+                                fontWeight: FontWeight.w600,
+                              )),
+                        ],
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 24),
+
+                  // ── Course level pill ────────────────────────
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 12, vertical: 5),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFFFE000),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Text(
+                      course.level,
+                      style: const TextStyle(
+                        color: Color(0xFF1A1A2E),
+                        fontSize: 13,
+                        fontWeight: FontWeight.w800,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+
+                  // ── Course title ─────────────────────────────
+                  Text(
+                    course.title,
+                    style: const TextStyle(
+                      color: AppColors.textPrimary,
+                      fontSize: 28,
+                      fontWeight: FontWeight.w900,
+                      height: 1.2,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    course.description,
+                    style: const TextStyle(
+                      color: AppColors.textMuted,
+                      fontSize: 15,
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
+                  const SizedBox(height: 24),
+
+                  // ── Kana sub-modules (N5 only) ─────────────────
+                  if (course.level == 'N5') ...[
+                    Text(
+                      'writing_systems'.tr,
+                      style: TextStyle(
+                        color: AppColors.textMuted,
+                        fontSize: 13,
+                        fontWeight: FontWeight.w700,
+                        letterSpacing: 1.2,
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+                    GestureDetector(
+                      onTap: () => Get.to(
+                        () => const N5KanaModulesScreen(),
+                        transition: Transition.rightToLeftWithFade,
+                        duration: const Duration(milliseconds: 300),
+                      ),
+                      child: Container(
+                        width: double.infinity,
+                        padding: const EdgeInsets.all(16),
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            colors: [
+                              Color(KanaData.sakuraPink),
+                              Color(KanaData.sakuraPinkDark),
+                            ],
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                          ),
+                          borderRadius: BorderRadius.circular(16),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Color(KanaData.sakuraPink)
+                                  .withValues(alpha: 0.3),
+                              blurRadius: 12,
+                              offset: const Offset(0, 4),
+                            ),
+                          ],
+                        ),
+                        child: Row(
+                          children: [
+                            Container(
+                              width: 48,
+                              height: 48,
+                              decoration: BoxDecoration(
+                                color: Colors.white.withValues(alpha: 0.2),
+                                borderRadius: BorderRadius.circular(14),
+                              ),
+                              child: const Center(
+                                child: Text('あア',
+                                    style: TextStyle(
+                                      color: const Color(0xFF1E293B),
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.w800,
+                                    )),
+                              ),
+                            ),
+                            const SizedBox(width: 14),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'hiragana_katakana'.tr,
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w800,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 3),
+                                  Text(
+                                    'kana_module_desc'.tr,
+                                    style: TextStyle(
+                                      color:
+                                          Colors.white.withValues(alpha: 0.8),
+                                      fontSize: 12,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Container(
+                              width: 32,
+                              height: 32,
+                              decoration: BoxDecoration(
+                                color: Colors.white.withValues(alpha: 0.2),
+                                shape: BoxShape.circle,
+                              ),
+                              child: const Icon(Icons.arrow_forward_rounded,
+                                  color: const Color(0xFF1E293B), size: 18),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 24),
+                  ],
+
+                  // ── Section label ────────────────────────────
+                  Text(
+                    'lessons_label'.tr,
+                    style: TextStyle(
+                      color: AppColors.textMuted,
+                      fontSize: 13,
+                      fontWeight: FontWeight.w700,
+                      letterSpacing: 1.2,
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                ],
+              ),
+            ),
+
+            // ── LESSONS LIST ───────────────────────────────────
+            Expanded(
+              child: Obx(() {
+                if (ctrl.isLoading.value) {
+                  return const Center(
+                    child: CircularProgressIndicator(color: AppColors.accentBlue),
+                  );
+                }
+
+                if (ctrl.lessons.isEmpty) {
+                  return Center(
+                    child: Text(
+                      'no_lessons'.tr,
+                      style: TextStyle(
+                        color: AppColors.textMuted,
+                        fontSize: 15,
+                      ),
+                    ),
+                  );
+                }
+
+                return ListView.builder(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 24),
+                  itemCount: ctrl.lessons.length,
+                  itemBuilder: (_, i) => _LessonTile(
+                    lesson: ctrl.lessons[i],
+                    index: i + 1,
+                  ),
+                );
+              }),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+// ── LESSON TILE WIDGET ───────────────────────────────────────────────
+class _LessonTile extends StatelessWidget {
+  final Lesson lesson;
+  final int index;
+
+  const _LessonTile({required this.lesson, required this.index});
+
+  @override
+  Widget build(BuildContext context) {
+    final hasVideo = CourseController.to.getVideoUrl(lesson.id) != null;
+    final hasQuizzes = lesson.quizzes.isNotEmpty;
+
+    return GestureDetector(
+      onTap: () {
+        CourseController.to.selectLesson(lesson);
+        if (lesson.id == 1) {
+          Get.to(() => const HiraganaLesson1Screen());
+        } else {
+          final screen = n5LessonVideoScreenForId(lesson.id);
+          if (screen != null) {
+            Get.to(() => screen);
+          } else {
+            Get.to(() => const LessonScreen());
+          }
+        }
+      },
+      child: Container(
+        margin: const EdgeInsets.only(bottom: 12),
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: AppColors.card,
+          borderRadius: BorderRadius.circular(14),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.06),
+              blurRadius: 10,
+              offset: const Offset(0, 3),
+            ),
+          ],
+        ),
+        child: Row(
+          children: [
+            // ── Lesson number circle ───────────────────────
+            Container(
+              width: 42,
+              height: 42,
+              decoration: BoxDecoration(
+                color: const Color(0xFF0F172A).withValues(alpha: 0.12),
+                shape: BoxShape.circle,
+              ),
+              child: Center(
+                child: Text(
+                  '$index',
+                  style: const TextStyle(
+                    color: const Color(0xFF0F172A),
+                    fontSize: 17,
+                    fontWeight: FontWeight.w800,
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(width: 14),
+
+            // ── Title + description ────────────────────────
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    lesson.title,
+                    style: const TextStyle(
+                      color: Color(0xFF1A1A2E),
+                      fontSize: 15,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                  const SizedBox(height: 3),
+                  Text(
+                    lesson.description,
+                    style: const TextStyle(
+                      color: Color(0xFF6B7280),
+                      fontSize: 12,
+                      fontWeight: FontWeight.w400,
+                    ),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  if (hasVideo || hasQuizzes) ...[
+                    const SizedBox(height: 6),
+                    Row(
+                      children: [
+                        if (hasVideo) ...[
+                          const Icon(Icons.play_circle_outline_rounded,
+                              color: const Color(0xFF0F172A), size: 16),
+                          const SizedBox(width: 4),
+                          Text('video'.tr,
+                              style: const TextStyle(
+                                color: const Color(0xFF0F172A),
+                                fontSize: 11,
+                                fontWeight: FontWeight.w600,
+                              )),
+                        ],
+                        if (hasVideo && hasQuizzes)
+                          const SizedBox(width: 12),
+                        if (hasQuizzes) ...[
+                          const Icon(Icons.quiz_outlined,
+                              color: Color(0xFFFFA726), size: 16),
+                          const SizedBox(width: 4),
+                          Text(
+                            lesson.quizzes.length > 1
+                                ? 'quiz_count_plural'.trParams({'count': '${lesson.quizzes.length}'})
+                                : 'quiz_count'.trParams({'count': '${lesson.quizzes.length}'}),
+                            style: const TextStyle(
+                              color: Color(0xFFFFA726),
+                              fontSize: 11,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ],
+                      ],
+                    ),
+                  ],
+                ],
+              ),
+            ),
+
+            const Icon(Icons.chevron_right_rounded,
+                color: Color(0xFFB0B0B0), size: 22),
+          ],
+        ),
+      ),
+    );
+  }
+}

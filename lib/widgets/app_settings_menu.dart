@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import 'package:ez_trainz/controllers/auth_controller.dart';
-import 'package:ez_trainz/screens/coming_soon_screen.dart';
-import 'package:ez_trainz/screens/login_screen.dart';
-import 'package:ez_trainz/screens/profile_screen.dart';
+import 'package:ez_trainz/view/coming_soon_screen.dart';
+import 'package:ez_trainz/view/login_screen.dart';
+import 'package:ez_trainz/view/profile_screen.dart';
 import 'package:ez_trainz/utils/app_theme.dart';
 
 /// Top-right gear that opens account settings (profile, billing, logout, etc.).

@@ -1,4 +1,4 @@
-import 'package:ez_trainz/utils/responsive_utils.dart';
+import 'package:ez_trainz/utils/asset_utils/responsive_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:get/get.dart';
@@ -16,20 +16,19 @@ import 'package:ez_trainz/controllers/lms_controller.dart';
 import 'package:ez_trainz/controllers/gamification_content_controller.dart';
 import 'package:ez_trainz/controllers/roster_controller.dart';
 import 'package:ez_trainz/controllers/journey_controller.dart';
-import 'package:ez_trainz/controllers/streak_controller.dart';
+import 'package:ez_trainz/module/module.dart';
 import 'package:ez_trainz/controllers/lightning_streak_controller.dart';
 import 'package:ez_trainz/controllers/collectibles_controller.dart';
 import 'package:ez_trainz/controllers/hearts_controller.dart';
 import 'package:ez_trainz/l10n/app_translations.dart';
-import 'package:ez_trainz/screens/course_list_screen.dart';
-import 'package:ez_trainz/screens/login_screen.dart';
-import 'package:ez_trainz/screens/home_screen.dart';
-import 'package:ez_trainz/screens/splash_screen.dart';
-import 'package:ez_trainz/screens/avatar_onboarding_screen.dart';
-import 'package:ez_trainz/screens/journey_screen.dart';
-import 'package:ez_trainz/screens/lesson_quiz_screen.dart';
+import 'package:ez_trainz/view/course_list_screen.dart';
+import 'package:ez_trainz/view/login_screen.dart';
+import 'package:ez_trainz/view/avatar_onboarding_screen.dart';
+import 'package:ez_trainz/view/journey_screen.dart';
+import 'package:ez_trainz/view/lesson_quiz_screen.dart';
 import 'package:ez_trainz/models/lesson_challenge.dart';
 import 'package:ez_trainz/utils/app_theme.dart';
+import 'module/module.dart';
 
 const bool _kBypassAuth = false;
 
@@ -76,7 +75,6 @@ class MyApp extends StatelessWidget {
       locale: LocaleController.to.locale,
       fallbackLocale: const Locale('en', 'US'),
       builder: (context, child) {
-        ResponsiveConfig.init(context);
         // Paint the sky→gold brand gradient once behind the whole app so every
         // (transparent) scaffold sits on it.
         ResponsiveConfig.init(context);
@@ -135,7 +133,7 @@ class MyApp extends StatelessWidget {
           transition: Transition.fadeIn,
         ),
       ],
-      home: _kBypassAuth ? const HomeScreen() : const SplashScreen(),
+      home: _kBypassAuth ? HomeView() : SplashView(),
     );
   }
 }

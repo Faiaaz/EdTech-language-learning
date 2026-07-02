@@ -27,6 +27,7 @@ dependencies:
   confetti: ^0.7.0
   url_launcher: ^6.3.0
   share_plus: ^10.1.4
+  google_fonts: ^8.1.0
 
 dependency_overrides:
   # Fix iOS build: ensure federated implementations match the platform interface.
