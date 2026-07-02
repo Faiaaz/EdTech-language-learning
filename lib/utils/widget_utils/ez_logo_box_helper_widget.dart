@@ -10,11 +10,11 @@ class EzLogoBoxHelperWidget {
     required double fontSize,
   }) {
     return Container(
-      height: containerHeight.h,
-      width: containerWidth.w,
+      height: containerHeight.h(),
+      width: containerWidth.w(),
       decoration: BoxDecoration(
         color: ColorUtils.primeBlue,
-        borderRadius: BorderRadius.circular(borderRadius.r)
+        borderRadius: BorderRadius.circular(borderRadius.r())
       ),
       alignment: Alignment.center,
       child: TextHelperWidget().headingTextWithoutWidth(

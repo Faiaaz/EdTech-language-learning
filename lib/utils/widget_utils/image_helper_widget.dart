@@ -37,15 +37,15 @@ class ImageHelperWidget {
 
     Widget fallback(Widget child) {
       return SizedBox(
-        height: height.h,
-        width: width.w,
+        height: height.h(),
+        width: width.w(),
         child: Center(child: child),
       );
     }
 
     Widget content = SizedBox(
-      height: height.h,
-      width: width.w,
+      height: height.h(),
+      width: width.w(),
       child: FittedBox(
         fit: fit,
         child: Image(
@@ -59,8 +59,8 @@ class ImageHelperWidget {
             if (loadingProgress == null) return child;
             return fallback(
               placeholder ?? SizedBox(
-                height: 20.h,
-                width: 20.w,
+                height: 20.h(),
+                width: 20.w(),
                 child: CircularProgressIndicator(strokeWidth: 2),
               ),
             );

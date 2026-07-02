@@ -15,8 +15,8 @@ class HomeView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        height: 926.h,
-        width: 428.w,
+        height: 926.h(),
+        width: 428.w(),
         decoration: BoxDecoration(
           gradient: ColorUtils.pageGradient,
         ),
@@ -27,12 +27,12 @@ class HomeView extends StatelessWidget {
               position: homeController.slideIn,
               child: SingleChildScrollView(
                 child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 24.hp),
+                  padding: EdgeInsets.symmetric(horizontal: 24.hp()),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
 
-                      SpaceHelperWidget.v(16.h),
+                      SpaceHelperWidget.v(16.h()),
 
                       // ── TOP BAR ──────────────────────────────────
                       Row(
@@ -51,17 +51,17 @@ class HomeView extends StatelessWidget {
                           InkWell(
                             onTap: homeController.onLogout,
                             child: Container(
-                              padding: EdgeInsets.symmetric(horizontal: 14.h, vertical: 8.w),
+                              padding: EdgeInsets.symmetric(horizontal: 14.h(), vertical: 8.w()),
                               decoration: BoxDecoration(
                                 color: ColorUtils.white255,
-                                borderRadius: BorderRadius.circular(20.r),
+                                borderRadius: BorderRadius.circular(20.r()),
                                 border: Border.all(color: ColorUtils.border, width: 1),
                               ),
                               child: Row(
                                 children: [
-                                  Icon(Icons.logout_rounded, color: ColorUtils.textPrimary, size: 15.r),
+                                  Icon(Icons.logout_rounded, color: ColorUtils.textPrimary, size: 15.r()),
 
-                                  SpaceHelperWidget.h(5.w),
+                                  SpaceHelperWidget.h(5.w()),
 
                                   TextHelperWidget().headingTextWithoutWidth(
                                     text: 'logout'.tr,
@@ -76,7 +76,7 @@ class HomeView extends StatelessWidget {
                         ],
                       ),
 
-                      SpaceHelperWidget.v(16.h),
+                      SpaceHelperWidget.v(16.h()),
 
                       // ── SUBTITLE ─────────────────────────────────
 
@@ -88,7 +88,7 @@ class HomeView extends StatelessWidget {
                       ),
 
 
-                      SpaceHelperWidget.v(16.h),
+                      SpaceHelperWidget.v(16.h()),
 
 
                       // ── TRIAL GAME CARD ───────────────────────────
@@ -108,7 +108,7 @@ class HomeView extends StatelessWidget {
                         ),
                       ),
 
-                      SpaceHelperWidget.v(14.h),
+                      SpaceHelperWidget.v(14.h()),
 
 
                       // ── PROGRAM CARDS ─────────────────────────────
@@ -132,7 +132,7 @@ class HomeView extends StatelessWidget {
                                 ),
                               ),
 
-                              SpaceHelperWidget.v(14.h),
+                              SpaceHelperWidget.v(14.h()),
 
                               SlideTransition(
                                 position: homeController.card3Slide,
@@ -148,7 +148,7 @@ class HomeView extends StatelessWidget {
                                 ),
                               ),
 
-                              SpaceHelperWidget.v(14.h),
+                              SpaceHelperWidget.v(14.h()),
 
                               SlideTransition(
                                 position: homeController.card4Slide,
@@ -164,7 +164,7 @@ class HomeView extends StatelessWidget {
                                 ),
                               ),
 
-                              SpaceHelperWidget.v(14.h),
+                              SpaceHelperWidget.v(14.h()),
 
                               SlideTransition(
                                 position: homeController.card5Slide,
@@ -184,7 +184,7 @@ class HomeView extends StatelessWidget {
                         },
                       ),
 
-                      SpaceHelperWidget.v(28.h),
+                      SpaceHelperWidget.v(28.h()),
 
 
                       // ── WAVING PENGUIN ────────────────────────────
@@ -206,7 +206,7 @@ class HomeView extends StatelessWidget {
                         ),
                       ),
 
-                      SpaceHelperWidget.v(20.h),
+                      SpaceHelperWidget.v(20.h()),
 
 
                       // ── TAGLINE ───────────────────────────────────
@@ -221,7 +221,7 @@ class HomeView extends StatelessWidget {
                       ),
 
 
-                      SpaceHelperWidget.v(32.h),
+                      SpaceHelperWidget.v(32.h()),
 
 
                     ],

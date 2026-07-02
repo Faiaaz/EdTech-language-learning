@@ -24,8 +24,8 @@ class AirplaneTransitionView extends StatelessWidget {
           children: [
             /// Seamless Sky Gradient
             Container(
-              height: 926.h,
-              width: 428.w,
+              height: 926.h(),
+              width: 428.w(),
               decoration: const BoxDecoration(
                 gradient: LinearGradient(
                   begin: Alignment.topCenter,
@@ -45,7 +45,7 @@ class AirplaneTransitionView extends StatelessWidget {
               child: GifView.asset(
                 'assets/images/popup_screen.gif',
                 controller: airplaneTransitionController.gifController,
-                width: 428.w,
+                width: 428.w(),
                 fit: BoxFit.contain,
                 loop: false,
               ),

@@ -15,18 +15,18 @@ class StreakPillWidget extends StatelessWidget {
       final done = p >= 1.0;
 
       return Container(
-        padding: EdgeInsets.symmetric(horizontal: 10.hp, vertical: 8.vp),
+        padding: EdgeInsets.symmetric(horizontal: 10.hp(), vertical: 8.vp()),
         decoration: BoxDecoration(
           color: Colors.white.withValues(alpha: 0.18),
-          borderRadius: BorderRadius.circular(999.r),
+          borderRadius: BorderRadius.circular(999.r()),
           border: Border.all(color: Colors.white.withValues(alpha: 0.35)),
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
             SizedBox(
-              width: 18.w,
-              height: 18.h,
+              width: 18.w(),
+              height: 18.h(),
               child: Stack(
                 fit: StackFit.expand,
                 children: [
@@ -39,13 +39,13 @@ class StreakPillWidget extends StatelessWidget {
                     ),
                   ),
                   Center(
-                    child: Icon(Icons.local_fire_department_rounded, size: 14.r, color: Colors.white),
+                    child: Icon(Icons.local_fire_department_rounded, size: 14.r(), color: Colors.white),
                   ),
                 ],
               ),
             ),
 
-            SpaceHelperWidget.h(8.w),
+            SpaceHelperWidget.h(8.w()),
 
 
             TextHelperWidget().headingTextWithoutWidth(

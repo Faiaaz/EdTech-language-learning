@@ -7,17 +7,17 @@ class SpaceHelperWidget {
 
   /// Horizontal Spacing
   static Widget h(double width) {
-    return SizedBox(width: width.w);
+    return SizedBox(width: width.w());
   }
 
   /// Vertical Spacing
   static Widget v(double height) {
-    return SizedBox(height: height.h);
+    return SizedBox(height: height.h());
   }
 
   /// Square Spacing (equal width & height)
   static Widget sq(double height,double width) {
-    return SizedBox(width: width.w, height: height.h);
+    return SizedBox(width: width.w(), height: height.h());
   }
 
 }

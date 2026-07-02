@@ -23,8 +23,8 @@ class SplashView extends StatelessWidget {
           return Opacity(
             opacity: isExiting ? splashController.splashOpacity.value.clamp(0.0, 1.0) : 1.0,
             child: Container(
-              height: 926.h,
-              width: 428.w,
+              height: 926.h(),
+              width: 428.w(),
               decoration: BoxDecoration(
                 color: ColorUtils.white255,
               ),
