@@ -15,6 +15,8 @@ class ResponsiveConfig {
 
   static late double _widthScale;
   static late double _heightScale;
+  static late double _effectiveDesignWidth;
+  static late double _effectiveDesignHeight;
   static late double _scale;
 
   static void init(BuildContext context) {
@@ -24,11 +26,16 @@ class ResponsiveConfig {
     _screenSize = mq.size;
 
     final bool isLandscape = mq.orientation == Orientation.landscape;
-    final double effectiveDesignWidth = isLandscape ? designHeight : designWidth;
-    final double effectiveDesignHeight = isLandscape ? designWidth : designHeight;
+    _effectiveDesignWidth = isLandscape ? designHeight : designWidth;
+    _effectiveDesignHeight = isLandscape ? designWidth : designHeight;
+    print(_effectiveDesignWidth);
+    print(_effectiveDesignHeight);
 
-    _widthScale = _screenSize.width / effectiveDesignWidth;
-    _heightScale = _screenSize.height / effectiveDesignHeight;
+    _widthScale = _screenSize.width / _effectiveDesignWidth;
+    _heightScale = _screenSize.height / _effectiveDesignHeight;
+
+    print(_widthScale);
+    print(_heightScale);
 
     _scale = min(_widthScale, _heightScale);
   }
@@ -40,20 +47,11 @@ class ResponsiveConfig {
   static bool get isLandscape => _mediaQuery.orientation == Orientation.landscape;
 
   static double width(num value) {
-    print(value);
-    if (value == _screenSize.width) {
-      return _screenSize.width;
-    } else {
-      return value * _widthScale;
-    }
+    return value * _widthScale;
   }
 
   static double height(num value) {
-    if (value == _screenSize.height) {
-      return _screenSize.height;
-    } else {
-      return value * _heightScale;
-    }
+    return value * _heightScale;
   }
 
   /// Radius scaling (use uniform scale)
@@ -64,6 +62,14 @@ class ResponsiveConfig {
   /// Font scaling (respects accessibility properly)
   static double font(num value) {
     return _mediaQuery.textScaler.scale(value * _scale);
+  }
+
+  static double fullWidth() {
+    return isLandscape ? (926 * _widthScale) : (428 * _widthScale);
+  }
+
+  static double fullHeight() {
+    return isLandscape ? (428 * _heightScale) : (926 * _heightScale);
   }
 }
 
@@ -102,5 +108,15 @@ extension ResponsiveExtension on num {
   /// vertical padding/margin
   double vp() {
     return ResponsiveConfig.height(this);
+  }
+
+  /// full width
+  double fw() {
+    return ResponsiveConfig.fullWidth();
+  }
+
+  /// full height
+  double fh() {
+    return ResponsiveConfig.fullHeight();
   }
 }

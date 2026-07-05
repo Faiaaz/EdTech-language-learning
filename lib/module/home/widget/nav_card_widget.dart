@@ -63,7 +63,7 @@ class _NavCardWidgetState extends State<NavCardWidget> with SingleTickerProvider
           return Transform.scale(scale: _scale.value, child: child);
         },
         child: Container(
-          width: 428.w(),
+          width: 428.fw(),
           padding: EdgeInsets.symmetric(horizontal: 20.hp(), vertical: 18.vp()),
           decoration: BoxDecoration(
             color: ColorUtils.white255,

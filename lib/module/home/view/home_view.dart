@@ -15,8 +15,8 @@ class HomeView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        height: 926.h(),
-        width: 428.w(),
+        height: 926.fh(),
+        width: 428.fw(),
         decoration: BoxDecoration(
           gradient: ColorUtils.pageGradient,
         ),

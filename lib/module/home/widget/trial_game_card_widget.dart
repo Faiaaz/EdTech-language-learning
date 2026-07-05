@@ -9,7 +9,7 @@ class TrialGameCardWidget {
     return InkWell(
       onTap: onTap,
       child: Container(
-        width: 428.w(),
+        //width: 428.fw(),
         padding: EdgeInsets.fromLTRB(18.w(), 16.h(), 16.w(), 16.h()),
         decoration: BoxDecoration(
           color: ColorUtils.cardAlt,
