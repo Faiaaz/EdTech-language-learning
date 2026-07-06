@@ -63,11 +63,11 @@ class _NavCardWidgetState extends State<NavCardWidget> with SingleTickerProvider
           return Transform.scale(scale: _scale.value, child: child);
         },
         child: Container(
-          width: 428.w(),
-          padding: EdgeInsets.symmetric(horizontal: 20.hp(), vertical: 18.vp()),
+          width: 428.w(context),
+          padding: EdgeInsets.symmetric(horizontal: 20.hp(context), vertical: 18.vp(context)),
           decoration: BoxDecoration(
             color: ColorUtils.white255,
-            borderRadius: BorderRadius.circular(18.r()),
+            borderRadius: BorderRadius.circular(18.r(context)),
             border: Border.all(color: ColorUtils.border),
             boxShadow: [
               BoxShadow(
@@ -81,17 +81,17 @@ class _NavCardWidgetState extends State<NavCardWidget> with SingleTickerProvider
             children: [
               // ── Flag icon in program-color tinted box ───────────────
               Container(
-                width: 48.w(),
-                height: 48.h(),
+                width: 48.w(context),
+                height: 48.h(context),
                 decoration: BoxDecoration(
                   color: widget.gradientColors.first.withValues(alpha: 0.14),
-                  borderRadius: BorderRadius.circular(14.r()),
+                  borderRadius: BorderRadius.circular(14.r(context)),
                 ),
                 alignment: Alignment.center,
                 child: widget.iconWidget,
               ),
 
-              SpaceHelperWidget.h(16.w()),
+              SpaceHelperWidget.h(context: context,width: 16),
 
               // ── Title + subtitle ────────────────────────────
               Expanded(
@@ -101,16 +101,18 @@ class _NavCardWidgetState extends State<NavCardWidget> with SingleTickerProvider
 
                     TextHelperWidget().headingTextWithoutWidth(
                       text: widget.title,
+                      context: context,
                       textColor: ColorUtils.textPrimary,
                       fontSize: 18,
                       fontWeight: FontWeight.w800,
                       lineHeight: 1.2,
                     ),
 
-                    SpaceHelperWidget.v(3.h()),
+                    SpaceHelperWidget.v(context: context,height: 3),
 
                     TextHelperWidget().headingTextWithoutWidth(
                       text: widget.subtitle,
+                      context: context,
                       textColor: ColorUtils.textMuted,
                       fontSize: 15,
                       fontWeight: FontWeight.w400,
@@ -122,8 +124,8 @@ class _NavCardWidgetState extends State<NavCardWidget> with SingleTickerProvider
 
               // ── Arrow ──────────────────────────────────────
               Container(
-                width: 32.w(),
-                height: 32.h(),
+                width: 32.w(context),
+                height: 32.h(context),
                 decoration: BoxDecoration(
                   color: widget.gradientColors.first.withValues(alpha: 0.12),
                   shape: BoxShape.circle,
@@ -131,7 +133,7 @@ class _NavCardWidgetState extends State<NavCardWidget> with SingleTickerProvider
                 child: Icon(
                   Icons.arrow_forward_rounded,
                   color: widget.gradientColors.first,
-                  size: 18.r(),
+                  size: 18.r(context),
                 ),
               ),
             ],

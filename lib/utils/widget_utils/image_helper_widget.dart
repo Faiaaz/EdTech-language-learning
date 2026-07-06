@@ -7,6 +7,7 @@ enum ImageSourceType { asset, network, file }
 class ImageHelperWidget {
 
   Widget imageHelperWidget({
+    required BuildContext context,
     required String imagePath,
     required ImageSourceType sourceType,
     required double height,
@@ -35,17 +36,20 @@ class ImageHelperWidget {
       }
     }
 
-    Widget fallback(Widget child) {
+    Widget fallback({
+      required Widget child,
+      required BuildContext context,
+    }) {
       return SizedBox(
-        height: height.h(),
-        width: width.w(),
+        height: height.h(context),
+        width: width.w(context),
         child: Center(child: child),
       );
     }
 
     Widget content = SizedBox(
-      height: height.h(),
-      width: width.w(),
+      height: height.h(context),
+      width: width.w(context),
       child: FittedBox(
         fit: fit,
         child: Image(
@@ -58,16 +62,18 @@ class ImageHelperWidget {
           loadingBuilder: (context, child, loadingProgress) {
             if (loadingProgress == null) return child;
             return fallback(
-              placeholder ?? SizedBox(
-                height: 20.h(),
-                width: 20.w(),
+              context: context,
+              child: placeholder ?? SizedBox(
+                height: 20.h(context),
+                width: 20.w(context),
                 child: CircularProgressIndicator(strokeWidth: 2),
               ),
             );
           },
           errorBuilder: (context, error, stackTrace) {
             return fallback(
-              errorWidget ?? const Icon(
+              context: context,
+              child: errorWidget ?? const Icon(
                 Icons.broken_image_outlined,
                 color: Colors.grey,
               ),

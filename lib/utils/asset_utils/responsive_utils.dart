@@ -2,105 +2,118 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 
-class ResponsiveConfig {
-  ResponsiveConfig._();
+class ResponsiveUtils {
 
-  /// Reference design size — authored in PORTRAIT
-  /// (e.g. iPhone 13/14 Pro Max: 428 x 926 logical pixels).
-  static const double designWidth = 428.0;
-  static const double designHeight = 926.0;
-
-  static late MediaQueryData _mediaQuery;
-  static late Size _screenSize;
-
-  static late double _widthScale;
-  static late double _heightScale;
-  static late double _scale;
-
-  static void init(BuildContext context) {
-    final mq = MediaQuery.of(context);
-
-    _mediaQuery = mq;
-    _screenSize = mq.size;
-
-    final bool isLandscape = mq.orientation == Orientation.landscape;
-    final double effectiveDesignWidth = isLandscape ? designHeight : designWidth;
-    final double effectiveDesignHeight = isLandscape ? designWidth : designHeight;
-
-    _widthScale = _screenSize.width / effectiveDesignWidth;
-    _heightScale = _screenSize.height / effectiveDesignHeight;
-
-    _scale = min(_widthScale, _heightScale);
+  static Size _screenSize({required BuildContext context}) {
+    return MediaQuery.of(context).size;
   }
 
-  /// Screen info
-  static Size get screenSize => _screenSize;
-  static double get screenWidth => _screenSize.width;
-  static double get screenHeight => _screenSize.height;
-  static bool get isLandscape => _mediaQuery.orientation == Orientation.landscape;
+  /// Width ratio
+  static double widthRatio({required BuildContext context}) {
+    final screenWidth = _screenSize(context: context).width;
+    return screenWidth / DesignUtils.designWidth(context: context);
+  }
 
-  static double width(num value) {
-    print(value);
-    if (value == _screenSize.width) {
-      return _screenSize.width;
+  /// Height ratio
+  static double heightRatio({required BuildContext context}) {
+    final screenHeight = _screenSize(context: context).height;
+    return screenHeight / DesignUtils.designHeight(context: context);
+  }
+  
+  
+  static double scale({required BuildContext context}) {
+    return min(widthRatio(context: context), heightRatio(context: context));
+  }
+
+  /// Width scaling
+  static double width({
+    required BuildContext context,
+    required num width,
+  }) {
+    print("print $width");
+    if(MediaQuery.of(context).orientation == Orientation.portrait && width == 428) {
+      return width * widthRatio(context: context);
+    } else if(MediaQuery.of(context).orientation == Orientation.landscape && width == 428) {
+      return 926 * widthRatio(context: context);
     } else {
-      return value * _widthScale;
+      return width * widthRatio(context: context);
     }
   }
 
-  static double height(num value) {
-    if (value == _screenSize.height) {
-      return _screenSize.height;
+  /// Height scaling
+  static double height({
+    required BuildContext context,
+    required num height,
+  }) {
+    if(MediaQuery.of(context).orientation == Orientation.portrait && height == 926) {
+      return height * heightRatio(context: context);
+    } else if(MediaQuery.of(context).orientation == Orientation.landscape && height == 926) {
+      return 428 * heightRatio(context: context);
     } else {
-      return value * _heightScale;
+      return height * heightRatio(context: context);
     }
   }
+
 
   /// Radius scaling (use uniform scale)
-  static double radius(num value) {
-    return value * _scale;
+  static double radius({required num value,required BuildContext context}) {
+    return value * scale(context: context);
   }
 
   /// Font scaling (respects accessibility properly)
-  static double font(num value) {
-    return _mediaQuery.textScaler.scale(value * _scale);
+  static double font({required num value,required BuildContext context}) {
+    return MediaQueryData().textScaler.scale(value * scale(context: context));
+  }
+
+
+}
+
+
+class DesignUtils {
+  static num designHeight({required BuildContext context}) {
+    return MediaQuery.of(context).orientation == Orientation.portrait ? 926 : 428;
+  }
+
+  static num designWidth({required BuildContext context}) {
+    return MediaQuery.of(context).orientation == Orientation.portrait ? 428 : 926;
   }
 }
 
 /// Extensions
 extension ResponsiveExtension on num {
   /// width
-  double w() {
-    return ResponsiveConfig.width(this);
+  double w(BuildContext context) {
+    return ResponsiveUtils.width(context: context,width: this);
   }
 
   /// height
-  double h() {
-    return ResponsiveConfig.height(this);
+  double h(BuildContext context) {
+    return ResponsiveUtils.height(context: context,height: this);
   }
 
   /// font size
-  double sp() {
-    return ResponsiveConfig.font(this);
+  double sp(BuildContext context) {
+    return ResponsiveUtils.font(context: context,value: this);
   }
 
   /// radius
-  double r() {
-    return ResponsiveConfig.radius(this);
+  double r(BuildContext context) {
+    return ResponsiveUtils.radius(context: context,value: this);
   }
 
   /// all padding margin
-  double apm() {
-    return ResponsiveConfig.radius(this);
+  double apm(BuildContext context) {
+    return ResponsiveUtils.radius(context: context,value: this);
   }
 
   /// horizontal padding/margin
-  double hp() {
-    return ResponsiveConfig.width(this);
+  double hp(BuildContext context) {
+    return ResponsiveUtils.width(context: context,width: this);
   }
 
   /// vertical padding/margin
-  double vp() {
-    return ResponsiveConfig.height(this);
+  double vp(BuildContext context) {
+    return ResponsiveUtils.height(context: context,height: this);
   }
+
 }

@@ -8,17 +8,19 @@ class EzLogoBoxHelperWidget {
     required double containerWidth,
     required double borderRadius,
     required double fontSize,
+    required BuildContext context,
   }) {
     return Container(
-      height: containerHeight.h(),
-      width: containerWidth.w(),
+      height: containerHeight.h(context),
+      width: containerWidth.w(context),
       decoration: BoxDecoration(
         color: ColorUtils.primeBlue,
-        borderRadius: BorderRadius.circular(borderRadius.r())
+        borderRadius: BorderRadius.circular(borderRadius.r(context))
       ),
       alignment: Alignment.center,
       child: TextHelperWidget().headingTextWithoutWidth(
         text: "EZ",
+        context: context,
         alignment: Alignment.center,
         fontSize: fontSize,
         fontWeight: FontWeight.w800,

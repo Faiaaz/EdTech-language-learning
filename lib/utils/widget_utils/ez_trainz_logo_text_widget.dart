@@ -9,6 +9,7 @@ class EzTrainzLogoTextWidget {
     required ImageSourceType sourceType,
     required double height,
     required double width,
+    required BuildContext context,
   }) {
     return Align(
       alignment: alignment,
@@ -17,6 +18,7 @@ class EzTrainzLogoTextWidget {
         sourceType: sourceType,
         height: height,
         width: width,
+        context: context,
       ),
     );
   }
