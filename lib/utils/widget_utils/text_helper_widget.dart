@@ -15,6 +15,7 @@ class TextHelperWidget {
   }
 
   TextStyle _buildTextStyle({
+    required BuildContext context,
     double? fontSize,
     Color? color,
     FontWeight? fontWeight,
@@ -24,7 +25,7 @@ class TextHelperWidget {
     TextDecoration? decoration,
   }) {
     return GoogleFonts.montserrat(
-      fontSize: fontSize?.sp(),
+      fontSize: fontSize?.sp(context),
       color: color,
       fontWeight: fontWeight,
       fontStyle: fontStyle,
@@ -36,6 +37,7 @@ class TextHelperWidget {
 
 
   BoxDecoration _buildDecoration({
+    required BuildContext context,
     required Color containerColor,
     required BoxShape shape,
     Gradient? gradient,
@@ -50,7 +52,7 @@ class TextHelperWidget {
       shape: shape,
       borderRadius: shape == BoxShape.rectangle ? borderRadius : null,
       border: hasBorder
-          ? Border.all(color: borderColor, width: borderWidth.w())
+          ? Border.all(color: borderColor, width: borderWidth.w(context))
           : null,
     );
   }
@@ -60,7 +62,7 @@ class TextHelperWidget {
   Widget headingText({
     // Content
     required String text,
-
+    required BuildContext context,
     // Typography
     double fontSize = 24,
     Color textColor = const Color.fromRGBO(35, 47, 48, 1),
@@ -101,7 +103,7 @@ class TextHelperWidget {
     );
 
     final bool isCircle = boxShape == BoxShape.circle;
-    final double size = (isCircle ? circleDiameter! : width).w();
+    final double size = (isCircle ? circleDiameter! : width).w(context);
 
     final resolvedGradient = _resolveGradient(
       gradient: gradient,
@@ -118,6 +120,7 @@ class TextHelperWidget {
       style: _buildTextStyle(
         fontSize: fontSize,
         color: textColor,
+        context: context,
         fontWeight: fontWeight,
         height: lineHeight,
         fontStyle: fontStyle,
@@ -134,6 +137,7 @@ class TextHelperWidget {
       decoration: _buildDecoration(
         containerColor: containerColor,
         shape: boxShape,
+        context: context,
         gradient: resolvedGradient,
         borderRadius: borderRadius,
         hasBorder: hasBorder,
@@ -149,6 +153,7 @@ class TextHelperWidget {
   Widget headingTextWithoutWidth({
     // Content
     required String text,
+    required BuildContext context,
     // Typography
     double fontSize = 24,
     Color textColor = const Color.fromRGBO(35, 47, 48, 1),
@@ -191,6 +196,7 @@ class TextHelperWidget {
     final textStyle = _buildTextStyle(
       fontSize: fontSize,
       color: textColor,
+      context: context,
       fontWeight: fontWeight,
       fontStyle: fontStyle,
       height: lineHeight,
@@ -217,6 +223,7 @@ class TextHelperWidget {
         gradient: resolvedGradient,
         borderRadius: borderRadius,
         hasBorder: hasBorder,
+        context: context,
         borderColor: borderColor,
         borderWidth: borderWidth,
       ),
@@ -224,11 +231,14 @@ class TextHelperWidget {
     );
   }
 
-  Widget flagIcon(String flagEmoji) {
+  Widget flagIcon({
+    required String flagEmoji,
+    required BuildContext context,
+  }) {
     return Text(
       flagEmoji,
       style: GoogleFonts.montserrat(
-        fontSize: 26.sp(),
+        fontSize: 26.sp(context),
         height: 1.2,
       ),
     );

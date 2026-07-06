@@ -23,8 +23,8 @@ class SplashView extends StatelessWidget {
           return Opacity(
             opacity: isExiting ? splashController.splashOpacity.value.clamp(0.0, 1.0) : 1.0,
             child: Container(
-              height: 926.h(),
-              width: 428.w(),
+              height: 926.h(context),
+              width: 428.w(context),
               decoration: BoxDecoration(
                 color: ColorUtils.white255,
               ),
@@ -44,6 +44,7 @@ class SplashView extends StatelessWidget {
                           alignment: Alignment.center,
                           transform: Matrix4.identity()..rotateZ(splashController.currentRotation),
                           child: EzLogoBoxHelperWidget().ezLogoBoxHelperWidget(
+                            context: context,
                             containerHeight: 42,
                             containerWidth: 52,
                             borderRadius: 10,
@@ -51,13 +52,14 @@ class SplashView extends StatelessWidget {
                           ),
                         ),
 
-                        SpaceHelperWidget.h(8),
+                        SpaceHelperWidget.h(context: context,width: 8),
 
                         Transform.translate(
                           offset: Offset(isExiting ? 0.0 : splashController.trainzOffset.value, 0,),
                           child: Opacity(
                             opacity: isExiting ? 1.0 : splashController.trainzOpacity.value,
                             child: TextHelperWidget().headingTextWithoutWidth(
+                              context: context,
                               text: "TRAINZ",
                               textColor: ColorUtils.primeBlue,
                               fontSize: 32,
@@ -72,7 +74,7 @@ class SplashView extends StatelessWidget {
                     ),
                   ),
 
-                  SpaceHelperWidget.v(15),
+                  SpaceHelperWidget.v(context: context,height: 15),
 
                   Transform.translate(
                     offset: Offset(taglineOffset, 0),
@@ -80,6 +82,7 @@ class SplashView extends StatelessWidget {
                       opacity: taglineOpacity.clamp(0.0, 1.0),
                       child: TextHelperWidget().headingTextWithoutWidth(
                         alignment: Alignment.center,
+                        context: context,
                         text: 'splash_tagline'.tr,
                         textAlign: TextAlign.center,
                         textColor: ColorUtils.primeGray,

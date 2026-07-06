@@ -15,8 +15,8 @@ class HomeView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        height: 926.fh(),
-        width: 428.fw(),
+        height: 926.h(context),
+        width: 428.w(context),
         decoration: BoxDecoration(
           gradient: ColorUtils.pageGradient,
         ),
@@ -27,18 +27,19 @@ class HomeView extends StatelessWidget {
               position: homeController.slideIn,
               child: SingleChildScrollView(
                 child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 24.hp()),
+                  padding: EdgeInsets.symmetric(horizontal: 24.hp(context)),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
 
-                      SpaceHelperWidget.v(16.h()),
+                      SpaceHelperWidget.v(context: context,height: 16),
 
                       // ── TOP BAR ──────────────────────────────────
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           EzTrainzLogoTextWidget().ezTrainzLogoTextWidget(
+                            context: context,
                             imagePath: ImageUtils.ezTrainzLogoTextCleanImage,
                             sourceType: ImageSourceType.asset,
                             height: 30,
@@ -51,20 +52,21 @@ class HomeView extends StatelessWidget {
                           InkWell(
                             onTap: homeController.onLogout,
                             child: Container(
-                              padding: EdgeInsets.symmetric(horizontal: 14.h(), vertical: 8.w()),
+                              padding: EdgeInsets.symmetric(horizontal: 14.h(context), vertical: 8.w(context)),
                               decoration: BoxDecoration(
                                 color: ColorUtils.white255,
-                                borderRadius: BorderRadius.circular(20.r()),
+                                borderRadius: BorderRadius.circular(20.r(context)),
                                 border: Border.all(color: ColorUtils.border, width: 1),
                               ),
                               child: Row(
                                 children: [
-                                  Icon(Icons.logout_rounded, color: ColorUtils.textPrimary, size: 15.r()),
+                                  Icon(Icons.logout_rounded, color: ColorUtils.textPrimary, size: 15.r(context)),
 
-                                  SpaceHelperWidget.h(5.w()),
+                                  SpaceHelperWidget.h(context: context,width: 5),
 
                                   TextHelperWidget().headingTextWithoutWidth(
                                     text: 'logout'.tr,
+                                    context: context,
                                     textColor: AppColors.textPrimary,
                                     fontSize: 15,
                                     fontWeight: FontWeight.w600,
@@ -76,19 +78,20 @@ class HomeView extends StatelessWidget {
                         ],
                       ),
 
-                      SpaceHelperWidget.v(16.h()),
+                      SpaceHelperWidget.v(context: context,height: 16),
 
                       // ── SUBTITLE ─────────────────────────────────
 
                       TextHelperWidget().headingTextWithoutWidth(
                         text: 'choose_program'.tr,
+                        context: context,
                         textColor: ColorUtils.textMuted,
                         fontSize: 15,
                         fontWeight: FontWeight.w400,
                       ),
 
 
-                      SpaceHelperWidget.v(16.h()),
+                      SpaceHelperWidget.v(context: context,height: 16),
 
 
                       // ── TRIAL GAME CARD ───────────────────────────
@@ -99,6 +102,7 @@ class HomeView extends StatelessWidget {
                           child: FadeTransition(
                             opacity: homeController.card1Fade,
                             child: TrialGameCardWidget().trialGameCardWidget(
+                              context: context,
                               onTap: () => Get.off(()=>TrialGameLanguagePickerScreen(),
                                 transition: Transition.rightToLeftWithFade,
                                 duration: const Duration(milliseconds: 260),
@@ -108,7 +112,7 @@ class HomeView extends StatelessWidget {
                         ),
                       ),
 
-                      SpaceHelperWidget.v(14.h()),
+                      SpaceHelperWidget.v(context: context,height: 14),
 
 
                       // ── PROGRAM CARDS ─────────────────────────────
@@ -125,14 +129,14 @@ class HomeView extends StatelessWidget {
                                   child: NavCardWidget(
                                     title: Program.jlc.name,
                                     subtitle: Program.jlc.subtitle,
-                                    iconWidget: TextHelperWidget().flagIcon(Program.jlc.flagEmoji),
+                                    iconWidget: TextHelperWidget().flagIcon(context:context, flagEmoji: Program.jlc.flagEmoji,),
                                     gradientColors: Program.jlc.gradientColors,
                                     onTap: () => homeController.navigateToProgram(Program.jlc),
                                   ),
                                 ),
                               ),
 
-                              SpaceHelperWidget.v(14.h()),
+                              SpaceHelperWidget.v(context: context,height: 14),
 
                               SlideTransition(
                                 position: homeController.card3Slide,
@@ -141,14 +145,14 @@ class HomeView extends StatelessWidget {
                                   child: NavCardWidget(
                                     title: Program.klc.name,
                                     subtitle: Program.klc.subtitle,
-                                    iconWidget: TextHelperWidget().flagIcon(Program.klc.flagEmoji),
+                                    iconWidget: TextHelperWidget().flagIcon(context:context, flagEmoji: Program.klc.flagEmoji,),
                                     gradientColors: Program.klc.gradientColors,
                                     onTap: () => homeController.navigateToProgram(Program.klc),
                                   ),
                                 ),
                               ),
 
-                              SpaceHelperWidget.v(14.h()),
+                              SpaceHelperWidget.v(context: context,height: 14),
 
                               SlideTransition(
                                 position: homeController.card4Slide,
@@ -157,14 +161,15 @@ class HomeView extends StatelessWidget {
                                   child: NavCardWidget(
                                     title: Program.elc.name,
                                     subtitle: Program.elc.subtitle,
-                                    iconWidget: TextHelperWidget().flagIcon(Program.elc.flagEmoji),
+                                    iconWidget: TextHelperWidget().flagIcon(context:context, flagEmoji: Program.elc.flagEmoji,),
                                     gradientColors: Program.elc.gradientColors,
                                     onTap: () => homeController.navigateToProgram(Program.elc),
                                   ),
                                 ),
                               ),
 
-                              SpaceHelperWidget.v(14.h()),
+                              SpaceHelperWidget.v(context: context,height: 14),
+
 
                               SlideTransition(
                                 position: homeController.card5Slide,
@@ -173,7 +178,7 @@ class HomeView extends StatelessWidget {
                                   child: NavCardWidget(
                                     title: Program.glc.name,
                                     subtitle: Program.glc.subtitle,
-                                    iconWidget: TextHelperWidget().flagIcon(Program.glc.flagEmoji),
+                                    iconWidget: TextHelperWidget().flagIcon(context:context, flagEmoji: Program.glc.flagEmoji,),
                                     gradientColors: Program.glc.gradientColors,
                                     onTap: () => homeController.navigateToProgram(Program.glc),
                                   ),
@@ -184,7 +189,7 @@ class HomeView extends StatelessWidget {
                         },
                       ),
 
-                      SpaceHelperWidget.v(28.h()),
+                      SpaceHelperWidget.v(context: context,height: 28),
 
 
                       // ── WAVING PENGUIN ────────────────────────────
@@ -198,6 +203,7 @@ class HomeView extends StatelessWidget {
                             child: child,
                           ),
                           child: ImageHelperWidget().imageHelperWidget(
+                            context: context,
                             imagePath: ImageUtils.homeScreenDoyoImage,
                             height: 180,
                             width: 140,
@@ -206,13 +212,15 @@ class HomeView extends StatelessWidget {
                         ),
                       ),
 
-                      SpaceHelperWidget.v(20.h()),
+
+                      SpaceHelperWidget.v(context: context,height: 20),
 
 
                       // ── TAGLINE ───────────────────────────────────
 
                       TextHelperWidget().headingTextWithoutWidth(
                         text: 'home_tagline'.tr,
+                        context: context,
                         textColor: ColorUtils.textMuted,
                         fontSize: 15,
                         alignment: Alignment.center,
@@ -220,8 +228,8 @@ class HomeView extends StatelessWidget {
                         letterSpacing: 0.3,
                       ),
 
+                      SpaceHelperWidget.v(context: context,height: 32),
 
-                      SpaceHelperWidget.v(32.h()),
 
 
                     ],

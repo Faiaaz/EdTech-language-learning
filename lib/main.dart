@@ -77,7 +77,6 @@ class MyApp extends StatelessWidget {
       builder: (context, child) {
         // Paint the sky→gold brand gradient once behind the whole app so every
         // (transparent) scaffold sits on it.
-        ResponsiveConfig.init(context);
         final app = SkyGoldBackground(child: child ?? const SizedBox.shrink());
         if (!kIsWeb) return app;
         return _WebPhonePreview(child: app);

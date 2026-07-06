@@ -6,18 +6,24 @@ import 'package:flutter/cupertino.dart';
 class SpaceHelperWidget {
 
   /// Horizontal Spacing
-  static Widget h(double width) {
-    return SizedBox(width: width.w());
+  static Widget h({
+    required double width,
+    required BuildContext context,
+  }) {
+    return SizedBox(width: width.w(context));
   }
 
   /// Vertical Spacing
-  static Widget v(double height) {
-    return SizedBox(height: height.h());
+  static Widget v({
+    required double height,
+    required BuildContext context,
+  }) {
+    return SizedBox(height: height.h(context));
   }
 
   /// Square Spacing (equal width & height)
-  static Widget sq(double height,double width) {
-    return SizedBox(width: width.w(), height: height.h());
+  static Widget sq({required double height,required double width,required BuildContext context}) {
+    return SizedBox(width: width.w(context), height: height.h(context));
   }
 
 }
