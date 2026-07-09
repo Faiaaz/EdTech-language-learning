@@ -1,5 +1,4 @@
 import 'dart:math';
-
 import 'package:flutter/material.dart';
 
 class ResponsiveUtils {
@@ -30,7 +29,6 @@ class ResponsiveUtils {
     required BuildContext context,
     required num width,
   }) {
-    print("print $width");
     if(MediaQuery.of(context).orientation == Orientation.portrait && width == 428) {
       return width * widthRatio(context: context);
     } else if(MediaQuery.of(context).orientation == Orientation.landscape && width == 428) {

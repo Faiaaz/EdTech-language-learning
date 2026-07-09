@@ -1,6 +1,8 @@
+import 'dart:math' as math;
+
+import 'package:ez_trainz/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
 import 'package:ez_trainz/controllers/course_controller.dart';
 import 'package:ez_trainz/controllers/program_controller.dart';
 import 'package:ez_trainz/models/program.dart';
@@ -19,6 +21,26 @@ import 'package:ez_trainz/module/module.dart';
 import 'package:ez_trainz/utils/app_theme.dart';
 
 /// Main container after login. Bottom nav: Learn, Game, EZ (For You), Call Us, Library.
+// NOTE: this file's notch painter uses math.asin/cos/pi, so make sure this
+// import is present alongside your existing ones:
+// import 'dart:math' as math;
+
+// NOTE: this file's notch painter uses math.asin/cos/pi, so make sure this
+// import is present alongside your existing ones:
+// import 'dart:math' as math;
+
+// NOTE: this file's notch painter uses math.asin/cos/pi, so make sure this
+// import is present alongside your existing ones:
+// import 'dart:math' as math;
+
+// NOTE: this file's notch painter uses math.asin/cos/tan/pi, so make sure
+// this import is present alongside your existing ones:
+// import 'dart:math' as math;
+
+// NOTE: this file's notch painter uses math.asin/cos/tan/pi, so make sure
+// this import is present alongside your existing ones:
+// import 'dart:math' as math;
+
 class MainShellScreen extends StatefulWidget {
   const MainShellScreen({super.key});
 
@@ -38,6 +60,10 @@ class _MainShellScreenState extends State<MainShellScreen> {
     _NavItem(icon: Icons.headset_mic_rounded, labelKey: 'nav_call_us'),
     _NavItem(icon: Icons.local_library_rounded, labelKey: 'nav_library'),
   ];
+
+  // Used so the notch painter knows when the EZ button is in its "selected"
+  // (translated up further) state, to keep the notch centered on it either way.
+  static final int _centerTabIndex = _tabs.indexWhere((t) => t.isCenter);
 
   @override
   Widget build(BuildContext context) {
@@ -74,47 +100,67 @@ class _MainShellScreenState extends State<MainShellScreen> {
             ),
           ),
           bottomNavigationBar: Container(
-            decoration: const BoxDecoration(
-              color: _navBgColor,
-              border: Border(
-                top: BorderSide(
-                  color: AppColors.border,
-                  width: 1,
+            height: 80.h(context),
+            width: 428.w(context),
+            decoration: BoxDecoration(
+              color: Colors.transparent,
+            ),
+            child: Stack(
+              clipBehavior: Clip.none,
+              alignment: Alignment.bottomCenter,
+              children: [
+                Positioned.fill(
+                  child: CustomPaint(
+                    painter: _NotchedNavBarPainter(
+                      backgroundColor: ColorUtils.white255,
+                      borderColor: AppColors.border,
+                      ezSelected: _currentIndex == _centerTabIndex,
+                      notchGap: 10.r(context),
+                      buttonRadius: 30.r(context),
+                    ),
+                  ),
                 ),
-              ),
-              boxShadow: [
-                BoxShadow(
-                  color: Color(0x14000000),
-                  blurRadius: 12,
-                  offset: Offset(0, -2),
+                SafeArea(
+                  top: false,
+                  child: Padding(
+                    padding: EdgeInsets.fromLTRB(
+                      6.w(context),
+                      0.h(context),
+                      6.w(context),
+                      6.h(context),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: List.generate(_tabs.length, (i) {
+                        final tab = _tabs[i];
+                        final selected = _currentIndex == i;
+                        if (tab.isCenter) {
+                          return const Expanded(child: SizedBox.shrink());
+                        }
+                        return Expanded(
+                          child: _NavTabButton(
+                            tab: tab,
+                            selected: selected,
+                            onTap: () => setState(() => _currentIndex = i),
+                          ),
+                        );
+                      }),
+                    ),
+                  ),
+                ),
+                Positioned(
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  child: Center(
+                    child: _EzCenterNavButton(
+                      selected: _currentIndex == _centerTabIndex,
+                      onTap: () => setState(() => _currentIndex = _centerTabIndex),
+                    ),
+                  ),
                 ),
               ],
-            ),
-            child: SafeArea(
-              top: false,
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(4, 0, 4, 4),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: List.generate(_tabs.length, (i) {
-                    final tab = _tabs[i];
-                    final selected = _currentIndex == i;
-                    if (tab.isCenter) {
-                      return Expanded(child: _EzCenterNavButton(
-                        selected: selected,
-                        onTap: () => setState(() => _currentIndex = i),
-                      ));
-                    }
-                    return Expanded(
-                      child: _NavTabButton(
-                        tab: tab,
-                        selected: selected,
-                        onTap: () => setState(() => _currentIndex = i),
-                      ),
-                    );
-                  }),
-                ),
-              ),
             ),
           ),
         );
@@ -122,6 +168,158 @@ class _MainShellScreenState extends State<MainShellScreen> {
     );
   }
 }
+
+
+class _NotchedNavBarPainter extends CustomPainter {
+  const _NotchedNavBarPainter({
+    required this.backgroundColor,
+    required this.borderColor,
+    required this.ezSelected,
+    this.borderWidth = 1.0,
+    this.buttonRadius = 30.0,
+    this.notchGap = 10.0,
+    this.topCornerRadius = 0.0,
+    this.notchFlareInsetDeg = 22.0,
+    this.notchFlareReachFactor = 0.35,
+    this.buttonRestOffsetY = -3.0,
+    this.buttonSelectedOffsetY = -8.0,
+    this.shadowColor = const Color(0x14000000),
+    this.shadowBlurRadius = 12.0,
+    this.shadowOffset = const Offset(0, -2),
+  });
+
+  final Color backgroundColor;
+  final Color borderColor;
+  final bool ezSelected;
+  final double borderWidth;
+  final double buttonRadius;
+  final double notchGap;
+  final double topCornerRadius;
+  final double notchFlareInsetDeg;
+  final double notchFlareReachFactor;
+  final double buttonRestOffsetY;
+  final double buttonSelectedOffsetY;
+
+  final Color shadowColor;
+  final double shadowBlurRadius;
+  final Offset shadowOffset;
+
+  double get _notchRadius => buttonRadius + notchGap;
+  double get _notchCenterY =>
+      buttonRadius + (ezSelected ? buttonSelectedOffsetY : buttonRestOffsetY);
+
+  static double _blurSigma(double blurRadius) => blurRadius * 0.57735 + 0.5;
+
+  Rect _notchRect(double width) {
+    final double cx = width / 2;
+    final double r = _notchRadius;
+    final double cy = _notchCenterY;
+    return Rect.fromLTWH(cx - r, cy - r, r * 2, r * 2);
+  }
+
+  Path _buildBarPath(Size size) {
+    final double width = size.width;
+    final double height = size.height;
+    final double tr = topCornerRadius;
+    final double cx = width / 2;
+    final double r = _notchRadius;
+    final double cy = _notchCenterY;
+
+    final path = Path()..moveTo(tr, 0);
+
+    final bool hasNotch = cy.abs() < r;
+    if (!hasNotch) {
+      path.lineTo(width - tr, 0);
+    } else {
+      // Angles (Flutter's arc convention: 0 = rightmost point of the oval,
+      // positive = clockwise) where the notch circle would cross y = 0.
+      final double thetaRightFlat = math.asin((-cy / r).clamp(-1.0, 1.0));
+      final double thetaLeftFlat = math.pi - thetaRightFlat;
+
+      // Pull both ends in slightly — this is the portion that becomes
+      // flare instead of true arc.
+      final double insetRad = notchFlareInsetDeg * math.pi / 180;
+      final double thetaR = thetaRightFlat + insetRad;
+      final double thetaL = thetaLeftFlat - insetRad;
+
+      // Control-point x-offset solved so the curve is exactly tangent to
+      // the circle at thetaR (see conversation notes / verification).
+      final double controlOffsetX = r / math.cos(thetaR) + cy * math.tan(thetaR);
+      final double circleOffsetX = r * math.cos(thetaR);
+      final double circleY = cy + r * math.sin(thetaR);
+      final double flatOffsetX = controlOffsetX + r * notchFlareReachFactor;
+
+      path.lineTo(cx - flatOffsetX, 0);
+      // Left flare: flat edge -> tangent onto the circle.
+      path.quadraticBezierTo(
+        cx - controlOffsetX, 0,
+        cx - circleOffsetX, circleY,
+      );
+      // True circular arc through the bottom of the notch.
+      path.arcTo(
+        _notchRect(width),
+        thetaL,
+        thetaR - thetaL,
+        false,
+      );
+      // Right flare: tangent off the circle -> back to the flat edge.
+      path.quadraticBezierTo(
+        cx + controlOffsetX, 0,
+        cx + flatOffsetX, 0,
+      );
+      path.lineTo(width - tr, 0);
+    }
+
+    path.arcToPoint(
+      Offset(width, tr),
+      radius: Radius.circular(tr),
+      clockwise: true,
+    );
+    path.lineTo(width, height);
+    path.lineTo(0, height);
+    path.lineTo(0, tr);
+    path.arcToPoint(
+      Offset(tr, 0),
+      radius: Radius.circular(tr),
+      clockwise: true,
+    );
+    path.close();
+    return path;
+  }
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final barPath = _buildBarPath(size);
+    canvas.save();
+    canvas.translate(shadowOffset.dx, shadowOffset.dy);
+    canvas.drawPath(
+      barPath,
+      Paint()
+        ..color = shadowColor
+        ..maskFilter = MaskFilter.blur(
+          BlurStyle.normal,
+          _blurSigma(shadowBlurRadius),
+        ),
+    );
+    canvas.restore();
+    canvas.drawPath(barPath, Paint()..color = backgroundColor);
+    canvas.drawPath(
+      barPath,
+      Paint()
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = borderWidth
+        ..color = borderColor,
+    );
+  }
+
+  @override
+  bool shouldRepaint(covariant _NotchedNavBarPainter oldDelegate) {
+    return true;
+  }
+}
+
+
+
 
 class _NavItem {
   const _NavItem({
@@ -149,53 +347,44 @@ class _NavTabButton extends StatelessWidget {
   final bool selected;
   final VoidCallback onTap;
 
-  static const _selectedColor = AppColors.accentBlueDk;
-  static const _unselectedColor = AppColors.textMuted;
-
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    return InkWell(
       onTap: onTap,
-      behavior: HitTestBehavior.opaque,
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 180),
         margin: const EdgeInsets.symmetric(horizontal: 2),
         padding: const EdgeInsets.symmetric(vertical: 6),
-        decoration: BoxDecoration(
-          color: selected
-              ? _selectedColor.withValues(alpha: 0.18)
-              : Colors.transparent,
-          borderRadius: BorderRadius.circular(14),
-          border: Border.all(
-            color: selected
-                ? _selectedColor.withValues(alpha: 0.55)
-                : Colors.transparent,
-            width: 1.4,
-          ),
-        ),
         child: Column(
-          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Icon(
               tab.icon,
-              size: 22,
-              color: selected ? _selectedColor : _unselectedColor,
+              size: 30.r(context),
+              color: selected ? ColorUtils.accentBlueDk : ColorUtils.textMuted,
             ),
-            const SizedBox(height: 2),
-            FittedBox(
-              fit: BoxFit.scaleDown,
-              child: Text(
-                tab.labelKey.tr,
-                maxLines: 1,
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 9,
-                  height: 1.1,
-                  fontWeight: selected ? FontWeight.w700 : FontWeight.w500,
-                  color: selected ? _selectedColor : _unselectedColor,
-                ),
-              ),
-            ),
+
+            selected ?
+            SpaceHelperWidget.v(height: 8, context: context) :
+            SizedBox.shrink(),
+
+
+            selected ?
+            TextHelperWidget().headingTextWithoutWidth(
+              text: tab.labelKey.tr,
+              maxLines: 1,
+              context: context,
+              alignment: Alignment.center,
+              textAlign: TextAlign.center,
+              fontSize: 13,
+              lineHeight: 1.1,
+              fontWeight: selected ? FontWeight.w700 : FontWeight.w500,
+              textColor: selected ? ColorUtils.accentBlueDk : ColorUtils.textMuted,
+            ) :
+            SizedBox.shrink(),
+
+
           ],
         ),
       ),
@@ -271,8 +460,8 @@ class _EzCenterNavButtonState extends State<_EzCenterNavButton>
               return Transform.translate(
                 offset: Offset(0, widget.selected ? -8 : -3),
                 child: Container(
-                  width: 60,
-                  height: 60,
+                  width: 60.r(context),
+                  height: 60.r(context),
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     boxShadow: [
@@ -339,13 +528,13 @@ class _EzCenterNavButtonState extends State<_EzCenterNavButton>
                           ),
                         ),
                         Positioned(
-                          top: 8,
-                          left: 14,
-                          right: 14,
+                          top: 8.h(context),
+                          left: 14.w(context),
+                          right: 14.w(context),
                           child: Container(
-                            height: 16,
+                            height: 16.h(context),
                             decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(999),
+                              borderRadius: BorderRadius.circular(999.r(context)),
                               gradient: LinearGradient(
                                 colors: [
                                   Colors.white.withValues(alpha: 0.42),
@@ -365,22 +554,6 @@ class _EzCenterNavButtonState extends State<_EzCenterNavButton>
               );
             },
           ),
-          const SizedBox(height: 2),
-          FittedBox(
-            fit: BoxFit.scaleDown,
-            child: Text(
-              'nav_for_you'.tr,
-              maxLines: 1,
-              style: TextStyle(
-                fontSize: 9,
-                height: 1.1,
-                fontWeight: widget.selected ? FontWeight.w700 : FontWeight.w500,
-                color: widget.selected
-                    ? AppColors.accentBlueDk
-                    : AppColors.textMuted,
-              ),
-            ),
-          ),
         ],
       ),
     );
@@ -396,10 +569,12 @@ class _GlowingEzText extends StatelessWidget {
   static const _yellowLight = Color(0xFFFFF59D);
   static const _yellowHot = Color(0xFFFFFDE7);
   static const _blueDark = Color(0xFF0D47A1);
+  static const _blueColor = Color(0xFF1B3B6F);
+
 
   @override
   Widget build(BuildContext context) {
-    const fontSize = 21.0;
+    final fontSize = 21.0.sp(context);
     const letterSpacing = -0.9;
     final outerBlur = 14.0 + intensity * 16;
     final midBlur = 8.0 + intensity * 10;
